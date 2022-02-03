@@ -1,4 +1,4 @@
-from dense import Dense
+from .dense import Dense
 class MLP:
     def __init__(self, nin, uout, uhidden):
         self.num_layer = len(uhidden)+1
