@@ -1,16 +1,10 @@
 import numpy as np
-
-from pprint import pprint
-from numpy import sin, cos, pi
-from matplotlib import pyplot as plt
-from shapely.geometry import Polygon
 from tensorflow import keras
 from pyomo.gdp import *
-from scipy.spatial import ConvexHull
+
 
 import pickle
 from tensorflow import keras
-import tensorflow.keras.backend as kb
 from acasxu_tf_keras.gen_tf_keras import read_acasxu_weights, build_dnn1
 
 nnet_path = "nnet_2_9.nnet"

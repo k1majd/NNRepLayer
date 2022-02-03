@@ -1,8 +1,7 @@
-from xml.parsers.expat import model
 import numpy as np
-from utils import mlp_get_weights, mlp_set_weights
-from mlp import MLP
-from mip_nn_model import MIPNNModel
+from ..utils.utils import mlp_get_weights, mlp_set_weights
+from ..form_nn.mlp import MLP
+from ..mip.mip_nn_model import MIPNNModel
 import pyomo.environ as pyo
 from tensorflow import keras
 
@@ -27,13 +26,13 @@ class repair_weights:
 
         return layer_values_train
 
-    def set_up_optimizer(self, y_train, layer_values_train):
+    def set_up_optimizer(self, y_train, layer_values_train, weightSlack):
         weights = [self.model_orig_params[iterate] for iterate in range(0,2*(len(self.architecture)-1),2)]
         bias = [self.model_orig_params[iterate] for iterate in range(1,2*(len(self.architecture)-1),2)]
 
         num_samples = layer_values_train[self.layer_to_repair-2].shape[0]
         mip_model_layer = MIPNNModel(self.layer_to_repair, self.architecture, weights, bias)
-        y_ = mip_model_layer(layer_values_train[self.layer_to_repair-2], (num_samples, self.architecture[self.layer_to_repair-1]), self.A,self.b)
+        y_ = mip_model_layer(layer_values_train[self.layer_to_repair-2], (num_samples, self.architecture[self.layer_to_repair-1]), self.A,self.b, weightSlack=weightSlack)
         model_lay = mip_model_layer.model
 
         cost_expr = self.cost_function_output(y_, y_train) 

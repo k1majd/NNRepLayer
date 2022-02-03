@@ -60,7 +60,7 @@ def keras_SSE_costum(y_actual, y_predicted):
     loss_value = kb.sum(kb.square(err))
     return loss_value
 
-model_orig = keras.models.load_model('/home/local/ASUAD/tkhandai/nn_repair/NN-Repair/affine_transform_model')
+model_orig = keras.models.load_model('/home/daittan/NNRepLayer/nnreplayer/repaired_affine_transform_layer3')
 
 
 num_input = 3
@@ -72,7 +72,7 @@ architecture = [num_input, num_hidden_0, num_hidden_1, num_output]
 
 
 
-with open("/home/local/ASUAD/tkhandai/nn_repair/NN-Repair/io_data_affine_transform.pickle", "rb") as data:
+with open("/home/daittan/NNRepLayer/nnreplayer/io_data_affine_transform.pickle", "rb") as data:
     x_train, y_train, x_test, y_test = pickle.load(data)
 
 # x_train = np.transpose(np.array([x_train]))
@@ -120,7 +120,6 @@ def squared_sum(x, y):
     return _squared_sum
 #########################################
 
-from repair_weights_class import repair_weights
 transform1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])  # transformation matrix 1
 transform2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])  # transformation matrix 2
 rotate = np.array([[cos(pi / 4), -sin(pi / 4), 0], [sin(pi / 4), cos(pi / 4), 0], [0, 0, 1]])  # rotation matrix
@@ -139,55 +138,25 @@ b = -eqs[0:eqs.shape[0],-1]
 
 b = np.array([b]).T
 
-
+from .utils.options import Options
+from .repair.perform_repair import perform_repair
 layer_to_repair = 3
+train_dataset = (x_train, y_train)
+options = Options('gdp.bigm', 'gurobi', "python", "keras", 100)
 
-rep_weights = repair_weights(model_orig, layer_to_repair, architecture, A,b, squared_sum)
-layer_values_train = rep_weights.extract_network(x_train)
-layer_values_test  = rep_weights.extract_network(x_test)
+results = perform_repair(layer_to_repair, model_orig, architecture, A,b, squared_sum, train_dataset, options)
 
-cost_expr, model_lay = rep_weights.set_up_optimizer(y_train, layer_values_train)
 
-gdp_formulation =  'gdp.bigm'
-solver_factory = 'gurobi'
-solver_language = "python"
-new_model_lay = rep_weights.solve_optimization_problem(model_lay, cost_expr, gdp_formulation, solver_factory, solver_language)
-
-model_new_params = rep_weights.set_new_params(model_lay)
-
-model_output_type = "keras"
-new_model = rep_weights.return_repaired_model(model_new_params, model_output_type)
-
-weights = [rep_weights.model_orig_params[iterate] for iterate in range(0,2*(len(architecture)-1),2)]
-bias = [rep_weights.model_orig_params[iterate] for iterate in range(1,2*(len(architecture)-1),2)]
-
-new_weight = [model_new_params[iterate] for iterate in range(0,2*(len(architecture)-1),2)]
-new_bias = [model_new_params[iterate] for iterate in range(1,2*(len(architecture)-1),2)]
-
-y_new_train = new_model.predict(x_train)
-y_new_test = new_model.predict(x_test)
+y_new_train = results.new_model.predict(x_train)
+y_new_test = results.new_model.predict(x_test)
 
 
 y_train_original = model_orig.predict(x_train)
 y_test_original = model_orig.predict(x_test)
-MSE_original_nn_train = squared_sum(y_train, y_train_original)/y_train.shape[0]
-MSE_new_nn_train = squared_sum(y_train, y_new_train)/y_train.shape[0]
-MSE_original_nn_test = squared_sum(y_test, y_test_original)/y_test.shape[0]
-MSE_new_nn_test = squared_sum(y_test, y_new_test)/y_test.shape[0]
 
+print("weight_error: {}".format(results.weight_error))
+print("bias_error: {}".format(results.bias_error))
 
-
-
-weight_error = np.max(new_weight[layer_to_repair-1]-weights[layer_to_repair-1])
-bias_error = np.max(new_bias[layer_to_repair-1]-bias[layer_to_repair-1])
-print("weight_error: {}".format(weight_error))
-print("bias_error: {}".format(bias_error))
-
-# y_predict_train = plot_model(model_orig, x_train, y_train, arg='Trained Model - Training Data')
-# y_predict_test = plot_model(model_orig, x_test, y_test, arg='Trained Model - Testing Data')
-
-# y_new_predict_train = plot_model(new_model, x_train, y_train, arg='Trained Model - Training Data')
-# y_new_predict_test = plot_model(new_model, x_test, y_test, arg='Trained Model - Testing Data')
 num_pts = 200
 ## polygon vertices
 poly = Polygon([(1, 1), (4, 1), (4, 4), (1, 4)])
@@ -222,4 +191,4 @@ plt.plot(y_new_test[:,0], y_new_test[:,1], 'yo', label='Repaired Model Ouptut')
 plt.legend(loc="upper left")
 plt.show()
 
-new_model.save("repaired_affine_transform_layer{}".format(layer_to_repair), '/home/daittan/NN-Repair/NN-Repair/')
+results.new_model.save("repaired_affine_transform_layer{}".format(layer_to_repair), '/home/daittan/NN-Repair/NN-Repair/')

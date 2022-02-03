@@ -1,21 +1,7 @@
-import numpy as np
-import os
-import sys
-from pprint import pprint
-from numpy import sin, cos, pi
-import numpy.matlib
-import random
-from matplotlib import pyplot as plt
-from shapely.geometry import Polygon, Point
-import shapely.affinity as affinity
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers, regularizers
-from sklearn.model_selection import train_test_split
 import pyomo.environ as pyo
 import pyomo.gdp as pyg
 from pyomo.gdp import *
-from utils import generate_constraints
+from ..utils.utils import generate_constraints
 
 class MIPLayer:
     def __init__(self, model, layer_to_repair, uin, uout, weights, bias, param_bounds=(-1, 1)):
@@ -45,14 +31,14 @@ class MIPLayer:
         self.layer_to_repair = layer_to_repair
         
         
-    def __call__(self, x, shape, A,b, relu=False,output_bounds=(-1e1, 1e1)):
+    def __call__(self, x, shape, A,b, relu=False,weightSlack=10, output_bounds=(-1e1, 1e1)):
         
         self.lout = getattr(self, 'layer_num', 0)+1
         if relu:
-            return self._relu_constraints(x, shape, self.lout, output_bounds)
-        return self._constraints(x, shape, self.lout, A,b, output_bounds)
+            return self._relu_constraints(x, shape, self.lout, weightSlack, output_bounds)
+        return self._constraints(x, shape, self.lout, A,b, weightSlack, output_bounds)
     
-    def _relu_constraints(self, x, shape, l, output_bounds=(-1e1, 1e1)):
+    def _relu_constraints(self, x, shape, l, weightSlack = 10, output_bounds=(-1e1, 1e1)):
         m, n = shape
         assert n == self.uin
         
@@ -77,7 +63,7 @@ class MIPLayer:
             print("Activating mid layer")
             
             dw_l = 'dw'
-            setattr(self.model, dw_l, pyo.Var(within=pyo.NonNegativeReals, bounds=(0, 100)))
+            setattr(self.model, dw_l, pyo.Var(within=pyo.NonNegativeReals, bounds=(0, weightSlack)))
             
             def constraint_bound_w0(model, i, j):
                 return(getattr(model, w_l)[i, j]-self.w_orig[i,j] <= getattr(model, dw_l))
@@ -107,7 +93,7 @@ class MIPLayer:
         setattr(self.model, 'disjunction'+str(l), pyg.Disjunction(range(m), range(self.uout), rule=disjuncts))
         return  getattr(self.model, x_l)
         
-    def _constraints(self, x, shape, l, A,b, output_bounds=(-1e1, 1e1)):
+    def _constraints(self, x, shape, l, A,b, weightSlack = 10, output_bounds=(-1e1, 1e1)):
         m, n = shape
         assert n == self.uin
         if l==self.layer_to_repair+1:
@@ -161,7 +147,7 @@ class MIPLayer:
             print("Activating Last layer")
             
             dw_l = 'dw'
-            setattr(self.model, dw_l, pyo.Var(within=pyo.NonNegativeReals, bounds=(0, output_bounds[1])))
+            setattr(self.model, dw_l, pyo.Var(within=pyo.NonNegativeReals, bounds=(0, weightSlack)))
             
             def constraint_bound_w0(model, i, j):
                 return(getattr(model, w_l)[i, j]-self.w_orig[i,j] <= getattr(model, dw_l))

@@ -3,7 +3,6 @@ from utils import mlp_get_weights, mlp_set_weights
 from mlp import MLP
 from mip_nn_model import MIPNNModel
 import pyomo.environ as pyo
-import pyomo.gdp as pyg
 import numpy as np
 from tensorflow import keras
 

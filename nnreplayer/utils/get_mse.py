@@ -1,4 +1,3 @@
-from pyexpat import model
 import numpy as np
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -12,13 +11,11 @@ if gpus:
     except RuntimeError as e:
         # Memory growth must be set before GPUs have been initialized
         print(e)
-from pprint import pprint
+
 from numpy import sin, cos, pi
-from matplotlib import pyplot as plt
 from shapely.geometry import Polygon
 from tensorflow import keras
 from pyomo.gdp import *
-from scipy.spatial import ConvexHull
 
 import pickle
 from tensorflow import keras
