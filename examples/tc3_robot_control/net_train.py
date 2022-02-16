@@ -6,7 +6,7 @@
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
-from fk_utils import data_generate, Batch
+from rc_utils import data_generate, Batch
 import pickle
 import os
 import argparse

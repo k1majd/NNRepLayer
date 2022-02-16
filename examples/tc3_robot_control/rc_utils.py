@@ -1,86 +1,65 @@
-from shapely.geometry import Polygon, Point
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
 import numpy as np
-from sklearn.model_selection import train_test_split
-import os
+from sympy import symbols, Matrix, sin, cos, lambdify
 
-## batch creation
-class Batch(object):
-    def __init__(self, X_col, Y_col, batch_size_val):
-        self.X = X_col
-        self.Y = Y_col
-        self.size = X_col.shape[0]
-        self.train_size = batch_size_val
-        self.test_size = self.size - batch_size_val
+# define a class for the car control problem
+class CarControlProblem:
+    """_summary_"""
 
-    def getBatch(self):
-        values = range(self.size)
-        train_dataset, test_dataset = train_test_split(
-            values, train_size=self.train_size, test_size=self.test_size
+    # pylint: disable=too-many-instance-attributes
+
+    def __init__(self) -> None:
+        self.time_sample = 0.5
+        self.dyn_approx_const = 0.01
+        self.goal = np.array([0.0, 0.0, 0.2])
+        self.init_x_interval = [(-5, -3), (-5, -3), (0, np.pi / 2)]
+        self.lyp = None
+        self.lyp_diff = None
+        self.lyp_lf = None
+        self.lyp_lg = None
+        self.dynamic = None
+
+    def initialize_symb_states(self):
+        """_summary_"""
+        # Define state, control, and goal symbols
+        x_r1, x_r2, x_r3 = symbols("xr1 xr2 xr3")
+        x_g1, x_g2, r_g = symbols("xg1 xg2 rg")
+        u_r1, u_r2 = symbols("u1,u2")
+
+        # Define vectors of state, control, and goal
+        x_r_vec = Matrix([x_r1, x_r2, x_r3])  # robot state [x,y,theta]
+        x_g_vec = Matrix([x_g1, x_g2, r_g])  # goal [x,y,r]
+        u_r_vec = Matrix([u_r1, u_r2])  # control [v,w]
+
+        # Construct lyapunov symbolic function
+        lyp = (
+            (x_r_vec[0] - x_g_vec[0]) ** 2
+            + (x_r_vec[1] - x_g_vec[1]) ** 2
+            - (self.dyn_approx_const) ** 2
         )
-        return (
-            self.X[train_dataset, :],
-            self.Y[train_dataset, :],
-            self.X[test_dataset, :],
-            self.Y[test_dataset, :],
+        lyp_diff = lyp.diff(Matrix([x_r_vec]))
+        self.lyp = lambdify([x_r_vec, x_g_vec], lyp)
+        self.lyp_lf = lambdify([x_r_vec, x_g_vec], lyp_diff.T * Matrix([0.0, 0.0, 0.0]))
+        self.lyp_lg = lambdify(
+            [x_r_vec, x_g_vec],
+            lyp_diff.T
+            * Matrix(
+                [
+                    [cos(x_r_vec[2]), -self.dyn_approx_const * sin(x_r_vec[2])],
+                    [sin(x_r_vec[2]), self.dyn_approx_const * cos(x_r_vec[2])],
+                    [0.0, 1.0],
+                ]
+            ),
         )
 
-
-## reshape input
-def reshape_cos_sin(inp):
-    row = inp.shape[0]
-    col = inp.shape[1]
-    x = np.zeros((row, 2 * col))
-    for i in range(row):
-        for j in range(col):
-            x[i, 2 * j] = np.cos(inp[i, j])
-            x[i, 2 * j + 1] = np.sin(inp[i, j])
-    return x
-
-
-## generate data samples
-def data_generate(num_pts, unif2edge=0.75, edge_scale=0.7):
-
-    num_pts_unif = int(unif2edge * num_pts)
-    num_pts_edge = num_pts - num_pts_unif
-
-    my_data = np.genfromtxt(
-        os.path.dirname(os.path.realpath(__file__)) + "/raw_dataset.csv", delimiter=","
-    )
-    x1 = my_data[0:, 0:6]
-    y_raw = my_data[0:, 6:]
-    x_raw = reshape_cos_sin(x1)  # pass input angles through sin cos filter
-
-    y_mean = (
-        np.sum(y_raw, 0) / np.sum(y_raw, 0).flatten()[-1]
-    )  # the mean point of output
-    y_dist = np.array(
-        [
-            np.linalg.norm(y_raw[i, 0:3] - y_mean.flatten()[0:3])
-            for i in range(y_raw.shape[0])
-        ]
-    )
-    y_dist = np.sort(y_dist, axis=None)
-    y_radii = np.sum(y_dist[-10:]) / 10  # avg radius of output ball
-
-    ## randomly select data samples inside the output ball
-    random_indices = np.random.choice(x_raw.shape[0], size=num_pts_unif, replace=False)
-    x = x_raw[random_indices, :]
-    y = y_raw[random_indices, :]
-    x_raw = np.delete(x_raw, random_indices, axis=0)
-    y_raw = np.delete(y_raw, random_indices, axis=0)
-
-    ## randomly select data samples on the edge of output ball
-    counter = 0
-    while counter != num_pts_edge:
-        indx = np.random.randint(0, x_raw.shape[0])
-        if (
-            np.linalg.norm(y_raw[indx, 0:3] - y_mean.flatten()[0:3])
-            >= edge_scale * y_radii
-        ):
-            x = np.vstack((x, x_raw[indx, :]))
-            y = np.vstack((y, y_raw[indx, :]))
-            x_raw = np.delete(x_raw, indx, axis=0)
-            y_raw = np.delete(y_raw, indx, axis=0)
-            counter += 1
-
-    return x, y
+        # define system dynamic
+        self.dynamic = lambdify(
+            [x_r_vec, u_r_vec],
+            Matrix([[cos(x_r_vec[2]), 0.0], [sin(x_r_vec[2]), 0.0], [0.0, 1.0]])
+            * u_r_vec,
+            "numpy",
+        )
