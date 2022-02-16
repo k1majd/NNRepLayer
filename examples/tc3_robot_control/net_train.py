@@ -1,7 +1,7 @@
-# this script train a DNN for the in-place rotation example in https://arxiv.org/pdf/2109.14041.pdf
+# this script train a DNN for the car control example in https://arxiv.org/pdf/2109.14041.pdf
 # ref: https://arxiv.org/pdf/2109.14041.pdf
-# example: In-place rotation
-# network arch: 4-30-30-30-12
+# example: Car Control
+# network arch: 3-10-10-3
 #
 import tensorflow as tf
 from tensorflow import keras
