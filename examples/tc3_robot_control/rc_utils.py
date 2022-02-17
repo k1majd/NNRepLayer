@@ -6,6 +6,9 @@ Returns:
 import numpy as np
 from sympy import symbols, Matrix, sin, cos, lambdify
 import cvxopt
+from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
+from matplotlib import pyplot as plt
+import matplotlib as mpl
 
 # define a class for the car control problem
 class CarControlProblem:
@@ -27,6 +30,7 @@ class CarControlProblem:
         self.lyp_lg = None
         self.dynamic = None
         self.controller_nn = None
+        self.controller_nn_train_hist = []
 
     def generate_sample(self):
         """_summary_
@@ -89,12 +93,19 @@ class CarControlProblem:
             "numpy",
         )
 
-    def train_nn_controller(self, num_traj):
+    def apply_dagger_learn(self, num_traj):
         """_summary_
 
         Args:
             num_traj (_type_): _description_
+
+        Returns:
+            _type_: _description_
         """
+
+        ## generate testing dataset
+        test_set = self.give_test_dataset()
+
         traj_set = []
         traj_nn_set = []
         action_set = []
@@ -134,16 +145,125 @@ class CarControlProblem:
             traj_nn_set.append(state_traj_nn)
             action_set.append(action_traj)
 
-            # Train model for the generate sample
-            his = self.controller_nn.fit(
-                np.concatenate(traj_nn_set),
-                np.concatenate(action_set),
-                epochs=2,
-                use_multiprocessing=True,
-                verbose=0,
-            )
+            self.train_controller([traj_nn_set, action_set], test_set)
 
             print("----------------------------------------")
+
+        return [traj_set, traj_nn_set, action_set], test_set
+
+    def train_controller(self, train_set, test_set):
+        """_summary_
+
+        Args:
+            train_set (list): _description_
+            test_set (list): _description_
+        """
+        ## define training callbacks:
+        callback_reduce_lr = ReduceLROnPlateau(
+            monitor="val_loss", factor=0.2, patience=5, min_lr=0.0001
+        )  # reduce learning rate
+        callback_es = EarlyStopping(
+            monitor="val_loss", patience=5, restore_best_weights=True
+        )  # early stopping callback
+
+        # Train model for the generated sample
+        self.controller_nn_train_hist.append(
+            self.controller_nn.fit(
+                np.concatenate(train_set[0]),
+                np.concatenate(train_set[1]),
+                validation_data=(
+                    np.concatenate(test_set[1]),
+                    np.concatenate(test_set[2]),
+                ),
+                batch_size=50,
+                epochs=500,
+                use_multiprocessing=True,
+                verbose=1,
+                callbacks=[callback_es, callback_reduce_lr],
+            )
+        )
+
+    def visualize_history(self):
+
+        plt.rcParams["text.usetex"] = True
+        mpl.style.use("seaborn")
+        results_train_loss = np.array([])
+        results_valid_loss = np.array([])
+        results_train_acc = np.array([])
+        results_valid_acc = np.array([])
+        for his in self.controller_nn_train_hist:
+            results_train_loss = np.concatenate(
+                (results_train_loss, his.history["loss"].flatten())
+            )
+            results_valid_loss = np.concatenate(
+                (results_valid_loss, his.history["val_loss"].flatten())
+            )
+            results_train_acc = np.concatenate(
+                (results_train_acc, his.history["accuracy"].flatten())
+            )
+            results_valid_acc = np.concatenate(
+                (results_valid_acc, his.history["val_accuracy"].flatten())
+            )
+
+        ## loss plotting
+        plt.plot(results_train_loss, color="red", label="training loss")
+        plt.plot(results_valid_loss, color="blue", label="validation loss")
+        plt.title("Loss Function Output")
+        plt.xlabel("epoch")
+        plt.ylabel("loss")
+        plt.legend(loc="upper left", frameon=False)
+        plt.show()
+
+        ## accuracy plotting
+        plt.plot(results_train_acc, color="red", label="training accuracy")
+        plt.plot(results_valid_acc, color="blue", label="validation accuracy")
+        plt.title("Accuracy Function Output")
+        plt.xlabel("epoch")
+        plt.ylabel("accuracy")
+        plt.legend(loc="upper left", frameon=False)
+        plt.show()
+
+    def give_test_dataset(self, size=35):
+        """this method generates testing dataset
+
+        Args:
+            size (int, optional): number of trajectories in the test dataset. Defaults to 35.
+
+        Returns:
+            list: returns testing dataset
+        """
+        traj_set = []
+        traj_nn_set = []
+        action_set = []
+
+        for i in range(size):
+            print(f"Generate testing traj {i + 1}")
+            state, state_nn = self.generate_sample()
+
+            state_traj = [state]
+            state_traj_nn = [state_nn]
+            action_traj = []
+
+            while np.linalg.norm(state[0:2] - self.goal[0:2]) > self.goal[2] + 0.05:
+                action_opt = self.give_control_opt(state)
+                state, state_nn = self.give_next_state(action_opt, state)
+
+                state_traj.append(state)
+                state_traj_nn.append(state_nn)
+                action_traj.append(action_opt)
+            action_traj.append(action_opt)
+
+            # convert the trajectories into np array
+            state_traj = np.array(state_traj)
+            state_traj_nn = np.array(state_traj_nn)
+            action_traj = self.normalize_action(np.array(action_traj))
+
+            # append the new trajectory into the list
+            traj_set.append(state_traj)
+            traj_nn_set.append(state_traj_nn)
+            action_set.append(action_traj)
+
+        return [traj_set, traj_nn_set, action_set]
 
     def give_control_opt(self, state, v_gain=1.2, w_gain=1):
         """_summary_
