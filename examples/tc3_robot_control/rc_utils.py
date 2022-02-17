@@ -3,9 +3,9 @@
 Returns:
     _type_: _description_
 """
-import math
 import numpy as np
 from sympy import symbols, Matrix, sin, cos, lambdify
+import cvxopt
 
 # define a class for the car control problem
 class CarControlProblem:
@@ -90,6 +90,11 @@ class CarControlProblem:
         )
 
     def train_nn_controller(self, num_traj):
+        """_summary_
+
+        Args:
+            num_traj (_type_): _description_
+        """
         traj_set = []
         traj_nn_set = []
         action_set = []
@@ -97,7 +102,7 @@ class CarControlProblem:
         # We use Dagger algorithm for training, ref: https://arxiv.org/pdf/2001.08088.pdf
         for i in range(num_traj):
             beta = (num_traj - i) / (num_traj)
-            print("Cycle {}".format(i + 1))
+            print(f"Cycle {i + 1}")
 
             # generate a sample initial state in the initial set
             state, state_nn = self.generate_sample()
@@ -117,7 +122,7 @@ class CarControlProblem:
                 state_traj_nn.append(state_nn)
                 action_traj.append(action_opt)
             action_traj.append(action_opt)
-            print("Trajectory {} is generated. Training time!!".format(i + 1))
+            print(f"Trajectory {i + 1} is generated. Training time!!")
 
             # convert the trajectories into np array
             state_traj = np.array(state_traj)
@@ -140,28 +145,138 @@ class CarControlProblem:
 
             print("----------------------------------------")
 
-    def give_control_opt(self, state):
-        pass
+    def give_control_opt(self, state, v_gain=1.2, w_gain=1):
+        """_summary_
+
+        Args:
+            state (_type_): _description_
+            v_gain (float, optional): _description_. Defaults to 1.2.
+            w_gain (int, optional): _description_. Defaults to 1.
+
+        Returns:
+            _type_: _description_
+        """
+        # robot spec
+        v_max = 1.0
+        v_min = 0.0
+        w_max = 0.5
+        w_min = -0.5
+
+        # OPT formulate: min u' H u + ff * u s.t. Au<=b
+        ineq_mat = np.zeros((6, 3))
+        ineq_vec = np.zeros((6, 1))
+
+        ## lyapanov
+        ineq_mat[0, 0:2] = self.lyp_lg(state)
+        ineq_mat[0, 2] = -1
+        ineq_vec[0] = -self.lyp_lf(state)
+        # slack variabl of lyapanov
+        ineq_mat[1, 2] = -1
+
+        ## Control constraints
+        ineq_mat[2, 0] = 1.0
+        ineq_vec[2] = v_max
+        ineq_mat[3, 0] = -1.0
+        ineq_vec[3] = -v_min
+        ineq_mat[4, 1] = 1.0
+        ineq_vec[4] = w_max
+        ineq_mat[5, 1] = -1.0
+        ineq_vec[5] = -w_min
+
+        # opt parameters
+        dist_goal, theta_goal = self.calc_distance_n_angle(state)
+        weight_mat = np.zeros((3, 3))
+        weight_vec = np.zeros((3, 1))
+        weight_mat[0, 0] = 2
+        weight_mat[1, 1] = 2
+        weight_mat[2, 2] = 0
+        weight_vec[0] = -2 * np.exp(-v_gain / dist_goal) * v_max  # ref velocity
+        weight_vec[1] = (
+            -2 * w_gain * self.give_angular_diff(state[2], theta_goal)
+        )  # ref steering rate
+        weight_vec[2] = 2
+        action = self.solve_qp(weight_mat, weight_vec, ineq_mat, ineq_vec)
+
+        return action[0:2]
 
     def give_control_nn(self, state_nn):
-        pass
+        """_summary_
+
+        Args:
+            state_nn (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        return self.controller_nn.predict(np.array([state_nn])).flatten()  # NN output
 
     def give_next_state(self, action, state):
+        """_summary_
+
+        Args:
+            action (_type_): _description_
+            state (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         state = (self.time_sample * self.dynamic(state, action)).flatten() + state
-        state[2] = self.pi_pi_adj(state[2])
+        state[2] = self.adjust_pi_pi(state[2])
         return state, self.format_state2nn(state)
 
-    def normalize_action(self, action):
+    def calc_distance_n_angle(self, state):
+        """_summary_
+
+        Args:
+            state (_type_): _description_
+            goal (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        diff = self.goal - state
+        dist = np.hypot(diff[0], diff[1])
+        theta = np.atan2(diff[1], diff[0])
+        return dist, theta
+
+    @staticmethod
+    def normalize_action(action):
+        """_summary_
+
+        Args:
+            action (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         return np.concatenate(
             (action, np.array([np.linspace(0.0, 1.0, num=action.shape[0])]).T), axis=1
         )
 
     @staticmethod
     def sample_interval(min_x, max_x, res=1):
+        """_summary_
+
+        Args:
+            min_x (_type_): _description_
+            max_x (_type_): _description_
+            res (int, optional): _description_. Defaults to 1.
+
+        Returns:
+            _type_: _description_
+        """
         return (((max_x) - (min_x)) / res) * np.random.randint(0, res) + (min_x)
 
     @staticmethod
     def format_state2nn(state):
+        """_summary_
+
+        Args:
+            state (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         state_nn = np.zeros((4))
         state_nn[0] = state[0]
         state_nn[1] = state[1]
@@ -171,7 +286,15 @@ class CarControlProblem:
         return state_nn
 
     @staticmethod
-    def pi_pi_adj(theta):
+    def adjust_pi_pi(theta):
+        """_summary_
+
+        Args:
+            theta (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         if theta > np.pi:
             temp = theta / (2 * np.pi) - 0.5
             k = np.ceil(temp)
@@ -181,3 +304,45 @@ class CarControlProblem:
             k = np.ceil(temp)
             theta = theta + k * 2 * np.pi
         return theta
+
+    @staticmethod
+    def give_angular_diff(state1, state2):
+        """_summary_
+
+        Args:
+            state1 (_type_): _description_
+            state2 (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        dist = state2 - state1
+        return np.atan2(np.sin(dist), np.cos(dist))
+
+    @staticmethod
+    def solve_qp(P, q, G=None, h=None, A=None, b=None):
+        """_summary_
+
+        Args:
+            P (_type_): _description_
+            q (_type_): _description_
+            G (_type_, optional): _description_. Defaults to None.
+            h (_type_, optional): _description_. Defaults to None.
+            A (_type_, optional): _description_. Defaults to None.
+            b (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
+        P = 0.5 * (P + P.T)  # make sure P is symmetric
+        args = [cvxopt.matrix(P), cvxopt.matrix(q)]
+        if G is not None:
+            args.extend([cvxopt.matrix(G), cvxopt.matrix(h)])
+            if A is not None:
+                args.extend([cvxopt.matrix(A), cvxopt.matrix(b)])
+        cvxopt.solvers.options["show_progress"] = False
+        cvxopt.solvers.options["maxiters"] = 100
+        sol = cvxopt.solvers.qp(*args)
+        if "optimal" not in sol["status"]:
+            return None
+        return np.array(sol["x"]).reshape((P.shape[1],))
