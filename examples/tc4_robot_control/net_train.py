@@ -1,8 +1,11 @@
-# this script train a DNN for the car control example in https://arxiv.org/pdf/2109.14041.pdf
-# ref: https://arxiv.org/pdf/2109.14041.pdf
-# example: Car Control
-# network arch: 3-10-10-3
-#
+""" This script train a DNN for the car control example in https://arxiv.org/pdf/2109.14041.pdf
+ref: https://arxiv.org/pdf/2109.14041.pdf
+example: Car Control
+network arch: 3-10-10-3
+
+Returns:
+    _type_: _description_
+"""
 
 import os
 import pickle
@@ -12,6 +15,11 @@ from rc_utils import CarControlProblem
 
 
 def arg_parser():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
     cwd = os.getcwd()
     parser = argparse.ArgumentParser()
     parser.add_argument(

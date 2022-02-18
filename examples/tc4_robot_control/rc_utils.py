@@ -3,13 +3,14 @@
 Returns:
     _type_: _description_
 """
+import math
 import numpy as np
 from sympy import symbols, Matrix, sin, cos, lambdify
 import cvxopt
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-import math
+
 
 # define a class for the car control problem
 class CarControlProblem:
