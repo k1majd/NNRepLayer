@@ -9,6 +9,7 @@ import cvxopt
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
 import matplotlib as mpl
+import math
 
 # define a class for the car control problem
 class CarControlProblem:
@@ -20,16 +21,16 @@ class CarControlProblem:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self) -> None:
+    def __init__(self, nn_controller_arch) -> None:
         self.time_sample = 0.5
         self.dyn_approx_const = 0.01
         self.goal = np.array([0.0, 0.0, 0.2])
         self.init_state_set = [(-5, -3), (-5, -3), (0, np.pi / 2)]
+        self.controller_nn = nn_controller_arch
         self.lyp = None
         self.lyp_lf = None
         self.lyp_lg = None
         self.dynamic = None
-        self.controller_nn = None
         self.controller_nn_train_hist = []
 
     def generate_sample(self):
@@ -93,18 +94,25 @@ class CarControlProblem:
             "numpy",
         )
 
-    def apply_dagger_learn(self, num_traj):
+    def apply_dagger_learn(
+        self, num_traj, train_epochs, batch_size_train, train2test_ratio=0.7
+    ):
         """_summary_
 
         Args:
             num_traj (_type_): _description_
+            train_epochs (_type_): _description_
+            batch_size_train (_type_): _description_
+            train2test_ratio (float, optional): _description_. Defaults to 0.7.
 
         Returns:
             _type_: _description_
         """
 
         ## generate testing dataset
-        test_set = self.give_test_dataset()
+        test_set = self.give_test_dataset(
+            int(num_traj * ((1 - train2test_ratio) / train2test_ratio))
+        )
 
         traj_set = []
         traj_nn_set = []
@@ -126,7 +134,7 @@ class CarControlProblem:
                 action_opt = self.give_control_opt(state)
                 action_nn = self.give_control_nn(state_nn)
                 state, state_nn = self.give_next_state(
-                    beta * action_opt + (1 - beta) * action_nn, state
+                    beta * action_opt + (1 - beta) * action_nn[0:2], state
                 )
 
                 state_traj.append(state)
@@ -145,13 +153,15 @@ class CarControlProblem:
             traj_nn_set.append(state_traj_nn)
             action_set.append(action_traj)
 
-            self.train_controller([traj_nn_set, action_set], test_set)
+            self.train_controller(
+                [traj_nn_set, action_set], test_set, train_epochs, batch_size_train
+            )
 
             print("----------------------------------------")
 
         return [traj_set, traj_nn_set, action_set], test_set
 
-    def train_controller(self, train_set, test_set):
+    def train_controller(self, train_set, test_set, train_epochs, batch_size_train):
         """_summary_
 
         Args:
@@ -175,35 +185,37 @@ class CarControlProblem:
                     np.concatenate(test_set[1]),
                     np.concatenate(test_set[2]),
                 ),
-                batch_size=50,
-                epochs=500,
+                batch_size=batch_size_train,
+                epochs=train_epochs,
                 use_multiprocessing=True,
                 verbose=1,
                 callbacks=[callback_es, callback_reduce_lr],
             )
         )
+        print("Model Loss + Accuracy on Train Data Set: ")
+        self.controller_nn.evaluate(
+            np.concatenate(train_set[0]), np.concatenate(train_set[1]), verbose=2
+        )  # model evaluation
+        print("Model Loss + Accuracy on Test Data Set: ")
+        self.controller_nn.evaluate(
+            np.concatenate(test_set[1]), np.concatenate(test_set[2]), verbose=2
+        )  # model evaluation
 
     def visualize_history(self):
 
+        """_summary_"""
+
         plt.rcParams["text.usetex"] = True
         mpl.style.use("seaborn")
-        results_train_loss = np.array([])
-        results_valid_loss = np.array([])
-        results_train_acc = np.array([])
-        results_valid_acc = np.array([])
+        results_train_loss = []
+        results_valid_loss = []
+        results_train_acc = []
+        results_valid_acc = []
         for his in self.controller_nn_train_hist:
-            results_train_loss = np.concatenate(
-                (results_train_loss, his.history["loss"].flatten())
-            )
-            results_valid_loss = np.concatenate(
-                (results_valid_loss, his.history["val_loss"].flatten())
-            )
-            results_train_acc = np.concatenate(
-                (results_train_acc, his.history["accuracy"].flatten())
-            )
-            results_valid_acc = np.concatenate(
-                (results_valid_acc, his.history["val_accuracy"].flatten())
-            )
+            results_train_loss.extend(his.history["loss"])
+            results_valid_loss.extend(his.history["val_loss"])
+            results_train_acc.extend(his.history["accuracy"])
+            results_valid_acc.extend(his.history["val_accuracy"])
 
         ## loss plotting
         plt.plot(results_train_loss, color="red", label="training loss")
@@ -287,9 +299,9 @@ class CarControlProblem:
         ineq_vec = np.zeros((6, 1))
 
         ## lyapanov
-        ineq_mat[0, 0:2] = self.lyp_lg(state)
+        ineq_mat[0, 0:2] = self.lyp_lg(state, self.goal)
         ineq_mat[0, 2] = -1
-        ineq_vec[0] = -self.lyp_lf(state)
+        ineq_vec[0] = -self.lyp_lf(state, self.goal)
         # slack variabl of lyapanov
         ineq_mat[1, 2] = -1
 
@@ -355,8 +367,8 @@ class CarControlProblem:
             _type_: _description_
         """
         diff = self.goal - state
-        dist = np.hypot(diff[0], diff[1])
-        theta = np.atan2(diff[1], diff[0])
+        dist = math.hypot(diff[0], diff[1])
+        theta = math.atan2(diff[1], diff[0])
         return dist, theta
 
     @staticmethod
@@ -437,7 +449,7 @@ class CarControlProblem:
             _type_: _description_
         """
         dist = state2 - state1
-        return np.atan2(np.sin(dist), np.cos(dist))
+        return math.atan2(np.sin(dist), np.cos(dist))
 
     @staticmethod
     def solve_qp(P, q, G=None, h=None, A=None, b=None):
