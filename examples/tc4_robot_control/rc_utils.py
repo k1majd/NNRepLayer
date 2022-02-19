@@ -10,6 +10,7 @@ import cvxopt
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
 import matplotlib as mpl
+import matplotlib.patches as mpatches
 
 
 # define a class for the car control problem
@@ -202,7 +203,7 @@ class CarControlProblem:
             np.concatenate(test_set[1]), np.concatenate(test_set[2]), verbose=2
         )  # model evaluation
 
-    def visualize_history(self):
+    def plot_history(self):
 
         """_summary_"""
 
@@ -253,30 +254,56 @@ class CarControlProblem:
             print(f"Generate testing traj {i + 1}")
             state, state_nn = self.generate_sample()
 
-            state_traj = [state]
-            state_traj_nn = [state_nn]
-            action_traj = []
-
-            while np.linalg.norm(state[0:2] - self.goal[0:2]) > self.goal[2] + 0.05:
-                action_opt = self.give_control_opt(state)
-                state, state_nn = self.give_next_state(action_opt, state)
-
-                state_traj.append(state)
-                state_traj_nn.append(state_nn)
-                action_traj.append(action_opt)
-            action_traj.append(action_opt)
-
-            # convert the trajectories into np array
-            state_traj = np.array(state_traj)
-            state_traj_nn = np.array(state_traj_nn)
-            action_traj = self.normalize_action(np.array(action_traj))
+            trace = self.give_single_trajectory(state, state_nn, control="opt")
 
             # append the new trajectory into the list
-            traj_set.append(state_traj)
-            traj_nn_set.append(state_traj_nn)
-            action_set.append(action_traj)
+            traj_set.append(trace[0])
+            traj_nn_set.append(trace[1])
+            action_set.append(trace[2])
 
         return [traj_set, traj_nn_set, action_set]
+
+    def give_single_trajectory(self, state, state_nn=None, control="opt"):
+        """_summary_
+
+        Args:
+            state (_type_): _description_
+            state_nn (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
+
+        if state_nn is None:
+            state_nn = self.format_state2nn(state)
+        state_traj = [state]
+        state_traj_nn = [state_nn]
+        action_traj = []
+
+        while np.linalg.norm(state[0:2] - self.goal[0:2]) > self.goal[2] + 0.05:
+            if control == "opt":
+                action = self.give_control_opt(state)
+                state, state_nn = self.give_next_state(action, state)
+            elif control == "nn":
+                action = self.give_control_nn(state_nn)
+                state, state_nn = self.give_next_state(action[0:2], state)
+            else:
+                raise NameError(f"Controller name -{control}- is not found!")
+
+            state_traj.append(state)
+            state_traj_nn.append(state_nn)
+            action_traj.append(action)
+        action_traj.append(action)
+
+        # convert the trajectories into np array
+        state_traj = np.array(state_traj)
+        state_traj_nn = np.array(state_traj_nn)
+        if control == "opt":
+            action_traj = self.normalize_action(np.array(action_traj))
+        else:
+            action_traj = np.array(action_traj)
+
+        return [state_traj, state_traj_nn, action_traj]
 
     def give_control_opt(self, state, v_gain=1.2, w_gain=1):
         """_summary_
@@ -372,6 +399,96 @@ class CarControlProblem:
         theta = math.atan2(diff[1], diff[0])
         return dist, theta
 
+    def plot_trajectory_sets(self, trajectories, title="trained vs ref trajectories"):
+        # pylint: disable = "invalid-name"
+        """_summary_
+
+        Args:
+            trajectories (_type_): _description_
+            title (str, optional): _description_. Defaults to "trained vs ref trajectories".
+        """
+        plt.rcParams["text.usetex"] = True
+        mpl.style.use("seaborn")
+        left, bottom, width, height = (
+            self.init_state_set[0][0],
+            self.init_state_set[1][0],
+            2,
+            2,
+        )
+        rect = mpatches.Rectangle(
+            (left, bottom),
+            width,
+            height,
+            fill=True,
+            color="grey",
+            linewidth=2,
+            label="Initial Set of States",
+        )
+        # facecolor="red")
+        for traj in trajectories[0]:
+            plt.plot(
+                np.array(traj)[:, 0],
+                np.array(traj)[:, 1],
+                linestyle="--",
+                linewidth=2.5,
+                color="darkgray",
+            )
+            plt.arrow(
+                np.array(traj)[10, 0],
+                np.array(traj)[10, 1],
+                np.array(traj)[11, 0] - np.array(traj)[10, 0],
+                np.array(traj)[11, 1] - np.array(traj)[10, 1],
+                shape="full",
+                color="darkgray",
+                lw=0,
+                length_includes_head=True,
+                head_width=0.15,
+            )
+
+        for traj in trajectories[1]:
+            plt.plot(
+                np.array(traj)[:, 0],
+                np.array(traj)[:, 1],
+                linewidth=2.5,
+                color="dimgray",
+            )
+            plt.arrow(
+                np.array(traj)[10, 0],
+                np.array(traj)[10, 1],
+                np.array(traj)[11, 0] - np.array(traj)[10, 0],
+                np.array(traj)[11, 1] - np.array(traj)[10, 1],
+                shape="full",
+                color="dimgray",
+                lw=0,
+                length_includes_head=True,
+                head_width=0.15,
+            )
+
+        plt.xlabel("x [m]", fontsize=20)
+        plt.ylabel("y [m]", fontsize=20)
+        plt.xticks(fontsize=20)
+        plt.yticks(fontsize=20)
+        plt.xlim((-6, 1.2))
+        plt.ylim((-5.1, 1.3))
+        plt.title(title, fontsize=25)
+        ax = plt.gca()
+        ax.add_patch(rect)
+        ax.set_facecolor("lavender")
+        ax.add_patch(
+            plt.Circle(
+                (self.goal[0], self.goal[1]),
+                self.goal[2],
+                color="cornflowerblue",
+                fill=True,
+                label="Goal Set",
+            )
+        )
+        ax.legend(loc="upper left", fontsize=20, frameon=False)
+        plt.savefig("real_time_multi_traj.eps", format="eps")
+
+    def visualize_trajectories(self, test_set):
+        pass
+
     @staticmethod
     def normalize_action(action):
         """_summary_
@@ -454,6 +571,9 @@ class CarControlProblem:
 
     @staticmethod
     def solve_qp(P, q, G=None, h=None, A=None, b=None):
+        # pylint: disable=invalid-name
+        # pylint: disable=too-many-arguments
+
         """_summary_
 
         Args:

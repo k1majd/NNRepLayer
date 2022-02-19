@@ -12,6 +12,7 @@ import pickle
 import argparse
 from tensorflow import keras
 from rc_utils import CarControlProblem
+import matplotlib as mpl
 
 
 def arg_parser():
@@ -170,7 +171,7 @@ def main(
     #########################################
     # Visualization
     if visual == 1:
-        control_obj.visualize_history()
+        control_obj.plot_history()
     #########################################
     # saving model
     print("-----------------------")
@@ -178,7 +179,7 @@ def main(
     if not os.path.exists(path):
         os.makedirs(path + "/model")
     keras.models.save_model(
-        model_orig,
+        control_obj.controller_nn,
         path + "/model",
         overwrite=True,
         include_optimizer=True,
