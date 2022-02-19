@@ -424,7 +424,6 @@ class CarControlProblem:
             linewidth=2,
             label="Initial Set of States",
         )
-        # facecolor="red")
         for traj in trajectories[0]:
             plt.plot(
                 np.array(traj)[:, 0],
@@ -486,8 +485,22 @@ class CarControlProblem:
         ax.legend(loc="upper left", fontsize=20, frameon=False)
         plt.savefig("real_time_multi_traj.eps", format="eps")
 
-    def visualize_trajectories(self, test_set):
-        pass
+    def visualize_ref_vs_traj(self, test_set):
+        trajectories = [test_set[0]]
+
+        traj_set_nn = []
+        traj_nn_set_nn = []
+        action_set_nn = []
+
+        for traj in test_set[0]:
+
+            trace = self.give_single_trajectory(traj[0][0], control="nn")
+
+            # append the new trajectory into the list
+            traj_set_nn.append(trace[0])
+            traj_nn_set_nn.append(trace[1])
+            action_set_nn.append(trace[2])
+
 
     @staticmethod
     def normalize_action(action):
