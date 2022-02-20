@@ -207,7 +207,7 @@ class CarControlProblem:
 
         """_summary_"""
 
-        plt.rcParams["text.usetex"] = True
+        plt.rcParams["text.usetex"] = False
         mpl.style.use("seaborn")
         results_train_loss = []
         results_valid_loss = []
@@ -407,7 +407,7 @@ class CarControlProblem:
             trajectories (_type_): _description_
             title (str, optional): _description_. Defaults to "trained vs ref trajectories".
         """
-        plt.rcParams["text.usetex"] = True
+        plt.rcParams["text.usetex"] = False
         mpl.style.use("seaborn")
         left, bottom, width, height = (
             self.init_state_set[0][0],
@@ -485,22 +485,22 @@ class CarControlProblem:
         ax.legend(loc="upper left", fontsize=20, frameon=False)
         plt.savefig("real_time_multi_traj.eps", format="eps")
 
-    def visualize_ref_vs_traj(self, test_set):
-        trajectories = [test_set[0]]
+    def visualize_ref_vs_nn(self, test_set):
+        """_summary_
 
-        traj_set_nn = []
-        traj_nn_set_nn = []
-        action_set_nn = []
+        Args:
+            test_set (_type_): _description_
+        """
+
+        traj_set_nn_control = []
 
         for traj in test_set[0]:
-
-            trace = self.give_single_trajectory(traj[0][0], control="nn")
-
             # append the new trajectory into the list
-            traj_set_nn.append(trace[0])
-            traj_nn_set_nn.append(trace[1])
-            action_set_nn.append(trace[2])
+            traj_set_nn_control.append(
+                self.give_single_trajectory(traj[0][:], control="nn")[0]
+            )
 
+        self.plot_trajectory_sets([test_set[0], traj_set_nn_control])
 
     @staticmethod
     def normalize_action(action):
@@ -540,6 +540,7 @@ class CarControlProblem:
         Returns:
             _type_: _description_
         """
+        print(state)
         state_nn = np.zeros((4))
         state_nn[0] = state[0]
         state_nn[1] = state[1]

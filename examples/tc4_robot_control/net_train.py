@@ -12,7 +12,6 @@ import pickle
 import argparse
 from tensorflow import keras
 from rc_utils import CarControlProblem
-import matplotlib as mpl
 
 
 def arg_parser():
@@ -36,9 +35,9 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        const=100,
-        default=100,
-        help="Specify training epochs in int, default: 5000",
+        const=10,
+        default=10,
+        help="Specify training epochs in int, default: 100",
     )
     parser.add_argument(
         "-lr",
@@ -56,7 +55,7 @@ def arg_parser():
         type=float,
         const=0.0001,
         default=0.0001,
-        help="Specify regularization rate in int, default: 0.001",
+        help="Specify regularization rate in int, default: 0.0001",
     )
     parser.add_argument(
         "-bs",
@@ -77,6 +76,15 @@ def arg_parser():
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
     )
+    parser.add_argument(
+        "-nt",
+        "--numberOfTrajectories",
+        nargs="?",
+        type=int,
+        const=10,
+        default=10,
+        help="Specify the number of trajectories in the training data set, default: 100",
+    )
     return parser.parse_args()
 
 
@@ -87,6 +95,7 @@ def main(
     train_epochs,
     visual,
     batch_size_train,
+    num_traj,
 ):
     """_summary_
 
@@ -107,7 +116,6 @@ def main(
     #########################################
     # parameters
     ## Data samples
-    num_traj = 100  # number of samples
     train2test_ratio = 0.7
     ## Network
     input_dim = 4
@@ -172,10 +180,11 @@ def main(
     # Visualization
     if visual == 1:
         control_obj.plot_history()
+        control_obj.visualize_ref_vs_nn(test_set)
     #########################################
     # saving model
     print("-----------------------")
-    print("the data set and model are saved in {}".format(path))
+    print(f"the data set and model are saved in {path}")
     if not os.path.exists(path):
         os.makedirs(path + "/model")
     keras.models.save_model(
@@ -204,4 +213,5 @@ if __name__ == "__main__":
         args.epoch,
         args.visualization,
         args.batchSizeTrain,
+        args.numberOfTrajectories,
     )
