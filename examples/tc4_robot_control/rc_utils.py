@@ -8,7 +8,7 @@ import math
 import numpy as np
 from sympy import symbols, Matrix, sin, cos, lambdify
 import cvxopt
-from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
+from tensorflow import keras
 from matplotlib import pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as mpatches
@@ -181,10 +181,10 @@ class CarControlProblem:
             test_set (list): _description_
         """
         ## define training callbacks:
-        callback_reduce_lr = ReduceLROnPlateau(
+        callback_reduce_lr = keras.callbacks.ReduceLROnPlateau(
             monitor="val_loss", factor=0.2, patience=5, min_lr=0.0001
         )  # reduce learning rate
-        callback_es = EarlyStopping(
+        callback_es = keras.callbacks.EarlyStopping(
             monitor="val_loss", patience=5, restore_best_weights=True
         )  # early stopping callback
 

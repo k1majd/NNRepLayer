@@ -21,7 +21,7 @@ def arg_parser():
     Returns:
         _type_: _description_
     """
-    cwd = os.getcwd()
+    cwd = os.path.dirname(os.path.realpath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-p",
