@@ -3,7 +3,7 @@ from rc_utils import CarControlProblem
 from tensorflow import keras
 import os
 
-path = os.getcwd() + "/examples/tc4_robot_control/tc4/original_net"
+path = os.getcwd() + "/tc4/original_net"
 
 with open(path + "/data/input_output_data_tc4.pickle", "rb") as data:
     dataset = pickle.load(data)
@@ -11,4 +11,4 @@ with open(path + "/data/input_output_data_tc4.pickle", "rb") as data:
 orig_model = keras.models.load_model(path + "/model")
 control_obj = CarControlProblem(orig_model)
 control_obj.initialize_sym_states()
-control_obj.visualize_ref_vs_nn(dataset[1])
+control_obj.visualize_ref_vs_nn(dataset[1][0])

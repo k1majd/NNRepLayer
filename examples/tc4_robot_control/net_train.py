@@ -26,7 +26,6 @@ def arg_parser():
         "-p",
         "--path",
         nargs="?",
-        const=cwd,
         default=cwd,
         help="Specify a path to store the data",
     )
@@ -35,16 +34,22 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        const=10,
-        default=10,
+        default=100,
         help="Specify training epochs in int, default: 100",
+    )
+    parser.add_argument(
+        "-nt",
+        "--numberOfTrajectories",
+        nargs="?",
+        type=int,
+        default=100,
+        help="Specify the number of trajectories in the training data set, default: 100",
     )
     parser.add_argument(
         "-lr",
         "--learnRate",
         nargs="?",
         type=float,
-        const=0.003,
         default=0.003,
         help="Specify Learning rate in int, default: 0.003",
     )
@@ -53,7 +58,6 @@ def arg_parser():
         "--regularizationRate",
         nargs="?",
         type=float,
-        const=0.0001,
         default=0.0001,
         help="Specify regularization rate in int, default: 0.0001",
     )
@@ -62,7 +66,6 @@ def arg_parser():
         "--batchSizeTrain",
         nargs="?",
         type=int,
-        const=50,
         default=50,
         help="Specify training batch sizes at each epoch in int, default: 50",
     )
@@ -71,19 +74,9 @@ def arg_parser():
         "--visualization",
         nargs="?",
         type=int,
-        const=1,
         default=1,
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
-    )
-    parser.add_argument(
-        "-nt",
-        "--numberOfTrajectories",
-        nargs="?",
-        type=int,
-        const=10,
-        default=10,
-        help="Specify the number of trajectories in the training data set, default: 100",
     )
     return parser.parse_args()
 
@@ -106,6 +99,7 @@ def main(
         train_epochs (_type_): _description_
         visual (_type_): _description_
         batch_size_train (_type_): _description_
+        num_traj (_type_): _description_
     """
     path = direc + "/tc4/original_net"
 
@@ -172,15 +166,17 @@ def main(
     control_obj.initialize_sym_states()
 
     ## Start model training
-    train_set, test_set = control_obj.apply_dagger_learn(
+    train_sets, test_sets = control_obj.apply_dagger_learn(
         num_traj, train_epochs, batch_size_train, train2test_ratio
     )
 
     #########################################
     # Visualization
     if visual == 1:
-        control_obj.plot_history()
-        control_obj.visualize_ref_vs_nn(test_set)
+        if not os.path.exists(path + "/figure"):
+            os.makedirs(path + "/figure")
+        control_obj.plot_history(path + "/figure/history.eps")
+        control_obj.visualize_ref_vs_nn(test_sets[0], path + "/figure/testVSref.eps")
     #########################################
     # saving model
     print("-----------------------")
@@ -201,7 +197,7 @@ def main(
     if not os.path.exists(path + "/data"):
         os.makedirs(path + "/data")
     with open(path + "/data/input_output_data_tc4.pickle", "wb") as data:
-        pickle.dump([train_set, test_set], data)
+        pickle.dump([train_sets, test_sets], data)
 
 
 if __name__ == "__main__":
