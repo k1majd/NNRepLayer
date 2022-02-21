@@ -4,7 +4,7 @@ example: Car Control
 network arch: 3-10-10-3
 
 Returns:
-    _type_: _description_
+    _type_: _description__
 """
 
 import os
