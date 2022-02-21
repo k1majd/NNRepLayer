@@ -138,7 +138,7 @@ class CarControlProblem:
             # generate the trajectory starting from the initial state where
             # action = beta * opt_action + (1-beta) * nn_action
             counter = 0
-            while np.linalg.norm(state[0:2] - self.goal[0:2]) >= self.goal[2] + 0.01:
+            while np.linalg.norm(state[0:2] - self.goal[0:2]) >= self.goal[2] + 0.05:
                 action_opt = self.give_control_opt(state)
                 action_nn = self.give_control_nn(state_nn)
                 if action_nn[0] < 0:
@@ -244,7 +244,7 @@ class CarControlProblem:
         state,
         state_nn=None,
         control="opt",
-        err=0.0,
+        err=0.05,
         disp_thresh=0.005,
         err_check_iter=15,
         max_err_updates=5,
@@ -439,7 +439,7 @@ class CarControlProblem:
         plt.legend(loc="upper left", frameon=False)
         plt.savefig(path[0] + "_loss." + path[1], format="eps")
         print(f"loss plot is stored in {path[0]}_loss.{path[1]}")
-        plt.show()
+        # plt.show()
 
         ## accuracy plotting
         plt.plot(results_train_acc, color="red", label="training accuracy")
@@ -450,7 +450,7 @@ class CarControlProblem:
         plt.legend(loc="upper left", frameon=False)
         plt.savefig(path[0] + "_acc." + path[1], format="eps")
         print(f"accuracy plot is stored in {path[0]}_accuracy.{path[1]}")
-        plt.show()
+        # plt.show()
 
     def plot_trajectory_sets(
         self,
@@ -543,7 +543,7 @@ class CarControlProblem:
         ax.legend(loc="upper left", fontsize=20, frameon=False)
         plt.savefig(path, format="eps")
         print(f"trajVSref plot is stored in {path}")
-        plt.show()
+        # plt.show()
 
     def visualize_ref_vs_nn(self, traj_set, path=os.getcwd() + "/trajVSref.eps"):
         """_summary_

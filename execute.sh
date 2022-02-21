@@ -1,6 +1,6 @@
 
 #!/bin/sh
-python examples/tc4_robot_control/net_train.py -ep 10 -nt 10
+python examples/tc4_robot_control/net_train.py -ep 100 -nt 100
 git add .
-git commit -m "test update2"
+git commit -m "test update3"
 git push
