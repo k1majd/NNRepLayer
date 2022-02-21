@@ -8,6 +8,7 @@ Returns:
 """
 
 import os
+from datetime import datetime
 import pickle
 import argparse
 from tensorflow import keras
@@ -101,7 +102,21 @@ def main(
         batch_size_train (_type_): _description_
         num_traj (_type_): _description_
     """
-    path = direc + "/tc4/original_net"
+    current_date = str(datetime.now()).split(" ")
+    path = (
+        direc
+        + "/tc4_"
+        + current_date[0].split("-")[1]
+        + "_"
+        + current_date[0].split("-")[2]
+        + "_"
+        + current_date[0].split("-")[0]
+        + "_"
+        + current_date[1].split(":")[0]
+        + "_"
+        + current_date[1].split(":")[1]
+        + "/original_net"
+    )
 
     if not os.path.exists(path):
         os.makedirs(path)

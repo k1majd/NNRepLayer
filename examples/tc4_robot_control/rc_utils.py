@@ -439,6 +439,7 @@ class CarControlProblem:
         plt.legend(loc="upper left", frameon=False)
         plt.savefig(path[0] + "_loss." + path[1], format="eps")
         print(f"loss plot is stored in {path[0]}_loss.{path[1]}")
+        plt.close()
         # plt.show()
 
         ## accuracy plotting
@@ -450,6 +451,7 @@ class CarControlProblem:
         plt.legend(loc="upper left", frameon=False)
         plt.savefig(path[0] + "_acc." + path[1], format="eps")
         print(f"accuracy plot is stored in {path[0]}_accuracy.{path[1]}")
+        plt.close()
         # plt.show()
 
     def plot_trajectory_sets(
@@ -543,6 +545,7 @@ class CarControlProblem:
         ax.legend(loc="upper left", fontsize=20, frameon=False)
         plt.savefig(path, format="eps")
         print(f"trajVSref plot is stored in {path}")
+        plt.close()
         # plt.show()
 
     def visualize_ref_vs_nn(self, traj_set, path=os.getcwd() + "/trajVSref.eps"):
