@@ -16,6 +16,11 @@ import matplotlib as mpl
 
 
 def arg_parser():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
     cwd = os.getcwd()
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -68,6 +73,15 @@ def arg_parser():
 
 
 def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
+    """_summary_
+
+    Args:
+        direc (_type_): _description_
+        learning_rate (_type_): _description_
+        regularizer_rate (_type_): _description_
+        train_epochs (_type_): _description_
+        visual (_type_): _description_
+    """
     path = direc + "/tc1/original_net"
 
     if not os.path.exists(path):
