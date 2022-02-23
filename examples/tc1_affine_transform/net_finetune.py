@@ -1,6 +1,5 @@
 import os
 import argparse
-import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
@@ -31,7 +30,7 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        default=1000,
+        default=500,
         help="Specify training epochs in int, default: 100",
     )
     parser.add_argument(
@@ -133,11 +132,13 @@ def main(
         )
     with open(path_read + "/data/input_output_data_tc1.pickle", "rb") as data:
         dataset = pickle.load(data)
-    x_train = dataset[0]
-    x_test = dataset[2]
-    y_train_inside = label_output_inside(poly_const, dataset[1])
-    y_test_inside = label_output_inside(poly_const, dataset[3])
-
+    x_train_inside, y_train_inside = label_output_inside(
+        poly_const, dataset[0], dataset[1], mode="finetune"
+    )
+    x_test_inside, y_test_inside = label_output_inside(
+        poly_const, dataset[2], dataset[3], mode="retrain"
+    )
+    plt.show()
     print("-----------------------")
     print("NN model fine tuning:")
 
@@ -145,26 +146,50 @@ def main(
         raise ImportError("path {path_read}/model does not exist!")
     model_orig = keras.models.load_model(path_read + "/model")
 
+    # substitute the output layer with a new layer and freeze the base model
+    output_dim = model_orig.layers[-1].output.shape[1]
+    model_orig.pop()
+    for lnum, layer in enumerate(model_orig.layers):
+        layer.trainable = False
+    model_orig.add(
+        keras.layers.Dense(
+            output_dim,
+            kernel_regularizer=keras.regularizers.l2(regularizer_rate),
+            bias_regularizer=keras.regularizers.l2(regularizer_rate),
+            name="output",
+        )
+    )
+    for lnum, layer in enumerate(model_orig.layers):
+        print(lnum, layer.name, layer.trainable, layer.dtype, layer.dtype_policy)
     model_orig.summary()
 
     print("-----------------------")
-    print("Start training!")
+    print("Start fine-tuning the last layer!")
 
     loss = keras.losses.MeanSquaredError(name="MSE")
     optimizer = keras.optimizers.SGD(learning_rate=learning_rate, name="Adam")
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="val_loss", factor=0.2, patience=10, min_lr=0.0001
+        monitor="loss", factor=0.2, patience=10, min_lr=0.0001
     )  # reduce learning rate
     callback_es = EarlyStopping(
-        monitor="val_loss", patience=20, restore_best_weights=True
+        monitor="loss", patience=20, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
+    # his = model_orig.fit(
+    #     x_train_inside,
+    #     y_train_inside,
+    #     validation_data=(x_test_inside, y_test_inside),
+    #     epochs=train_epochs,
+    #     batch_size=batch_size_train,
+    #     use_multiprocessing=True,
+    #     verbose=1,
+    #     callbacks=[callback_es, callback_reduce_lr],
+    # )
     his = model_orig.fit(
-        x_train,
+        x_train_inside,
         y_train_inside,
-        validation_data=(x_test, y_test_inside),
         epochs=train_epochs,
         batch_size=batch_size_train,
         use_multiprocessing=True,
@@ -172,7 +197,7 @@ def main(
         callbacks=[callback_es, callback_reduce_lr],
     )
     print("Model Loss + Accuracy on Test Data Set: ")
-    model_orig.evaluate(x_test, y_test_inside, verbose=2)
+    model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
 
     if visual == 1:
         print("----------------------")
@@ -182,20 +207,88 @@ def main(
 
         ## loss plotting
         results_train_loss = his.history["loss"]
-        results_valid_loss = his.history["val_loss"]
+        # results_valid_loss = his.history["val_loss"]
         plt.plot(results_train_loss, color="red", label="training loss")
-        plt.plot(results_valid_loss, color="blue", label="validation loss")
-        plt.title("Loss Function Output")
+        # plt.plot(results_valid_loss, color="blue", label="validation loss")
+        plt.title("Loss Function Output (fine-tuning the last layer)")
         plt.xlabel("epoch")
         plt.ylabel("loss")
         plt.legend(loc="upper left", frameon=False)
+        # plt.savefig(path[0] + "_acc." + path[1], format="eps")
         plt.show()
 
         ## accuracy plotting
         results_train_acc = his.history["accuracy"]
-        results_valid_acc = his.history["val_accuracy"]
+        # results_valid_acc = his.history["val_accuracy"]
         plt.plot(results_train_acc, color="red", label="training accuracy")
-        plt.plot(results_valid_acc, color="blue", label="validation accuracy")
+        # plt.plot(results_valid_acc, color="blue", label="validation accuracy")
+        plt.title("Accuracy Function Output (fine-tuning the last layer)")
+        plt.xlabel("epoch")
+        plt.ylabel("accuracy")
+        plt.legend(loc="upper left", frameon=False)
+        plt.show()
+
+    print("-----------------------")
+    print("Start fine-tuning the whole model!")
+    for lnum, layer in enumerate(model_orig.layers):
+        layer.trainable = True
+
+    loss = keras.losses.MeanSquaredError(name="MSE")
+    optimizer = keras.optimizers.SGD(learning_rate=0.0001, name="Adam")
+    model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
+    # compile the model
+    callback_reduce_lr = ReduceLROnPlateau(
+        monitor="loss", factor=0.2, patience=10, min_lr=0.0001
+    )  # reduce learning rate
+    callback_es = EarlyStopping(
+        monitor="loss", patience=20, restore_best_weights=True
+    )  # early stopping callback
+    ## model fitting
+    # his = model_orig.fit(
+    #     x_train_inside,
+    #     y_train_inside,
+    #     validation_data=(x_test_inside, y_test_inside),
+    #     epochs=500,
+    #     batch_size=batch_size_train,
+    #     use_multiprocessing=True,
+    #     verbose=1,
+    #     callbacks=[callback_es, callback_reduce_lr],
+    # )
+    his = model_orig.fit(
+        x_train_inside,
+        y_train_inside,
+        epochs=50,
+        batch_size=batch_size_train,
+        use_multiprocessing=True,
+        verbose=1,
+        callbacks=[callback_es, callback_reduce_lr],
+    )
+    print("Model Loss + Accuracy on Test Data Set: ")
+    model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
+
+    if visual == 1:
+        print("----------------------")
+        print("Visualization")
+        plt.rcParams["text.usetex"] = False
+        mpl.style.use("seaborn")
+
+        ## loss plotting
+        results_train_loss = his.history["loss"]
+        # results_valid_loss = his.history["val_loss"]
+        plt.plot(results_train_loss, color="red", label="training loss")
+        # plt.plot(results_valid_loss, color="blue", label="validation loss")
+        plt.title("Loss Function Output")
+        plt.xlabel("epoch")
+        plt.ylabel("loss")
+        plt.legend(loc="upper left", frameon=False)
+        # plt.savefig(path[0] + "_acc." + path[1], format="eps")
+        plt.show()
+
+        ## accuracy plotting
+        results_train_acc = his.history["accuracy"]
+        # results_valid_acc = his.history["val_accuracy"]
+        plt.plot(results_train_acc, color="red", label="training accuracy")
+        # plt.plot(results_valid_acc, color="blue", label="validation accuracy")
         plt.title("Accuracy Function Output")
         plt.xlabel("epoch")
         plt.ylabel("accuracy")
@@ -235,7 +328,7 @@ def main(
             linewidth=3,
             solid_capstyle="round",
             zorder=2,
-            label="Target Set",
+            label="Constraint Set",
         )
         plt.scatter(
             y_train_inside[:, 0],
@@ -243,7 +336,7 @@ def main(
             color="tab:blue",
             label="Original Target",
         )
-        y_predict_train = model_orig.predict(x_train)
+        y_predict_train = model_orig.predict(x_train_inside)
         plt.scatter(
             y_predict_train[:, 0],
             y_predict_train[:, 1],
@@ -293,7 +386,7 @@ def main(
             color="tab:blue",
             label="Original Target",
         )
-        y_predict_test = model_orig.predict(x_test)
+        y_predict_test = model_orig.predict(x_test_inside)
         plt.scatter(
             y_predict_test[:, 0],
             y_predict_test[:, 1],
@@ -325,7 +418,9 @@ def main(
     if not os.path.exists(path_write + "/data"):
         os.makedirs(path_write + "/data")
     with open(path_write + "/data/input_output_data_tc1.pickle", "wb") as data:
-        pickle.dump([x_train, y_train_inside, x_test, y_test_inside], data)
+        pickle.dump(
+            [x_train_inside, y_train_inside, x_test_inside, y_test_inside], data
+        )
 
 
 if __name__ == "__main__":

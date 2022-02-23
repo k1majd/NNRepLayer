@@ -85,15 +85,22 @@ class Batch:
         )
 
 
-def label_output_inside(poly_const, out_data):
-    """_summary_
+def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
+    """Project the target points that lie outside of the contrained poly
+    to the poly's surface.
+    Outputs either all target data points(retrain) or just projected points (finetune).
 
     Args:
         poly_const (_type_): _description_
         out_data (_type_): _description_
+        mode (str, optional): Hand-labeling mode = "finetune", "retrain". Defaults to "finetune".
+
+    Returns:
+        _type_: _description_
     """
     # get the coordinates of the exterior points of the polytope
     out_data_new = []
+    inp_data_new = []
     ex_points = np.array(poly_const.exterior.coords)
     P = np.diag(np.ones(2))
     # get A and b matrices
@@ -106,8 +113,19 @@ def label_output_inside(poly_const, out_data):
             sol, _, _, _, _, _ = solve_qp(
                 P, out_data[i, 0:2], A.T, b, meq=0, factorized=True
             )
-            out_data_new.append(np.append(sol, [1]))
-        else:
-            out_data_new.append(out_data[i, :])
+            if not Point([sol[0], sol[1]]).within(
+                poly_const
+            ):  # captures the within error
+                sol = (
+                    ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.00001)
+                    / np.linalg.norm(sol - out_data[i, 0:2])
+                ) * (sol - out_data[i, 0:2]) + sol
 
-    return np.array(out_data_new)
+            out_data_new.append(np.append(sol, [1]))
+            inp_data_new.append(inp_data[i, :])
+        else:
+            if mode == "retrain":
+                out_data_new.append(out_data[i, :])
+                inp_data_new.append(inp_data[i, :])
+
+    return np.array(inp_data_new), np.array(out_data_new)
