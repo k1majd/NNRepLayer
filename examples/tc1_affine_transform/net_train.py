@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import gen_rand_points_within_poly, Batch
+from affine_utils import gen_rand_points_within_poly, get_batch
 import pickle
 import os
 import argparse
@@ -183,7 +183,7 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     loss = keras.losses.MeanSquaredError(name="MSE")
     optimizer = keras.optimizers.SGD(learning_rate=learning_rate, name="Adam")
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
-    x_train, y_train, x_test, y_test = batch.getBatch()
+    x_train, y_train, x_test, y_test = batch.get_batch()
     his = model_orig.fit(
         x_train, y_train, epochs=train_epochs, use_multiprocessing=True, verbose=0
     )
