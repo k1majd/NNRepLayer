@@ -46,7 +46,7 @@ def arg_parser():
         "--regularizationRate",
         nargs="?",
         type=float,
-        default=0.0001,
+        default=0.003,
         help="Specify regularization rate in int, default: 0.0001",
     )
     parser.add_argument(

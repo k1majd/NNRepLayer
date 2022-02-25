@@ -113,13 +113,17 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
             sol, _, _, _, _, _ = solve_qp(
                 P, out_data[i, 0:2], A.T, b, meq=0, factorized=True
             )
-            if not Point([sol[0], sol[1]]).within(
-                poly_const
-            ):  # captures the within error
-                sol = (
-                    ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.00001)
-                    / np.linalg.norm(sol - out_data[i, 0:2])
-                ) * (sol - out_data[i, 0:2]) + sol
+            sol = (
+                ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.25)
+                / np.linalg.norm(sol - out_data[i, 0:2])
+            ) * (sol - out_data[i, 0:2]) + sol
+            # if not Point([sol[0], sol[1]]).within(
+            #     poly_const
+            # ):  # captures the within error
+            #     sol = (
+            #         ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.00001)
+            #         / np.linalg.norm(sol - out_data[i, 0:2])
+            #     ) * (sol - out_data[i, 0:2]) + sol
 
             out_data_new.append(np.append(sol, [1]))
             inp_data_new.append(inp_data[i, :])

@@ -46,7 +46,7 @@ def arg_parser():
         "--regularizationRate",
         nargs="?",
         type=float,
-        default=0.0001,
+        default=0.003,
         help="Specify regularization rate in int, default: 0.0001",
     )
     parser.add_argument(
@@ -54,7 +54,7 @@ def arg_parser():
         "--batchSizeTrain",
         nargs="?",
         type=int,
-        default=50,
+        default=10,
         help="Specify training batch sizes at each epoch in int, default: 50",
     )
     parser.add_argument(
@@ -135,6 +135,7 @@ def main(
     x_train_inside, y_train_inside = label_output_inside(
         poly_const, dataset[0], dataset[1], mode="finetune"
     )
+    print(f"fine-tuning size: {y_train_inside.shape[0]}")
     x_test_inside, y_test_inside = label_output_inside(
         poly_const, dataset[2], dataset[3], mode="retrain"
     )
@@ -171,10 +172,10 @@ def main(
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=10, min_lr=0.0001
+        monitor="loss", factor=0.2, patience=10, min_lr=0.001
     )  # reduce learning rate
     callback_es = EarlyStopping(
-        monitor="loss", patience=20, restore_best_weights=True
+        monitor="loss", patience=10, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
     # his = model_orig.fit(
@@ -228,8 +229,8 @@ def main(
         plt.legend(loc="upper left", frameon=False)
         plt.show()
 
-    print("-----------------------")
-    print("Start fine-tuning the whole model!")
+    # print("-----------------------")
+    # print("Start fine-tuning the whole model!")
     for lnum, layer in enumerate(model_orig.layers):
         layer.trainable = True
 
@@ -238,7 +239,7 @@ def main(
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=10, min_lr=0.0001
+        monitor="loss", factor=0.2, patience=5, min_lr=0.001
     )  # reduce learning rate
     callback_es = EarlyStopping(
         monitor="loss", patience=20, restore_best_weights=True
@@ -257,7 +258,7 @@ def main(
     his = model_orig.fit(
         x_train_inside,
         y_train_inside,
-        epochs=10,
+        epochs=50,
         batch_size=batch_size_train,
         use_multiprocessing=True,
         verbose=1,
