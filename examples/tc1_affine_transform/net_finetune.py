@@ -1,13 +1,12 @@
 import os
 import argparse
+import pickle
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import label_output_inside
-import pickle
+from affine_utils import label_output_inside, plot_history, plot_dataset
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
-import matplotlib as mpl
 
 
 def arg_parser():
@@ -30,7 +29,7 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        default=1000,
+        default=500,
         help="Specify training epochs in int, default: 100",
     )
     parser.add_argument(
@@ -178,16 +177,6 @@ def main(
         monitor="loss", patience=10, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
-    # his = model_orig.fit(
-    #     x_train_inside,
-    #     y_train_inside,
-    #     validation_data=(x_test_inside, y_test_inside),
-    #     epochs=train_epochs,
-    #     batch_size=batch_size_train,
-    #     use_multiprocessing=True,
-    #     verbose=1,
-    #     callbacks=[callback_es, callback_reduce_lr],
-    # )
     his = model_orig.fit(
         x_train_inside,
         y_train_inside,
@@ -201,36 +190,20 @@ def main(
     model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
 
     if visual == 1:
-        print("----------------------")
-        print("Visualization")
-        plt.rcParams["text.usetex"] = False
-        mpl.style.use("seaborn")
+        plot_history(his, include_validaation=False)
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_train_inside, model_orig.predict(x_train_inside)],
+            label="training",
+        )
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_test_inside, model_orig.predict(x_test_inside)],
+            label="testing",
+        )
 
-        ## loss plotting
-        results_train_loss = his.history["loss"]
-        # results_valid_loss = his.history["val_loss"]
-        plt.plot(results_train_loss, color="red", label="training loss")
-        # plt.plot(results_valid_loss, color="blue", label="validation loss")
-        plt.title("Loss Function Output (fine-tuning the last layer)")
-        plt.xlabel("epoch")
-        plt.ylabel("loss")
-        plt.legend(loc="upper left", frameon=False)
-        # plt.savefig(path[0] + "_acc." + path[1], format="eps")
-        plt.show()
-
-        ## accuracy plotting
-        results_train_acc = his.history["accuracy"]
-        # results_valid_acc = his.history["val_accuracy"]
-        plt.plot(results_train_acc, color="red", label="training accuracy")
-        # plt.plot(results_valid_acc, color="blue", label="validation accuracy")
-        plt.title("Accuracy Function Output (fine-tuning the last layer)")
-        plt.xlabel("epoch")
-        plt.ylabel("accuracy")
-        plt.legend(loc="upper left", frameon=False)
-        plt.show()
-
-    # print("-----------------------")
-    # print("Start fine-tuning the whole model!")
+    print("-----------------------")
+    print("Start fine-tuning the whole model!")
     for lnum, layer in enumerate(model_orig.layers):
         layer.trainable = True
 
@@ -245,16 +218,6 @@ def main(
         monitor="loss", patience=20, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
-    # his = model_orig.fit(
-    #     x_train_inside,
-    #     y_train_inside,
-    #     validation_data=(x_test_inside, y_test_inside),
-    #     epochs=500,
-    #     batch_size=batch_size_train,
-    #     use_multiprocessing=True,
-    #     verbose=1,
-    #     callbacks=[callback_es, callback_reduce_lr],
-    # )
     his = model_orig.fit(
         x_train_inside,
         y_train_inside,
@@ -268,137 +231,17 @@ def main(
     model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
 
     if visual == 1:
-        print("----------------------")
-        print("Visualization")
-        plt.rcParams["text.usetex"] = False
-        mpl.style.use("seaborn")
-
-        ## loss plotting
-        results_train_loss = his.history["loss"]
-        # results_valid_loss = his.history["val_loss"]
-        plt.plot(results_train_loss, color="red", label="training loss")
-        # plt.plot(results_valid_loss, color="blue", label="validation loss")
-        plt.title("Loss Function Output")
-        plt.xlabel("epoch")
-        plt.ylabel("loss")
-        plt.legend(loc="upper left", frameon=False)
-        # plt.savefig(path[0] + "_acc." + path[1], format="eps")
-        plt.show()
-
-        ## accuracy plotting
-        results_train_acc = his.history["accuracy"]
-        # results_valid_acc = his.history["val_accuracy"]
-        plt.plot(results_train_acc, color="red", label="training accuracy")
-        # plt.plot(results_valid_acc, color="blue", label="validation accuracy")
-        plt.title("Accuracy Function Output")
-        plt.xlabel("epoch")
-        plt.ylabel("accuracy")
-        plt.legend(loc="upper left", frameon=False)
-        plt.show()
-
-        x_poly_const_bound, y_poly_const_bound = poly_const.exterior.xy
-        x_poly_trans_bound, y_poly_trans_bound = poly_trans.exterior.xy
-        x_poly_orig_bound, y_poly_orig_bound = poly_orig.exterior.xy
-
-        ## predicted output (training dataset)
-        plt.plot(
-            x_poly_orig_bound,
-            y_poly_orig_bound,
-            color="plum",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Original Set",
+        plot_history(his, include_validaation=False)
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_train_inside, model_orig.predict(x_train_inside)],
+            label="training",
         )
-        plt.plot(
-            x_poly_trans_bound,
-            y_poly_trans_bound,
-            color="tab:blue",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Target Set",
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_test_inside, model_orig.predict(x_test_inside)],
+            label="testing",
         )
-        plt.plot(
-            x_poly_const_bound,
-            y_poly_const_bound,
-            color="tab:red",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Constraint Set",
-        )
-        plt.scatter(
-            y_train_inside[:, 0],
-            y_train_inside[:, 1],
-            color="tab:blue",
-            label="Original Target",
-        )
-        y_predict_train = model_orig.predict(x_train_inside)
-        plt.scatter(
-            y_predict_train[:, 0],
-            y_predict_train[:, 1],
-            color="mediumseagreen",
-            label="Predicted Target",
-        )
-        plt.legend(loc="upper left", frameon=False, fontsize=20)
-        plt.title(r"In-place Rotation (training dataset)", fontsize=25)
-        plt.xlabel("x", fontsize=25)
-        plt.ylabel("y", fontsize=25)
-        plt.show()
-
-        ## predicted output (testing dataset)
-        plt.plot(
-            x_poly_orig_bound,
-            y_poly_orig_bound,
-            color="plum",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Original Set",
-        )
-        plt.plot(
-            x_poly_trans_bound,
-            y_poly_trans_bound,
-            color="tab:blue",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Target Set",
-        )
-        plt.plot(
-            x_poly_const_bound,
-            y_poly_const_bound,
-            color="tab:red",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Target Set",
-        )
-        plt.scatter(
-            y_test_inside[:, 0],
-            y_test_inside[:, 1],
-            color="tab:blue",
-            label="Original Target",
-        )
-        y_predict_test = model_orig.predict(x_test_inside)
-        plt.scatter(
-            y_predict_test[:, 0],
-            y_predict_test[:, 1],
-            color="mediumseagreen",
-            label="Predicted Target",
-        )
-        plt.legend(loc="upper left", frameon=False, fontsize=20)
-        plt.title(r"In-place Rotation (testing dataset)", fontsize=25)
-        plt.xlabel("x", fontsize=25)
-        plt.ylabel("y", fontsize=25)
-        plt.show()
 
     print("-----------------------")
     print(f"the data set and model are saved in {path_write}")

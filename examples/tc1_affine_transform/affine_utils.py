@@ -5,6 +5,7 @@ from quadprog import solve_qp
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point
 from matplotlib import pyplot as plt
+import matplotlib as mpl
 
 ## generate random samples within the input polygon
 def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7):
@@ -114,7 +115,7 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
                 P, out_data[i, 0:2], A.T, b, meq=0, factorized=True
             )
             sol = (
-                ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.25)
+                ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.15)
                 / np.linalg.norm(sol - out_data[i, 0:2])
             ) * (sol - out_data[i, 0:2]) + sol
             # if not Point([sol[0], sol[1]]).within(
@@ -133,3 +134,71 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
                 inp_data_new.append(inp_data[i, :])
 
     return np.array(inp_data_new), np.array(out_data_new)
+
+
+def plot_history(his, include_validaation=False):
+    print("----------------------")
+    print("History Visualization")
+    plt.rcParams["text.usetex"] = True
+    mpl.style.use("seaborn")
+
+    ## loss plotting
+    results_train_loss = his.history["loss"]
+    plt.plot(results_train_loss, color="red", label="training loss")
+    if include_validaation:
+        results_valid_loss = his.history["val_loss"]
+        plt.plot(results_valid_loss, color="blue", label="validation loss")
+    plt.title("Loss Function Output (fine-tuning the last layer)")
+    plt.xlabel("epoch")
+    plt.ylabel("loss")
+    plt.legend(loc="upper left", frameon=False)
+    plt.show()
+
+    ## accuracy plotting
+    results_train_acc = his.history["accuracy"]
+    plt.plot(results_train_acc, color="red", label="training accuracy")
+    if include_validaation:
+        results_valid_acc = his.history["val_accuracy"]
+        plt.plot(results_valid_acc, color="blue", label="validation accuracy")
+    plt.title("Accuracy Function Output (fine-tuning the last layer)")
+    plt.xlabel("epoch")
+    plt.ylabel("accuracy")
+    plt.legend(loc="upper left", frameon=False)
+    plt.show()
+
+
+def plot_dataset(polys, out_dataset, label="training"):
+    print("----------------------")
+    print(f"Data samples Visualization ({label})")
+    plt.rcParams["text.usetex"] = True
+    mpl.style.use("seaborn")
+
+    poly_labels = ["Original Set", "Target Set", "Constraint Set"]
+    colors = ["plum", "tab:blue", "tab:red"]
+    # plot polys
+    for i, poly in enumerate(polys):
+        x_poly_bound, y_poly_bound = poly.exterior.xy
+        plt.plot(
+            x_poly_bound,
+            y_poly_bound,
+            color=colors[i],
+            alpha=0.7,
+            linewidth=3,
+            solid_capstyle="round",
+            zorder=2,
+            label=poly_labels[i],
+        )
+    plot_labels = ["Original Target", "Predicted Target"]
+    for i, data in enumerate(out_dataset):
+        plt.scatter(
+            data[:, 0],
+            data[:, 1],
+            color=colors[i],
+            label=plot_labels[i],
+        )
+
+    plt.legend(loc="upper left", frameon=False, fontsize=20)
+    plt.title(f"In-place Rotation ({label} dataset)", fontsize=25)
+    plt.xlabel("x", fontsize=25)
+    plt.ylabel("y", fontsize=25)
+    plt.show()
