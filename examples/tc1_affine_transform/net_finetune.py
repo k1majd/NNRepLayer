@@ -4,9 +4,10 @@ import pickle
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import label_output_inside, plot_history, plot_dataset
+from affine_utils import label_output_inside, plot_history, plot_dataset, model_eval
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
+from csv import writer
 
 
 def arg_parser():
@@ -65,6 +66,33 @@ def arg_parser():
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
     )
+    parser.add_argument(
+        "-sm",
+        "--saveModel",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to save model or not 1 = on, 0 = off, default: 1",
+    )
+    parser.add_argument(
+        "-sd",
+        "--saveData",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to save data or not 1 = on, 0 = off, default: 1",
+    )
+    parser.add_argument(
+        "-ss",
+        "--saveStats",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to save stats or not 1 = on, 0 = off, default: 1",
+    )
     return parser.parse_args()
 
 
@@ -75,6 +103,9 @@ def main(
     train_epochs,
     visual,
     batch_size_train,
+    save_model,
+    save_data,
+    save_stats,
 ):
     """_summary_
 
@@ -246,25 +277,50 @@ def main(
     print("-----------------------")
     print(f"the data set and model are saved in {path_write}")
 
-    if not os.path.exists(path_write):
-        os.makedirs(path_write + "/model")
-    keras.models.save_model(
-        model_orig,
-        path_write + "/model",
-        overwrite=True,
-        include_optimizer=True,
-        save_format=None,
-        signatures=None,
-        options=None,
-        save_traces=True,
-    )
-
-    if not os.path.exists(path_write + "/data"):
-        os.makedirs(path_write + "/data")
-    with open(path_write + "/data/input_output_data_tc1.pickle", "wb") as data:
-        pickle.dump(
-            [x_train_inside, y_train_inside, x_test_inside, y_test_inside], data
+    if save_model == 1:
+        if not os.path.exists(path_write):
+            os.makedirs(path_write + "/model")
+        keras.models.save_model(
+            model_orig,
+            path_write + "/model",
+            overwrite=True,
+            include_optimizer=True,
+            save_format=None,
+            signatures=None,
+            options=None,
+            save_traces=True,
         )
+        print("saved: model")
+
+    if save_data == 1:
+        if not os.path.exists(path_write + "/data"):
+            os.makedirs(path_write + "/data")
+        with open(path_write + "/data/input_output_data_tc1.pickle", "wb") as data:
+            pickle.dump(
+                [x_train_inside, y_train_inside, x_test_inside, y_test_inside], data
+            )
+        print("saved: dataset")
+
+    # save the statistics
+    if save_stats == 1:
+        if not os.path.exists(path_write + "/stats"):
+            os.makedirs(path_write + "/stats")
+
+        with open(
+            path_write + "/stats/fine_tune_accs_stats_tc1.csv", "a+", newline=""
+        ) as write_obj:
+            # Create a writer object from csv module
+            csv_writer = writer(write_obj)
+
+            # Add contents of list as last row in the csv file
+            csv_writer.writerow(
+                model_eval(
+                    model_orig,
+                    keras.models.load_model(path_read + "/model"),
+                    path_read,
+                    poly_const,
+                )
+            )
 
 
 if __name__ == "__main__":
@@ -276,4 +332,7 @@ if __name__ == "__main__":
         args.epoch,
         args.visualization,
         args.batchSizeTrain,
+        args.saveModel,
+        args.saveData,
+        args.saveStats,
     )

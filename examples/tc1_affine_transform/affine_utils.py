@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import shapely.affinity as affinity
 from sklearn.model_selection import train_test_split
@@ -6,6 +7,7 @@ from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point
 from matplotlib import pyplot as plt
 import matplotlib as mpl
+import pickle
 
 ## generate random samples within the input polygon
 def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7):
@@ -136,7 +138,113 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
     return np.array(inp_data_new), np.array(out_data_new)
 
 
+def model_eval(model_new, model_orig, path_read, poly_const):
+    """_summary_
+
+    Args:
+        model_new (tf): new model in tensorflow
+        model_orig (tf): original model in tensorflow
+        path_read (str): path to read stat data
+
+    Raises:
+        ImportError: error if the given path does not exits.
+    """
+    # load eval dataset
+    if not (
+        os.path.exists(path_read + "/data/input_output_data_inside_train_tc1.pickle")
+        or os.path.exists(
+            path_read + "/data/input_output_data_outside_train_tc1.pickle"
+        )
+        or os.path.exists(path_read + "/data/input_output_data_inside_test_tc1.pickle")
+        or os.path.exists(path_read + "/data/input_output_data_outside_test_tc1.pickle")
+    ):
+        raise ImportError(
+            "inside-outside datasets for test and train should be generated first in path {path_read}/data/"
+        )
+    # with open(
+    #     path_read + "/data/input_output_data_inside_train_tc1.pickle", "rb"
+    # ) as data:
+    #     train_inside = pickle.load(data)
+    with open(
+        path_read + "/data/input_output_data_outside_train_tc1.pickle", "rb"
+    ) as data:
+        train_out = pickle.load(data)
+    with open(
+        path_read + "/data/input_output_data_inside_test_tc1.pickle", "rb"
+    ) as data:
+        test_in = pickle.load(data)
+    with open(
+        path_read + "/data/input_output_data_outside_test_tc1.pickle", "rb"
+    ) as data:
+        test_out = pickle.load(data)
+
+    # accuracy on outside and inside models
+    loss_test_in = model_new.evaluate(test_in[0], test_in[1], verbose=0)[0]
+    loss_test_out = model_new.evaluate(test_out[0], test_out[1], verbose=0)[0]
+
+    # new model accuracy on buggy data - train
+    y_train_out_pred = model_new.predict(train_out[0])
+    num_buggy_train = train_out[1].shape[0]
+    num_corrected_train = 0
+
+    for i in range(num_buggy_train):
+        if not Point(y_train_out_pred[i][0], y_train_out_pred[i][1]).within(poly_const):
+            if (
+                not poly_const.exterior.distance(
+                    Point(y_train_out_pred[i][0], y_train_out_pred[i][1])
+                )
+                < 0.00001
+            ):
+                num_corrected_train += 1
+
+    acc_buggy_train = num_corrected_train / num_buggy_train
+
+    # new model accuracy on buggy data - test
+    y_test_out_pred = model_new.predict(test_out[0])
+    num_buggy_test = test_out[1].shape[0]
+    num_corrected_test = 0
+
+    for i in range(num_buggy_test):
+        if not Point(y_test_out_pred[i][0], y_test_out_pred[i][1]).within(poly_const):
+            if (
+                not poly_const.exterior.distance(
+                    Point(y_test_out_pred[i][0], y_test_out_pred[i][1])
+                )
+                < 0.00001
+            ):
+                num_corrected_test += 1
+
+    acc_buggy_test = num_corrected_test / num_buggy_test
+
+    # w-w_orig metrics
+    w_orig = np.array([])
+    w_new = np.array([])
+    for w1, w2 in zip(model_orig.get_weights(), model_new.get_weights()):
+        w_orig = np.append(w_orig, w1.flatten())
+        w_new = np.append(w_new, w2.flatten())
+
+    norm_1 = np.linalg.norm(w_orig - w_new, 1)
+    norm_2 = np.linalg.norm(w_orig - w_new)
+    norm_inf = np.linalg.norm(w_orig - w_new, np.inf)
+
+    return [
+        loss_test_in,
+        loss_test_out,
+        acc_buggy_train,
+        acc_buggy_test,
+        norm_1,
+        norm_2,
+        norm_inf,
+    ]
+
+
 def plot_history(his, include_validaation=False):
+    """_summary_
+
+    Args:
+        his (_type_): _description_
+        include_validaation (bool, optional): _description_. Defaults to False.
+    """
     print("----------------------")
     print("History Visualization")
     plt.rcParams["text.usetex"] = True
