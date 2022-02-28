@@ -230,7 +230,7 @@ def main(
     model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
 
     if visual == 1:
-        plot_history(his, include_validaation=False)
+        plot_history(his, include_validation=False)
         plot_dataset(
             [poly_orig, poly_trans, poly_const],
             [y_train_inside, model_orig.predict(x_train_inside)],
@@ -271,7 +271,7 @@ def main(
     model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
 
     if visual == 1:
-        plot_history(his, include_validaation=False)
+        plot_history(his, include_validation=False)
         plot_dataset(
             [poly_orig, poly_trans, poly_const],
             [y_train_inside, model_orig.predict(x_train_inside)],

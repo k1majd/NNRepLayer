@@ -286,7 +286,7 @@ def plot_history(his, include_validation=False):
     """
     print("----------------------")
     print("History Visualization")
-    plt.rcParams["text.usetex"] = True
+    plt.rcParams["text.usetex"] = False
     mpl.style.use("seaborn")
 
     ## loss plotting
@@ -324,7 +324,7 @@ def plot_dataset(polys, out_dataset, label="training"):
     """
     print("----------------------")
     print(f"Data samples Visualization ({label})")
-    plt.rcParams["text.usetex"] = True
+    plt.rcParams["text.usetex"] = False
     mpl.style.use("seaborn")
 
     poly_labels = ["Original Set", "Target Set", "Constraint Set"]
