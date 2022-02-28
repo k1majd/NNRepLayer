@@ -2,6 +2,7 @@ import os
 import pickle
 import numpy as np
 from shapely.geometry import Polygon, Point
+from matplotlib import pyplot as plt
 
 
 direc = os.path.dirname(os.path.realpath(__file__))
@@ -61,7 +62,7 @@ with open(path + "/data/input_output_data_inside_train_tc1.pickle", "wb") as dat
     pickle.dump([np.array(x_inside), np.array(y_inside)], data)
 with open(path + "/data/input_output_data_outside_train_tc1.pickle", "wb") as data:
     print(f"number of training points outside: {len(y_outside)}")
-    pickle.dump([np.array(x_inside), np.array(y_inside)], data)
+    pickle.dump([np.array(x_outside), np.array(y_outside)], data)
 
 # divide testing dataset
 x_inside = []
@@ -84,4 +85,4 @@ with open(path + "/data/input_output_data_inside_test_tc1.pickle", "wb") as data
     pickle.dump([np.array(x_inside), np.array(y_inside)], data)
 with open(path + "/data/input_output_data_outside_test_tc1.pickle", "wb") as data:
     print(f"number of testing points outside: {len(y_outside)}")
-    pickle.dump([np.array(x_inside), np.array(y_inside)], data)
+    pickle.dump([np.array(x_outside), np.array(y_outside)], data)

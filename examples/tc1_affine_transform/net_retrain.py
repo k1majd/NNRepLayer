@@ -1,10 +1,17 @@
 import os
+from csv import writer
 import argparse
+import pickle
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import label_output_inside
-import pickle
+from affine_utils import (
+    label_output_inside,
+    original_data_loader,
+    plot_history,
+    plot_dataset,
+    model_eval,
+)
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
 import matplotlib as mpl
@@ -38,7 +45,7 @@ def arg_parser():
         "--learnRate",
         nargs="?",
         type=float,
-        default=0.01,
+        default=0.03,
         help="Specify Learning rate in int, default: 0.003",
     )
     parser.add_argument(
@@ -66,6 +73,42 @@ def arg_parser():
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
     )
+    parser.add_argument(
+        "-sm",
+        "--saveModel",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to save model or not 1 = on, 0 = off, default: 1",
+    )
+    parser.add_argument(
+        "-sd",
+        "--saveData",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to save data or not 1 = on, 0 = off, default: 1",
+    )
+    parser.add_argument(
+        "-ss",
+        "--saveStats",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to save stats or not 1 = on, 0 = off, default: 1",
+    )
+    parser.add_argument(
+        "-vb",
+        "--netVerbose",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to show training verbose or not 1 = on, 0 = off, default: 1",
+    )
     return parser.parse_args()
 
 
@@ -76,6 +119,10 @@ def main(
     train_epochs,
     visual,
     batch_size_train,
+    save_model,
+    save_data,
+    save_stats,
+    net_verbose,
 ):
     """_summary_
 
@@ -126,25 +173,16 @@ def main(
 
     print("-----------------------")
     print("Data modification")
-    if not os.path.exists(path_read + "/data/input_output_data_tc1.pickle"):
-        raise ImportError(
-            "path {path_read}/data/input_output_data_tc1.pickle does not exist!"
-        )
-    with open(path_read + "/data/input_output_data_tc1.pickle", "rb") as data:
-        dataset = pickle.load(data)
+    x_train, y_train, x_test, y_test = original_data_loader()
     x_train_inside, y_train_inside = label_output_inside(
-        poly_const, dataset[0], dataset[1], mode="retrain"
+        poly_const, x_train, y_train, bound_error=0.45, mode="retrain"
     )
     x_test_inside, y_test_inside = label_output_inside(
-        poly_const, dataset[2], dataset[3], mode="retrain"
+        poly_const, x_test, y_test, bound_error=0.45, mode="retrain"
     )
     plt.show()
     print("-----------------------")
     print("NN model fine tuning:")
-
-    # if not os.path.exists(path_read + "/model"):
-    #     raise ImportError("path {path_read}/model does not exist!")
-    # model_orig = keras.models.load_model(path_read + "/model")
 
     # substitute the output layer with a new layer and freeze the base model
     model_orig = keras.Sequential(name="3_layer_NN")
@@ -186,10 +224,10 @@ def main(
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=10, min_lr=0.0001
+        monitor="val_loss", factor=0.2, patience=8, min_lr=0.00001
     )  # reduce learning rate
     callback_es = EarlyStopping(
-        monitor="loss", patience=20, restore_best_weights=True
+        monitor="val_loss", patience=10, restore_best_weights=True
     )  # early stopping callback
     # model fitting
     his = model_orig.fit(
@@ -199,7 +237,7 @@ def main(
         epochs=train_epochs,
         batch_size=batch_size_train,
         use_multiprocessing=True,
-        verbose=1,
+        verbose=net_verbose,
         callbacks=[callback_es, callback_reduce_lr],
     )
     print("Model Loss + Accuracy on Test Data Set: ")
@@ -208,158 +246,66 @@ def main(
     if visual == 1:
         print("----------------------")
         print("Visualization")
-        plt.rcParams["text.usetex"] = False
-        mpl.style.use("seaborn")
-
-        ## loss plotting
-        results_train_loss = his.history["loss"]
-        results_valid_loss = his.history["val_loss"]
-        plt.plot(results_train_loss, color="red", label="training loss")
-        plt.plot(results_valid_loss, color="blue", label="validation loss")
-        plt.title("Loss Function Output")
-        plt.xlabel("epoch")
-        plt.ylabel("loss")
-        plt.legend(loc="upper left", frameon=False)
-        # plt.savefig(path[0] + "_acc." + path[1], format="eps")
-        plt.show()
-
-        ## accuracy plotting
-        results_train_acc = his.history["accuracy"]
-        results_valid_acc = his.history["val_accuracy"]
-        plt.plot(results_train_acc, color="red", label="training accuracy")
-        plt.plot(results_valid_acc, color="blue", label="validation accuracy")
-        plt.title("Accuracy Function Output")
-        plt.xlabel("epoch")
-        plt.ylabel("accuracy")
-        plt.legend(loc="upper left", frameon=False)
-        plt.show()
-
-        x_poly_const_bound, y_poly_const_bound = poly_const.exterior.xy
-        x_poly_trans_bound, y_poly_trans_bound = poly_trans.exterior.xy
-        x_poly_orig_bound, y_poly_orig_bound = poly_orig.exterior.xy
-
-        ## predicted output (training dataset)
-        plt.plot(
-            x_poly_orig_bound,
-            y_poly_orig_bound,
-            color="plum",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Original Set",
+        plot_history(his, include_validation=True)
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_train_inside, model_orig.predict(x_train_inside)],
+            label="training",
         )
-        plt.plot(
-            x_poly_trans_bound,
-            y_poly_trans_bound,
-            color="tab:blue",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Target Set",
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_test_inside, model_orig.predict(x_test_inside)],
+            label="testing",
         )
-        plt.plot(
-            x_poly_const_bound,
-            y_poly_const_bound,
-            color="tab:red",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Constraint Set",
-        )
-        plt.scatter(
-            y_train_inside[:, 0],
-            y_train_inside[:, 1],
-            color="tab:blue",
-            label="Original Target",
-        )
-        y_predict_train = model_orig.predict(x_train_inside)
-        plt.scatter(
-            y_predict_train[:, 0],
-            y_predict_train[:, 1],
-            color="mediumseagreen",
-            label="Predicted Target",
-        )
-        plt.legend(loc="upper left", frameon=False, fontsize=20)
-        plt.title(r"In-place Rotation (training dataset)", fontsize=25)
-        plt.xlabel("x", fontsize=25)
-        plt.ylabel("y", fontsize=25)
-        plt.show()
-
-        ## predicted output (testing dataset)
-        plt.plot(
-            x_poly_orig_bound,
-            y_poly_orig_bound,
-            color="plum",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Original Set",
-        )
-        plt.plot(
-            x_poly_trans_bound,
-            y_poly_trans_bound,
-            color="tab:blue",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Target Set",
-        )
-        plt.plot(
-            x_poly_const_bound,
-            y_poly_const_bound,
-            color="tab:red",
-            alpha=0.7,
-            linewidth=3,
-            solid_capstyle="round",
-            zorder=2,
-            label="Target Set",
-        )
-        plt.scatter(
-            y_test_inside[:, 0],
-            y_test_inside[:, 1],
-            color="tab:blue",
-            label="Original Target",
-        )
-        y_predict_test = model_orig.predict(x_test_inside)
-        plt.scatter(
-            y_predict_test[:, 0],
-            y_predict_test[:, 1],
-            color="mediumseagreen",
-            label="Predicted Target",
-        )
-        plt.legend(loc="upper left", frameon=False, fontsize=20)
-        plt.title(r"In-place Rotation (testing dataset)", fontsize=25)
-        plt.xlabel("x", fontsize=25)
-        plt.ylabel("y", fontsize=25)
-        plt.show()
 
     print("-----------------------")
     print(f"the data set and model are saved in {path_write}")
 
-    if not os.path.exists(path_write):
-        os.makedirs(path_write + "/model")
-    keras.models.save_model(
-        model_orig,
-        path_write + "/model",
-        overwrite=True,
-        include_optimizer=True,
-        save_format=None,
-        signatures=None,
-        options=None,
-        save_traces=True,
-    )
-
-    if not os.path.exists(path_write + "/data"):
-        os.makedirs(path_write + "/data")
-    with open(path_write + "/data/input_output_data_tc1.pickle", "wb") as data:
-        pickle.dump(
-            [x_train_inside, y_train_inside, x_test_inside, y_test_inside], data
+    if save_model == 1:
+        if not os.path.exists(path_write):
+            os.makedirs(path_write + "/model")
+        keras.models.save_model(
+            model_orig,
+            path_write + "/model",
+            overwrite=True,
+            include_optimizer=True,
+            save_format=None,
+            signatures=None,
+            options=None,
+            save_traces=True,
         )
+        print("saved: model")
+
+    if save_data == 1:
+        if not os.path.exists(path_write + "/data"):
+            os.makedirs(path_write + "/data")
+        with open(path_write + "/data/input_output_data_tc1.pickle", "wb") as data:
+            pickle.dump(
+                [x_train_inside, y_train_inside, x_test_inside, y_test_inside], data
+            )
+        print("saved: dataset")
+
+    # save the statistics
+    if save_stats == 1:
+        if not os.path.exists(path_write + "/stats"):
+            os.makedirs(path_write + "/stats")
+
+        with open(
+            path_write + "/stats/retrain_accs_stats_tc1.csv", "a+", newline=""
+        ) as write_obj:
+            # Create a writer object from csv module
+            csv_writer = writer(write_obj)
+
+            # Add contents of list as last row in the csv file
+            csv_writer.writerow(
+                model_eval(
+                    model_orig,
+                    keras.models.load_model(path_read + "/model"),
+                    path_read,
+                    poly_const,
+                )
+            )
+        print("saved: stats")
 
 
 if __name__ == "__main__":
@@ -371,4 +317,8 @@ if __name__ == "__main__":
         args.epoch,
         args.visualization,
         args.batchSizeTrain,
+        args.saveModel,
+        args.saveData,
+        args.saveStats,
+        args.netVerbose,
     )

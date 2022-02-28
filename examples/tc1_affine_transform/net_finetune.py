@@ -1,13 +1,19 @@
 import os
 import argparse
 import pickle
+from csv import writer
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import label_output_inside, plot_history, plot_dataset, model_eval
+from affine_utils import (
+    label_output_inside,
+    plot_history,
+    plot_dataset,
+    model_eval,
+    original_data_loader,
+)
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
-from csv import writer
 
 
 def arg_parser():
@@ -93,6 +99,15 @@ def arg_parser():
         choices=range(0, 2),
         help="Specify whether to save stats or not 1 = on, 0 = off, default: 1",
     )
+    parser.add_argument(
+        "-vb",
+        "--netVerbose",
+        nargs="?",
+        type=int,
+        default=1,
+        choices=range(0, 2),
+        help="Specify whether to show training verbose or not 1 = on, 0 = off, default: 1",
+    )
     return parser.parse_args()
 
 
@@ -106,6 +121,7 @@ def main(
     save_model,
     save_data,
     save_stats,
+    net_verbose,
 ):
     """_summary_
 
@@ -156,18 +172,13 @@ def main(
 
     print("-----------------------")
     print("Data modification")
-    if not os.path.exists(path_read + "/data/input_output_data_tc1.pickle"):
-        raise ImportError(
-            "path {path_read}/data/input_output_data_tc1.pickle does not exist!"
-        )
-    with open(path_read + "/data/input_output_data_tc1.pickle", "rb") as data:
-        dataset = pickle.load(data)
+    x_train, y_train, x_test, y_test = original_data_loader()
     x_train_inside, y_train_inside = label_output_inside(
-        poly_const, dataset[0], dataset[1], mode="finetune"
+        poly_const, x_train, y_train, mode="finetune"
     )
     print(f"fine-tuning size: {y_train_inside.shape[0]}")
     x_test_inside, y_test_inside = label_output_inside(
-        poly_const, dataset[2], dataset[3], mode="retrain"
+        poly_const, x_test, y_test, mode="retrain"
     )
     plt.show()
     print("-----------------------")
@@ -180,7 +191,7 @@ def main(
     # substitute the output layer with a new layer and freeze the base model
     output_dim = model_orig.layers[-1].output.shape[1]
     model_orig.pop()
-    for lnum, layer in enumerate(model_orig.layers):
+    for _, layer in enumerate(model_orig.layers):
         layer.trainable = False
     model_orig.add(
         keras.layers.Dense(
@@ -190,8 +201,6 @@ def main(
             name="output",
         )
     )
-    for lnum, layer in enumerate(model_orig.layers):
-        print(lnum, layer.name, layer.trainable, layer.dtype, layer.dtype_policy)
     model_orig.summary()
 
     print("-----------------------")
@@ -214,7 +223,7 @@ def main(
         epochs=train_epochs,
         batch_size=batch_size_train,
         use_multiprocessing=True,
-        verbose=1,
+        verbose=net_verbose,
         callbacks=[callback_es, callback_reduce_lr],
     )
     print("Model Loss + Accuracy on Test Data Set: ")
@@ -235,7 +244,7 @@ def main(
 
     print("-----------------------")
     print("Start fine-tuning the whole model!")
-    for lnum, layer in enumerate(model_orig.layers):
+    for _, layer in enumerate(model_orig.layers):
         layer.trainable = True
 
     loss = keras.losses.MeanSquaredError(name="MSE")
@@ -255,7 +264,7 @@ def main(
         epochs=50,
         batch_size=batch_size_train,
         use_multiprocessing=True,
-        verbose=1,
+        verbose=net_verbose,
         callbacks=[callback_es, callback_reduce_lr],
     )
     print("Model Loss + Accuracy on Test Data Set: ")
@@ -321,6 +330,7 @@ def main(
                     poly_const,
                 )
             )
+        print("saved: stats")
 
 
 if __name__ == "__main__":
@@ -335,4 +345,5 @@ if __name__ == "__main__":
         args.saveModel,
         args.saveData,
         args.saveStats,
+        args.netVerbose,
     )

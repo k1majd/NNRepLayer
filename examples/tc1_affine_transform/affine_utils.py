@@ -9,8 +9,30 @@ from matplotlib import pyplot as plt
 import matplotlib as mpl
 import pickle
 
+
+def original_data_loader():
+    """_summary_
+
+    Raises:
+        ImportError: error if the data is does not exist in the designated location
+
+    Returns:
+        list[ndarray]: a list of [x_train, y_train, x_test, y_test]
+    """
+    direc = os.path.dirname(os.path.realpath(__file__))
+    path_read = direc + "/tc1/original_net"
+    if not os.path.exists(path_read + "/data/input_output_data_tc1.pickle"):
+        raise ImportError(
+            "path {path_read}/data/input_output_data_tc1.pickle does not exist!"
+        )
+    with open(path_read + "/data/input_output_data_tc1.pickle", "rb") as data:
+        dataset = pickle.load(data)
+    return dataset[0], dataset[1], dataset[2], dataset[3]
+
+
 ## generate random samples within the input polygon
 def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7):
+    # pylint: disable=invalid-name
     """_summary_
 
     Args:
@@ -53,6 +75,7 @@ def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7
 
 
 class Batch:
+    # pylint: disable=too-few-public-methods
     """_summary_"""
 
     def __init__(self, X_col, Y_col, batch_size_val):
@@ -88,7 +111,10 @@ class Batch:
         )
 
 
-def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
+def label_output_inside(
+    poly_const, inp_data, out_data, bound_error=0.3, mode="finetune"
+):
+    # pylint: disable=invalid-name
     """Project the target points that lie outside of the contrained poly
     to the poly's surface.
     Outputs either all target data points(retrain) or just projected points (finetune).
@@ -96,6 +122,7 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
     Args:
         poly_const (_type_): _description_
         out_data (_type_): _description_
+        bound_error (float, optional): distance of newly labeled points to the boudnary of set.
         mode (str, optional): Hand-labeling mode = "finetune", "retrain". Defaults to "finetune".
 
     Returns:
@@ -117,7 +144,7 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
                 P, out_data[i, 0:2], A.T, b, meq=0, factorized=True
             )
             sol = (
-                ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + 0.15)
+                ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + bound_error)
                 / np.linalg.norm(sol - out_data[i, 0:2])
             ) * (sol - out_data[i, 0:2]) + sol
             # if not Point([sol[0], sol[1]]).within(
@@ -139,15 +166,27 @@ def label_output_inside(poly_const, inp_data, out_data, mode="finetune"):
 
 
 def model_eval(model_new, model_orig, path_read, poly_const):
+    # pylint: disable=trailing-whitespace
+    # pylint: disable=too-many-locals
     """_summary_
 
     Args:
         model_new (tf): new model in tensorflow
         model_orig (tf): original model in tensorflow
         path_read (str): path to read stat data
+        poly_const (obj): constraint polytope._read Shapely documentation
 
     Raises:
-        ImportError: error if the given path does not exits.
+        ImportError: error if path_read does not exist
+
+    Returns:
+        list[float]: a list of [loss for inside test samples,
+                                loss for outside test samples,
+                                #corrected samples/#train buggy samples,
+                                #corrected samples/#test buggy samples,
+                                L1 weight error,
+                                L2 weight error,
+                                Linfty weight error]
     """
     # load eval dataset
     if not (
@@ -185,7 +224,7 @@ def model_eval(model_new, model_orig, path_read, poly_const):
     # new model accuracy on buggy data - train
     y_train_out_pred = model_new.predict(train_out[0])
     num_buggy_train = train_out[1].shape[0]
-    num_corrected_train = 0
+    num_corrected_train = num_buggy_train
 
     for i in range(num_buggy_train):
         if not Point(y_train_out_pred[i][0], y_train_out_pred[i][1]).within(poly_const):
@@ -195,14 +234,14 @@ def model_eval(model_new, model_orig, path_read, poly_const):
                 )
                 < 0.00001
             ):
-                num_corrected_train += 1
+                num_corrected_train -= 1
 
     acc_buggy_train = num_corrected_train / num_buggy_train
 
     # new model accuracy on buggy data - test
     y_test_out_pred = model_new.predict(test_out[0])
     num_buggy_test = test_out[1].shape[0]
-    num_corrected_test = 0
+    num_corrected_test = num_buggy_test
 
     for i in range(num_buggy_test):
         if not Point(y_test_out_pred[i][0], y_test_out_pred[i][1]).within(poly_const):
@@ -212,7 +251,7 @@ def model_eval(model_new, model_orig, path_read, poly_const):
                 )
                 < 0.00001
             ):
-                num_corrected_test += 1
+                num_corrected_test -= 1
 
     acc_buggy_test = num_corrected_test / num_buggy_test
 
@@ -238,7 +277,7 @@ def model_eval(model_new, model_orig, path_read, poly_const):
     ]
 
 
-def plot_history(his, include_validaation=False):
+def plot_history(his, include_validation=False):
     """_summary_
 
     Args:
@@ -253,7 +292,7 @@ def plot_history(his, include_validaation=False):
     ## loss plotting
     results_train_loss = his.history["loss"]
     plt.plot(results_train_loss, color="red", label="training loss")
-    if include_validaation:
+    if include_validation:
         results_valid_loss = his.history["val_loss"]
         plt.plot(results_valid_loss, color="blue", label="validation loss")
     plt.title("Loss Function Output (fine-tuning the last layer)")
@@ -265,7 +304,7 @@ def plot_history(his, include_validaation=False):
     ## accuracy plotting
     results_train_acc = his.history["accuracy"]
     plt.plot(results_train_acc, color="red", label="training accuracy")
-    if include_validaation:
+    if include_validation:
         results_valid_acc = his.history["val_accuracy"]
         plt.plot(results_valid_acc, color="blue", label="validation accuracy")
     plt.title("Accuracy Function Output (fine-tuning the last layer)")
@@ -276,6 +315,13 @@ def plot_history(his, include_validaation=False):
 
 
 def plot_dataset(polys, out_dataset, label="training"):
+    """_summary_
+
+    Args:
+        polys (_type_): _description_
+        out_dataset (_type_): _description_
+        label (str, optional): _description_. Defaults to "training".
+    """
     print("----------------------")
     print(f"Data samples Visualization ({label})")
     plt.rcParams["text.usetex"] = True
