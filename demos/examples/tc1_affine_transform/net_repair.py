@@ -130,8 +130,8 @@ def main(
     train_dataset = (x_train, y_train)
 
     weight_slack = 1
-    time_limit = 3600
-    mip_gap = 0.05
+    time_limit = 7200
+    mip_gap = 0.04
     options = Options(
         "gdp.bigm", "gurobi", "python", "keras", weight_slack, time_limit, mip_gap
     )
