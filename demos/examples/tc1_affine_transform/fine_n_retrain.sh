@@ -19,3 +19,6 @@ do
    echo "Retrain - test: $i"
    python net_repair.py -rl i
 done
+git add .
+git commit -m "update affine repair"
+git push
