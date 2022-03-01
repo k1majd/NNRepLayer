@@ -17,7 +17,7 @@ echo "Retraining"
 for i in {3..1}
 do
    echo "Retrain - test: $i"
-   python net_repair.py -rl i
+   python net_repair.py -rl $i
 done
 git add .
 git commit -m "update affine repair"
