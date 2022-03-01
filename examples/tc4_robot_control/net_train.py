@@ -1,10 +1,14 @@
-# this script train a DNN for the car control example in https://arxiv.org/pdf/2109.14041.pdf
-# ref: https://arxiv.org/pdf/2109.14041.pdf
-# example: Car Control
-# network arch: 3-10-10-3
-#
+""" This script train a DNN for the car control example in https://arxiv.org/pdf/2109.14041.pdf
+ref: https://arxiv.org/pdf/2109.14041.pdf
+example: Car Control
+network arch: 3-10-10-3
+
+Returns:
+    _type_: _description__
+"""
 
 import os
+from datetime import datetime
 import pickle
 import argparse
 from tensorflow import keras
@@ -12,13 +16,17 @@ from rc_utils import CarControlProblem
 
 
 def arg_parser():
-    cwd = os.getcwd()
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    cwd = os.path.dirname(os.path.realpath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-p",
         "--path",
         nargs="?",
-        const=cwd,
         default=cwd,
         help="Specify a path to store the data",
     )
@@ -27,16 +35,22 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        const=100,
         default=100,
-        help="Specify training epochs in int, default: 5000",
+        help="Specify training epochs in int, default: 100",
+    )
+    parser.add_argument(
+        "-nt",
+        "--numberOfTrajectories",
+        nargs="?",
+        type=int,
+        default=100,
+        help="Specify the number of trajectories in the training data set, default: 100",
     )
     parser.add_argument(
         "-lr",
         "--learnRate",
         nargs="?",
         type=float,
-        const=0.003,
         default=0.003,
         help="Specify Learning rate in int, default: 0.003",
     )
@@ -45,16 +59,14 @@ def arg_parser():
         "--regularizationRate",
         nargs="?",
         type=float,
-        const=0.0001,
         default=0.0001,
-        help="Specify regularization rate in int, default: 0.001",
+        help="Specify regularization rate in int, default: 0.0001",
     )
     parser.add_argument(
         "-bs",
         "--batchSizeTrain",
         nargs="?",
         type=int,
-        const=50,
         default=50,
         help="Specify training batch sizes at each epoch in int, default: 50",
     )
@@ -63,7 +75,6 @@ def arg_parser():
         "--visualization",
         nargs="?",
         type=int,
-        const=1,
         default=1,
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
@@ -78,6 +89,7 @@ def main(
     train_epochs,
     visual,
     batch_size_train,
+    num_traj,
 ):
     """_summary_
 
@@ -88,8 +100,23 @@ def main(
         train_epochs (_type_): _description_
         visual (_type_): _description_
         batch_size_train (_type_): _description_
+        num_traj (_type_): _description_
     """
-    path = direc + "/tc4/original_net"
+    current_date = str(datetime.now()).split(" ")
+    path = (
+        direc
+        + "/tc4_"
+        + current_date[0].split("-")[1]
+        + "_"
+        + current_date[0].split("-")[2]
+        + "_"
+        + current_date[0].split("-")[0]
+        + "_"
+        + current_date[1].split(":")[0]
+        + "_"
+        + current_date[1].split(":")[1]
+        + "/original_net"
+    )
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -98,7 +125,6 @@ def main(
     #########################################
     # parameters
     ## Data samples
-    num_traj = 100  # number of samples
     train2test_ratio = 0.7
     ## Network
     input_dim = 4
@@ -155,22 +181,25 @@ def main(
     control_obj.initialize_sym_states()
 
     ## Start model training
-    train_set, test_set = control_obj.apply_dagger_learn(
+    train_sets, test_sets = control_obj.apply_dagger_learn(
         num_traj, train_epochs, batch_size_train, train2test_ratio
     )
 
     #########################################
     # Visualization
     if visual == 1:
-        control_obj.visualize_history()
+        if not os.path.exists(path + "/figure"):
+            os.makedirs(path + "/figure")
+        control_obj.plot_history(path + "/figure/history.eps")
+        control_obj.visualize_ref_vs_nn(test_sets[0], path + "/figure/testVSref.eps")
     #########################################
     # saving model
     print("-----------------------")
-    print("the data set and model are saved in {}".format(path))
+    print(f"the data set and model are saved in {path}")
     if not os.path.exists(path):
         os.makedirs(path + "/model")
     keras.models.save_model(
-        model_orig,
+        control_obj.controller_nn,
         path + "/model",
         overwrite=True,
         include_optimizer=True,
@@ -183,7 +212,7 @@ def main(
     if not os.path.exists(path + "/data"):
         os.makedirs(path + "/data")
     with open(path + "/data/input_output_data_tc4.pickle", "wb") as data:
-        pickle.dump([train_set, test_set], data)
+        pickle.dump([train_sets, test_sets], data)
 
 
 if __name__ == "__main__":
@@ -195,4 +224,5 @@ if __name__ == "__main__":
         args.epoch,
         args.visualization,
         args.batchSizeTrain,
+        args.numberOfTrajectories,
     )
