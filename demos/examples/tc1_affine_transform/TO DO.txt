@@ -1,0 +1,8 @@
+Items I changed in NNReplayer:
+1. weightSlack in repair_weights_class is not correct it is actually the bound of weight error
+2. add more gurobi options by changing the Option class. enable adding any options for the solver_factory
+3. add the capability to apply different weight values for samples and e_w slack variables through options and modifying cost_expr
+4. change e_w cost to e_w**2
+6. apply a mechanism to apply different parameter and variable bounds 
+7. remove the extra binary variable defined on the outpur constraint
+imp: 8. parameter bound should be == bound of weight error (or weight slack in this version of code)

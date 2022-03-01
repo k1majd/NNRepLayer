@@ -66,7 +66,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=3,
+        default=2,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -125,15 +125,15 @@ def main(
         for i in range(m):
             for j in range(n):
                 _squared_sum += (x[i, j] - y[i, j]) ** 2
-        return _squared_sum
+        return _squared_sum/m
 
     train_dataset = (x_train, y_train)
 
-    weight_slack = 1
-    time_limit = 7200
+    max_slack = 10
+    time_limit = 200
     mip_gap = 0.04
     options = Options(
-        "gdp.bigm", "gurobi", "python", "keras", weight_slack, time_limit, mip_gap
+        "gdp.bigm", "gurobi", "python", "keras", max_slack, time_limit, mip_gap
     )
     results = perform_repair(
         layer_to_repair,

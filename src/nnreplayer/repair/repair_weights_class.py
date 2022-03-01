@@ -8,7 +8,7 @@ from tensorflow import keras
 
 class repair_weights:
     # pylint: disable=invalid-name
-    
+
     """_summary_"""
 
     def __init__(
@@ -87,10 +87,9 @@ class repair_weights:
         model_lay = mip_model_layer.model
 
         cost_expr = self.cost_function_output(y_, y_train)
-
         # minimize error bound
         dw_l = "dw"
-        cost_expr += getattr(model_lay, dw_l)
+        cost_expr += 10 * getattr(model_lay, dw_l) ** 2
         return cost_expr, model_lay
 
     def solve_optimization_problem(
@@ -126,6 +125,7 @@ class repair_weights:
         opt.options["timelimit"] = optimizer_time_limit
         opt.options["mipgap"] = optimizer_mip_gap
         opt.solve(model_lay, tee=True)
+        # model_lay.pprint()
         print(model_lay.dw.display())
         return model_lay
 
