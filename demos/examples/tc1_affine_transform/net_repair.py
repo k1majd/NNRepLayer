@@ -1,13 +1,17 @@
+"""_summary_
+
+Raises:
+    ImportError: _description_
+
+Returns:
+    _type_: _description_
+"""
+# pylint: disable=import-error, unused-import
 import os
-import numpy as np
-from csv import writer
 import argparse
 from statistics import mode
-from nnreplayer.utils.options import Options
-from nnreplayer.utils.utils import constraints_class
-from nnreplayer.repair.perform_repair import perform_repair
-from shapely.geometry import Polygon
-from tensorflow import keras
+from csv import writer
+import numpy as np
 from affine_utils import (
     plot_history,
     plot_dataset,
@@ -16,7 +20,11 @@ from affine_utils import (
     give_polys,
     give_constraints,
 )
-from affine_utils import give_polys
+from shapely.geometry import Polygon
+from tensorflow import keras
+from nnreplayer.utils.options import Options
+from nnreplayer.utils.utils import constraints_class
+from nnreplayer.repair.perform_repair import perform_repair
 
 
 def arg_parser():
@@ -125,15 +133,31 @@ def main(
         for i in range(m):
             for j in range(n):
                 _squared_sum += (x[i, j] - y[i, j]) ** 2
-        return _squared_sum/m
+        return _squared_sum / m
 
     train_dataset = (x_train, y_train)
 
-    max_slack = 10
-    time_limit = 200
-    mip_gap = 0.04
+    max_slack = 10.0
+
+    # directory to save optimizer logs
+    if not os.path.exists(path_write + "/logs"):
+        os.makedirs(path_write + "/logs")
+
     options = Options(
-        "gdp.bigm", "gurobi", "python", "keras", max_slack, time_limit, mip_gap
+        "gdp.bigm",
+        "gurobi",
+        "python",
+        "keras",
+        max_slack,
+        {
+            "timelimit": 300,
+            "mipgap": 0.01,
+            "mipfocus": 1,
+            "mipsepcuts": 2,
+            "cuts": 3,
+            "improvestartnodes": 40,
+        },
+        path_write + f"/logs/opt_log_layer{layer_to_repair}.log",
     )
     results = perform_repair(
         layer_to_repair,

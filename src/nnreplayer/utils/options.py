@@ -1,12 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
+
 
 @dataclass
 class Options:
-    gdp_formulation: Any
-    solver_factory: Any
-    solver_language: Any
-    model_output_type: Any
-    weightSlack: Any
-    optimizer_time_limit: Any
-    optimizer_mip_gap: Any
+    """_summary_"""
+
+    gdp_formulation: str = "gdp.bigm"
+    solver_factory: str = "gurobi"
+    solver_language: str = "python"
+    model_output_type: str = "keras"
+    max_weight_bound: float = 1
+    optimizer_options: dict = field(default_factory=lambda: {"timelimit": 200})
+    optimizer_log_path: str = "optimizer_log.log"

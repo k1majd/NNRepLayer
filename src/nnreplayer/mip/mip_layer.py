@@ -58,7 +58,7 @@ class MIPLayer:
         shape,
         output_constraint_list,
         relu=False,
-        weightSlack=10,
+        max_weight_bound=10,
         output_bounds=(-1e1, 1e1),
     ):
         """_summary_
@@ -68,7 +68,7 @@ class MIPLayer:
             shape (_type_): _description_
             output_constraint_list (_type_): _description_
             relu (bool, optional): _description_. Defaults to False.
-            weightSlack (int, optional): _description_. Defaults to 10.
+            max_weight_bound (int, optional): _description_. Defaults to 10.
             output_bounds (tuple, optional): _description_. Defaults to (-1e1, 1e1).
 
         Returns:
@@ -78,20 +78,22 @@ class MIPLayer:
         self.lout = getattr(self, "layer_num", 0) + 1
         if relu:
             return self._relu_constraints(
-                x, shape, self.lout, weightSlack, output_bounds
+                x, shape, self.lout, max_weight_bound, output_bounds
             )
         return self._constraints(
-            x, shape, self.lout, output_constraint_list, weightSlack, output_bounds
+            x, shape, self.lout, output_constraint_list, max_weight_bound, output_bounds
         )
 
-    def _relu_constraints(self, x, shape, l, weightSlack=1, output_bounds=(-1e1, 1e1)):
+    def _relu_constraints(
+        self, x, shape, l, max_weight_bound=1, output_bounds=(-1e1, 1e1)
+    ):
         """_summary_
 
         Args:
             x (_type_): _description_
             shape (_type_): _description_
             l (_type_): _description_
-            weightSlack (int, optional): _description_. Defaults to 10.
+            max_weight_bound (int, optional): _description_. Defaults to 10.
             output_bounds (tuple, optional): _description_. Defaults to (-1e1, 1e1).
 
         Returns:
@@ -147,7 +149,7 @@ class MIPLayer:
             setattr(
                 self.model,
                 dw_l,
-                pyo.Var(within=pyo.NonNegativeReals, bounds=(0, weightSlack)),
+                pyo.Var(within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)),
             )
 
             def constraint_bound_w0(model, i, j):
@@ -210,7 +212,7 @@ class MIPLayer:
         shape,
         l,
         output_constraint_list,
-        weightSlack=10,
+        max_weight_bound=10,
         output_bounds=(-1e1, 1e1),
     ):
         m, n = shape
@@ -274,7 +276,7 @@ class MIPLayer:
             setattr(
                 self.model,
                 dw_l,
-                pyo.Var(within=pyo.NonNegativeReals, bounds=(0, weightSlack)),
+                pyo.Var(within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)),
             )
 
             def constraint_bound_w0(model, i, j):

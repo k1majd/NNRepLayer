@@ -54,13 +54,13 @@ class repair_weights:
 
         return layer_values_train
 
-    def set_up_optimizer(self, y_train, layer_values_train, weightSlack):
+    def set_up_optimizer(self, y_train, layer_values_train, max_weight_bound):
         """_summary_
 
         Args:
             y_train (_type_): _description_
             layer_values_train (_type_): _description_
-            weightSlack (_type_): _description_
+            max_weight_bound (_type_): _description_
 
         Returns:
             _type_: _description_
@@ -76,13 +76,16 @@ class repair_weights:
 
         num_samples = layer_values_train[self.layer_to_repair - 2].shape[0]
         mip_model_layer = MIPNNModel(
-            self.layer_to_repair, self.architecture, weights, bias
+            self.layer_to_repair,
+            self.architecture,
+            weights,
+            bias,
         )
         y_ = mip_model_layer(
             layer_values_train[self.layer_to_repair - 2],
             (num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
-            weightSlack=weightSlack,
+            max_weight_bound=max_weight_bound,
         )
         model_lay = mip_model_layer.model
 
@@ -99,8 +102,8 @@ class repair_weights:
         gdp_formulation,
         solver_factory,
         solver_language,
-        optimizer_time_limit,
-        optimizer_mip_gap,
+        optimizer_options,
+        opt_log_path,
     ):
         """_summary_
 
@@ -122,9 +125,11 @@ class repair_weights:
         model_lay.obj = pyo.Objective(expr=cost_expr)
         pyo.TransformationFactory(gdp_formulation).apply_to(model_lay)
         opt = pyo.SolverFactory(solver_factory, solver_io=solver_language)
-        opt.options["timelimit"] = optimizer_time_limit
-        opt.options["mipgap"] = optimizer_mip_gap
-        opt.solve(model_lay, tee=True)
+        for key in optimizer_options:
+            opt.options[key] = optimizer_options[key]
+        # opt.options["timelimit"] = optimizer_time_limit
+        # opt.options["mipgap"] = optimizer_mip_gap
+        opt.solve(model_lay, tee=True, logfile=opt_log_path)
         # model_lay.pprint()
         print(model_lay.dw.display())
         return model_lay

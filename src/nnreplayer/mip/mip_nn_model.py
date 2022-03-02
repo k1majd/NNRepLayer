@@ -59,7 +59,7 @@ class MIPNNModel:
         shape,
         output_constraint_list,
         relu=False,
-        weightSlack=10,
+        max_weight_bound=10,
         output_bounds=(-1e1, 1e1),
     ):
         """_summary_
@@ -69,7 +69,7 @@ class MIPNNModel:
             shape (_type_): _description_
             output_constraint_list (_type_): _description_
             relu (bool, optional): _description_. Defaults to False.
-            weightSlack (int, optional): _description_. Defaults to 10.
+            max_weight_bound (int, optional): _description_. Defaults to 10.
             output_bounds (tuple, optional): _description_. Defaults to (-1e1, 1e1).
 
         Returns:
@@ -85,7 +85,7 @@ class MIPNNModel:
                 (m, layer.uin),
                 output_constraint_list,
                 relu=True,
-                weightSlack=weightSlack,
+                max_weight_bound=max_weight_bound,
                 output_bounds=output_bounds,
             )
 
@@ -95,7 +95,7 @@ class MIPNNModel:
             (m, layer.uin),
             output_constraint_list,
             relu=relu,
-            weightSlack=weightSlack,
+            max_weight_bound=max_weight_bound,
             output_bounds=output_bounds,
         )
         return y
