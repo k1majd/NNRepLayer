@@ -9,6 +9,7 @@ Returns:
 # pylint: disable=import-error, unused-import
 import os
 import argparse
+import pickle
 from statistics import mode
 from csv import writer
 import numpy as np
@@ -20,13 +21,11 @@ from affine_utils import (
     give_polys,
     give_constraints,
 )
-from shapely.affinity import scale
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon
 from tensorflow import keras
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import constraints_class
 from nnreplayer.repair.perform_repair import perform_repair
-from matplotlib import pyplot as plt
 
 
 def arg_parser():
@@ -119,11 +118,19 @@ def main(
             architecture.append(lay.output.shape[1])
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
-    # p = np.random.choice(x_train.shape[0], 100)
-    # x_train_sampled = x_train[p, :]
-    # y_train_sampled = y_train[p, :]
+    with open(
+        path_read + "/data/input_output_data_inside_train_tc1.pickle", "rb"
+    ) as data:
+        train_in = pickle.load(data)
+    with open(
+        path_read + "/data/input_output_data_outside_train_tc1.pickle", "rb"
+    ) as data:
+        train_out = pickle.load(data)
+    p = np.random.choice(train_in[0].shape[0], 10)
+    x_train_sampled = np.append(train_in[0][p, :], train_out[0], axis=0)
+    y_train_sampled = np.append(train_in[1][p, :], train_out[1], axis=0)
     poly_orig, poly_trans, poly_const = give_polys()
-    A, b = give_constraints(scale(poly_const, xfact=0.98, yfact=0.98, origin="center"))
+    A, b = give_constraints(poly_const)
 
     print("----------------------")
     print("create repair model")
@@ -138,12 +145,11 @@ def main(
         for i in range(m):
             for j in range(n):
                 _squared_sum += (x[i, j] - y[i, j]) ** 2
-
         return _squared_sum / m
 
-    train_dataset = (x_train, y_train)
+    train_dataset = (x_train_sampled, y_train_sampled)
 
-    max_slack = 1
+    max_slack = 10.0
 
     # directory to save optimizer logs
     if not os.path.exists(path_write + "/logs"):
@@ -156,10 +162,10 @@ def main(
         "keras",
         max_slack,
         {
-            "timelimit": 3600,
-            "mipgap": 0.001,
-            "mipfocus": 2,
-            "improvestarttime": 3300,
+            "timelimit": 2500,
+            "mipgap": 0.01,
+            "mipfocus": 3,
+            "improvestarttime": 2000,
         },
         path_write + f"/logs/opt_log_layer{layer_to_repair}.log",
     )
@@ -200,7 +206,7 @@ def main(
     if save_stats == 1:
         if not os.path.exists(path_write + "/stats"):
             os.makedirs(path_write + "/stats")
-        # pylint: disable=unspecified-encoding
+
         with open(
             path_write + f"/stats/repair_layer{layer_to_repair}_accs_stats_tc1.csv",
             "a+",

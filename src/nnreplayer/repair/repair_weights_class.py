@@ -92,7 +92,7 @@ class repair_weights:
         cost_expr = self.cost_function_output(y_, y_train)
         # minimize error bound
         dw_l = "dw"
-        cost_expr += 10 * getattr(model_lay, dw_l) ** 2
+        cost_expr += getattr(model_lay, dw_l) ** 2
         return cost_expr, model_lay
 
     def solve_optimization_problem(

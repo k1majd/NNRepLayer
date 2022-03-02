@@ -12,7 +12,7 @@ import numpy as np
 
 path_read = os.path.dirname(os.path.realpath(__file__)) + "/tc1/repair_net"
 
-model_orig = keras.models.load_model(path_read + "/model_2")
+model_orig = keras.models.load_model(path_read + "/model_1")
 new_weights = model_orig.get_weights()
 model_orig.set_weights(new_weights)
 
