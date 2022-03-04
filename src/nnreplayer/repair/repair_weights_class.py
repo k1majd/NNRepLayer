@@ -1,5 +1,5 @@
 import numpy as np
-from ..utils.utils import mlp_get_weights, mlp_set_weights
+from ..utils.utils import tf_get_weights, tf_get_architecture
 from ..form_nn.mlp import MLP
 from ..mip.mip_nn_model import MIPNNModel
 import pyomo.environ as pyo
@@ -14,10 +14,10 @@ class repair_weights:
     def __init__(
         self,
         model_orig,
-        layer_to_repair,
-        architecture,
-        output_constraint_list,
-        cost_function_output,
+        # layer_to_repair,
+        # architecture,
+        # output_constraint_list,
+        # cost_function_output,
     ):
         """_summary_
 
@@ -29,11 +29,11 @@ class repair_weights:
             cost_function_output (_type_): _description_
         """
         self.model_orig = model_orig
-        self.layer_to_repair = layer_to_repair
-        self.architecture = architecture
-        self.cost_function_output = cost_function_output
-        self.model_orig_params = mlp_get_weights(self.model_orig)
-        self.output_constraint_list = output_constraint_list
+        # self.layer_to_repair = layer_to_repair
+        self.architecture = tf_get_architecture(self.model_orig)
+        # self.cost_function_output = cost_function_output
+        self.model_orig_params = tf_get_weights(self.model_orig)
+        # self.output_constraint_list = output_constraint_list
 
     def extract_network(self, x_dataset):
         """_summary_
@@ -49,7 +49,7 @@ class repair_weights:
         mlp_orig = MLP(
             self.architecture[0], self.architecture[-1], self.architecture[1:-1]
         )
-        mlp_orig = mlp_set_weights(mlp_orig, self.model_orig_params)
+        mlp_orig.mlp_set_weights(self.model_orig_params)
         layer_values_train = mlp_orig(x_dataset, relu=False)
 
         return layer_values_train
@@ -93,17 +93,18 @@ class repair_weights:
         # minimize error bound
         dw_l = "dw"
         cost_expr += getattr(model_lay, dw_l) ** 2
+        model_lay.obj = pyo.Objective(expr=cost_expr)
+
         return cost_expr, model_lay
 
     def solve_optimization_problem(
         self,
         model_lay,
-        cost_expr,
+        # cost_expr,
         gdp_formulation,
         solver_factory,
         solver_language,
         optimizer_options,
-        opt_log_path,
     ):
         """_summary_
 
@@ -119,18 +120,12 @@ class repair_weights:
         Returns:
             _type_: _description_
         """
-        # gdp_formulation =  'gdp.bigm'
-        # solver_factory = 'gurobi'
-        # solver_language = "python"
-        model_lay.obj = pyo.Objective(expr=cost_expr)
+        # model_lay.obj = pyo.Objective(expr=cost_expr)
         pyo.TransformationFactory(gdp_formulation).apply_to(model_lay)
-        opt = pyo.SolverFactory(solver_factory, solver_io=solver_language)
+        opt = pyo.SolverFactory(solver_factory, solver_io="python")
         for key in optimizer_options:
             opt.options[key] = optimizer_options[key]
-        # opt.options["timelimit"] = optimizer_time_limit
-        # opt.options["mipgap"] = optimizer_mip_gap
-        opt.solve(model_lay, tee=True, logfile=opt_log_path)
-        # model_lay.pprint()
+        opt.solve(model_lay, tee=True)
         print(model_lay.dw.display())
         return model_lay
 

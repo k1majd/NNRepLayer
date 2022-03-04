@@ -25,7 +25,7 @@ from shapely.geometry import Polygon, Point
 from tensorflow import keras
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import constraints_class
-from nnreplayer.repair.perform_repair import perform_repair
+from nnreplayer.repair.perform_repair import perform_repair, NNRepLayer
 from matplotlib import pyplot as plt
 
 
@@ -76,7 +76,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=1,
+        default=3,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -160,18 +160,27 @@ def main(
             "mipgap": 0.001,
             "mipfocus": 2,
             "improvestarttime": 3300,
+            "logfile": path_write + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
-        path_write + f"/logs/opt_log_layer{layer_to_repair}.log",
     )
-    results = perform_repair(
-        layer_to_repair,
+    repair_model = NNRepLayer(
         model_orig,
+        layer_to_repair,
         architecture,
         output_constraint_list,
         squared_sum,
-        train_dataset,
-        options,
     )
+    results = repair_model.perform_repair(train_dataset, options)
+    repair_model.display_opt_solved_model()
+    # results = perform_repair(
+    #     layer_to_repair,
+    #     model_orig,
+    #     architecture,
+    #     output_constraint_list,
+    #     squared_sum,
+    #     train_dataset,
+    #     options,
+    # )
 
     results.new_model.compile(
         optimizer=keras.optimizers.Adam(),

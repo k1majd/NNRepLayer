@@ -9,3 +9,7 @@ imp: 8. parameter bound should be compatible with bound of weight error (or weig
 9. record opt and optimal variable logs
 10. Specify output bounds in optimizer
 11. options is modified
+12. record opt log file
+13. save the constructed model
+14 mlp_get_weights() should also work with pytorch models!
+15. play with gdp_formulation variable.
