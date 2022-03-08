@@ -47,11 +47,11 @@ class MLP:
 
         return list(eval(exec_string))
 
-    def mlp_set_weights(self, mlp_weights):
+    def set_mlp_params(self, mlp_weights):
         """_summary_
 
         Args:
-            mlp_weights (_type_): _description_
+            mlp_weights (list of ndarray): a list of [wight(layer), bias(layer)] for layer = 1,2,3,...
         """
 
         iterate = 0
@@ -61,3 +61,89 @@ class MLP:
             iterate = iterate + 1
             self.layers[j].bias = mlp_weights[iterate]
             iterate = iterate + 1
+
+    def set_mlp_params_layer(self, mlp_weights, layer):
+        """_summary_
+
+        Args:
+            mlp_weights (list of ndarray): a list of [weight, bias]
+            layer (int): target layer i for i in 1,2,3,...
+        """
+        self.layers[layer - 1].weights = mlp_weights[0]
+        self.layers[layer - 1].bias = mlp_weights[1]
+
+    def get_mlp_params(self):
+        """_summary_
+
+        Returns:
+            list of ndarray: a list of [wight(layer), bias(layer)] for layer = 1,2,3,...
+        """
+
+        weight_bias_list = []
+        for layer in self.layers:
+            weight_bias_list.append(layer.weights)
+            weight_bias_list.append(layer.bias)
+
+        return weight_bias_list
+
+    def get_mlp_weights(self):
+        """_summary_
+
+        Returns:
+            list of ndarray: a list of [wight(layer)] for layer = 1,2,3,...
+        """
+
+        weight_list = []
+        for layer in self.layers:
+            weight_list.append(layer.weights)
+
+        return weight_list
+
+    def get_mlp_biases(self):
+        """_summary_
+
+        Returns:
+            list of ndarray: a list of [bias(layer)] for layer = 1,2,3,...
+        """
+
+        bias_list = []
+        for layer in self.layers:
+            bias_list.append(layer.bias)
+
+        return bias_list
+
+    def get_mlp_params_layer(self, layer):
+        """_summary_
+
+        Args:
+            layer (int): target layer i for i in 1,2,3,...
+
+        Returns:
+            list of ndarray: a list of [weight(layer), bias(layer)]
+        """
+
+        return [self.layers[layer - 1].weights, self.layers[layer - 1].bias]
+
+    def get_mlp_weight_layer(self, layer):
+        """_summary_
+
+        Args:
+            layer (int): target layer i for i in 1,2,3,...
+
+        Returns:
+            ndarray: weight(layer)
+        """
+
+        return self.layers[layer - 1].weights
+
+    def get_mlp_bias_layer(self, layer):
+        """_summary_
+
+        Args:
+            layer (int): target layer i for i in 1,2,3,...
+
+        Returns:
+            ndarray: bias(layer)
+        """
+
+        return self.layers[layer - 1].bias

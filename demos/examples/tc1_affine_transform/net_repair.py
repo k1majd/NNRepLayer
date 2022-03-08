@@ -154,7 +154,6 @@ def main(
         "gurobi",
         "python",
         "keras",
-        max_slack,
         {
             "timelimit": 3600,
             "mipgap": 0.001,

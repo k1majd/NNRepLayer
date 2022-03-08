@@ -1,4 +1,48 @@
-def tf_get_weights(mlp):
+# def tf_get_weights(mlp):
+#     """_summary_
+
+#     Args:
+#         mlp (_type_): _description_
+
+#     Returns:
+#         _type_: _description_
+#     """
+#     weights = []
+#     bias = []
+#     exec_string = ""
+#     for iterate in range(len(mlp.layers)):
+#         w_var = "w" + str(iterate) + "_orig"
+#         b_var = "b" + str(iterate) + "_orig"
+#         vars()[w_var] = mlp.layers[iterate].kernel.numpy()
+#         vars()[b_var] = mlp.layers[iterate].bias.numpy()
+#         weights.append(vars()[w_var])
+#         bias.append(vars()[b_var])
+#         if iterate == len(mlp.layers) - 1:
+#             exec_string = (
+#                 exec_string
+#                 + "w"
+#                 + str(iterate)
+#                 + "_orig, "
+#                 + "b"
+#                 + str(iterate)
+#                 + "_orig"
+#             )
+#         else:
+#             exec_string = (
+#                 exec_string
+#                 + "w"
+#                 + str(iterate)
+#                 + "_orig, "
+#                 + "b"
+#                 + str(iterate)
+#                 + "_orig, "
+#             )
+
+#     print(list(eval(exec_string)))
+#     return list(eval(exec_string))
+
+
+def tf2_get_weights(mlp):
     """_summary_
 
     Args:
@@ -7,42 +51,10 @@ def tf_get_weights(mlp):
     Returns:
         _type_: _description_
     """
-    weights = []
-    bias = []
-    exec_string = ""
-    for iterate in range(len(mlp.layers)):
-        w_var = "w" + str(iterate) + "_orig"
-        b_var = "b" + str(iterate) + "_orig"
-        vars()[w_var] = mlp.layers[iterate].kernel.numpy()
-        vars()[b_var] = mlp.layers[iterate].bias.numpy()
-        weights.append(vars()[w_var])
-        bias.append(vars()[b_var])
-        if iterate == len(mlp.layers) - 1:
-            exec_string = (
-                exec_string
-                + "w"
-                + str(iterate)
-                + "_orig, "
-                + "b"
-                + str(iterate)
-                + "_orig"
-            )
-        else:
-            exec_string = (
-                exec_string
-                + "w"
-                + str(iterate)
-                + "_orig, "
-                + "b"
-                + str(iterate)
-                + "_orig, "
-            )
-
-    print(list(eval(exec_string)))
-    return list(eval(exec_string))
+    return mlp.get_weights()
 
 
-def tf_get_architecture(model):
+def tf2_get_architecture(model):
     """extracts the arhitecture of tf model (tf2)
 
     Args:
