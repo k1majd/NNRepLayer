@@ -8,8 +8,8 @@ from nnreplayer.utils.options import Options
 from matplotlib import pyplot as plt
 
 
-path_read = os.path.dirname(os.path.realpath(__file__)) + "/tc1/original_net"
-model_orig = keras.models.load_model(path_read + "/model")
+path_read = os.path.dirname(os.path.realpath(__file__)) + "/tc1"
+model_orig = keras.models.load_model(path_read + "/original_net/model_2")
 repair_obj = repair_weights(model_orig)
 x_repair, y_repair, _, _ = original_data_loader()
 poly_orig, poly_trans, poly_const = give_polys()
@@ -23,18 +23,20 @@ repair_obj.compile(
     output_constraint_list=output_constraint_list,
 )
 options = Options(
-    "gdp.bigm",
+    "gdp.hull",
     "gurobi",
     "python",
     "keras",
     {
-        "timelimit": 100,
+        "timelimit": 500,
         "mipgap": 0.001,
-        "mipfocus": 2,
+        "mipfocus": 3,
         "improvestarttime": 3300,
         # "logfile": f"/opt_log_layer{3}.log",
     },
 )
+# display model
+# repair_obj.print_opt_model(path_read + "/repair_net/logs")
 out_model = repair_obj.repair(options)
 y_new = out_model.predict(x_repair)
 x_poly_bound, y_poly_bound = poly_const.exterior.xy

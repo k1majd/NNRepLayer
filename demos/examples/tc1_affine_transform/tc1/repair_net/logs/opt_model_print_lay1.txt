@@ -1,0 +1,2961 @@
+52 Set Declarations
+    b1_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    b_bounded_constraint02_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    b_bounded_constraint12_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    disjunction2_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                    : Size : Members
+        None :     2 : disjunction2_index_0*disjunction2_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    disjunction2_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    disjunction2_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    disjunction3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                    : Size : Members
+        None :     2 : disjunction3_index_0*disjunction3_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    disjunction3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    disjunction3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    eq_constraint2_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                        : Size : Members
+        None :     2 : eq_constraint2_index_0*eq_constraint2_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    eq_constraint2_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    eq_constraint2_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    eq_constraint3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                        : Size : Members
+        None :     2 : eq_constraint3_index_0*eq_constraint3_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    eq_constraint3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    eq_constraint3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    eq_constraint4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                        : Size : Members
+        None :     2 : eq_constraint4_index_0*eq_constraint4_index_1 :    6 : {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)}
+    eq_constraint4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    eq_constraint4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    inside004_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    inside014_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    inside024_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    inside034_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    s2_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : s2_index_0*s2_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    s2_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    s2_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    s3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : s3_index_0*s3_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    s3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    s3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    theta2_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                        : Size : Members
+        None :     2 : theta2_index_0*theta2_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    theta2_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    theta2_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    theta3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                        : Size : Members
+        None :     2 : theta3_index_0*theta3_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    theta3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    theta3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    w1_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : w1_index_0*w1_index_1 :   30 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9)}
+    w1_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w1_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    w_bounded_constraint02_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                        : Size : Members
+        None :     2 : w_bounded_constraint02_index_0*w_bounded_constraint02_index_1 :   30 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9)}
+    w_bounded_constraint02_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w_bounded_constraint02_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    w_bounded_constraint12_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                        : Size : Members
+        None :     2 : w_bounded_constraint12_index_0*w_bounded_constraint12_index_1 :   30 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9)}
+    w_bounded_constraint12_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w_bounded_constraint12_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    x2_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x2_index_0*x2_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    x2_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    x2_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    x3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x3_index_0*x3_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)}
+    x3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    x3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :   10 : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    x4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x4_index_0*x4_index_1 :    6 : {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)}
+    x4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {0, 1}
+    x4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+
+10 Var Declarations
+    b1 : Size=10, Index=b1_index
+        Key : Lower : Value : Upper : Fixed : Stale : Domain
+          0 :   -10 :  None :    10 : False :  True :  Reals
+          1 :   -10 :  None :    10 : False :  True :  Reals
+          2 :   -10 :  None :    10 : False :  True :  Reals
+          3 :   -10 :  None :    10 : False :  True :  Reals
+          4 :   -10 :  None :    10 : False :  True :  Reals
+          5 :   -10 :  None :    10 : False :  True :  Reals
+          6 :   -10 :  None :    10 : False :  True :  Reals
+          7 :   -10 :  None :    10 : False :  True :  Reals
+          8 :   -10 :  None :    10 : False :  True :  Reals
+          9 :   -10 :  None :    10 : False :  True :  Reals
+    dw : Size=1, Index=None
+        Key  : Lower : Value : Upper : Fixed : Stale : Domain
+        None :     0 :  None :   1.0 : False :  True : NonNegativeReals
+    s2 : Size=20, Index=s2_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+    s3 : Size=20, Index=s3_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+    theta2 : Size=20, Index=theta2_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :  None :     1 : False :  True : Binary
+        (0, 1) :     0 :  None :     1 : False :  True : Binary
+        (0, 2) :     0 :  None :     1 : False :  True : Binary
+        (0, 3) :     0 :  None :     1 : False :  True : Binary
+        (0, 4) :     0 :  None :     1 : False :  True : Binary
+        (0, 5) :     0 :  None :     1 : False :  True : Binary
+        (0, 6) :     0 :  None :     1 : False :  True : Binary
+        (0, 7) :     0 :  None :     1 : False :  True : Binary
+        (0, 8) :     0 :  None :     1 : False :  True : Binary
+        (0, 9) :     0 :  None :     1 : False :  True : Binary
+        (1, 0) :     0 :  None :     1 : False :  True : Binary
+        (1, 1) :     0 :  None :     1 : False :  True : Binary
+        (1, 2) :     0 :  None :     1 : False :  True : Binary
+        (1, 3) :     0 :  None :     1 : False :  True : Binary
+        (1, 4) :     0 :  None :     1 : False :  True : Binary
+        (1, 5) :     0 :  None :     1 : False :  True : Binary
+        (1, 6) :     0 :  None :     1 : False :  True : Binary
+        (1, 7) :     0 :  None :     1 : False :  True : Binary
+        (1, 8) :     0 :  None :     1 : False :  True : Binary
+        (1, 9) :     0 :  None :     1 : False :  True : Binary
+    theta3 : Size=20, Index=theta3_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :  None :     1 : False :  True : Binary
+        (0, 1) :     0 :  None :     1 : False :  True : Binary
+        (0, 2) :     0 :  None :     1 : False :  True : Binary
+        (0, 3) :     0 :  None :     1 : False :  True : Binary
+        (0, 4) :     0 :  None :     1 : False :  True : Binary
+        (0, 5) :     0 :  None :     1 : False :  True : Binary
+        (0, 6) :     0 :  None :     1 : False :  True : Binary
+        (0, 7) :     0 :  None :     1 : False :  True : Binary
+        (0, 8) :     0 :  None :     1 : False :  True : Binary
+        (0, 9) :     0 :  None :     1 : False :  True : Binary
+        (1, 0) :     0 :  None :     1 : False :  True : Binary
+        (1, 1) :     0 :  None :     1 : False :  True : Binary
+        (1, 2) :     0 :  None :     1 : False :  True : Binary
+        (1, 3) :     0 :  None :     1 : False :  True : Binary
+        (1, 4) :     0 :  None :     1 : False :  True : Binary
+        (1, 5) :     0 :  None :     1 : False :  True : Binary
+        (1, 6) :     0 :  None :     1 : False :  True : Binary
+        (1, 7) :     0 :  None :     1 : False :  True : Binary
+        (1, 8) :     0 :  None :     1 : False :  True : Binary
+        (1, 9) :     0 :  None :     1 : False :  True : Binary
+    w1 : Size=30, Index=w1_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 1) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 2) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 3) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 4) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 5) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 6) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 7) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 8) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 9) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 0) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 1) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 2) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 3) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 4) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 5) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 6) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 7) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 8) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 9) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 0) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 1) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 2) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 3) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 4) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 5) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 6) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 7) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 8) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 9) :   -10 :  None :    10 : False :  True :  Reals
+    x2 : Size=20, Index=x2_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+    x3 : Size=20, Index=x3_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (0, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 0) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 1) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 2) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 3) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 4) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 5) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 6) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 7) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 8) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+        (1, 9) :     0 :  None :  10.0 : False :  True : NonNegativeReals
+    x4 : Size=6, Index=x4_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (0, 1) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (0, 2) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (1, 0) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (1, 1) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (1, 2) : -10.0 :  None :  10.0 : False :  True :  Reals
+
+1 Objective Declarations
+    obj : Size=1, Index=None, Active=True
+        Key  : Active : Sense    : Expression
+        None :   True : minimize : ((x4[0,0] - 2.974656482251861)**2 + (x4[0,1] - 2.9696105876308687)**2 + (x4[0,2] - 1.0)**2 + (x4[1,0] - 2.3954712716407)**2 + (x4[1,1] - 2.8411101838992887)**2 + (x4[1,2] - 1.0)**2)/2 + dw**2
+
+11 Constraint Declarations
+    b_bounded_constraint02 : Size=10, Index=b_bounded_constraint02_index, Active=True
+        Key : Lower : Body                     : Upper : Active
+          0 :  -Inf :  b1[0] + 0.27841827 - dw :   0.0 :   True
+          1 :  -Inf :               b1[1] - dw :   0.0 :   True
+          2 :  -Inf : b1[2] + 0.070990935 - dw :   0.0 :   True
+          3 :  -Inf :  b1[3] - 0.22342855 - dw :   0.0 :   True
+          4 :  -Inf : b1[4] + 0.027302321 - dw :   0.0 :   True
+          5 :  -Inf :               b1[5] - dw :   0.0 :   True
+          6 :  -Inf :   b1[6] + 0.2598241 - dw :   0.0 :   True
+          7 :  -Inf :               b1[7] - dw :   0.0 :   True
+          8 :  -Inf :               b1[8] - dw :   0.0 :   True
+          9 :  -Inf :               b1[9] - dw :   0.0 :   True
+    b_bounded_constraint12 : Size=10, Index=b_bounded_constraint12_index, Active=True
+        Key : Lower : Body                         : Upper : Active
+          0 :  -Inf :  - dw - (b1[0] + 0.27841827) :   0.0 :   True
+          1 :  -Inf :                 - dw - b1[1] :   0.0 :   True
+          2 :  -Inf : - dw - (b1[2] + 0.070990935) :   0.0 :   True
+          3 :  -Inf :  - dw - (b1[3] - 0.22342855) :   0.0 :   True
+          4 :  -Inf : - dw - (b1[4] + 0.027302321) :   0.0 :   True
+          5 :  -Inf :                 - dw - b1[5] :   0.0 :   True
+          6 :  -Inf :   - dw - (b1[6] + 0.2598241) :   0.0 :   True
+          7 :  -Inf :                 - dw - b1[7] :   0.0 :   True
+          8 :  -Inf :                 - dw - b1[8] :   0.0 :   True
+          9 :  -Inf :                 - dw - b1[9] :   0.0 :   True
+    eq_constraint2 : Size=20, Index=eq_constraint2_index, Active=True
+        Key    : Lower : Body                                                                                                              : Upper : Active
+        (0, 0) :   0.0 : b1[0] + 2.972866528711154*w1[0,0] + 2.9516449687724586*w1[1,0] + 1.0485247145784862*w1[2,0] - (x2[0,0] - s2[0,0]) :   0.0 :   True
+        (0, 1) :   0.0 : b1[1] + 2.972866528711154*w1[0,1] + 2.9516449687724586*w1[1,1] + 1.0485247145784862*w1[2,1] - (x2[0,1] - s2[0,1]) :   0.0 :   True
+        (0, 2) :   0.0 : b1[2] + 2.972866528711154*w1[0,2] + 2.9516449687724586*w1[1,2] + 1.0485247145784862*w1[2,2] - (x2[0,2] - s2[0,2]) :   0.0 :   True
+        (0, 3) :   0.0 : b1[3] + 2.972866528711154*w1[0,3] + 2.9516449687724586*w1[1,3] + 1.0485247145784862*w1[2,3] - (x2[0,3] - s2[0,3]) :   0.0 :   True
+        (0, 4) :   0.0 : b1[4] + 2.972866528711154*w1[0,4] + 2.9516449687724586*w1[1,4] + 1.0485247145784862*w1[2,4] - (x2[0,4] - s2[0,4]) :   0.0 :   True
+        (0, 5) :   0.0 : b1[5] + 2.972866528711154*w1[0,5] + 2.9516449687724586*w1[1,5] + 1.0485247145784862*w1[2,5] - (x2[0,5] - s2[0,5]) :   0.0 :   True
+        (0, 6) :   0.0 : b1[6] + 2.972866528711154*w1[0,6] + 2.9516449687724586*w1[1,6] + 1.0485247145784862*w1[2,6] - (x2[0,6] - s2[0,6]) :   0.0 :   True
+        (0, 7) :   0.0 : b1[7] + 2.972866528711154*w1[0,7] + 2.9516449687724586*w1[1,7] + 1.0485247145784862*w1[2,7] - (x2[0,7] - s2[0,7]) :   0.0 :   True
+        (0, 8) :   0.0 : b1[8] + 2.972866528711154*w1[0,8] + 2.9516449687724586*w1[1,8] + 1.0485247145784862*w1[2,8] - (x2[0,8] - s2[0,8]) :   0.0 :   True
+        (0, 9) :   0.0 : b1[9] + 2.972866528711154*w1[0,9] + 2.9516449687724586*w1[1,9] + 1.0485247145784862*w1[2,9] - (x2[0,9] - s2[0,9]) :   0.0 :   True
+        (1, 0) :   0.0 : b1[0] + 2.3962215424406184*w1[0,0] + 2.837699454495346*w1[1,0] + 1.0069775563323557*w1[2,0] - (x2[1,0] - s2[1,0]) :   0.0 :   True
+        (1, 1) :   0.0 : b1[1] + 2.3962215424406184*w1[0,1] + 2.837699454495346*w1[1,1] + 1.0069775563323557*w1[2,1] - (x2[1,1] - s2[1,1]) :   0.0 :   True
+        (1, 2) :   0.0 : b1[2] + 2.3962215424406184*w1[0,2] + 2.837699454495346*w1[1,2] + 1.0069775563323557*w1[2,2] - (x2[1,2] - s2[1,2]) :   0.0 :   True
+        (1, 3) :   0.0 : b1[3] + 2.3962215424406184*w1[0,3] + 2.837699454495346*w1[1,3] + 1.0069775563323557*w1[2,3] - (x2[1,3] - s2[1,3]) :   0.0 :   True
+        (1, 4) :   0.0 : b1[4] + 2.3962215424406184*w1[0,4] + 2.837699454495346*w1[1,4] + 1.0069775563323557*w1[2,4] - (x2[1,4] - s2[1,4]) :   0.0 :   True
+        (1, 5) :   0.0 : b1[5] + 2.3962215424406184*w1[0,5] + 2.837699454495346*w1[1,5] + 1.0069775563323557*w1[2,5] - (x2[1,5] - s2[1,5]) :   0.0 :   True
+        (1, 6) :   0.0 : b1[6] + 2.3962215424406184*w1[0,6] + 2.837699454495346*w1[1,6] + 1.0069775563323557*w1[2,6] - (x2[1,6] - s2[1,6]) :   0.0 :   True
+        (1, 7) :   0.0 : b1[7] + 2.3962215424406184*w1[0,7] + 2.837699454495346*w1[1,7] + 1.0069775563323557*w1[2,7] - (x2[1,7] - s2[1,7]) :   0.0 :   True
+        (1, 8) :   0.0 : b1[8] + 2.3962215424406184*w1[0,8] + 2.837699454495346*w1[1,8] + 1.0069775563323557*w1[2,8] - (x2[1,8] - s2[1,8]) :   0.0 :   True
+        (1, 9) :   0.0 : b1[9] + 2.3962215424406184*w1[0,9] + 2.837699454495346*w1[1,9] + 1.0069775563323557*w1[2,9] - (x2[1,9] - s2[1,9]) :   0.0 :   True
+    eq_constraint3 : Size=20, Index=eq_constraint3_index, Active=True
+        Key    : Lower : Body                                                                                                                                                                                                                                                               : Upper : Active
+        (0, 0) :   0.0 :           -0.03970331326127052 - 0.24498211*x2[0,0] + 0.21267034*x2[0,1] + 0.43096206*x2[0,2] + 0.37242565*x2[0,3] - 0.3256779*x2[0,4] + 0.034998115*x2[0,5] - 0.04011732*x2[0,6] - 0.104986*x2[0,7] + 0.31540698*x2[0,8] + 0.205929*x2[0,9] - (x3[0,0] - s3[0,0]) :   0.0 :   True
+        (0, 1) :   0.0 :                                 0.41672936*x2[0,0] - 0.46055302*x2[0,1] + 0.3695462*x2[0,2] - 0.32058257*x2[0,3] + 0.07441488*x2[0,4] - 0.49154958*x2[0,5] - 0.3976999*x2[0,6] + 0.30332714*x2[0,7] + 0.23929618*x2[0,8] - 0.3789624*x2[0,9] - (x3[0,1] - s3[0,1]) :   0.0 :   True
+        (0, 2) :   0.0 :         -0.004439764190465212 + 0.49311864*x2[0,0] + 0.48460245*x2[0,1] - 0.46665117*x2[0,2] - 0.5093591*x2[0,3] - 0.4544193*x2[0,4] - 0.36502483*x2[0,5] + 0.2654199*x2[0,6] + 0.08490654*x2[0,7] - 0.46692312*x2[0,8] - 0.41570365*x2[0,9] - (x3[0,2] - s3[0,2]) :   0.0 :   True
+        (0, 3) :   0.0 :          -0.41912153363227844 + 0.5435033*x2[0,0] - 0.25324693*x2[0,1] - 0.49539983*x2[0,2] + 0.2694373*x2[0,3] - 0.31424117*x2[0,4] + 0.45879236*x2[0,5] + 0.67107284*x2[0,6] - 0.3108776*x2[0,7] + 0.078423195*x2[0,8] - 0.4094882*x2[0,9] - (x3[0,3] - s3[0,3]) :   0.0 :   True
+        (0, 4) :   0.0 :                               -0.12379114*x2[0,0] + 0.27533814*x2[0,1] + 0.13851866*x2[0,2] - 0.474013*x2[0,3] - 0.36281484*x2[0,4] - 0.2510338*x2[0,5] + 0.10109826*x2[0,6] + 0.11602617*x2[0,7] + 0.029826438*x2[0,8] - 0.42378294*x2[0,9] - (x3[0,4] - s3[0,4]) :   0.0 :   True
+        (0, 5) :   0.0 :         -0.05941165238618851 + 0.007128789*x2[0,0] + 0.427266*x2[0,1] + 0.42953008*x2[0,2] - 0.14331177*x2[0,3] + 0.4106597*x2[0,4] + 0.35366714*x2[0,5] + 0.37726068*x2[0,6] - 0.066260986*x2[0,7] + 0.022421567*x2[0,8] + 0.298414*x2[0,9] - (x3[0,5] - s3[0,5]) :   0.0 :   True
+        (0, 6) :   0.0 :                            -0.24717546*x2[0,0] + 0.036903907*x2[0,1] - 0.060209382*x2[0,2] - 0.048144523*x2[0,3] - 0.27006018*x2[0,4] + 0.47600695*x2[0,5] - 0.15646745*x2[0,6] - 0.2746902*x2[0,7] + 0.2880212*x2[0,8] + 0.29059163*x2[0,9] - (x3[0,6] - s3[0,6]) :   0.0 :   True
+        (0, 7) :   0.0 :       0.4796961545944214 - 0.5139493*x2[0,0] - 0.32880533*x2[0,1] + 0.22799969*x2[0,2] + 0.79312277*x2[0,3] - 0.124157175*x2[0,4] - 0.20522423*x2[0,5] - 0.099469595*x2[0,6] - 0.43338317*x2[0,7] - 0.14964104*x2[0,8] + 0.052932687*x2[0,9] - (x3[0,7] - s3[0,7]) :   0.0 :   True
+        (0, 8) :   0.0 : -0.0015103549230843782 - 0.47032577*x2[0,0] - 0.19203308*x2[0,1] + 0.010558512*x2[0,2] - 0.30611673*x2[0,3] - 0.30309704*x2[0,4] + 0.049981643*x2[0,5] + 0.48637018*x2[0,6] - 0.011950459*x2[0,7] + 0.016448872*x2[0,8] + 0.15184839*x2[0,9] - (x3[0,8] - s3[0,8]) :   0.0 :   True
+        (0, 9) :   0.0 :                                -0.17067876*x2[0,0] + 0.046270434*x2[0,1] + 0.15175244*x2[0,2] - 0.43276718*x2[0,3] - 0.4130451*x2[0,4] + 0.37604606*x2[0,5] - 0.5056629*x2[0,6] - 0.24348895*x2[0,7] + 0.5013039*x2[0,8] + 0.4781234*x2[0,9] - (x3[0,9] - s3[0,9]) :   0.0 :   True
+        (1, 0) :   0.0 :           -0.03970331326127052 - 0.24498211*x2[1,0] + 0.21267034*x2[1,1] + 0.43096206*x2[1,2] + 0.37242565*x2[1,3] - 0.3256779*x2[1,4] + 0.034998115*x2[1,5] - 0.04011732*x2[1,6] - 0.104986*x2[1,7] + 0.31540698*x2[1,8] + 0.205929*x2[1,9] - (x3[1,0] - s3[1,0]) :   0.0 :   True
+        (1, 1) :   0.0 :                                 0.41672936*x2[1,0] - 0.46055302*x2[1,1] + 0.3695462*x2[1,2] - 0.32058257*x2[1,3] + 0.07441488*x2[1,4] - 0.49154958*x2[1,5] - 0.3976999*x2[1,6] + 0.30332714*x2[1,7] + 0.23929618*x2[1,8] - 0.3789624*x2[1,9] - (x3[1,1] - s3[1,1]) :   0.0 :   True
+        (1, 2) :   0.0 :         -0.004439764190465212 + 0.49311864*x2[1,0] + 0.48460245*x2[1,1] - 0.46665117*x2[1,2] - 0.5093591*x2[1,3] - 0.4544193*x2[1,4] - 0.36502483*x2[1,5] + 0.2654199*x2[1,6] + 0.08490654*x2[1,7] - 0.46692312*x2[1,8] - 0.41570365*x2[1,9] - (x3[1,2] - s3[1,2]) :   0.0 :   True
+        (1, 3) :   0.0 :          -0.41912153363227844 + 0.5435033*x2[1,0] - 0.25324693*x2[1,1] - 0.49539983*x2[1,2] + 0.2694373*x2[1,3] - 0.31424117*x2[1,4] + 0.45879236*x2[1,5] + 0.67107284*x2[1,6] - 0.3108776*x2[1,7] + 0.078423195*x2[1,8] - 0.4094882*x2[1,9] - (x3[1,3] - s3[1,3]) :   0.0 :   True
+        (1, 4) :   0.0 :                               -0.12379114*x2[1,0] + 0.27533814*x2[1,1] + 0.13851866*x2[1,2] - 0.474013*x2[1,3] - 0.36281484*x2[1,4] - 0.2510338*x2[1,5] + 0.10109826*x2[1,6] + 0.11602617*x2[1,7] + 0.029826438*x2[1,8] - 0.42378294*x2[1,9] - (x3[1,4] - s3[1,4]) :   0.0 :   True
+        (1, 5) :   0.0 :         -0.05941165238618851 + 0.007128789*x2[1,0] + 0.427266*x2[1,1] + 0.42953008*x2[1,2] - 0.14331177*x2[1,3] + 0.4106597*x2[1,4] + 0.35366714*x2[1,5] + 0.37726068*x2[1,6] - 0.066260986*x2[1,7] + 0.022421567*x2[1,8] + 0.298414*x2[1,9] - (x3[1,5] - s3[1,5]) :   0.0 :   True
+        (1, 6) :   0.0 :                            -0.24717546*x2[1,0] + 0.036903907*x2[1,1] - 0.060209382*x2[1,2] - 0.048144523*x2[1,3] - 0.27006018*x2[1,4] + 0.47600695*x2[1,5] - 0.15646745*x2[1,6] - 0.2746902*x2[1,7] + 0.2880212*x2[1,8] + 0.29059163*x2[1,9] - (x3[1,6] - s3[1,6]) :   0.0 :   True
+        (1, 7) :   0.0 :       0.4796961545944214 - 0.5139493*x2[1,0] - 0.32880533*x2[1,1] + 0.22799969*x2[1,2] + 0.79312277*x2[1,3] - 0.124157175*x2[1,4] - 0.20522423*x2[1,5] - 0.099469595*x2[1,6] - 0.43338317*x2[1,7] - 0.14964104*x2[1,8] + 0.052932687*x2[1,9] - (x3[1,7] - s3[1,7]) :   0.0 :   True
+        (1, 8) :   0.0 : -0.0015103549230843782 - 0.47032577*x2[1,0] - 0.19203308*x2[1,1] + 0.010558512*x2[1,2] - 0.30611673*x2[1,3] - 0.30309704*x2[1,4] + 0.049981643*x2[1,5] + 0.48637018*x2[1,6] - 0.011950459*x2[1,7] + 0.016448872*x2[1,8] + 0.15184839*x2[1,9] - (x3[1,8] - s3[1,8]) :   0.0 :   True
+        (1, 9) :   0.0 :                                -0.17067876*x2[1,0] + 0.046270434*x2[1,1] + 0.15175244*x2[1,2] - 0.43276718*x2[1,3] - 0.4130451*x2[1,4] + 0.37604606*x2[1,5] - 0.5056629*x2[1,6] - 0.24348895*x2[1,7] + 0.5013039*x2[1,8] + 0.4781234*x2[1,9] - (x3[1,9] - s3[1,9]) :   0.0 :   True
+    eq_constraint4 : Size=6, Index=eq_constraint4_index, Active=True
+        Key    : Lower : Body                                                                                                                                                                                                                                           : Upper : Active
+        (0, 0) :   0.0 :      0.7050654292106628 + 0.34811932*x3[0,0] - 0.15877503*x3[0,1] - 0.4411581*x3[0,2] - 0.7105392*x3[0,3] - 0.053921476*x3[0,4] - 0.2642617*x3[0,5] - 0.3305929*x3[0,6] + 1.0952173*x3[0,7] + 0.20653176*x3[0,8] + 0.4528915*x3[0,9] - x4[0,0] :   0.0 :   True
+        (0, 1) :   0.0 : -0.2627146542072296 + 0.1944692*x3[0,0] - 0.00033468902*x3[0,1] + 0.628905*x3[0,2] + 1.0233388*x3[0,3] + 0.22338583*x3[0,4] + 0.035902534*x3[0,5] - 0.16170509*x3[0,6] + 0.25462124*x3[0,7] - 0.5233936*x3[0,8] + 0.11777053*x3[0,9] - x4[0,1] :   0.0 :   True
+        (0, 2) :   0.0 : 0.4685669243335724 - 0.15905154*x3[0,0] - 0.47241625*x3[0,1] - 0.030536667*x3[0,2] + 0.10095108*x3[0,3] + 0.3910022*x3[0,4] - 0.28711787*x3[0,5] + 0.45623076*x3[0,6] + 0.1788385*x3[0,7] - 0.030213635*x3[0,8] - 0.24551058*x3[0,9] - x4[0,2] :   0.0 :   True
+        (1, 0) :   0.0 :      0.7050654292106628 + 0.34811932*x3[1,0] - 0.15877503*x3[1,1] - 0.4411581*x3[1,2] - 0.7105392*x3[1,3] - 0.053921476*x3[1,4] - 0.2642617*x3[1,5] - 0.3305929*x3[1,6] + 1.0952173*x3[1,7] + 0.20653176*x3[1,8] + 0.4528915*x3[1,9] - x4[1,0] :   0.0 :   True
+        (1, 1) :   0.0 : -0.2627146542072296 + 0.1944692*x3[1,0] - 0.00033468902*x3[1,1] + 0.628905*x3[1,2] + 1.0233388*x3[1,3] + 0.22338583*x3[1,4] + 0.035902534*x3[1,5] - 0.16170509*x3[1,6] + 0.25462124*x3[1,7] - 0.5233936*x3[1,8] + 0.11777053*x3[1,9] - x4[1,1] :   0.0 :   True
+        (1, 2) :   0.0 : 0.4685669243335724 - 0.15905154*x3[1,0] - 0.47241625*x3[1,1] - 0.030536667*x3[1,2] + 0.10095108*x3[1,3] + 0.3910022*x3[1,4] - 0.28711787*x3[1,5] + 0.45623076*x3[1,6] + 0.1788385*x3[1,7] - 0.030213635*x3[1,8] - 0.24551058*x3[1,9] - x4[1,2] :   0.0 :   True
+    inside004 : Size=2, Index=inside004_index, Active=True
+        Key : Lower : Body                                                                          : Upper : Active
+          0 :  -Inf : -0.7071067811865477*x4[0,0] + 0.7071067811865475*x4[0,1] - 1.2249999999999992 :   0.0 :   True
+          1 :  -Inf : -0.7071067811865477*x4[1,0] + 0.7071067811865475*x4[1,1] - 1.2249999999999992 :   0.0 :   True
+    inside014 : Size=2, Index=inside014_index, Active=True
+        Key : Lower : Body                                                                        : Upper : Active
+          0 :  -Inf : 0.7071067811865476*x4[0,0] + 0.7071067811865474*x4[0,1] - 4.760533905932737 :   0.0 :   True
+          1 :  -Inf : 0.7071067811865476*x4[1,0] + 0.7071067811865474*x4[1,1] - 4.760533905932737 :   0.0 :   True
+    inside024 : Size=2, Index=inside024_index, Active=True
+        Key : Lower : Body                                                                         : Upper : Active
+          0 :  -Inf : -0.7071067811865477*x4[0,0] - 0.7071067811865475*x4[0,1] + 2.310533905932738 :   0.0 :   True
+          1 :  -Inf : -0.7071067811865477*x4[1,0] - 0.7071067811865475*x4[1,1] + 2.310533905932738 :   0.0 :   True
+    inside034 : Size=2, Index=inside034_index, Active=True
+        Key : Lower : Body                                                                         : Upper : Active
+          0 :  -Inf : 0.7071067811865475*x4[0,0] - 0.7071067811865477*x4[0,1] - 1.2249999999999999 :   0.0 :   True
+          1 :  -Inf : 0.7071067811865475*x4[1,0] - 0.7071067811865477*x4[1,1] - 1.2249999999999999 :   0.0 :   True
+    w_bounded_constraint02 : Size=30, Index=w_bounded_constraint02_index, Active=True
+        Key    : Lower : Body                       : Upper : Active
+        (0, 0) :  -Inf :  w1[0,0] + 0.15746559 - dw :   0.0 :   True
+        (0, 1) :  -Inf :  w1[0,1] + 0.19204429 - dw :   0.0 :   True
+        (0, 2) :  -Inf :   w1[0,2] + 0.4336461 - dw :   0.0 :   True
+        (0, 3) :  -Inf :    w1[0,3] - 0.916734 - dw :   0.0 :   True
+        (0, 4) :  -Inf :   w1[0,4] + 0.3704671 - dw :   0.0 :   True
+        (0, 5) :  -Inf :   w1[0,5] + 0.1192832 - dw :   0.0 :   True
+        (0, 6) :  -Inf :  w1[0,6] - 0.32942224 - dw :   0.0 :   True
+        (0, 7) :  -Inf :  w1[0,7] + 0.35096824 - dw :   0.0 :   True
+        (0, 8) :  -Inf :  w1[0,8] + 0.27334487 - dw :   0.0 :   True
+        (0, 9) :  -Inf :   w1[0,9] + 0.3910206 - dw :   0.0 :   True
+        (1, 0) :  -Inf :   w1[1,0] - 0.7747477 - dw :   0.0 :   True
+        (1, 1) :  -Inf :  w1[1,1] + 0.09926043 - dw :   0.0 :   True
+        (1, 2) :  -Inf : w1[1,2] - 0.025928581 - dw :   0.0 :   True
+        (1, 3) :  -Inf :  w1[1,3] - 0.34570727 - dw :   0.0 :   True
+        (1, 4) :  -Inf :  w1[1,4] - 0.30240172 - dw :   0.0 :   True
+        (1, 5) :  -Inf :   w1[1,5] + 0.4614949 - dw :   0.0 :   True
+        (1, 6) :  -Inf :   w1[1,6] - 0.3002352 - dw :   0.0 :   True
+        (1, 7) :  -Inf :  w1[1,7] - 0.12578164 - dw :   0.0 :   True
+        (1, 8) :  -Inf :  w1[1,8] + 0.17942981 - dw :   0.0 :   True
+        (1, 9) :  -Inf :  w1[1,9] + 0.34642553 - dw :   0.0 :   True
+        (2, 0) :  -Inf :  w1[2,0] - 0.09115197 - dw :   0.0 :   True
+        (2, 1) :  -Inf :  w1[2,1] - 0.07361479 - dw :   0.0 :   True
+        (2, 2) :  -Inf :  w1[2,2] - 0.40727624 - dw :   0.0 :   True
+        (2, 3) :  -Inf :  w1[2,3] - 0.24474779 - dw :   0.0 :   True
+        (2, 4) :  -Inf :   w1[2,4] + 0.5357707 - dw :   0.0 :   True
+        (2, 5) :  -Inf :  w1[2,5] - 0.55377865 - dw :   0.0 :   True
+        (2, 6) :  -Inf :  w1[2,6] + 0.41978174 - dw :   0.0 :   True
+        (2, 7) :  -Inf :    w1[2,7] + 0.396707 - dw :   0.0 :   True
+        (2, 8) :  -Inf :   w1[2,8] + 0.5535368 - dw :   0.0 :   True
+        (2, 9) :  -Inf :  w1[2,9] - 0.15743007 - dw :   0.0 :   True
+    w_bounded_constraint12 : Size=30, Index=w_bounded_constraint12_index, Active=True
+        Key    : Lower : Body                           : Upper : Active
+        (0, 0) :  -Inf :  - dw - (w1[0,0] + 0.15746559) :   0.0 :   True
+        (0, 1) :  -Inf :  - dw - (w1[0,1] + 0.19204429) :   0.0 :   True
+        (0, 2) :  -Inf :   - dw - (w1[0,2] + 0.4336461) :   0.0 :   True
+        (0, 3) :  -Inf :    - dw - (w1[0,3] - 0.916734) :   0.0 :   True
+        (0, 4) :  -Inf :   - dw - (w1[0,4] + 0.3704671) :   0.0 :   True
+        (0, 5) :  -Inf :   - dw - (w1[0,5] + 0.1192832) :   0.0 :   True
+        (0, 6) :  -Inf :  - dw - (w1[0,6] - 0.32942224) :   0.0 :   True
+        (0, 7) :  -Inf :  - dw - (w1[0,7] + 0.35096824) :   0.0 :   True
+        (0, 8) :  -Inf :  - dw - (w1[0,8] + 0.27334487) :   0.0 :   True
+        (0, 9) :  -Inf :   - dw - (w1[0,9] + 0.3910206) :   0.0 :   True
+        (1, 0) :  -Inf :   - dw - (w1[1,0] - 0.7747477) :   0.0 :   True
+        (1, 1) :  -Inf :  - dw - (w1[1,1] + 0.09926043) :   0.0 :   True
+        (1, 2) :  -Inf : - dw - (w1[1,2] - 0.025928581) :   0.0 :   True
+        (1, 3) :  -Inf :  - dw - (w1[1,3] - 0.34570727) :   0.0 :   True
+        (1, 4) :  -Inf :  - dw - (w1[1,4] - 0.30240172) :   0.0 :   True
+        (1, 5) :  -Inf :   - dw - (w1[1,5] + 0.4614949) :   0.0 :   True
+        (1, 6) :  -Inf :   - dw - (w1[1,6] - 0.3002352) :   0.0 :   True
+        (1, 7) :  -Inf :  - dw - (w1[1,7] - 0.12578164) :   0.0 :   True
+        (1, 8) :  -Inf :  - dw - (w1[1,8] + 0.17942981) :   0.0 :   True
+        (1, 9) :  -Inf :  - dw - (w1[1,9] + 0.34642553) :   0.0 :   True
+        (2, 0) :  -Inf :  - dw - (w1[2,0] - 0.09115197) :   0.0 :   True
+        (2, 1) :  -Inf :  - dw - (w1[2,1] - 0.07361479) :   0.0 :   True
+        (2, 2) :  -Inf :  - dw - (w1[2,2] - 0.40727624) :   0.0 :   True
+        (2, 3) :  -Inf :  - dw - (w1[2,3] - 0.24474779) :   0.0 :   True
+        (2, 4) :  -Inf :   - dw - (w1[2,4] + 0.5357707) :   0.0 :   True
+        (2, 5) :  -Inf :  - dw - (w1[2,5] - 0.55377865) :   0.0 :   True
+        (2, 6) :  -Inf :  - dw - (w1[2,6] + 0.41978174) :   0.0 :   True
+        (2, 7) :  -Inf :    - dw - (w1[2,7] + 0.396707) :   0.0 :   True
+        (2, 8) :  -Inf :   - dw - (w1[2,8] + 0.5535368) :   0.0 :   True
+        (2, 9) :  -Inf :  - dw - (w1[2,9] - 0.15743007) :   0.0 :   True
+
+2 Disjunct Declarations
+    disjunction2_disjuncts : Size=40, Index=Any, Active=True
+        disjunction2_disjuncts[0] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[0].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,0] :   0.0 :   True
+                      2 :  -Inf :     x2[0,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[0].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[1] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[1].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,0] :   1.0 :   True
+                      2 :  -Inf :     s2[0,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[1].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[2] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[2].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,1] :   0.0 :   True
+                      2 :  -Inf :     x2[0,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[2].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[3] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[3].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,1] :   1.0 :   True
+                      2 :  -Inf :     s2[0,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[3].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[4] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[4].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,2] :   0.0 :   True
+                      2 :  -Inf :     x2[0,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[4].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[5] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[5].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,2] :   1.0 :   True
+                      2 :  -Inf :     s2[0,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[5].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[6] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[6].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,3] :   0.0 :   True
+                      2 :  -Inf :     x2[0,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[6].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[7] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[7].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,3] :   1.0 :   True
+                      2 :  -Inf :     s2[0,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[7].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[8] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[8].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,4] :   0.0 :   True
+                      2 :  -Inf :     x2[0,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[8].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[9] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[9].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,4] :   1.0 :   True
+                      2 :  -Inf :     s2[0,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[9].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[10] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[10].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,5] :   0.0 :   True
+                      2 :  -Inf :     x2[0,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[10].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[11] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[11].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,5] :   1.0 :   True
+                      2 :  -Inf :     s2[0,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[11].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[12] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[12].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,6] :   0.0 :   True
+                      2 :  -Inf :     x2[0,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[12].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[13] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[13].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,6] :   1.0 :   True
+                      2 :  -Inf :     s2[0,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[13].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[14] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[14].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,7] :   0.0 :   True
+                      2 :  -Inf :     x2[0,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[14].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[15] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[15].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,7] :   1.0 :   True
+                      2 :  -Inf :     s2[0,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[15].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[16] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[16].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,8] :   0.0 :   True
+                      2 :  -Inf :     x2[0,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[16].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[17] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[17].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,8] :   1.0 :   True
+                      2 :  -Inf :     s2[0,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[17].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[18] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[18].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[0,9] :   0.0 :   True
+                      2 :  -Inf :     x2[0,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[18].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[19] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[19].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[0,9] :   1.0 :   True
+                      2 :  -Inf :     s2[0,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[19].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[20] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[20].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,0] :   0.0 :   True
+                      2 :  -Inf :     x2[1,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[20].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[21] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[21].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,0] :   1.0 :   True
+                      2 :  -Inf :     s2[1,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[21].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[22] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[22].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,1] :   0.0 :   True
+                      2 :  -Inf :     x2[1,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[22].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[23] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[23].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,1] :   1.0 :   True
+                      2 :  -Inf :     s2[1,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[23].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[24] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[24].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,2] :   0.0 :   True
+                      2 :  -Inf :     x2[1,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[24].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[25] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[25].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,2] :   1.0 :   True
+                      2 :  -Inf :     s2[1,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[25].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[26] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[26].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,3] :   0.0 :   True
+                      2 :  -Inf :     x2[1,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[26].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[27] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[27].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,3] :   1.0 :   True
+                      2 :  -Inf :     s2[1,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[27].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[28] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[28].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,4] :   0.0 :   True
+                      2 :  -Inf :     x2[1,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[28].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[29] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[29].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,4] :   1.0 :   True
+                      2 :  -Inf :     s2[1,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[29].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[30] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[30].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,5] :   0.0 :   True
+                      2 :  -Inf :     x2[1,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[30].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[31] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[31].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,5] :   1.0 :   True
+                      2 :  -Inf :     s2[1,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[31].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[32] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[32].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,6] :   0.0 :   True
+                      2 :  -Inf :     x2[1,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[32].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[33] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[33].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,6] :   1.0 :   True
+                      2 :  -Inf :     s2[1,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[33].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[34] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[34].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,7] :   0.0 :   True
+                      2 :  -Inf :     x2[1,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[34].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[35] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[35].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,7] :   1.0 :   True
+                      2 :  -Inf :     s2[1,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[35].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[36] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[36].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,8] :   0.0 :   True
+                      2 :  -Inf :     x2[1,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[36].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[37] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[37].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,8] :   1.0 :   True
+                      2 :  -Inf :     s2[1,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[37].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[38] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[38].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta2[1,9] :   0.0 :   True
+                      2 :  -Inf :     x2[1,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[38].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction2_disjuncts[39] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction2_disjuncts[39].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta2[1,9] :   1.0 :   True
+                      2 :  -Inf :     s2[1,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction2_disjuncts[39].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+    disjunction3_disjuncts : Size=40, Index=Any, Active=True
+        disjunction3_disjuncts[0] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[0].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,0] :   0.0 :   True
+                      2 :  -Inf :     x3[0,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[0].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[1] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[1].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,0] :   1.0 :   True
+                      2 :  -Inf :     s3[0,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[1].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[2] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[2].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,1] :   0.0 :   True
+                      2 :  -Inf :     x3[0,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[2].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[3] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[3].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,1] :   1.0 :   True
+                      2 :  -Inf :     s3[0,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[3].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[4] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[4].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,2] :   0.0 :   True
+                      2 :  -Inf :     x3[0,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[4].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[5] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[5].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,2] :   1.0 :   True
+                      2 :  -Inf :     s3[0,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[5].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[6] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[6].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,3] :   0.0 :   True
+                      2 :  -Inf :     x3[0,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[6].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[7] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[7].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,3] :   1.0 :   True
+                      2 :  -Inf :     s3[0,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[7].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[8] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[8].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,4] :   0.0 :   True
+                      2 :  -Inf :     x3[0,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[8].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[9] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[9].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,4] :   1.0 :   True
+                      2 :  -Inf :     s3[0,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[9].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[10] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[10].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,5] :   0.0 :   True
+                      2 :  -Inf :     x3[0,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[10].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[11] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[11].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,5] :   1.0 :   True
+                      2 :  -Inf :     s3[0,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[11].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[12] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[12].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,6] :   0.0 :   True
+                      2 :  -Inf :     x3[0,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[12].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[13] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[13].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,6] :   1.0 :   True
+                      2 :  -Inf :     s3[0,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[13].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[14] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[14].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,7] :   0.0 :   True
+                      2 :  -Inf :     x3[0,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[14].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[15] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[15].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,7] :   1.0 :   True
+                      2 :  -Inf :     s3[0,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[15].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[16] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[16].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,8] :   0.0 :   True
+                      2 :  -Inf :     x3[0,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[16].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[17] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[17].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,8] :   1.0 :   True
+                      2 :  -Inf :     s3[0,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[17].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[18] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[18].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[0,9] :   0.0 :   True
+                      2 :  -Inf :     x3[0,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[18].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[19] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[19].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[0,9] :   1.0 :   True
+                      2 :  -Inf :     s3[0,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[19].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[20] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[20].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,0] :   0.0 :   True
+                      2 :  -Inf :     x3[1,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[20].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[21] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[21].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,0] :   1.0 :   True
+                      2 :  -Inf :     s3[1,0] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[21].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[22] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[22].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,1] :   0.0 :   True
+                      2 :  -Inf :     x3[1,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[22].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[23] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[23].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,1] :   1.0 :   True
+                      2 :  -Inf :     s3[1,1] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[23].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[24] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[24].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,2] :   0.0 :   True
+                      2 :  -Inf :     x3[1,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[24].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[25] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[25].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,2] :   1.0 :   True
+                      2 :  -Inf :     s3[1,2] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[25].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[26] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[26].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,3] :   0.0 :   True
+                      2 :  -Inf :     x3[1,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[26].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[27] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[27].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,3] :   1.0 :   True
+                      2 :  -Inf :     s3[1,3] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[27].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[28] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[28].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,4] :   0.0 :   True
+                      2 :  -Inf :     x3[1,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[28].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[29] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[29].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,4] :   1.0 :   True
+                      2 :  -Inf :     s3[1,4] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[29].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[30] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[30].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,5] :   0.0 :   True
+                      2 :  -Inf :     x3[1,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[30].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[31] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[31].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,5] :   1.0 :   True
+                      2 :  -Inf :     s3[1,5] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[31].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[32] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[32].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,6] :   0.0 :   True
+                      2 :  -Inf :     x3[1,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[32].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[33] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[33].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,6] :   1.0 :   True
+                      2 :  -Inf :     s3[1,6] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[33].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[34] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[34].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,7] :   0.0 :   True
+                      2 :  -Inf :     x3[1,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[34].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[35] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[35].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,7] :   1.0 :   True
+                      2 :  -Inf :     s3[1,7] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[35].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[36] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[36].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,8] :   0.0 :   True
+                      2 :  -Inf :     x3[1,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[36].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[37] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[37].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,8] :   1.0 :   True
+                      2 :  -Inf :     s3[1,8] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[37].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[38] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[38].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   0.0 : theta3[1,9] :   0.0 :   True
+                      2 :  -Inf :     x3[1,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[38].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+        disjunction3_disjuncts[39] : Active=True
+            2 Set Declarations
+                constraint_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :     1 :    Any :    2 : {1, 2}
+                propositions_index : Size=1, Index=None, Ordered=Insertion
+                    Key  : Dimen : Domain : Size : Members
+                    None :    -- :    Any :    0 :      {}
+
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=2, Index=disjunction3_disjuncts[39].constraint_index, Active=True
+                    Key : Lower : Body        : Upper : Active
+                      1 :   1.0 : theta3[1,9] :   1.0 :   True
+                      2 :  -Inf :     s3[1,9] :   0.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index=disjunction3_disjuncts[39].propositions_index, Active=True
+                    Key : Body : Active
+
+            6 Declarations: indicator_var binary_indicator_var constraint_index constraint propositions_index propositions
+
+2 Disjunction Declarations
+    disjunction2 : Size=20, Index=disjunction2_index, Active=True
+        Key    : Disjuncts                                                    : Active : XOR
+        (0, 0) :   ['disjunction2_disjuncts[0]', 'disjunction2_disjuncts[1]'] :   True : True
+        (0, 1) :   ['disjunction2_disjuncts[2]', 'disjunction2_disjuncts[3]'] :   True : True
+        (0, 2) :   ['disjunction2_disjuncts[4]', 'disjunction2_disjuncts[5]'] :   True : True
+        (0, 3) :   ['disjunction2_disjuncts[6]', 'disjunction2_disjuncts[7]'] :   True : True
+        (0, 4) :   ['disjunction2_disjuncts[8]', 'disjunction2_disjuncts[9]'] :   True : True
+        (0, 5) : ['disjunction2_disjuncts[10]', 'disjunction2_disjuncts[11]'] :   True : True
+        (0, 6) : ['disjunction2_disjuncts[12]', 'disjunction2_disjuncts[13]'] :   True : True
+        (0, 7) : ['disjunction2_disjuncts[14]', 'disjunction2_disjuncts[15]'] :   True : True
+        (0, 8) : ['disjunction2_disjuncts[16]', 'disjunction2_disjuncts[17]'] :   True : True
+        (0, 9) : ['disjunction2_disjuncts[18]', 'disjunction2_disjuncts[19]'] :   True : True
+        (1, 0) : ['disjunction2_disjuncts[20]', 'disjunction2_disjuncts[21]'] :   True : True
+        (1, 1) : ['disjunction2_disjuncts[22]', 'disjunction2_disjuncts[23]'] :   True : True
+        (1, 2) : ['disjunction2_disjuncts[24]', 'disjunction2_disjuncts[25]'] :   True : True
+        (1, 3) : ['disjunction2_disjuncts[26]', 'disjunction2_disjuncts[27]'] :   True : True
+        (1, 4) : ['disjunction2_disjuncts[28]', 'disjunction2_disjuncts[29]'] :   True : True
+        (1, 5) : ['disjunction2_disjuncts[30]', 'disjunction2_disjuncts[31]'] :   True : True
+        (1, 6) : ['disjunction2_disjuncts[32]', 'disjunction2_disjuncts[33]'] :   True : True
+        (1, 7) : ['disjunction2_disjuncts[34]', 'disjunction2_disjuncts[35]'] :   True : True
+        (1, 8) : ['disjunction2_disjuncts[36]', 'disjunction2_disjuncts[37]'] :   True : True
+        (1, 9) : ['disjunction2_disjuncts[38]', 'disjunction2_disjuncts[39]'] :   True : True
+    disjunction3 : Size=20, Index=disjunction3_index, Active=True
+        Key    : Disjuncts                                                    : Active : XOR
+        (0, 0) :   ['disjunction3_disjuncts[0]', 'disjunction3_disjuncts[1]'] :   True : True
+        (0, 1) :   ['disjunction3_disjuncts[2]', 'disjunction3_disjuncts[3]'] :   True : True
+        (0, 2) :   ['disjunction3_disjuncts[4]', 'disjunction3_disjuncts[5]'] :   True : True
+        (0, 3) :   ['disjunction3_disjuncts[6]', 'disjunction3_disjuncts[7]'] :   True : True
+        (0, 4) :   ['disjunction3_disjuncts[8]', 'disjunction3_disjuncts[9]'] :   True : True
+        (0, 5) : ['disjunction3_disjuncts[10]', 'disjunction3_disjuncts[11]'] :   True : True
+        (0, 6) : ['disjunction3_disjuncts[12]', 'disjunction3_disjuncts[13]'] :   True : True
+        (0, 7) : ['disjunction3_disjuncts[14]', 'disjunction3_disjuncts[15]'] :   True : True
+        (0, 8) : ['disjunction3_disjuncts[16]', 'disjunction3_disjuncts[17]'] :   True : True
+        (0, 9) : ['disjunction3_disjuncts[18]', 'disjunction3_disjuncts[19]'] :   True : True
+        (1, 0) : ['disjunction3_disjuncts[20]', 'disjunction3_disjuncts[21]'] :   True : True
+        (1, 1) : ['disjunction3_disjuncts[22]', 'disjunction3_disjuncts[23]'] :   True : True
+        (1, 2) : ['disjunction3_disjuncts[24]', 'disjunction3_disjuncts[25]'] :   True : True
+        (1, 3) : ['disjunction3_disjuncts[26]', 'disjunction3_disjuncts[27]'] :   True : True
+        (1, 4) : ['disjunction3_disjuncts[28]', 'disjunction3_disjuncts[29]'] :   True : True
+        (1, 5) : ['disjunction3_disjuncts[30]', 'disjunction3_disjuncts[31]'] :   True : True
+        (1, 6) : ['disjunction3_disjuncts[32]', 'disjunction3_disjuncts[33]'] :   True : True
+        (1, 7) : ['disjunction3_disjuncts[34]', 'disjunction3_disjuncts[35]'] :   True : True
+        (1, 8) : ['disjunction3_disjuncts[36]', 'disjunction3_disjuncts[37]'] :   True : True
+        (1, 9) : ['disjunction3_disjuncts[38]', 'disjunction3_disjuncts[39]'] :   True : True
+
+78 Declarations: w1_index_0 w1_index_1 w1_index w1 b1_index b1 x2_index_0 x2_index_1 x2_index x2 s2_index_0 s2_index_1 s2_index s2 theta2_index_0 theta2_index_1 theta2_index theta2 eq_constraint2_index_0 eq_constraint2_index_1 eq_constraint2_index eq_constraint2 dw w_bounded_constraint02_index_0 w_bounded_constraint02_index_1 w_bounded_constraint02_index w_bounded_constraint02 w_bounded_constraint12_index_0 w_bounded_constraint12_index_1 w_bounded_constraint12_index w_bounded_constraint12 b_bounded_constraint02_index b_bounded_constraint02 b_bounded_constraint12_index b_bounded_constraint12 disjunction2_index_0 disjunction2_index_1 disjunction2_index disjunction2 disjunction2_disjuncts x3_index_0 x3_index_1 x3_index x3 s3_index_0 s3_index_1 s3_index s3 theta3_index_0 theta3_index_1 theta3_index theta3 eq_constraint3_index_0 eq_constraint3_index_1 eq_constraint3_index eq_constraint3 disjunction3_index_0 disjunction3_index_1 disjunction3_index disjunction3 disjunction3_disjuncts x4_index_0 x4_index_1 x4_index x4 eq_constraint4_index_0 eq_constraint4_index_1 eq_constraint4_index eq_constraint4 inside004_index inside004 inside014_index inside014 inside024_index inside024 inside034_index inside034 obj

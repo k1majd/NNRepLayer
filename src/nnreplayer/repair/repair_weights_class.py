@@ -1,3 +1,12 @@
+"""_summary_
+
+Raises:
+    ValueError: _description_
+
+Returns:
+    _type_: _description_
+"""
+import os
 import numpy as np
 import pyomo.environ as pyo
 from tensorflow import keras
@@ -118,6 +127,31 @@ class repair_weights:
         self.layer_to_repair = None
         self.output_constraint_list = []
 
+    def print_opt_model(self, direc=None):
+        """_summary_
+
+        Args:
+            direc (_type_, optional): _description_. Defaults to None.
+
+        Raises:
+            ValueError: _description_
+        """
+        if self.opt_model is None:
+            raise ValueError(
+                "Optimization model does not exist. First compile the model!"
+            )
+        if direc is not None:
+            if not os.path.exists(direc):
+                raise ImportError(f"path {direc} does not exist!")
+            with open(
+                direc + f"/opt_model_print_lay{self.layer_to_repair}.txt",
+                "w",
+                encoding="utf8",
+            ) as file:
+                self.opt_model.pprint(ostream=file)
+        else:
+            self.opt_model.pprint()
+
     # def update_mlp_model(self):
 
     def extract_network_values(self, x_dataset):
@@ -131,10 +165,6 @@ class repair_weights:
         """
 
         print("************************************************")
-        # mlp_orig = MLP(
-        #     self.architecture[0], self.architecture[-1], self.architecture[1:-1]
-        # )
-        # mlp_orig.set_mlp_params(self.model_orig_params)
         layer_values = self.model_mlp(x_dataset, relu=False)
 
         return layer_values
@@ -164,26 +194,6 @@ class repair_weights:
         self.model_mlp.set_mlp_params_layer(
             [new_weight, new_bias], self.layer_to_repair
         )
-        # Set new weights and bias
-        # model_new_params = []
-        # iterate = 0
-        # for j in range(len(self.architecture) - 1):
-        #     if j + 1 != self.layer_to_repair:
-        #         model_new_params.append(self.model_orig_params[iterate])
-        #         # print(model_orig_params[iterate].shape)
-        #         iterate = iterate + 1
-        #         model_new_params.append(self.model_orig_params[iterate])
-        #         # print(model_orig_params[iterate].shape)
-        #         iterate = iterate + 1
-        #     else:
-        #         # print(iterate)
-        #         model_new_params.append(new_weight)
-        #         # print(new_weight.shape)
-
-        #         model_new_params.append(np.squeeze(new_bias))
-        #         iterate = iterate + 2
-
-        # return model_new_params
 
     def return_repaired_model(self, model_output_type):
         """_summary_
@@ -224,14 +234,6 @@ class repair_weights:
         Returns:
             _type_: _description_
         """
-        # weights = [
-        #     self.model_orig_params[iterate]
-        #     for iterate in range(0, 2 * (len(self.architecture) - 1), 2)
-        # ]
-        # bias = [
-        #     self.model_orig_params[iterate]
-        #     for iterate in range(1, 2 * (len(self.architecture) - 1), 2)
-        # ]
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
         num_samples = layer_values[self.layer_to_repair - 2].shape[0]
