@@ -179,11 +179,11 @@ def main(
     print("Data modification")
     x_train, y_train, x_test, y_test = original_data_loader()
     x_train_inside, y_train_inside = label_output_inside(
-        poly_const, x_train, y_train, bound_error=0.23, mode="finetune"
+        poly_const, x_train, y_train, bound_error=0.25, mode="finetune"
     )
     print(f"fine-tuning size: {y_train_inside.shape[0]}")
     x_test_inside, y_test_inside = label_output_inside(
-        poly_const, x_test, y_test, bound_error=0.23, mode="retrain"
+        poly_const, x_test, y_test, bound_error=0.25, mode="retrain"
     )
     plt.show()
     print("-----------------------")
