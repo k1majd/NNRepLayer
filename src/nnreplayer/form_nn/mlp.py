@@ -4,7 +4,7 @@ from .dense import Dense
 class MLP:
     """_summary_"""
 
-    def __init__(self, nin, uout, uhidden):
+    def __init__(self, nin, uout, uhidden, relu=False):
         """_summary_
 
         Args:
@@ -16,11 +16,11 @@ class MLP:
         prev = nin
         self.layers = []
         for u in uhidden:
-            self.layers.append(Dense(prev, u))
+            self.layers.append(Dense(prev, u, relu=True))
             prev = u
-        self.layers.append(Dense(prev, uout))
+        self.layers.append(Dense(prev, uout, relu=relu))
 
-    def __call__(self, x, relu=False):
+    def __call__(self, x):
         """_summary_
 
         Args:
@@ -30,22 +30,27 @@ class MLP:
         Returns:
             _type_: _description_
         """
+        layer_values = [x]
+        for layer in self.layers:
+            x = layer(x)
+            layer_values.append(x)
+        return layer_values
 
-        x1 = self.layers[0](x, relu=True)
-        for iterate in range(1, self.num_layer - 1):
-            variable1 = "x" + str(iterate + 1)
-            variable2 = "x" + str(iterate)
-            vars()[variable1] = self.layers[iterate](vars()[variable2], relu=True)
+        # x1 = self.layers[0](x, relu=True)
+        # for iterate in range(1, self.num_layer - 1):
+        #     variable1 = "x" + str(iterate + 1)
+        #     variable2 = "x" + str(iterate)
+        #     vars()[variable1] = self.layers[iterate](vars()[variable2], relu=True)
 
-        variable_name = "x" + str(self.num_layer - 1)
-        y = self.layers[self.num_layer - 1](vars()[variable_name], relu=True)
+        # variable_name = "x" + str(self.num_layer - 1)
+        # y = self.layers[self.num_layer - 1](vars()[variable_name], relu=True)
 
-        exec_string = ""
-        for j in range(1, self.num_layer):
-            exec_string = exec_string + "x" + str(j) + ", "
-        exec_string = exec_string + "y"
+        # exec_string = ""
+        # for j in range(1, self.num_layer):
+        #     exec_string = exec_string + "x" + str(j) + ", "
+        # exec_string = exec_string + "y"
 
-        return list(eval(exec_string))
+        # return list(eval(exec_string))
 
     def set_mlp_params(self, mlp_weights):
         """_summary_

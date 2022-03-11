@@ -1,0 +1,151 @@
+22 Set Declarations
+    b3_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    b_bounded_constraint04_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    b_bounded_constraint14_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    eq_constraint4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                        : Size : Members
+        None :     2 : eq_constraint4_index_0*eq_constraint4_index_1 :    3 : {(0, 0), (0, 1), (0, 2)}
+    eq_constraint4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    eq_constraint4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    inside004_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    inside014_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    inside024_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    inside034_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    w3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : w3_index_0*w3_index_1 :    9 : {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)}
+    w3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w_bounded_constraint04_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                        : Size : Members
+        None :     2 : w_bounded_constraint04_index_0*w_bounded_constraint04_index_1 :    9 : {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)}
+    w_bounded_constraint04_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w_bounded_constraint04_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w_bounded_constraint14_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                        : Size : Members
+        None :     2 : w_bounded_constraint14_index_0*w_bounded_constraint14_index_1 :    9 : {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)}
+    w_bounded_constraint14_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    w_bounded_constraint14_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+    x4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x4_index_0*x4_index_1 :    3 : {(0, 0), (0, 1), (0, 2)}
+    x4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    x4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    3 : {0, 1, 2}
+
+4 Var Declarations
+    b3 : Size=3, Index=b3_index
+        Key : Lower : Value : Upper : Fixed : Stale : Domain
+          0 :   -10 :  None :    10 : False :  True :  Reals
+          1 :   -10 :  None :    10 : False :  True :  Reals
+          2 :   -10 :  None :    10 : False :  True :  Reals
+    dw : Size=1, Index=None
+        Key  : Lower : Value : Upper : Fixed : Stale : Domain
+        None :     0 :  None :   1.0 : False :  True : NonNegativeReals
+    w3 : Size=9, Index=w3_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 1) :   -10 :  None :    10 : False :  True :  Reals
+        (0, 2) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 0) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 1) :   -10 :  None :    10 : False :  True :  Reals
+        (1, 2) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 0) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 1) :   -10 :  None :    10 : False :  True :  Reals
+        (2, 2) :   -10 :  None :    10 : False :  True :  Reals
+    x4 : Size=3, Index=x4_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (0, 1) : -10.0 :  None :  10.0 : False :  True :  Reals
+        (0, 2) : -10.0 :  None :  10.0 : False :  True :  Reals
+
+1 Objective Declarations
+    obj : Size=1, Index=None, Active=True
+        Key  : Active : Sense    : Expression
+        None :   True : minimize : (x4[0,0] - 2.974656482251861)**2 + (x4[0,1] - 2.9696105876308687)**2 + (x4[0,2] - 1.0)**2 + dw**2
+
+9 Constraint Declarations
+    b_bounded_constraint04 : Size=3, Index=b_bounded_constraint04_index, Active=True
+        Key : Lower : Body                    : Upper : Active
+          0 :  -Inf : b3[0] - 0.18148705 - dw :   0.0 :   True
+          1 :  -Inf : b3[1] + 0.17888941 - dw :   0.0 :   True
+          2 :  -Inf : b3[2] - 0.95702285 - dw :   0.0 :   True
+    b_bounded_constraint14 : Size=3, Index=b_bounded_constraint14_index, Active=True
+        Key : Lower : Body                        : Upper : Active
+          0 :  -Inf : - dw - (b3[0] - 0.18148705) :   0.0 :   True
+          1 :  -Inf : - dw - (b3[1] + 0.17888941) :   0.0 :   True
+          2 :  -Inf : - dw - (b3[2] - 0.95702285) :   0.0 :   True
+    eq_constraint4 : Size=3, Index=eq_constraint4_index, Active=True
+        Key    : Lower : Body                                                                     : Upper : Active
+        (0, 0) :   0.0 : b3[0] + 1.9207396839997044*w3[0,0] + 3.278182262611459*w3[1,0] - x4[0,0] :   0.0 :   True
+        (0, 1) :   0.0 : b3[1] + 1.9207396839997044*w3[0,1] + 3.278182262611459*w3[1,1] - x4[0,1] :   0.0 :   True
+        (0, 2) :   0.0 : b3[2] + 1.9207396839997044*w3[0,2] + 3.278182262611459*w3[1,2] - x4[0,2] :   0.0 :   True
+    inside004 : Size=1, Index=inside004_index, Active=True
+        Key : Lower : Body                                                                          : Upper : Active
+          0 :  -Inf : -0.7071067811865476*x4[0,0] - 0.7071067811865476*x4[0,1] + 2.2855339059327378 :   0.0 :   True
+    inside014 : Size=1, Index=inside014_index, Active=True
+        Key : Lower : Body                                                           : Upper : Active
+          0 :  -Inf : 0.7071067811865476*x4[0,0] - 0.7071067811865476*x4[0,1] - 1.25 :   0.0 :   True
+    inside024 : Size=1, Index=inside024_index, Active=True
+        Key : Lower : Body                                                            : Upper : Active
+          0 :  -Inf : -0.7071067811865476*x4[0,0] + 0.7071067811865476*x4[0,1] - 1.25 :   0.0 :   True
+    inside034 : Size=1, Index=inside034_index, Active=True
+        Key : Lower : Body                                                                        : Upper : Active
+          0 :  -Inf : 0.7071067811865476*x4[0,0] + 0.7071067811865476*x4[0,1] - 4.785533905932738 :   0.0 :   True
+    w_bounded_constraint04 : Size=9, Index=w_bounded_constraint04_index, Active=True
+        Key    : Lower : Body                       : Upper : Active
+        (0, 0) :  -Inf :   w3[0,0] - 1.1784871 - dw :   0.0 :   True
+        (0, 1) :  -Inf :  w3[0,1] + 0.26937833 - dw :   0.0 :   True
+        (0, 2) :  -Inf : w3[0,2] - 0.006613095 - dw :   0.0 :   True
+        (1, 0) :  -Inf :  w3[1,0] - 0.16163068 - dw :   0.0 :   True
+        (1, 1) :  -Inf :   w3[1,1] - 1.1174892 - dw :   0.0 :   True
+        (1, 2) :  -Inf : w3[1,2] - 0.010765284 - dw :   0.0 :   True
+        (2, 0) :  -Inf :  w3[2,0] - 0.21709351 - dw :   0.0 :   True
+        (2, 1) :  -Inf :   w3[2,1] - 0.3236272 - dw :   0.0 :   True
+        (2, 2) :  -Inf : w3[2,2] - 0.106829345 - dw :   0.0 :   True
+    w_bounded_constraint14 : Size=9, Index=w_bounded_constraint14_index, Active=True
+        Key    : Lower : Body                           : Upper : Active
+        (0, 0) :  -Inf :   - dw - (w3[0,0] - 1.1784871) :   0.0 :   True
+        (0, 1) :  -Inf :  - dw - (w3[0,1] + 0.26937833) :   0.0 :   True
+        (0, 2) :  -Inf : - dw - (w3[0,2] - 0.006613095) :   0.0 :   True
+        (1, 0) :  -Inf :  - dw - (w3[1,0] - 0.16163068) :   0.0 :   True
+        (1, 1) :  -Inf :   - dw - (w3[1,1] - 1.1174892) :   0.0 :   True
+        (1, 2) :  -Inf : - dw - (w3[1,2] - 0.010765284) :   0.0 :   True
+        (2, 0) :  -Inf :  - dw - (w3[2,0] - 0.21709351) :   0.0 :   True
+        (2, 1) :  -Inf :   - dw - (w3[2,1] - 0.3236272) :   0.0 :   True
+        (2, 2) :  -Inf : - dw - (w3[2,2] - 0.106829345) :   0.0 :   True
+
+36 Declarations: w3_index_0 w3_index_1 w3_index w3 b3_index b3 x4_index_0 x4_index_1 x4_index x4 eq_constraint4_index_0 eq_constraint4_index_1 eq_constraint4_index eq_constraint4 inside004_index inside004 inside014_index inside014 inside024_index inside024 inside034_index inside034 dw w_bounded_constraint04_index_0 w_bounded_constraint04_index_1 w_bounded_constraint04_index w_bounded_constraint04 w_bounded_constraint14_index_0 w_bounded_constraint14_index_1 w_bounded_constraint14_index w_bounded_constraint14 b_bounded_constraint04_index b_bounded_constraint04 b_bounded_constraint14_index b_bounded_constraint14 obj

@@ -4,7 +4,7 @@ import numpy as np
 class Dense:
     """_summary_"""
 
-    def __init__(self, nin, nout):
+    def __init__(self, nin, nout, relu=False):
         """_summary_
 
         Args:
@@ -13,6 +13,7 @@ class Dense:
         """
         self.weights = np.random.rand(nin, nout) * 2 - 1
         self.bias = np.random.rand(nout) * 2 - 1
+        self.relu = relu
 
     def _relu(self, x):
         """_summary_
@@ -25,7 +26,7 @@ class Dense:
         """
         return np.maximum(x, 0)
 
-    def __call__(self, x, relu=False):
+    def __call__(self, x):
         """_summary_
 
         Args:
@@ -36,7 +37,7 @@ class Dense:
             _type_: _description_
         """
         x = x @ self.weights + self.bias
-        if relu:
+        if self.relu:
             x = self._relu(x)
 
         return x

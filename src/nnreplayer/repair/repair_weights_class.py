@@ -1,6 +1,8 @@
-"""_summary_
+"""builds a repair model 
 
 Raises:
+    ValueError: _description_
+    ImportError: _description_
     ValueError: _description_
 
 Returns:
@@ -16,14 +18,14 @@ from ..mip.mip_nn_model import MIPNNModel
 
 
 def give_mse_error(data1, data2):
-    """_summary_
+    """return the mean square error of data1-data2 samples
 
     Args:
-        data1 (_type_): _description_
-        data2 (_type_): _description_
+        data1 (ndarray): predicted targets
+        data2 (ndarray): original targets
 
     Returns:
-        _type_: _description_
+        float: mse error
     """
     row, col = np.array(data1).shape
     _squared_sum = 0
@@ -34,10 +36,10 @@ def give_mse_error(data1, data2):
     return _squared_sum / row
 
 
-class repair_weights:
+class NNRepair:
     # pylint: disable=invalid-name
 
-    """_summary_"""
+    """Neural Network repair class"""
 
     def __init__(
         self,
@@ -47,14 +49,10 @@ class repair_weights:
         # output_constraint_list,
         # cost_function_output,
     ):
-        """_summary_
+        """Creates a 'NNRepair' model instance.
 
         Args:
-            model_orig (_type_): _description_
-            layer_to_repair (_type_): _description_
-            architecture (_type_): _description_
-            output_constraint_list (_type_): _description_
-            cost_function_output (_type_): _description_
+            model_orig (keras.engine.sequential.Sequential): input is the keras tf model
         """
         self.model_orig = model_orig
         self.architecture = tf2_get_architecture(self.model_orig)
@@ -81,12 +79,13 @@ class repair_weights:
         """_summary_
 
         Args:
-            x_dataset (_type_): _description_
-            layer_2_repair (_type_): _description_
-            output_constraint_list (_type_): _description_
-            cost (_type_, optional): _description_. Defaults to give_mse_error.
-            cost_weights (list, optional): _description_. Defaults to [1.0, 1.0].
-            max_weight_bound (float, optional): _description_. Defaults to 1.0.
+            x_repair (ndarray): input repair samples
+            y_repair (ndarray): output repair samples
+            layer_2_repair (int): target repair layer
+            output_constraint_list (list[nnreplayer.utils.utils.constraints_class], optional): list of output constraints . Defaults to None.
+            cost (function, optional): minimization loss function. Defaults to give_mse_error.
+            cost_weights (list[ndarray], optional): cost_weights[0]: weight of  min loss, cost_weights[1]: weight of weight bounding slack variable. Defaults to np.array([1.0, 1.0]).
+            max_weight_bound (float, optional): upper bound of weights error. Defaults to 1.0.
         """
         # set repair parameters:
         self.layer_to_repair = layer_2_repair
@@ -95,16 +94,16 @@ class repair_weights:
 
         self.__set_up_optimizer(
             y_repair,
-            self.extract_network_values(x_repair),
+            self.extract_network_layers_values(x_repair),
             max_weight_bound,
             cost_weights,
         )
 
     def repair(self, options):
-        """_summary_
+        """perform the layer-wise repair and updates the weights of model_mlp
 
         Args:
-            options (_type_): _description_
+            options (nnreplayer.utils.options.Options): optimization options
         """
         self.__solve_optimization_problem(
             options.gdp_formulation,
@@ -115,7 +114,7 @@ class repair_weights:
         return self.return_repaired_model(options.model_output_type)
 
     def reset(self):
-        """reset the mlp model to the original model"""
+        """reset the model_mlp model to the original model"""
         self.architecture = tf2_get_architecture(self.model_orig)
         self.model_mlp = MLP(
             self.architecture[0], self.architecture[-1], self.architecture[1:-1]
@@ -128,13 +127,13 @@ class repair_weights:
         self.output_constraint_list = []
 
     def print_opt_model(self, direc=None):
-        """_summary_
+        """print or store the pyomo optimization model
 
         Args:
-            direc (_type_, optional): _description_. Defaults to None.
+            direc (str, optional): directory to print (stdout) the modelled opt. Defaults to None.
 
         Raises:
-            ValueError: _description_
+            ValueError: returns an error if opt is not complied
         """
         if self.opt_model is None:
             raise ValueError(
@@ -152,20 +151,17 @@ class repair_weights:
         else:
             self.opt_model.pprint()
 
-    # def update_mlp_model(self):
-
-    def extract_network_values(self, x_dataset):
-        """_summary_
+    def extract_network_layers_values(self, x_dataset):
+        """extract the values of each layer for all input samples
 
         Args:
-            x_dataset (_type_): _description_
+            x_dataset (ndarray): network input samples
 
         Returns:
-            _type_: _description_
+            list[ndarray]: values of layers give input samples
         """
 
-        print("************************************************")
-        layer_values = self.model_mlp(x_dataset, relu=False)
+        layer_values = self.model_mlp(x_dataset)
 
         return layer_values
 
@@ -236,7 +232,8 @@ class repair_weights:
         """
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
-        num_samples = layer_values[self.layer_to_repair - 2].shape[0]
+        # num_samples = layer_values[self.layer_to_repair - 2].shape[0]
+        num_samples = layer_values[self.layer_to_repair - 1].shape[0]
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
@@ -244,7 +241,8 @@ class repair_weights:
             bias,
         )
         y_ = mip_model_layer(
-            layer_values[self.layer_to_repair - 2],
+            # layer_values[self.layer_to_repair - 2],
+            layer_values[self.layer_to_repair - 1],
             (num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
             max_weight_bound=max_weight_bound,

@@ -7,7 +7,7 @@ class MIPNNModel:
     """_summary_"""
 
     def __init__(
-        self, layer_to_repair, architecture, weights, bias, param_bounds=(-10, 10)
+        self, layer_to_repair, architecture, weights, bias, param_bounds=(-1, 1)
     ):
         """_summary_
 
