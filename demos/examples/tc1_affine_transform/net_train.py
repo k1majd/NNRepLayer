@@ -21,7 +21,7 @@ def arg_parser():
     Returns:
         _type_: _description_
     """
-    cwd = os.getcwd()
+    cwd = os.path.dirname(os.path.realpath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-p",
@@ -128,8 +128,8 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     ## Network
     input_dim = 3
     output_dim = 3
-    hid_dim_0 = 10
-    hid_dim_1 = 10
+    hid_dim_0 = 3
+    hid_dim_1 = 3
 
     print("-----------------------")
     print("Data Generation")
@@ -185,7 +185,7 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     print("Start training!")
     # compile the model
     loss = keras.losses.MeanSquaredError(name="MSE")
-    optimizer = keras.optimizers.SGD(learning_rate=learning_rate, name="Adam")
+    optimizer = keras.optimizers.Adam(learning_rate=learning_rate, name="Adam")
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     x_train, y_train, x_test, y_test = batch.get_batch()
     his = model_orig.fit(
@@ -201,7 +201,7 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     if visual == 1:
         print("----------------------")
         print("Visualization")
-        plt.rcParams["text.usetex"] = True
+        plt.rcParams["text.usetex"] = False
         mpl.style.use("seaborn")
 
         x_poly_trans_bound, y_poly_trans_bound = poly_trans.exterior.xy

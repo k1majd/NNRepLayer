@@ -140,7 +140,9 @@ def main(
         print("Directory: {path_write} is created!")
 
     ## affine transformation matrices
-    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])  # translation matrix 1
+    translate1 = np.array(
+        [[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]]
+    )  # translation matrix 1
     translate2 = np.array(
         [[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]]
     )  # translation matrix 2
@@ -154,12 +156,15 @@ def main(
 
     ## original, transformed, and constraint Polygons
     poly_orig = Polygon([(1, 1), (4, 1), (4, 4), (1, 4)])
-    poly_trans = Polygon([(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)])
+    poly_trans = Polygon(
+        [(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)]
+    )
     inp_const_vertices = np.array(
         [[1.25, 3.75, 3.75, 1.25], [1.25, 1.25, 3.75, 3.75], [1, 1, 1, 1]]
     )  # contraint vertices in input space
     out_const_vertices = np.matmul(
-        np.matmul(np.matmul(translate1, rotate), translate2), inp_const_vertices
+        np.matmul(np.matmul(translate1, rotate), translate2),
+        inp_const_vertices,
     )  # constraint vertices in output space
     poly_const = Polygon(
         [
@@ -174,11 +179,11 @@ def main(
     print("Data modification")
     x_train, y_train, x_test, y_test = original_data_loader()
     x_train_inside, y_train_inside = label_output_inside(
-        poly_const, x_train, y_train, mode="finetune"
+        poly_const, x_train, y_train, bound_error=0.23, mode="finetune"
     )
     print(f"fine-tuning size: {y_train_inside.shape[0]}")
     x_test_inside, y_test_inside = label_output_inside(
-        poly_const, x_test, y_test, mode="retrain"
+        poly_const, x_test, y_test, bound_error=0.23, mode="retrain"
     )
     plt.show()
     print("-----------------------")
@@ -304,9 +309,12 @@ def main(
     if save_data == 1:
         if not os.path.exists(path_write + "/data"):
             os.makedirs(path_write + "/data")
-        with open(path_write + "/data/input_output_data_tc1.pickle", "wb") as data:
+        with open(
+            path_write + "/data/input_output_data_tc1.pickle", "wb"
+        ) as data:
             pickle.dump(
-                [x_train_inside, y_train_inside, x_test_inside, y_test_inside], data
+                [x_train_inside, y_train_inside, x_test_inside, y_test_inside],
+                data,
             )
         print("saved: dataset")
 
@@ -316,7 +324,9 @@ def main(
             os.makedirs(path_write + "/stats")
 
         with open(
-            path_write + "/stats/fine_tune_accs_stats_tc1.csv", "a+", newline=""
+            path_write + "/stats/fine_tune_accs_stats_tc1.csv",
+            "a+",
+            newline="",
         ) as write_obj:
             # Create a writer object from csv module
             csv_writer = writer(write_obj)
