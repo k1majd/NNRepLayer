@@ -13,7 +13,9 @@ import pickle
 def give_polys():
     """_summary_"""
     ## affine transformation matrices
-    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])  # translation matrix 1
+    translate1 = np.array(
+        [[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]]
+    )  # translation matrix 1
     translate2 = np.array(
         [[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]]
     )  # translation matrix 2
@@ -27,12 +29,15 @@ def give_polys():
 
     ## original, transformed, and constraint Polygons
     poly_orig = Polygon([(1, 1), (4, 1), (4, 4), (1, 4)])
-    poly_trans = Polygon([(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)])
+    poly_trans = Polygon(
+        [(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)]
+    )
     inp_const_vertices = np.array(
         [[1.25, 3.75, 3.75, 1.25], [1.25, 1.25, 3.75, 3.75], [1, 1, 1, 1]]
     )  # contraint vertices in input space
     out_const_vertices = np.matmul(
-        np.matmul(np.matmul(translate1, rotate), translate2), inp_const_vertices
+        np.matmul(np.matmul(translate1, rotate), translate2),
+        inp_const_vertices,
     )  # constraint vertices in output space
     poly_const = Polygon(
         [
@@ -89,7 +94,9 @@ def original_data_loader():
 
 
 ## generate random samples within the input polygon
-def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7):
+def gen_rand_points_within_poly(
+    poly, num_points, unif2edge=0.75, edge_scale=0.7
+):
     # pylint: disable=invalid-name
     """_summary_
 
@@ -112,7 +119,10 @@ def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7
     # uniformly distributed points
     count = 0
     while count < num_pts_unif:
-        rand_pt = [np.random.uniform(min_x, max_x), np.random.uniform(min_y, max_y)]
+        rand_pt = [
+            np.random.uniform(min_x, max_x),
+            np.random.uniform(min_y, max_y),
+        ]
         random_point = Point(rand_pt)
         if random_point.within(poly):
             x[count, 0:2] = np.array(rand_pt).flatten()
@@ -121,7 +131,10 @@ def gen_rand_points_within_poly(poly, num_points, unif2edge=0.75, edge_scale=0.7
     # edge points
     while count < num_points:
         while True:
-            rand_pt = [np.random.uniform(min_x, max_x), np.random.uniform(min_y, max_y)]
+            rand_pt = [
+                np.random.uniform(min_x, max_x),
+                np.random.uniform(min_y, max_y),
+            ]
             random_point = Point(rand_pt)
             if random_point.within(poly) and not random_point.within(poly_a):
                 break
@@ -202,7 +215,10 @@ def label_output_inside(
                 P, out_data[i, 0:2], A.T, b, meq=0, factorized=True
             )
             sol = (
-                ((poly_const.exterior.distance(Point([sol[0], sol[1]]))) + bound_error)
+                (
+                    (poly_const.exterior.distance(Point([sol[0], sol[1]])))
+                    + bound_error
+                )
                 / np.linalg.norm(sol - out_data[i, 0:2])
             ) * (sol - out_data[i, 0:2]) + sol
             # if not Point([sol[0], sol[1]]).within(
@@ -248,12 +264,18 @@ def model_eval(model_new, model_orig, path_read, poly_const):
     """
     # load eval dataset
     if not (
-        os.path.exists(path_read + "/data/input_output_data_inside_train_tc1.pickle")
+        os.path.exists(
+            path_read + "/data/input_output_data_inside_train_tc1.pickle"
+        )
         or os.path.exists(
             path_read + "/data/input_output_data_outside_train_tc1.pickle"
         )
-        or os.path.exists(path_read + "/data/input_output_data_inside_test_tc1.pickle")
-        or os.path.exists(path_read + "/data/input_output_data_outside_test_tc1.pickle")
+        or os.path.exists(
+            path_read + "/data/input_output_data_inside_test_tc1.pickle"
+        )
+        or os.path.exists(
+            path_read + "/data/input_output_data_outside_test_tc1.pickle"
+        )
     ):
         raise ImportError(
             "inside-outside datasets for test and train should be generated first in path {path_read}/data/"
@@ -285,7 +307,9 @@ def model_eval(model_new, model_orig, path_read, poly_const):
     num_corrected_train = num_buggy_train
 
     for i in range(num_buggy_train):
-        if not Point(y_train_out_pred[i][0], y_train_out_pred[i][1]).within(poly_const):
+        if not Point(y_train_out_pred[i][0], y_train_out_pred[i][1]).within(
+            poly_const
+        ):
             if (
                 not poly_const.exterior.distance(
                     Point(y_train_out_pred[i][0], y_train_out_pred[i][1])
@@ -302,7 +326,9 @@ def model_eval(model_new, model_orig, path_read, poly_const):
     num_corrected_test = num_buggy_test
 
     for i in range(num_buggy_test):
-        if not Point(y_test_out_pred[i][0], y_test_out_pred[i][1]).within(poly_const):
+        if not Point(y_test_out_pred[i][0], y_test_out_pred[i][1]).within(
+            poly_const
+        ):
             if (
                 not poly_const.exterior.distance(
                     Point(y_test_out_pred[i][0], y_test_out_pred[i][1])

@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import gen_rand_points_within_poly, get_batch
+from affine_utils import gen_rand_points_within_poly, Batch
 import pickle
 import os
 import argparse
@@ -93,7 +93,9 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     num_pts = 300  # number of samples
     train2test_ratio = 0.7
     ## affine transformation matrices
-    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])  # translation matrix 1
+    translate1 = np.array(
+        [[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]]
+    )  # translation matrix 1
     translate2 = np.array(
         [[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]]
     )  # translation matrix 2
@@ -106,7 +108,9 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     )  # rotation matrix
     ## original, transformed, and constraint Polygons
     poly_orig = Polygon([(1, 1), (4, 1), (4, 4), (1, 4)])
-    poly_trans = Polygon([(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)])
+    poly_trans = Polygon(
+        [(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)]
+    )
     vert_const_inp = np.array(
         [[1.25, 3.75, 3.75, 1.25], [1.25, 1.25, 3.75, 3.75], [1, 1, 1, 1]]
     )  # contraint vertices in input space
@@ -185,7 +189,11 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     x_train, y_train, x_test, y_test = batch.get_batch()
     his = model_orig.fit(
-        x_train, y_train, epochs=train_epochs, use_multiprocessing=True, verbose=0
+        x_train,
+        y_train,
+        epochs=train_epochs,
+        use_multiprocessing=True,
+        verbose=0,
     )
     print("Model Loss + Accuracy on Test Data Set: ")
     model_orig.evaluate(x_test, y_test, verbose=2)
@@ -221,7 +229,10 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
             label="Target Set",
         )
         plt.scatter(
-            y_train[:, 0], y_train[:, 1], color="tab:blue", label="Original Target"
+            y_train[:, 0],
+            y_train[:, 1],
+            color="tab:blue",
+            label="Original Target",
         )
         y_predict_train = model_orig.predict(x_train)
         plt.scatter(
@@ -258,7 +269,10 @@ def main(direc, learning_rate, regularizer_rate, train_epochs, visual):
             label="Target Set",
         )
         plt.scatter(
-            y_test[:, 0], y_test[:, 1], color="tab:blue", label="Original Target"
+            y_test[:, 0],
+            y_test[:, 1],
+            color="tab:blue",
+            label="Original Target",
         )
         y_predict_test = model_orig.predict(x_test)
         plt.scatter(

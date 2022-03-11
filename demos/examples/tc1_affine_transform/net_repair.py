@@ -9,12 +9,10 @@ Returns:
 # pylint: disable=import-error, unused-import
 import os
 import argparse
-from statistics import mode
 from csv import writer
 from datetime import datetime
 import numpy as np
 from affine_utils import (
-    plot_history,
     plot_dataset,
     model_eval,
     original_data_loader,
@@ -22,9 +20,7 @@ from affine_utils import (
     give_constraints,
 )
 from shapely.affinity import scale
-from shapely.geometry import Polygon, Point
 from tensorflow import keras
-from matplotlib import pyplot as plt
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import constraints_class
 from nnreplayer.repair.repair_weights_class import NNRepair
@@ -114,7 +110,7 @@ def main(
         os.makedirs(path_write + "/logs")
 
     # load model
-    model_orig = keras.models.load_model(path_read + "/model")
+    model_orig = keras.models.load_model(path_read + "/model_2")
 
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
@@ -122,7 +118,9 @@ def main(
     # x_train_sampled = x_train[p, :]
     # y_train_sampled = y_train[p, :]
     poly_orig, poly_trans, poly_const = give_polys()
-    A, b = give_constraints(scale(poly_const, xfact=0.98, yfact=0.98, origin="center"))
+    A, b = give_constraints(
+        scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
+    )
 
     print("----------------------")
     print("create repair model")
@@ -140,9 +138,10 @@ def main(
         {
             "timelimit": 3600,
             "mipgap": 0.001,
-            "mipfocus": 2,
+            "mipfocus": 3,
             "improvestarttime": 3300,
-            "logfile": path_write + f"/logs/opt_log_layer{layer_to_repair}.log",
+            "logfile": path_write
+            + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
     )
 
@@ -197,7 +196,8 @@ def main(
             os.makedirs(path_write + "/stats")
         # pylint: disable=unspecified-encoding
         with open(
-            path_write + f"/stats/repair_layer{layer_to_repair}_accs_stats_tc1.csv",
+            path_write
+            + f"/stats/repair_layer{layer_to_repair}_accs_stats_tc1.csv",
             "a+",
             newline="",
         ) as write_obj:
