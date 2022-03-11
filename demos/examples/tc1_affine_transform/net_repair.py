@@ -23,10 +23,10 @@ from affine_utils import (
 from shapely.affinity import scale
 from shapely.geometry import Polygon, Point
 from tensorflow import keras
+from matplotlib import pyplot as plt
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import constraints_class
-from nnreplayer.repair.perform_repair import perform_repair, NNRepLayer
-from matplotlib import pyplot as plt
+from nnreplayer.repair.repair_weights_class import NNRepair
 
 
 def arg_parser():
@@ -76,7 +76,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=3,
+        default=1,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -99,24 +99,22 @@ def main(
     """
     print("----------------------")
     print("load model and data")
-    # load model
+    # setup directories
     path_read = direc + "/tc1/original_net"
     path_write = direc + "/tc1/repair_net"
     if not os.path.exists(path_write):
         os.makedirs(path_write)
         print(f"Directory: {path_write} is created!")
 
-    if not os.path.exists(path_read + "/model"):
+    if not os.path.exists(path_read + "/model_2"):
         raise ImportError(f"path {path_read}/model does not exist!")
 
+    if not os.path.exists(path_write + "/logs"):
+        os.makedirs(path_write + "/logs")
+
+    # load model
     model_orig = keras.models.load_model(path_read + "/model")
 
-    # extract network architecture
-    architecture = []
-    for lnum, lay in enumerate(model_orig.layers):
-        architecture.append(lay.input.shape[1])
-        if lnum == len(model_orig.layers) - 1:
-            architecture.append(lay.output.shape[1])
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
     # p = np.random.choice(x_train.shape[0], 100)
@@ -131,24 +129,8 @@ def main(
     constraint_inside = constraints_class("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    # repair cost
-    def squared_sum(x, y):
-        m, n = np.array(x).shape
-        _squared_sum = 0
-        for i in range(m):
-            for j in range(n):
-                _squared_sum += (x[i, j] - y[i, j]) ** 2
-
-        return _squared_sum / m
-
-    train_dataset = (x_train, y_train)
-
-    max_slack = 1
-
-    # directory to save optimizer logs
-    if not os.path.exists(path_write + "/logs"):
-        os.makedirs(path_write + "/logs")
-
+    max_weight_bound = 5
+    cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
         "gurobi",
@@ -162,48 +144,52 @@ def main(
             "logfile": path_write + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
     )
-    repair_model = NNRepLayer(
-        model_orig,
-        layer_to_repair,
-        architecture,
-        output_constraint_list,
-        squared_sum,
-    )
-    results = repair_model.perform_repair(train_dataset, options)
-    repair_model.display_opt_solved_model()
-    # results = perform_repair(
-    #     layer_to_repair,
-    #     model_orig,
-    #     architecture,
-    #     output_constraint_list,
-    #     squared_sum,
-    #     train_dataset,
-    #     options,
-    # )
 
-    results.new_model.compile(
+    repair_obj = NNRepair(model_orig)
+    repair_obj.compile(
+        x_train,
+        y_train,
+        layer_to_repair,
+        output_constraint_list=output_constraint_list,
+        cost_weights=cost_weights,
+        max_weight_bound=max_weight_bound,
+    )
+    out_model = repair_obj.repair(options)
+
+    out_model.compile(
         optimizer=keras.optimizers.Adam(),
         loss=keras.losses.MeanSquaredError(name="MSE"),
         metrics=["accuracy"],
     )
-    results.new_model.evaluate(x_train, y_train, verbose=2)
-    print(f"weight_error: {results.weight_error}")
-    print(f"bias_error: {results.bias_error}")
+
+    if visual == 1:
+        print("----------------------")
+        print("Visualization")
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_train, out_model.predict(x_train)],
+            label="training",
+        )
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_test, out_model.predict(x_test)],
+            label="testing",
+        )
 
     if save_model == 1:
         if not os.path.exists(path_write):
             os.makedirs(path_write + f"/model_{layer_to_repair}")
         keras.models.save_model(
-            results.new_model,
+            out_model,
             path_write + f"/model_{layer_to_repair}",
             overwrite=True,
-            include_optimizer=True,
+            include_optimizer=False,
             save_format=None,
             signatures=None,
             options=None,
             save_traces=True,
         )
-        print("saved: model")
+        print(f"saved: model in /{path_write}/model_{layer_to_repair}")
 
     if save_stats == 1:
         if not os.path.exists(path_write + "/stats"):
@@ -217,14 +203,18 @@ def main(
             # Create a writer object from csv module
             csv_writer = writer(write_obj)
             model_evaluation = model_eval(
-                results.new_model,
-                keras.models.load_model(path_read + "/model"),
+                out_model,
+                keras.models.load_model(path_read + "/model_2"),
                 path_read,
                 poly_const,
             )
             for key, item in options.optimizer_options.items():
                 model_evaluation.append(key)
                 model_evaluation.append(item)
+            model_evaluation.append("max_weight_bound")
+            model_evaluation.append(max_weight_bound)
+            model_evaluation.append("cost weights")
+            model_evaluation.append(cost_weights)
             # Add contents of list as last row in the csv file
             csv_writer.writerow(model_evaluation)
         print("saved: stats")

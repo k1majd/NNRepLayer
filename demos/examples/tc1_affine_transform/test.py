@@ -38,7 +38,7 @@ options = Options(
 )
 # display model
 out_model = repair_obj.repair(options)
-repair_obj.print_opt_model(path_read + "/repair_net/logs")
+repair_obj.summary(path_read + "/repair_net/logs")
 y_new = out_model.predict(x_repair)
 x_poly_bound, y_poly_bound = poly_const.exterior.xy
 plt.plot(x_poly_bound, y_poly_bound)

@@ -126,7 +126,7 @@ class NNRepair:
         self.layer_to_repair = None
         self.output_constraint_list = []
 
-    def print_opt_model(self, direc=None):
+    def summery(self, direc=None):
         """print or store the pyomo optimization model
 
         Args:
@@ -143,7 +143,7 @@ class NNRepair:
             if not os.path.exists(direc):
                 raise ImportError(f"path {direc} does not exist!")
             with open(
-                direc + f"/opt_model_print_lay{self.layer_to_repair}.txt",
+                direc + f"/opt_model_summery_layer{self.layer_to_repair}.txt",
                 "w",
                 encoding="utf8",
             ) as file:
