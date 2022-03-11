@@ -287,4 +287,5 @@ class NNRepair:
         for key in optimizer_options:
             opt.options[key] = optimizer_options[key]
         opt.solve(self.opt_model, tee=True)
+        print("----------------------")
         print(self.opt_model.dw.display())

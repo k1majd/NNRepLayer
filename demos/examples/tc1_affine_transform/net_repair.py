@@ -69,14 +69,53 @@ def arg_parser():
         help="Specify whether to save stats or not 1 = on, 0 = off, default: 1",
     )
     parser.add_argument(
+        "-sms",
+        "--saveModelSummery",
+        nargs="?",
+        type=int,
+        default=0,
+        choices=range(0, 2),
+        help="Specify whether to save model summery or not 1 = on, 0 = off, default: 1",
+    )
+    parser.add_argument(
         "-rl",
         "--repairLayer",
         nargs="?",
         type=int,
-        default=1,
+        default=3,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
+
+
+def check_log_directories(path_read, path_write, layer_to_repair):
+    """_summary_
+
+    Args:
+        path_read (_type_): _description_
+        path_write (_type_): _description_
+
+    Raises:
+        ImportError: _description_
+    """
+    if not os.path.exists(path_read + "/model"):
+        raise ImportError(f"path {path_read}/model does not exist!")
+
+    if not os.path.exists(path_write):
+        os.makedirs(path_write)
+        print(f"Directory: {path_write} is created!")
+
+    if not os.path.exists(path_write + "/logs"):
+        os.makedirs(path_write + "/logs")
+
+    if not os.path.exists(path_write + "/summery"):
+        os.makedirs(path_write + "/summery")
+
+    if not os.path.exists(path_write):
+        os.makedirs(path_write + f"/model_layer_{layer_to_repair}")
+    
+    if not os.path.exists(path_write + "/stats"):
+            os.makedirs(path_write + "/stats")
 
 
 def main(
@@ -85,6 +124,7 @@ def main(
     save_model,
     save_stats,
     layer_to_repair,
+    save_summery,
 ):
     """_summary_
 
@@ -99,31 +139,20 @@ def main(
     # setup directories
     path_read = direc + "/tc1/original_net"
     path_write = direc + "/tc1/repair_net"
-    if not os.path.exists(path_write):
-        os.makedirs(path_write)
-        print(f"Directory: {path_write} is created!")
-
-    if not os.path.exists(path_read + "/model_2"):
-        raise ImportError(f"path {path_read}/model does not exist!")
-
-    if not os.path.exists(path_write + "/logs"):
-        os.makedirs(path_write + "/logs")
+    check_log_directories(path_read, path_write, layer_to_repair)
 
     # load model
-    model_orig = keras.models.load_model(path_read + "/model_2")
+    model_orig = keras.models.load_model(path_read + "/model")
 
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
-    # p = np.random.choice(x_train.shape[0], 100)
-    # x_train_sampled = x_train[p, :]
-    # y_train_sampled = y_train[p, :]
     poly_orig, poly_trans, poly_const = give_polys()
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
     )
 
     print("----------------------")
-    print("create repair model")
+    print("repair model")
     # input the constraint list
     constraint_inside = constraints_class("inside", A, b)
     output_constraint_list = [constraint_inside]
@@ -138,7 +167,7 @@ def main(
         {
             "timelimit": 3600,
             "mipgap": 0.001,
-            "mipfocus": 3,
+            "mipfocus": 2,
             "improvestarttime": 3300,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
@@ -176,12 +205,17 @@ def main(
             label="testing",
         )
 
+    print("----------------------")
+    print("logging")
+
+    if save_summery == 0:
+        repair_obj.summery(direc=path_write + "/summery")
+        print("saved: summery")
+
     if save_model == 1:
-        if not os.path.exists(path_write):
-            os.makedirs(path_write + f"/model_{layer_to_repair}")
         keras.models.save_model(
             out_model,
-            path_write + f"/model_{layer_to_repair}",
+            path_write + f"/model_layer_{layer_to_repair}",
             overwrite=True,
             include_optimizer=False,
             save_format=None,
@@ -189,11 +223,9 @@ def main(
             options=None,
             save_traces=True,
         )
-        print(f"saved: model in /{path_write}/model_{layer_to_repair}")
+        print("saved: model")
 
     if save_stats == 1:
-        if not os.path.exists(path_write + "/stats"):
-            os.makedirs(path_write + "/stats")
         # pylint: disable=unspecified-encoding
         with open(
             path_write
@@ -205,7 +237,7 @@ def main(
             csv_writer = writer(write_obj)
             model_evaluation = model_eval(
                 out_model,
-                keras.models.load_model(path_read + "/model_2"),
+                keras.models.load_model(path_read + "/model"),
                 path_read,
                 poly_const,
             )
@@ -230,4 +262,5 @@ if __name__ == "__main__":
         args.saveModel,
         args.saveStats,
         args.repairLayer,
+        args.saveModelSummery,
     )
