@@ -113,9 +113,9 @@ def check_log_directories(path_read, path_write, layer_to_repair):
 
     if not os.path.exists(path_write):
         os.makedirs(path_write + f"/model_layer_{layer_to_repair}")
-    
+
     if not os.path.exists(path_write + "/stats"):
-            os.makedirs(path_write + "/stats")
+        os.makedirs(path_write + "/stats")
 
 
 def main(
@@ -208,7 +208,7 @@ def main(
     print("----------------------")
     print("logging")
 
-    if save_summery == 0:
+    if save_summery == 1:
         repair_obj.summery(direc=path_write + "/summery")
         print("saved: summery")
 
