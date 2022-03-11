@@ -1,0 +1,18 @@
+Items I changed in NNReplayer:
+1. weightSlack in repair_weights_class is not correct it is actually the bound of weight error
+2. add more gurobi options by changing the Option class. enable adding any options for the solver_factory
+3. add the capability to apply different weight values for samples and e_w slack variables through options and modifying cost_expr
+4. change e_w cost to e_w**2
+6. apply a mechanism to apply different parameter and variable bounds 
+7. remove the extra binary variable defined on the output constraint
+imp: 8. parameter bound should be compatible with bound of weight error (or weight slack in this version of code)
+9. record opt and optimal variable logs
+10. Specify output bounds in optimizer
+11. options is modified
+12. record opt log file
+13. save the constructed model
+14 mlp_get_weights() should also work with pytorch models!
+15. play with gdp_formulation variable.
+16. check what happens if an empty list of constraints is inputted to the repair obj
+17. write a parser to extract the atchitechture and weights of an inputed model (including relu activations) << important
+    a) it will change the input of NNRepair class to weight and architecture
