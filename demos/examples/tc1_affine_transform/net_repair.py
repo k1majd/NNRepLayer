@@ -11,6 +11,7 @@ import os
 import argparse
 from statistics import mode
 from csv import writer
+from datetime import datetime
 import numpy as np
 from affine_utils import (
     plot_history,
@@ -215,6 +216,7 @@ def main(
             model_evaluation.append(max_weight_bound)
             model_evaluation.append("cost weights")
             model_evaluation.append(cost_weights)
+            model_evaluation.append(str(datetime.now()))
             # Add contents of list as last row in the csv file
             csv_writer.writerow(model_evaluation)
         print("saved: stats")
