@@ -7,7 +7,7 @@ import pickle
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
-from wm_utils import load_model
+from wm_utils import original_model_loader
 from nnreplayer.utils.utils import tf2_get_architecture
 
 
@@ -57,6 +57,12 @@ def main(direc):
     x_test = x_test.reshape(
         x_test.shape[0], x_test.shape[1], x_test.shape[2], 1
     )
+    temp_idx = np.random.choice(x_train[0].shape[0], 750)
+    x_train = x_train[temp_idx]
+    y_train = y_train[temp_idx]
+    temp_idx = np.random.choice(x_test[0].shape[0], 250)
+    x_test = x_test[temp_idx]
+    y_test = y_test[temp_idx]
     wm_images = np.load(path_read + "/wm_imgs.npy")  # watermark images
     wm_labels = np.loadtxt(
         path_read + "/wm_labels.txt", dtype="int32"
@@ -67,7 +73,7 @@ def main(direc):
 
     #########################################
     # Load raw model and store the original model
-    net_model = load_model()
+    net_model = original_model_loader()
     net_model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=0.001, name="Adam"),
         loss="sparse_categorical_crossentropy",

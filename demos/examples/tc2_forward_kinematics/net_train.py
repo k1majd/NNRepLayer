@@ -1,7 +1,7 @@
 # this script train a DNN for the in-place rotation example in https://arxiv.org/pdf/2109.14041.pdf
 # ref: https://arxiv.org/pdf/2109.14041.pdf
 # example: In-place rotation
-# network arch: 4-30-30-30-12
+# network arch: 12-30-30-30-4
 #
 import tensorflow as tf
 from tensorflow import keras
@@ -16,7 +16,12 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 
 
 def arg_parser():
-    cwd = os.getcwd()
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    cwd = os.path.dirname(os.path.realpath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-p",
@@ -84,6 +89,16 @@ def main(
     visual,
     batch_size_train,
 ):
+    """_summary_
+
+    Args:
+        direc (_type_): _description_
+        learning_rate (_type_): _description_
+        regularizer_rate (_type_): _description_
+        train_epochs (_type_): _description_
+        visual (_type_): _description_
+        batch_size_train (_type_): _description_
+    """
     path = direc + "/tc2/original_net"
 
     if not os.path.exists(path):
@@ -172,7 +187,7 @@ def main(
     optimizer = keras.optimizers.Adam(learning_rate=learning_rate, name="Adam")
     ## compile the model
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
-    x_train, y_train, x_test, y_test = batch.getBatch()  # create data batch
+    x_train, y_train, x_test, y_test = batch.get_batch()  # create data batch
     ## define callbacks:
     callback_reduce_lr = ReduceLROnPlateau(
         monitor="val_loss", factor=0.2, patience=5, min_lr=0.0001
@@ -201,7 +216,7 @@ def main(
     if visual == 1:
         print("----------------------")
         print("Visualization")
-        plt.rcParams["text.usetex"] = True
+        plt.rcParams["text.usetex"] = False
         mpl.style.use("seaborn")
 
         ## loss plotting
