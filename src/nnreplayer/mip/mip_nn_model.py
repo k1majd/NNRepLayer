@@ -7,12 +7,7 @@ class MIPNNModel:
     """_summary_"""
 
     def __init__(
-        self,
-        layer_to_repair,
-        architecture,
-        weights,
-        bias,
-        param_bounds=(-1, 1),
+        self, layer_to_repair, architecture, weights, bias, param_bounds=(-1, 1)
     ):
         """_summary_
 
@@ -27,10 +22,7 @@ class MIPNNModel:
 
         self.model.nlayers = layer_to_repair
 
-        self.uin, self.uout = (
-            architecture[layer_to_repair - 1],
-            architecture[-1],
-        )
+        self.uin, self.uout = architecture[layer_to_repair - 1], architecture[-1]
         uhidden = architecture[layer_to_repair:-1]
 
         self.layers = []
