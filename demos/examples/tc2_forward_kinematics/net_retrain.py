@@ -277,7 +277,7 @@ def main(
             os.makedirs(path_write + "/stats")
 
         with open(
-            path_write + "/stats/fine_tune_accs_stats_tc2.csv",
+            path_write + "/stats/retrain_accs_stats_tc2.csv",
             "a+",
             newline="",
         ) as write_obj:
