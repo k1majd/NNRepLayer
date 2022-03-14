@@ -5,11 +5,11 @@ import pickle
 from tensorflow import keras
 import numpy as np
 from shapely.geometry import Polygon
-from affine_utils import (
+from fk_utils import (
     label_output_inside,
     original_data_loader,
+    plot_dataset3d,
     plot_history,
-    plot_dataset,
     model_eval,
 )
 from nnreplayer.utils.utils import tf2_get_architecture
@@ -38,7 +38,7 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        default=1000,
+        default=5000,
         help="Specify training epochs in int, default: 100",
     )
     parser.add_argument(
@@ -46,7 +46,7 @@ def arg_parser():
         "--learnRate",
         nargs="?",
         type=float,
-        default=0.03,
+        default=0.003,
         help="Specify Learning rate in int, default: 0.003",
     )
     parser.add_argument(
@@ -54,7 +54,7 @@ def arg_parser():
         "--regularizationRate",
         nargs="?",
         type=float,
-        default=0.003,
+        default=0.0001,
         help="Specify regularization rate in int, default: 0.0001",
     )
     parser.add_argument(
@@ -134,61 +134,27 @@ def main(
         train_epochs (_type_): _description_
         visual (_type_): _description_
     """
-    path_read = direc + "/tc1/original_net"
-    path_write = direc + "/tc1/retrain_net"
+    path_read = direc + "/tc2/original_net"
+    path_write = direc + "/tc2/retrain_net"
 
     if not os.path.exists(path_write):
         os.makedirs(path_write)
         print(f"Directory: {path_write} is created!")
 
-    ## affine transformation matrices
-    translate1 = np.array(
-        [[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]]
-    )  # translation matrix 1
-    translate2 = np.array(
-        [[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]]
-    )  # translation matrix 2
-    rotate = np.array(
-        [
-            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
-            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
-            [0, 0, 1],
-        ]
-    )  # rotation matrix
-
-    ## original, transformed, and constraint Polygons
-    poly_orig = Polygon([(1, 1), (4, 1), (4, 4), (1, 4)])
-    poly_trans = Polygon(
-        [(2.5, 4.621), (4.624, 2.5), (2.5, 0.3787), (0.3787, 2.5)]
-    )
-    inp_const_vertices = np.array(
-        [[1.25, 3.75, 3.75, 1.25], [1.25, 1.25, 3.75, 3.75], [1, 1, 1, 1]]
-    )  # contraint vertices in input space
-    out_const_vertices = np.matmul(
-        np.matmul(np.matmul(translate1, rotate), translate2),
-        inp_const_vertices,
-    )  # constraint vertices in output space
-    poly_const = Polygon(
-        [
-            (out_const_vertices[0, 0], out_const_vertices[1, 0]),
-            (out_const_vertices[0, 1], out_const_vertices[1, 1]),
-            (out_const_vertices[0, 2], out_const_vertices[1, 2]),
-            (out_const_vertices[0, 3], out_const_vertices[1, 3]),
-        ]
-    )
-
     print("-----------------------")
     print("Data modification")
+    A = np.array([[1.0, 0.0, 0.0, 0.0]])
+    b = np.array([0.5])
     x_train, y_train, x_test, y_test = original_data_loader()
     x_train_inside, y_train_inside = label_output_inside(
-        poly_const, x_train, y_train, bound_error=0.3, mode="retrain"
+        x_train, y_train, A, b, bound_error=0.3, mode="retrain"
     )
+    print(f"fine-tuning size: {y_train_inside.shape[0]}")
     x_test_inside, y_test_inside = label_output_inside(
-        poly_const, x_test, y_test, bound_error=0.3, mode="retrain"
+        x_test, y_test, A, b, bound_error=0.2, mode="retrain"
     )
-    plt.show()
     print("-----------------------")
-    print("NN model fine tuning:")
+    print("NN model re-train:")
 
     # substitute the output layer with a new layer and freeze the base model
     if not os.path.exists(path_read + "/model"):
@@ -202,7 +168,7 @@ def main(
             activation="relu",
             kernel_regularizer=keras.regularizers.l2(regularizer_rate),
             bias_regularizer=keras.regularizers.l2(regularizer_rate),
-            input_shape=(3,),
+            input_shape=(arch[0],),
             name="layer0",
         )
     )
@@ -218,6 +184,15 @@ def main(
     model_orig.add(
         keras.layers.Dense(
             arch[3],
+            activation="relu",
+            kernel_regularizer=keras.regularizers.l2(regularizer_rate),
+            bias_regularizer=keras.regularizers.l2(regularizer_rate),
+            name="layer2",
+        )
+    )
+    model_orig.add(
+        keras.layers.Dense(
+            arch[4],
             kernel_regularizer=keras.regularizers.l2(regularizer_rate),
             bias_regularizer=keras.regularizers.l2(regularizer_rate),
             name="output",
@@ -234,7 +209,7 @@ def main(
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="val_loss", factor=0.2, patience=8, min_lr=0.00001
+        monitor="val_loss", factor=0.2, patience=5, min_lr=0.00001
     )  # reduce learning rate
     callback_es = EarlyStopping(
         monitor="val_loss", patience=10, restore_best_weights=True
@@ -254,18 +229,16 @@ def main(
     model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
 
     if visual == 1:
-        print("----------------------")
-        print("Visualization")
-        plot_history(his, include_validation=True)
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
+        plot_history(his, include_validation=False)
+        plot_dataset3d(
             [y_train_inside, model_orig.predict(x_train_inside)],
-            label="training",
+            ["hand-labeled output", "re-trained output"],
+            title_label="training - after re-train all layers",
         )
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
+        plot_dataset3d(
             [y_test_inside, model_orig.predict(x_test_inside)],
-            label="testing",
+            ["hand-labeled output", "re-trained output"],
+            title_label="testing - after re-train all layers",
         )
 
     print("-----------------------")
@@ -290,7 +263,7 @@ def main(
         if not os.path.exists(path_write + "/data"):
             os.makedirs(path_write + "/data")
         with open(
-            path_write + "/data/input_output_data_tc1.pickle", "wb"
+            path_write + "/data/input_output_data_tc2.pickle", "wb"
         ) as data:
             pickle.dump(
                 [x_train_inside, y_train_inside, x_test_inside, y_test_inside],
@@ -304,7 +277,9 @@ def main(
             os.makedirs(path_write + "/stats")
 
         with open(
-            path_write + "/stats/retrain_accs_stats_tc1.csv", "a+", newline=""
+            path_write + "/stats/fine_tune_accs_stats_tc2.csv",
+            "a+",
+            newline="",
         ) as write_obj:
             # Create a writer object from csv module
             csv_writer = writer(write_obj)
@@ -315,7 +290,7 @@ def main(
                     model_orig,
                     keras.models.load_model(path_read + "/model"),
                     path_read,
-                    poly_const,
+                    (A, b),
                 )
             )
         print("saved: stats")

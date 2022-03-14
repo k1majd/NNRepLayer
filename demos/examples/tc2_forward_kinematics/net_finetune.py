@@ -7,10 +7,10 @@ import numpy as np
 from shapely.geometry import Polygon
 from fk_utils import (
     label_output_inside,
-    plot_history,
-    plot_dataset,
-    model_eval,
     original_data_loader,
+    plot_dataset3d,
+    plot_history,
+    model_eval,
 )
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from matplotlib import pyplot as plt
@@ -36,7 +36,7 @@ def arg_parser():
         "--epoch",
         nargs="?",
         type=int,
-        default=500,
+        default=50,
         help="Specify training epochs in int, default: 100",
     )
     parser.add_argument(
@@ -44,7 +44,7 @@ def arg_parser():
         "--learnRate",
         nargs="?",
         type=float,
-        default=0.01,
+        default=0.0001,
         help="Specify Learning rate in int, default: 0.003",
     )
     parser.add_argument(
@@ -52,7 +52,7 @@ def arg_parser():
         "--regularizationRate",
         nargs="?",
         type=float,
-        default=0.003,
+        default=0.0001,
         help="Specify regularization rate in int, default: 0.0001",
     )
     parser.add_argument(
@@ -141,49 +141,49 @@ def main(
 
     print("-----------------------")
     print("Data modification")
+    A = np.array([[1.0, 0.0, 0.0, 0.0]])
+    b = np.array([0.5])
     x_train, y_train, x_test, y_test = original_data_loader()
     x_train_inside, y_train_inside = label_output_inside(
-        poly_const, x_train, y_train, bound_error=0.25, mode="finetune"
+        x_train, y_train, A, b, bound_error=0.3, mode="finetune"
     )
     print(f"fine-tuning size: {y_train_inside.shape[0]}")
     x_test_inside, y_test_inside = label_output_inside(
-        poly_const, x_test, y_test, bound_error=0.25, mode="retrain"
+        x_test, y_test, A, b, bound_error=0.2, mode="retrain"
     )
-    plt.show()
+
     print("-----------------------")
     print("NN model fine tuning:")
 
     if not os.path.exists(path_read + "/model"):
         raise ImportError(f"path {path_read}/model does not exist!")
     model_orig = keras.models.load_model(path_read + "/model")
-
-    # substitute the output layer with a new layer and freeze the base model
-    output_dim = model_orig.layers[-1].output.shape[1]
-    model_orig.pop()
-    for _, layer in enumerate(model_orig.layers):
-        layer.trainable = False
-    model_orig.add(
-        keras.layers.Dense(
-            output_dim,
-            kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-            bias_regularizer=keras.regularizers.l2(regularizer_rate),
-            name="output",
+    if visual == 1:
+        plot_dataset3d(
+            [y_train_inside, model_orig.predict(x_train_inside)],
+            ["hand-labeled output", "fine-tuned output"],
+            title_label="training - after fine-tune all layers",
         )
-    )
-    model_orig.summary()
+        plot_dataset3d(
+            [y_test_inside, model_orig.predict(x_test_inside)],
+            ["hand-labeled output", "fine-tuned output"],
+            title_label="testing - after fine-tune all layers",
+        )
 
     print("-----------------------")
-    print("Start fine-tuning the last layer!")
+    print("Start fine-tuning the whole model!")
+    for _, layer in enumerate(model_orig.layers):
+        layer.trainable = True
 
     loss = keras.losses.MeanSquaredError(name="MSE")
     optimizer = keras.optimizers.Adam(learning_rate=learning_rate, name="Adam")
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=10, min_lr=0.001
+        monitor="loss", factor=0.2, patience=5, min_lr=0.0001
     )  # reduce learning rate
     callback_es = EarlyStopping(
-        monitor="loss", patience=10, restore_best_weights=True
+        monitor="loss", patience=20, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
     his = model_orig.fit(
@@ -200,56 +200,15 @@ def main(
 
     if visual == 1:
         plot_history(his, include_validation=False)
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
+        plot_dataset3d(
             [y_train_inside, model_orig.predict(x_train_inside)],
-            label="training",
+            ["hand-labeled output", "fine-tuned output"],
+            title_label="training - after fine-tune all layers",
         )
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
+        plot_dataset3d(
             [y_test_inside, model_orig.predict(x_test_inside)],
-            label="testing",
-        )
-
-    print("-----------------------")
-    print("Start fine-tuning the whole model!")
-    for _, layer in enumerate(model_orig.layers):
-        layer.trainable = True
-
-    loss = keras.losses.MeanSquaredError(name="MSE")
-    optimizer = keras.optimizers.Adam(learning_rate=learning_rate, name="Adam")
-    model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
-    # compile the model
-    callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=5, min_lr=0.001
-    )  # reduce learning rate
-    callback_es = EarlyStopping(
-        monitor="loss", patience=20, restore_best_weights=True
-    )  # early stopping callback
-    ## model fitting
-    his = model_orig.fit(
-        x_train_inside,
-        y_train_inside,
-        epochs=50,
-        batch_size=batch_size_train,
-        use_multiprocessing=True,
-        verbose=net_verbose,
-        callbacks=[callback_es, callback_reduce_lr],
-    )
-    print("Model Loss + Accuracy on Test Data Set: ")
-    model_orig.evaluate(x_test_inside, y_test_inside, verbose=2)
-
-    if visual == 1:
-        plot_history(his, include_validation=False)
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
-            [y_train_inside, model_orig.predict(x_train_inside)],
-            label="training",
-        )
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
-            [y_test_inside, model_orig.predict(x_test_inside)],
-            label="testing",
+            ["hand-labeled output", "fine-tuned output"],
+            title_label="testing - after fine-tune all layers",
         )
 
     print("-----------------------")
@@ -301,7 +260,7 @@ def main(
                     model_orig,
                     keras.models.load_model(path_read + "/model"),
                     path_read,
-                    poly_const,
+                    (A, b),
                 )
             )
         print("saved: stats")

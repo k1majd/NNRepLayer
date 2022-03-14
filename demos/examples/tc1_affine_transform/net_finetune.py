@@ -185,7 +185,7 @@ def main(
     x_test_inside, y_test_inside = label_output_inside(
         poly_const, x_test, y_test, bound_error=0.25, mode="retrain"
     )
-    plt.show()
+
     print("-----------------------")
     print("NN model fine tuning:")
 

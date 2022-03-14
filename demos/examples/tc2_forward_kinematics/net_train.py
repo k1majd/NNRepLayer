@@ -16,7 +16,12 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 
 
 def arg_parser():
-    cwd = os.getcwd()
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    cwd = os.path.dirname(os.path.realpath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-p",
@@ -84,6 +89,16 @@ def main(
     visual,
     batch_size_train,
 ):
+    """_summary_
+
+    Args:
+        direc (_type_): _description_
+        learning_rate (_type_): _description_
+        regularizer_rate (_type_): _description_
+        train_epochs (_type_): _description_
+        visual (_type_): _description_
+        batch_size_train (_type_): _description_
+    """
     path = direc + "/tc2/original_net"
 
     if not os.path.exists(path):
@@ -201,7 +216,7 @@ def main(
     if visual == 1:
         print("----------------------")
         print("Visualization")
-        plt.rcParams["text.usetex"] = True
+        plt.rcParams["text.usetex"] = False
         mpl.style.use("seaborn")
 
         ## loss plotting
