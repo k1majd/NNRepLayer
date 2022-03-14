@@ -17,6 +17,7 @@ from fk_utils import (
     model_eval,
     original_data_loader,
 )
+import pickle
 from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
@@ -144,6 +145,17 @@ def main(
 
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
+    with open(
+        path_read + "/data/input_output_data_inside_train_tc2.pickle", "rb"
+    ) as data:
+        train_inside = pickle.load(data)
+    rnd_pts = np.random.choice(train_inside[0].shape[0], 200)
+    with open(
+        path_read + "/data/input_output_data_outside_train_tc2.pickle", "rb"
+    ) as data:
+        train_out = pickle.load(data)
+    x_train = np.vstack((train_inside[0][rnd_pts], train_out[0]))
+    y_train = np.vstack((train_inside[1][rnd_pts], train_out[1]))
     A = np.array([[1.0, 0.0, 0.0, 0.0]])
     b = np.array([[0.5]])
 
