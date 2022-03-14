@@ -113,9 +113,9 @@ def label_output_inside(
     inp_data_new = []
     P = np.diag(np.ones(3))
     for i in range(out_data.shape[0]):
-        if not np.matmul(A, out_data[i, 0:3]) <= b:
+        if not np.matmul(A[:, 0:3], out_data[i, 0:3]) <= b:
             sol, _, _, _, _, _ = solve_qp(
-                P, out_data[i, 0:3], -A.T, -b, meq=0, factorized=True
+                P, out_data[i, 0:3], -A[:, 0:3].T, -b, meq=0, factorized=True
             )
             dist = np.linalg.norm(out_data[i, 0:3] - sol)
             sol = (bound_error / dist) * (sol - out_data[i, 0:3]) + sol

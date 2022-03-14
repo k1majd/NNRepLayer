@@ -1,8 +1,8 @@
 #!/bin/bash
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "remove the existing stats in:"
-echo $SCRIPT_DIR/tc2/finetune_net/stats
-rm -rf $SCRIPT_DIR/tc2/finetune_net/stats
+echo $SCRIPT_DIR/tc2/finetuned_net/stats
+rm -rf $SCRIPT_DIR/tc2/finetuned_net/stats
 echo "Finetuning"
 for i in {1..50}
 do
