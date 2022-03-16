@@ -1,0 +1,21 @@
+
+Gurobi 9.5.0 (win64) logging started Tue Mar 15 18:20:25 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc5_mnist_watermark_removal/tc5/repair_net_single_wm/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 236720 rows, 118520 columns and 592396 nonzeros
+Model fingerprint: 0xc6dc0378
+Model has 11 quadratic objective terms
+Variable types: 118061 continuous, 459 integer (459 binary)
+Coefficient statistics:
+  Matrix range     [9e-06, 2e+01]
+  Objective range  [6e+00, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 2e+01]
+  RHS range        [1e-06, 2e+01]
+Presolve removed 750 rows and 300 columns
+Presolve time: 0.70s
+Presolved: 235970 rows, 118220 columns, 591196 nonzeros
+Presolved model has 11 quadratic objective terms
+Variable types: 118061 continuous, 159 integer (159 binary)

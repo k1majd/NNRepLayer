@@ -50,3 +50,26 @@ def original_data_loader():
     with open(path_read + "/data/input_output_data_tc5.pickle", "rb") as data:
         dataset = pickle.load(data)
     return dataset[0], dataset[1], dataset[2], dataset[3]
+
+
+def wm_data_loader(model_orig):
+    """_summary_
+
+    Args:
+        model_orig (_type_): _description_
+
+    Raises:
+        ImportError: _description_
+
+    Returns:
+        _type_: _description_
+    """
+    direc = os.path.dirname(os.path.realpath(__file__))
+    path_read = direc + "/tc5/original_net"
+    if not os.path.exists(path_read + "/data/input_output_wm_tc5.pickle"):
+        raise ImportError(
+            "path {path_read}/data/input_output_wm_tc5.pickle does not exist!"
+        )
+    with open(path_read + "/data/input_output_wm_tc5.pickle", "rb") as data:
+        dataset = pickle.load(data)
+    return dataset[0], model_orig.predict(dataset[0]), dataset[1]

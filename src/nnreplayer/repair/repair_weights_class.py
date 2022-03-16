@@ -57,13 +57,17 @@ class NNRepair:
         self.model_orig = model_orig
         self.architecture = tf2_get_architecture(self.model_orig)
         self.model_mlp = MLP(
-            self.architecture[0], self.architecture[-1], self.architecture[1:-1]
+            self.architecture[0],
+            self.architecture[-1],
+            self.architecture[1:-1],
         )
         self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         self.cost_function_output = give_mse_error
         # self.__compile_flag = False
         self.opt_model = None
         self.layer_to_repair = None
+        self.output_name = None
+        self.num_samples = None
         self.output_constraint_list = []
 
     def compile(
@@ -117,13 +121,17 @@ class NNRepair:
         """reset the model_mlp model to the original model"""
         self.architecture = tf2_get_architecture(self.model_orig)
         self.model_mlp = MLP(
-            self.architecture[0], self.architecture[-1], self.architecture[1:-1]
+            self.architecture[0],
+            self.architecture[-1],
+            self.architecture[1:-1],
         )
         self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         self.cost_function_output = give_mse_error
         # self.__compile_flag = False
         self.opt_model = None
         self.layer_to_repair = None
+        self.output_name = None
+        self.num_samples = None
         self.output_constraint_list = []
 
     def summery(self, direc=None):
@@ -179,11 +187,15 @@ class NNRepair:
         )
         new_bias = np.zeros(self.architecture[self.layer_to_repair])
         for keys, items in (
-            getattr(self.opt_model, f"w{self.layer_to_repair}").get_values().items()
+            getattr(self.opt_model, f"w{self.layer_to_repair}")
+            .get_values()
+            .items()
         ):
             new_weight[keys[0], keys[1]] = items
         for keys, items in (
-            getattr(self.opt_model, f"b{self.layer_to_repair}").get_values().items()
+            getattr(self.opt_model, f"b{self.layer_to_repair}")
+            .get_values()
+            .items()
         ):
             new_bias[keys] = items
 
@@ -207,7 +219,9 @@ class NNRepair:
             weights_bias_iterate = 0
             for iterate in range(len(self.architecture) - 1):
                 new_model.layers[iterate].set_weights(
-                    model_new_params[weights_bias_iterate : weights_bias_iterate + 2]
+                    model_new_params[
+                        weights_bias_iterate : weights_bias_iterate + 2
+                    ]
                 )
                 weights_bias_iterate = weights_bias_iterate + 2
 
@@ -233,20 +247,40 @@ class NNRepair:
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
         # num_samples = layer_values[self.layer_to_repair - 2].shape[0]
-        num_samples = layer_values[self.layer_to_repair - 1].shape[0]
+        self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
             weights,
             bias,
+            param_bounds=(
+                np.min(
+                    [
+                        np.min(bias[self.layer_to_repair - 1]),
+                        np.min(weights[self.layer_to_repair - 1]),
+                    ]
+                )
+                - max_weight_bound
+                - 0.01,
+                np.max(
+                    [
+                        np.max(bias[self.layer_to_repair - 1]),
+                        np.max(weights[self.layer_to_repair - 1]),
+                    ]
+                )
+                + max_weight_bound
+                + 0.01,
+            ),
         )
         y_ = mip_model_layer(
             # layer_values[self.layer_to_repair - 2],
             layer_values[self.layer_to_repair - 1],
-            (num_samples, self.architecture[self.layer_to_repair - 1]),
+            (self.num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
             max_weight_bound=max_weight_bound,
+            output_bounds=(np.min(y_repair), np.max(y_repair)),
         )
+        self.output_name = y_.name
         self.opt_model = mip_model_layer.model
 
         cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)

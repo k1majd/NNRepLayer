@@ -243,8 +243,9 @@ class MIPLayer:
             pyo.Constraint(range(m), range(self.uout), rule=constraints),
         )
 
-        constraint_addition_string = generate_output_constraints(output_constraint_list)
-        exec(constraint_addition_string, locals(), globals())
+        if output_constraint_list:
+            constraint_addition_string = generate_output_constraints(output_constraint_list)
+            exec(constraint_addition_string, locals(), globals())
         # def constraint_inside0(model, i):
         #     return [(getattr(model, ind_l)[i, 0] == 0, getattr(model, x_l)[i, 0] + 0.0001 <= getattr(model, x_l)[i, 1],
         #             getattr(model, x_l)[i, 0] + 0.0001 <= getattr(model, x_l)[i, 2],
