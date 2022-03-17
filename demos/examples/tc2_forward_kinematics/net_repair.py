@@ -81,7 +81,15 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=4,
+        default=3,
+        help="Specify the layer to repair.",
+    )
+    parser.add_argument(
+        "-tl",
+        "--timeLimit",
+        nargs="?",
+        type=int,
+        default=3600,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -124,6 +132,7 @@ def main(
     save_stats,
     layer_to_repair,
     save_summery,
+    time_limit,
 ):
     """_summary_
 
@@ -149,7 +158,7 @@ def main(
         path_read + "/data/input_output_data_inside_train_tc2.pickle", "rb"
     ) as data:
         train_inside = pickle.load(data)
-    rnd_pts = np.random.choice(train_inside[0].shape[0], 150)
+    rnd_pts = np.random.choice(train_inside[0].shape[0], 100)
     with open(
         path_read + "/data/input_output_data_outside_train_tc2.pickle", "rb"
     ) as data:
@@ -173,10 +182,10 @@ def main(
         "python",
         "keras",
         {
-            "timelimit": 7200,
+            "timelimit": time_limit,
             "mipgap": 0.001,
             "mipfocus": 2,
-            "improvestarttime": 7000,
+            "improvestarttime": time_limit,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
@@ -271,4 +280,5 @@ if __name__ == "__main__":
         args.saveStats,
         args.repairLayer,
         args.saveModelSummery,
+        args.timeLimit,
     )

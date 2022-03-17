@@ -1550,3 +1550,315 @@ Iter       Primal          Dual         Primal    Dual     Compl     Time
 Barrier solved model in 17 iterations and 0.04 seconds (0.04 work units)
 Optimal objective 2.63526409e-01
 
+
+Gurobi 9.5.0 (linux64) logging started Wed 16 Mar 2022 09:16:17 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net/logs/opt_log_layer4.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 1073 rows, 785 columns and 12721 nonzeros
+Model fingerprint: 0xdaae5eb1
+Model has 661 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [9e-06, 1e+00]
+  Objective range  [3e-06, 2e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [1e+00, 2e+00]
+  RHS range        [1e-33, 7e-01]
+Presolve removed 189 rows and 12 columns
+Presolve time: 0.00s
+Presolved: 884 rows, 773 columns, 12508 nonzeros
+Presolved model has 661 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 93
+ AA' NZ     : 1.425e+04
+ Factor NZ  : 1.861e+04 (roughly 1 MB of memory)
+ Factor Ops : 4.969e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.56186044e+08 -2.56506774e+08  1.00e+03 7.13e+02  9.01e+05     0s
+   1   1.18811850e+08 -1.19149407e+08  1.32e+03 4.73e+02  6.05e+05     0s
+   2   2.01160691e+07 -2.08234770e+07  2.91e+02 1.87e+02  3.18e+05     0s
+   3   2.21617713e+05 -1.23263921e+06  5.58e+01 2.01e+01  4.66e+04     0s
+   4   3.13927711e+00 -9.69324548e+05  7.73e-02 3.27e-02  6.21e+02     0s
+   5   4.46200713e+00 -3.88351570e+04  3.81e-04 5.45e-04  2.20e+01     0s
+   6   4.48161269e+00 -6.41974016e+01  2.95e-07 4.21e-07  3.88e-02     0s
+   7   2.51230940e+00 -8.98497792e+00  3.31e-08 4.73e-08  6.50e-03     0s
+   8   8.50909804e-01 -3.66312702e+00  3.33e-14 4.74e-14  2.55e-03     0s
+   9   4.79084260e-01 -1.08716890e+00  1.08e-14 1.50e-14  8.85e-04     0s
+  10   3.95597998e-01 -5.39813385e-01  4.33e-15 8.85e-15  5.28e-04     0s
+  11   3.61600712e-01  1.46885681e-01  8.88e-16 1.20e-15  1.21e-04     0s
+  12   3.52719350e-01  2.86277774e-01  8.88e-16 1.48e-15  3.75e-05     0s
+  13   3.49849187e-01  3.38222328e-01  8.88e-16 2.38e-15  6.57e-06     0s
+  14   3.49363218e-01  3.49007713e-01  1.33e-15 8.31e-15  2.01e-07     0s
+  15   3.49345029e-01  3.49332649e-01  1.98e-14 2.84e-14  6.99e-09     0s
+  16   3.49344346e-01  3.49344159e-01  7.31e-14 6.11e-14  1.05e-10     0s
+  17   3.49344324e-01  3.49344323e-01  2.76e-13 6.77e-13  4.41e-13     0s
+
+Barrier solved model in 17 iterations and 0.02 seconds (0.02 work units)
+Optimal objective 3.49344324e-01
+
+
+Gurobi 9.5.0 (linux64) logging started Wed 16 Mar 2022 09:16:36 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net/logs/opt_log_layer4.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 1073 rows, 785 columns and 12717 nonzeros
+Model fingerprint: 0x98cca3a6
+Model has 661 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-05, 1e+00]
+  Objective range  [4e-05, 2e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [1e+00, 2e+00]
+  RHS range        [1e-33, 7e-01]
+Presolve removed 189 rows and 12 columns
+Presolve time: 0.00s
+Presolved: 884 rows, 773 columns, 12504 nonzeros
+Presolved model has 661 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 93
+ AA' NZ     : 1.376e+04
+ Factor NZ  : 1.773e+04 (roughly 1 MB of memory)
+ Factor Ops : 4.367e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.56186665e+08 -2.56520004e+08  1.00e+03 7.13e+02  9.01e+05     0s
+   1   1.18833228e+08 -1.19182811e+08  1.32e+03 4.73e+02  6.05e+05     0s
+   2   2.00313647e+07 -2.07524419e+07  2.90e+02 1.87e+02  3.17e+05     0s
+   3   2.19634870e+05 -1.24779525e+06  5.55e+01 2.00e+01  4.64e+04     0s
+   4   2.81259115e+00 -9.85622960e+05  1.11e-01 4.47e-02  6.57e+02     0s
+   5   4.36922687e+00 -4.92096737e+04  4.94e-04 6.91e-04  2.79e+01     0s
+   6   4.39838224e+00 -7.37786332e+01  2.93e-07 4.10e-07  4.42e-02     0s
+   7   2.55491436e+00 -9.35328693e+00  3.04e-08 4.26e-08  6.73e-03     0s
+   8   7.15530417e-01 -7.14923880e+00  1.14e-09 1.59e-09  4.44e-03     0s
+   9   4.93009296e-01 -2.65760527e+00  4.14e-10 5.79e-10  1.78e-03     0s
+  10   4.39199502e-01 -1.42281504e+00  2.55e-11 3.56e-11  1.05e-03     0s
+  11   3.62418420e-01 -2.87489311e-03  3.18e-12 4.45e-12  2.06e-04     0s
+  12   3.54674265e-01  2.31320484e-01  7.21e-13 1.01e-12  6.97e-05     0s
+  13   3.52014048e-01  3.38248997e-01  2.40e-14 3.35e-14  7.78e-06     0s
+  14   3.51664285e-01  3.51119008e-01  4.22e-15 1.98e-14  3.08e-07     0s
+  15   3.51639573e-01  3.51619880e-01  3.20e-14 3.66e-14  1.11e-08     0s
+  16   3.51638009e-01  3.51637308e-01  5.73e-14 5.39e-13  3.96e-10     0s
+  17   3.51637932e-01  3.51637916e-01  2.40e-13 4.00e-13  8.97e-12     0s
+
+Barrier solved model in 17 iterations and 0.02 seconds (0.02 work units)
+Optimal objective 3.51637932e-01
+
+
+Gurobi 9.5.0 (linux64) logging started Wed 16 Mar 2022 09:16:51 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net/logs/opt_log_layer4.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 1323 rows, 985 columns and 16507 nonzeros
+Model fingerprint: 0x71ce574c
+Model has 861 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-05, 1e+00]
+  Objective range  [5e-06, 2e-02]
+  QObjective range [9e-03, 2e+00]
+  Bounds range     [1e+00, 2e+00]
+  RHS range        [1e-33, 7e-01]
+Presolve removed 239 rows and 12 columns
+Presolve time: 0.00s
+Presolved: 1084 rows, 973 columns, 16244 nonzeros
+Presolved model has 861 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 101
+ AA' NZ     : 1.728e+04
+ Factor NZ  : 2.140e+04 (roughly 1 MB of memory)
+ Factor Ops : 5.078e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.56195768e+08 -2.56585286e+08  1.00e+03 5.44e+02  9.20e+05     0s
+   1   1.18067412e+08 -1.18476611e+08  1.32e+03 3.61e+02  6.17e+05     0s
+   2   1.95994541e+07 -2.04042673e+07  2.87e+02 1.43e+02  3.21e+05     0s
+   3   2.13445065e+05 -1.35623297e+06  5.51e+01 1.51e+01  4.64e+04     0s
+   4   2.80440817e+00 -1.09777254e+06  7.07e-02 2.32e-02  5.75e+02     0s
+   5   3.91495117e+00 -3.38293143e+04  1.74e-04 1.85e-04  1.56e+01     0s
+   6   3.91832827e+00 -5.80587401e+01  1.45e-07 1.55e-07  2.86e-02     0s
+   7   2.46113327e+00 -1.11712930e+01  2.63e-08 2.81e-08  6.28e-03     0s
+   8   8.54898539e-01 -6.94147510e+00  2.63e-14 2.81e-14  3.59e-03     0s
+   9   4.89755443e-01 -1.53340204e+00  5.33e-15 5.66e-15  9.32e-04     0s
+  10   3.25447391e-01 -6.29394726e-01  8.88e-16 1.33e-14  4.40e-04     0s
+  11   3.04156744e-01  4.27093800e-02  8.88e-16 3.08e-15  1.20e-04     0s
+  12   2.97791898e-01  2.05632358e-01  8.88e-16 3.06e-15  4.25e-05     0s
+  13   2.95451761e-01  2.84655863e-01  8.88e-16 6.30e-15  4.98e-06     0s
+  14   2.95194786e-01  2.94540144e-01  1.11e-15 3.11e-14  3.02e-07     0s
+  15   2.95178909e-01  2.95159038e-01  1.11e-15 1.04e-13  9.16e-09     0s
+  16   2.95178376e-01  2.95178199e-01  5.11e-15 9.93e-14  8.18e-11     0s
+  17   2.95178372e-01  2.95178371e-01  4.44e-14 1.70e-13  1.72e-13     0s
+
+Barrier solved model in 17 iterations and 0.03 seconds (0.03 work units)
+Optimal objective 2.95178372e-01
+
+
+Gurobi 9.5.0 (linux64) logging started Wed 16 Mar 2022 09:17:19 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net/logs/opt_log_layer4.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 1323 rows, 985 columns and 16467 nonzeros
+Model fingerprint: 0xd1a78926
+Model has 861 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [9e-06, 1e+00]
+  Objective range  [2e-06, 2e-02]
+  QObjective range [9e-03, 2e+00]
+  Bounds range     [1e+00, 2e+00]
+  RHS range        [1e-33, 7e-01]
+Presolve removed 239 rows and 12 columns
+Presolve time: 0.00s
+Presolved: 1084 rows, 973 columns, 16204 nonzeros
+Presolved model has 861 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 101
+ AA' NZ     : 1.690e+04
+ Factor NZ  : 2.088e+04 (roughly 1 MB of memory)
+ Factor Ops : 4.761e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.56194021e+08 -2.56582218e+08  1.00e+03 5.44e+02  9.20e+05     0s
+   1   1.18061694e+08 -1.18468898e+08  1.32e+03 3.61e+02  6.17e+05     0s
+   2   1.96602928e+07 -2.04616196e+07  2.89e+02 1.43e+02  3.21e+05     0s
+   3   2.14666763e+05 -1.35247779e+06  5.52e+01 1.52e+01  4.65e+04     0s
+   4   2.63392241e+00 -1.09321313e+06  8.78e-02 2.78e-02  5.86e+02     0s
+   5   3.95496792e+00 -4.40315302e+04  2.70e-04 2.88e-04  2.03e+01     0s
+   6   3.96761963e+00 -6.60815410e+01  1.60e-07 1.71e-07  3.23e-02     0s
+   7   2.56318247e+00 -1.09219750e+01  2.70e-08 2.88e-08  6.21e-03     0s
+   8   7.20619228e-01 -8.18174898e+00  2.31e-09 2.47e-09  4.10e-03     0s
+   9   4.41845503e-01 -1.97815239e+00  5.28e-10 5.64e-10  1.12e-03     0s
+  10   3.39534823e-01 -8.60425510e-01  1.11e-15 1.74e-14  5.53e-04     0s
+  11   3.07464809e-01  7.95731758e-02  8.88e-16 1.14e-15  1.05e-04     0s
+  12   3.00177314e-01  2.64462961e-01  8.88e-16 1.06e-15  1.65e-05     0s
+  13   2.99374318e-01  2.97611012e-01  8.88e-16 3.63e-14  8.13e-07     0s
+  14   2.99326151e-01  2.99165302e-01  2.00e-15 7.77e-14  7.41e-08     0s
+  15   2.99323230e-01  2.99312007e-01  3.33e-15 4.74e-13  5.17e-09     0s
+  16   2.99322990e-01  2.99322856e-01  9.10e-15 4.90e-13  6.20e-11     0s
+  17   2.99322985e-01  2.99322984e-01  2.42e-13 3.78e-12  8.32e-13     0s
+
+Barrier solved model in 17 iterations and 0.03 seconds (0.03 work units)
+Optimal objective 2.99322985e-01
+
+
+Gurobi 9.5.0 (linux64) logging started Wed 16 Mar 2022 09:27:24 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net/logs/opt_log_layer4.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 1323 rows, 985 columns and 16571 nonzeros
+Model fingerprint: 0x066f1616
+Model has 861 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-05, 1e+00]
+  Objective range  [3e-05, 2e-02]
+  QObjective range [9e-03, 2e+00]
+  Bounds range     [1e+00, 2e+00]
+  RHS range        [1e-33, 7e-01]
+Presolve removed 239 rows and 12 columns
+Presolve time: 0.00s
+Presolved: 1084 rows, 973 columns, 16308 nonzeros
+Presolved model has 861 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 101
+ AA' NZ     : 1.712e+04
+ Factor NZ  : 2.136e+04 (roughly 1 MB of memory)
+ Factor Ops : 5.065e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.56195674e+08 -2.56587576e+08  1.00e+03 5.44e+02  9.20e+05     0s
+   1   1.18075098e+08 -1.18486657e+08  1.32e+03 3.61e+02  6.17e+05     0s
+   2   1.95630615e+07 -2.03706678e+07  2.86e+02 1.42e+02  3.20e+05     0s
+   3   2.12573341e+05 -1.35883524e+06  5.49e+01 1.51e+01  4.63e+04     0s
+   4   2.67058725e+00 -1.10095964e+06  7.87e-02 2.54e-02  5.83e+02     0s
+   5   3.85121421e+00 -3.88202921e+04  2.18e-04 2.33e-04  1.79e+01     0s
+   6   3.85875936e+00 -6.28552346e+01  1.57e-07 1.68e-07  3.07e-02     0s
+   7   2.46168316e+00 -1.10346947e+01  2.68e-08 2.86e-08  6.22e-03     0s
+   8   7.14959741e-01 -7.43284856e+00  2.70e-14 3.31e-14  3.75e-03     0s
+   9   4.26562533e-01 -1.54765636e+00  4.44e-15 5.55e-15  9.10e-04     0s
+  10   3.17254217e-01 -1.69723991e-01  8.88e-16 9.04e-14  2.24e-04     0s
+  11   3.07725478e-01  8.19768868e-02  1.11e-15 6.89e-14  1.04e-04     0s
+  12   3.03054289e-01  2.22111396e-01  8.88e-16 9.13e-15  3.73e-05     0s
+  13   3.01337904e-01  2.96139246e-01  8.88e-16 8.79e-15  2.40e-06     0s
+  14   3.01193085e-01  3.00840976e-01  8.88e-16 2.47e-14  1.62e-07     0s
+  15   3.01184319e-01  3.01173200e-01  3.33e-15 3.50e-13  5.12e-09     0s
+  16   3.01184011e-01  3.01183681e-01  1.93e-14 4.17e-12  1.52e-10     0s
+  17   3.01184001e-01  3.01183996e-01  9.41e-14 4.50e-11  2.23e-12     0s
+
+Barrier solved model in 17 iterations and 0.03 seconds (0.03 work units)
+Optimal objective 3.01184001e-01
+
+
+Gurobi 9.5.0 (linux64) logging started Wed 16 Mar 2022 09:28:36 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net/logs/opt_log_layer4.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 1323 rows, 985 columns and 16495 nonzeros
+Model fingerprint: 0x9fe1667a
+Model has 861 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [9e-06, 1e+00]
+  Objective range  [3e-05, 2e-02]
+  QObjective range [9e-03, 2e+00]
+  Bounds range     [1e+00, 2e+00]
+  RHS range        [1e-33, 7e-01]
+Presolve removed 239 rows and 12 columns
+Presolve time: 0.00s
+Presolved: 1084 rows, 973 columns, 16232 nonzeros
+Presolved model has 861 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 101
+ AA' NZ     : 1.736e+04
+ Factor NZ  : 2.152e+04 (roughly 1 MB of memory)
+ Factor Ops : 5.158e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.56190899e+08 -2.56597965e+08  1.00e+03 5.44e+02  9.20e+05     0s
+   1   1.18051565e+08 -1.18475456e+08  1.32e+03 3.61e+02  6.17e+05     0s
+   2   1.95684939e+07 -2.03865405e+07  2.87e+02 1.42e+02  3.21e+05     0s
+   3   2.12742723e+05 -1.37023464e+06  5.50e+01 1.51e+01  4.63e+04     0s
+   4   3.22161411e+00 -1.11204778e+06  5.57e-02 1.91e-02  5.69e+02     0s
+   5   4.35909268e+00 -2.44790877e+04  1.12e-04 1.20e-04  1.13e+01     0s
+   6   4.35318746e+00 -5.03460992e+01  1.39e-07 1.48e-07  2.52e-02     0s
+   7   2.47872228e+00 -1.13490108e+01  2.63e-08 2.81e-08  6.37e-03     0s
+   8   1.10435311e+00 -6.33608601e+00  2.63e-14 2.81e-14  3.43e-03     0s
+   9   5.10641729e-01 -1.57312860e+00  5.00e-15 5.30e-15  9.60e-04     0s
+  10   3.28317983e-01 -6.81132043e-01  8.88e-16 7.14e-15  4.65e-04     0s
+  11   3.06142165e-01  3.82126200e-03  8.88e-16 1.62e-15  1.39e-04     0s
+  12   2.99291754e-01  1.94582464e-01  1.11e-15 5.65e-16  4.83e-05     0s
+  13   2.96339850e-01  2.88814769e-01  8.88e-16 9.54e-16  3.47e-06     0s
+  14   2.96106932e-01  2.95615437e-01  1.33e-15 2.35e-14  2.26e-07     0s
+  15   2.96092151e-01  2.96078732e-01  1.27e-14 3.19e-14  6.18e-09     0s
+  16   2.96091652e-01  2.96091593e-01  1.93e-14 1.12e-13  2.70e-11     0s
+  17   2.96091647e-01  2.96091647e-01  1.25e-13 3.75e-12  2.92e-14     0s
+
+Barrier solved model in 17 iterations and 0.03 seconds (0.03 work units)
+Optimal objective 2.96091647e-01
+
