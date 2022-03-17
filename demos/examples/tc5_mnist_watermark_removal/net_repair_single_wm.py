@@ -9,7 +9,7 @@ Returns:
 # pylint: disable=import-error, unused-import
 import os
 import argparse
-from csv import writer
+from csv import DictReader, writer
 from datetime import datetime
 import pickle
 import numpy as np
@@ -85,7 +85,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=1,
+        default=2,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -209,92 +209,104 @@ def main(
     repair_obj = NNRepair(model_orig)
     dw_vec = []
     y_new_vec = []
-    # for i in range(x_wm.shape[0]):
-    x_repair = np.array([x_wm[0]])
-    y_repair = np.array([y_wm[0]])
-    repair_obj.compile(
-        x_repair,
-        y_repair,
-        layer_to_repair,
-        cost_weights=cost_weights,
-        max_weight_bound=max_weight_bound,
-    )
+    for i in range(x_wm.shape[0]):
+        x_repair = np.array([x_wm[i]])
+        y_repair = np.array([y_wm[i]])
+        repair_obj.compile(
+            x_repair,
+            y_repair,
+            layer_to_repair,
+            cost_weights=cost_weights,
+            max_weight_bound=max_weight_bound,
+        )
 
-    setattr(
-        repair_obj.opt_model,
-        "output_constraint" + str(layer_to_repair),
-        pyg.Disjunction(range(repair_obj.num_samples), rule=out_constraint),
-    )
-    # repair_obj.summery(direc=path_write + "/summery")
-    out_model = repair_obj.repair(options)
-    out_model.compile(
-        optimizer=keras.optimizers.Adam(),
-        loss=keras.losses.MeanSquaredError(name="MSE"),
-        metrics=["accuracy"],
-    )
-    dw_vec.append(repair_obj.opt_model.dw.value)
-    y_new_vec.append(out_model.predict(x_repair))
-    repair_obj.reset()
+        setattr(
+            repair_obj.opt_model,
+            "output_constraint" + str(layer_to_repair),
+            pyg.Disjunction(
+                range(repair_obj.num_samples), rule=out_constraint
+            ),
+        )
+        # repair_obj.summery(direc=path_write + "/summery")
+        out_model = repair_obj.repair(options)
+        out_model.compile(
+            optimizer=keras.optimizers.Adam(),
+            loss=keras.losses.MeanSquaredError(name="MSE"),
+            metrics=["accuracy"],
+        )
+        dw_vec.append(repair_obj.opt_model.dw.value)
+        y_new_vec.append(out_model.predict(x_repair))
+        repair_obj.reset()
 
-    # if visual == 1:
-    # plot_dataset3d(
-    #     [y_train, out_model.predict(x_train)],
-    #     ["hand-labeled output", "fine-tuned output"],
-    #     title_label="training - after repair",
-    # )
-    # plot_dataset3d(
-    #     [y_test, out_model.predict(x_test)],
-    #     ["hand-labeled output", "fine-tuned output"],
-    #     title_label="testing - after repair",
-    # )
+    if visual == 1:
+        datafile1 = open(direc + "/raw_data/mnist.w.wm.1.wm.csv")
+        file_reader = DictReader(datafile1)
+        dw_goldberger = np.sort(
+            np.array([float(line["sat-epsilon"]) for line in file_reader])
+        )
+        dw_vec = np.sort(np.array(dw_vec))
+        plt.scatter(
+            np.linspace(1, 100, 100),
+            dw_goldberger,
+            label="(goldberger et al. 2020)",
+        )
+        plt.scatter(
+            np.linspace(1, 100, 100),
+            dw_vec,
+            label="(our method)",
+        )
+        plt.legend()
+        plt.xlabel("watermark images")
+        plt.ylabel("delta")
+        plt.show()
 
     print("----------------------")
     print("logging")
 
-    if save_summery == 1:
-        repair_obj.summery(direc=path_write + "/summery")
-        print("saved: summery")
+    # if save_summery == 1:
+    #     repair_obj.summery(direc=path_write + "/summery")
+    #     print("saved: summery")
 
-    if save_model == 1:
-        keras.models.save_model(
-            out_model,
-            path_write + f"/model_layer_{layer_to_repair}",
-            overwrite=True,
-            include_optimizer=False,
-            save_format=None,
-            signatures=None,
-            options=None,
-            save_traces=True,
-        )
-        print("saved: model")
+    # if save_model == 1:
+    #     keras.models.save_model(
+    #         out_model,
+    #         path_write + f"/model_layer_{layer_to_repair}",
+    #         overwrite=True,
+    #         include_optimizer=False,
+    #         save_format=None,
+    #         signatures=None,
+    #         options=None,
+    #         save_traces=True,
+    #     )
+    #     print("saved: model")
 
-    if save_stats == 1:
-        # pylint: disable=unspecified-encoding
-        with open(
-            path_write
-            + f"/stats/repair_layer{layer_to_repair}_accs_stats_tc5.csv",
-            "a+",
-            newline="",
-        ) as write_obj:
-            # Create a writer object from csv module
-            csv_writer = writer(write_obj)
-            model_evaluation = model_eval(
-                out_model,
-                keras.models.load_model(path_read + "/model"),
-                path_read,
-                (A, b),
-            )
-            for key, item in options.optimizer_options.items():
-                model_evaluation.append(key)
-                model_evaluation.append(item)
-            model_evaluation.append("max_weight_bound")
-            model_evaluation.append(max_weight_bound)
-            model_evaluation.append("cost weights")
-            model_evaluation.append(cost_weights)
-            model_evaluation.append(str(datetime.now()))
-            # Add contents of list as last row in the csv file
-            csv_writer.writerow(model_evaluation)
-        print("saved: stats")
+    # if save_stats == 1:
+    #     # pylint: disable=unspecified-encoding
+    #     with open(
+    #         path_write
+    #         + f"/stats/repair_layer{layer_to_repair}_accs_stats_tc5.csv",
+    #         "a+",
+    #         newline="",
+    #     ) as write_obj:
+    #         # Create a writer object from csv module
+    #         csv_writer = writer(write_obj)
+    #         model_evaluation = model_eval(
+    #             out_model,
+    #             keras.models.load_model(path_read + "/model"),
+    #             path_read,
+    #             (A, b),
+    #         )
+    #         for key, item in options.optimizer_options.items():
+    #             model_evaluation.append(key)
+    #             model_evaluation.append(item)
+    #         model_evaluation.append("max_weight_bound")
+    #         model_evaluation.append(max_weight_bound)
+    #         model_evaluation.append("cost weights")
+    #         model_evaluation.append(cost_weights)
+    #         model_evaluation.append(str(datetime.now()))
+    #         # Add contents of list as last row in the csv file
+    #         csv_writer.writerow(model_evaluation)
+    #     print("saved: stats")
 
 
 if __name__ == "__main__":
