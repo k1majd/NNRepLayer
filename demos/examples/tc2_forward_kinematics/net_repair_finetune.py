@@ -89,7 +89,15 @@ def arg_parser():
         "--timeLimit",
         nargs="?",
         type=int,
-        default=43200,
+        default=7200,
+        help="Specify the layer to repair.",
+    )
+    parser.add_argument(
+        "-mf",
+        "--mipFocus",
+        nargs="?",
+        type=int,
+        default=3,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -133,6 +141,7 @@ def main(
     layer_to_repair,
     save_summery,
     time_limit,
+    mip_focus,
 ):
     """_summary_
 
@@ -154,7 +163,9 @@ def main(
     # model_orig = keras.models.load_model(
     #     path_write + f"/model_layer_{layer_to_repair}"
     # )
-    model_orig = keras.models.load_model(path_read + "/model")
+    model_orig = keras.models.load_model(
+        path_repair_orig + f"/model_layer_{layer_to_repair}"
+    )
 
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
@@ -178,8 +189,8 @@ def main(
     constraint_inside = constraints_class("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 1
-    cost_weights = np.array([1.0, 1.0])
+    max_weight_bound = 2
+    cost_weights = np.array([2.0, 1.0])
     options = Options(
         "gdp.bigm",
         "gurobi",
@@ -188,7 +199,7 @@ def main(
         {
             "timelimit": time_limit,
             "mipgap": 0.001,
-            "mipfocus": 1,
+            "mipfocus": mip_focus,
             "improvestarttime": time_limit,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
@@ -203,18 +214,20 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        param_precision=5,
-        data_precision=5,
+        param_precision=4,
+        data_precision=4,
     )
     # initialize the opt model weights with the latest repair weights
     w = keras.models.load_model(
         path_repair_orig + f"/model_layer_{layer_to_repair}"
     ).get_weights()
-    for i in range(w[4].shape[0]):
-        for j in range(w[4].shape[1]):
-            repair_obj.opt_model.w3.set_values({(i, j): w[4][i, j]})
-    for i in range(w[5].shape[0]):
-        repair_obj.opt_model.b3.set_values({i: w[5][i]})
+    for i in range(w[2 * layer_to_repair - 2].shape[0]):
+        for j in range(w[2 * layer_to_repair - 2].shape[1]):
+            repair_obj.opt_model.w3.set_values(
+                {(i, j): w[2 * layer_to_repair - 2][i, j]}
+            )
+    for i in range(w[2 * layer_to_repair - 1].shape[0]):
+        repair_obj.opt_model.b3.set_values({i: w[2 * layer_to_repair - 1][i]})
 
     out_model = repair_obj.repair(options)
 
@@ -297,4 +310,5 @@ if __name__ == "__main__":
         args.repairLayer,
         args.saveModelSummery,
         args.timeLimit,
+        args.mipFocus,
     )
