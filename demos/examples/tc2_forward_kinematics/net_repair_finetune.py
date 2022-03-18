@@ -89,7 +89,7 @@ def arg_parser():
         "--timeLimit",
         nargs="?",
         type=int,
-        default=400,
+        default=43200,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -146,13 +146,15 @@ def main(
     print("load model and data")
     # setup directories
     path_read = direc + "/tc2/original_net"
-    path_write = direc + "/tc2/repair_net"
+    path_repair_orig = direc + "/tc2/repair_net"
+    path_write = direc + "/tc2/repair_net_finetune"
     check_log_directories(path_read, path_write, layer_to_repair)
 
     # load model
-    model_orig = keras.models.load_model(
-        path_write + f"/model_layer_{layer_to_repair}"
-    )
+    # model_orig = keras.models.load_model(
+    #     path_write + f"/model_layer_{layer_to_repair}"
+    # )
+    model_orig = keras.models.load_model(path_read + "/model")
 
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
@@ -186,7 +188,7 @@ def main(
         {
             "timelimit": time_limit,
             "mipgap": 0.001,
-            "mipfocus": 2,
+            "mipfocus": 1,
             "improvestarttime": time_limit,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
@@ -204,6 +206,16 @@ def main(
         param_precision=5,
         data_precision=5,
     )
+    # initialize the opt model weights with the latest repair weights
+    w = keras.models.load_model(
+        path_repair_orig + f"/model_layer_{layer_to_repair}"
+    ).get_weights()
+    for i in range(w[4].shape[0]):
+        for j in range(w[4].shape[1]):
+            repair_obj.opt_model.w3.set_values({(i, j): w[4][i, j]})
+    for i in range(w[5].shape[0]):
+        repair_obj.opt_model.b3.set_values({i: w[5][i]})
+
     out_model = repair_obj.repair(options)
 
     out_model.compile(
