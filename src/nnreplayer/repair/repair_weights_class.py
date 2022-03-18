@@ -63,7 +63,8 @@ class NNRepair:
         )
         self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         self.cost_function_output = give_mse_error
-        # self.__compile_flag = False
+        self.data_precision = None
+        self.param_precision = None
         self.opt_model = None
         self.layer_to_repair = None
         self.output_name = None
@@ -79,6 +80,8 @@ class NNRepair:
         cost=give_mse_error,
         cost_weights=np.array([1.0, 1.0]),
         max_weight_bound=1.0,
+        data_precision=4,
+        param_precision=4,
     ):
         """_summary_
 
@@ -95,10 +98,14 @@ class NNRepair:
         self.layer_to_repair = layer_2_repair
         self.cost_function_output = cost
         self.output_constraint_list = output_constraint_list
+        self.data_precision = data_precision
+        self.param_precision = param_precision
 
         self.__set_up_optimizer(
-            y_repair,
-            self.extract_network_layers_values(x_repair),
+            np.round(y_repair, data_precision),
+            self.extract_network_layers_values(
+                np.round(x_repair, data_precision)
+            ),
             max_weight_bound,
             cost_weights,
         )
@@ -246,7 +253,15 @@ class NNRepair:
         """
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
-        # num_samples = layer_values[self.layer_to_repair - 2].shape[0]
+
+        # specify the precision of weights, bias, and layer values
+        for l, w in enumerate(weights):
+            weights[l] = np.round(w, self.param_precision)
+        for l, b in enumerate(bias):
+            bias[l] = np.round(b, self.param_precision)
+        for l, value in enumerate(layer_values):
+            layer_values[l] = np.round(value, self.data_precision)
+
         self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
