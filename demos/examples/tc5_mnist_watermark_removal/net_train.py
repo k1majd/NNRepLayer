@@ -24,7 +24,7 @@ def arg_parser():
         nargs="?",
         const=cwd,
         default=cwd,
-        help="Specify a path to store the data",
+        help="Specify a path to store data",
     )
     args = parser.parse_args()
     return args

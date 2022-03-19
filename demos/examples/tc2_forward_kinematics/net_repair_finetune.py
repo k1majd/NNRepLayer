@@ -81,7 +81,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=3,
+        default=2,
         help="Specify the layer to repair.",
     )
     parser.add_argument(
@@ -90,7 +90,7 @@ def arg_parser():
         nargs="?",
         type=int,
         default=7200,
-        help="Specify the layer to repair.",
+        help="Specify opt time limit.",
     )
     parser.add_argument(
         "-mf",
@@ -98,7 +98,7 @@ def arg_parser():
         nargs="?",
         type=int,
         default=3,
-        help="Specify the layer to repair.",
+        help="Specify mip focus.",
     )
     return parser.parse_args()
 
@@ -218,16 +218,16 @@ def main(
         data_precision=4,
     )
     # initialize the opt model weights with the latest repair weights
-    w = keras.models.load_model(
-        path_repair_orig + f"/model_layer_{layer_to_repair}"
-    ).get_weights()
-    for i in range(w[2 * layer_to_repair - 2].shape[0]):
-        for j in range(w[2 * layer_to_repair - 2].shape[1]):
-            repair_obj.opt_model.w3.set_values(
-                {(i, j): w[2 * layer_to_repair - 2][i, j]}
-            )
-    for i in range(w[2 * layer_to_repair - 1].shape[0]):
-        repair_obj.opt_model.b3.set_values({i: w[2 * layer_to_repair - 1][i]})
+    # w = keras.models.load_model(
+    #     path_repair_orig + f"/model_layer_{layer_to_repair}"
+    # ).get_weights()
+    # for i in range(w[2 * layer_to_repair - 2].shape[0]):
+    #     for j in range(w[2 * layer_to_repair - 2].shape[1]):
+    #         repair_obj.opt_model.w3.set_values(
+    #             {(i, j): w[2 * layer_to_repair - 2][i, j]}
+    #         )
+    # for i in range(w[2 * layer_to_repair - 1].shape[0]):
+    #     repair_obj.opt_model.b3.set_values({i: w[2 * layer_to_repair - 1][i]})
 
     out_model = repair_obj.repair(options)
 

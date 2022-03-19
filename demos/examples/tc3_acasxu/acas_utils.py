@@ -118,44 +118,61 @@ def vacinity_adv_finder(
     return x_adv_set, y_adv_set
 
 
-def original_data_loader():
-    """_summary_
-
-    Raises:
-        ImportError: error if the data is does not exist in the designated location
-
-    Returns:
-        list[ndarray]: a list of [x_train, y_train, x_test, y_test]
-    """
-    direc = os.path.dirname(os.path.realpath(__file__))
-    path_read = direc + "/tc5/original_net"
-    if not os.path.exists(path_read + "/data/input_output_data_tc5.pickle"):
-        raise ImportError(
-            "path {path_read}/data/input_output_data_tc5.pickle does not exist!"
-        )
-    with open(path_read + "/data/input_output_data_tc5.pickle", "rb") as data:
-        dataset = pickle.load(data)
-    return dataset[0], dataset[1], dataset[2], dataset[3]
-
-
-def wm_data_loader(model_orig):
+def train_test_sampler(model, x_adv, num_train, num_test):
     """_summary_
 
     Args:
-        model_orig (_type_): _description_
-
-    Raises:
-        ImportError: _description_
-
-    Returns:
-        _type_: _description_
+        model (keras): original model
+        x_adv (ndarray): adversarial point
+        num_train (int): number of train samples - adv in training
+        num_test (int): number of test samples - adv in testing
     """
-    direc = os.path.dirname(os.path.realpath(__file__))
-    path_read = direc + "/tc5/original_net"
-    if not os.path.exists(path_read + "/data/input_output_wm_tc5.pickle"):
-        raise ImportError(
-            "path {path_read}/data/input_output_wm_tc5.pickle does not exist!"
-        )
-    with open(path_read + "/data/input_output_wm_tc5.pickle", "rb") as data:
-        dataset = pickle.load(data)
-    return dataset[0], model_orig.predict(dataset[0]), dataset[1]
+    x_center = np.array(x_adv)
+    precision = [100, 10, 5, 1, 0.05, 0.1]
+    x_train = []
+    y_train = []
+    x_test = []
+    y_test = []
+
+
+# def original_data_loader():
+#     """_summary_
+
+#     Raises:
+#         ImportError: error if the data is does not exist in the designated location
+
+#     Returns:
+#         list[ndarray]: a list of [x_train, y_train, x_test, y_test]
+#     """
+#     direc = os.path.dirname(os.path.realpath(__file__))
+#     path_read = direc + "/tc5/original_net"
+#     if not os.path.exists(path_read + "/data/input_output_data_tc5.pickle"):
+#         raise ImportError(
+#             "path {path_read}/data/input_output_data_tc5.pickle does not exist!"
+#         )
+#     with open(path_read + "/data/input_output_data_tc5.pickle", "rb") as data:
+#         dataset = pickle.load(data)
+#     return dataset[0], dataset[1], dataset[2], dataset[3]
+
+
+# def wm_data_loader(model_orig):
+#     """_summary_
+
+#     Args:
+#         model_orig (_type_): _description_
+
+#     Raises:
+#         ImportError: _description_
+
+#     Returns:
+#         _type_: _description_
+#     """
+#     direc = os.path.dirname(os.path.realpath(__file__))
+#     path_read = direc + "/tc5/original_net"
+#     if not os.path.exists(path_read + "/data/input_output_wm_tc5.pickle"):
+#         raise ImportError(
+#             "path {path_read}/data/input_output_wm_tc5.pickle does not exist!"
+#         )
+#     with open(path_read + "/data/input_output_wm_tc5.pickle", "rb") as data:
+#         dataset = pickle.load(data)
+#     return dataset[0], model_orig.predict(dataset[0]), dataset[1]
