@@ -201,6 +201,7 @@ def main(
             "mipgap": 0.001,
             "mipfocus": mip_focus,
             "improvestarttime": time_limit,
+            "threads": 45,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
