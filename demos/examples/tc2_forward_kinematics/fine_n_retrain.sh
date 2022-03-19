@@ -27,6 +27,6 @@ do
    python3 net_repair_finetune.py -rl $i -vi 0 -tl 86400 -mf 1
    git pull origin emsoft_examples_replayer_update1
    git add .
-   git commit -m "update FK repair-finetune lay $i"
+   git commit -m "Update FK repair-finetune lay $i"
    git push
 done
