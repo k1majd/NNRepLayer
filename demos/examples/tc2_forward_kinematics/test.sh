@@ -1,9 +1,9 @@
 #! /bin/bash
 
 
-for x in {1..30}
+for x in {1..172800}
 do
-  if (($x % 10 == 0))
+  if (($x % 3600 == 0))
   then
     echo "Push FK repair log timer $x"
     git pull origin emsoft_examples_replayer_update1
