@@ -126,3 +126,44 @@ Solution count 1: 7.43038
 
 Solve interrupted
 Best objective 7.430383273833e+00, best bound 2.544989467978e-01, gap 96.5749%
+
+Gurobi 9.5.0 (linux64) logging started Fri 18 Mar 2022 09:11:41 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/Documents/NNRepLayer_v2/demos/examples/tc2_forward_kinematics/tc2/repair_net_finetune/logs/opt_log_layer2.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 45 threads
+Optimize a model with 106135 rows, 66291 columns and 510060 nonzeros
+Model fingerprint: 0x30b1d4e0
+Model has 861 quadratic objective terms
+Variable types: 27591 continuous, 38700 integer (38700 binary)
+Coefficient statistics:
+  Matrix range     [1e-04, 2e+00]
+  Objective range  [2e-05, 3e-02]
+  QObjective range [2e-02, 2e+00]
+  Bounds range     [1e+00, 3e+00]
+  RHS range        [2e-04, 2e+00]
+Presolve removed 66650 rows and 27735 columns
+Presolve time: 1.02s
+Presolved: 39485 rows, 38556 columns, 402775 nonzeros
+Presolved model has 861 quadratic objective terms
+Variable types: 26301 continuous, 12255 integer (12255 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    2.3808174e-01   0.000000e+00   0.000000e+00      6s
+   16399    2.3808174e-01   4.416321e+03   0.000000e+00     10s
+   51687    2.5449894e-01   7.703038e+01   0.000000e+00     15s
+   60463    2.5449894e-01   0.000000e+00   0.000000e+00     19s
+
+Root relaxation: objective 2.544989e-01, 60463 iterations, 12.63 seconds (27.72 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.25450    0 8155          -    0.25450      -     -   19s
+     0     0    0.25450    0 8539          -    0.25450      -     -   48s
+     0     0    0.25450    0 8631          -    0.25450      -     -   82s
+     0     0    0.25450    0 8638          -    0.25450      -     -   88s
+     0     0    0.25450    0 8639          -    0.25450      -     -  167s
+     0     0    0.25450    0 8623          -    0.25450      -     -  172s
