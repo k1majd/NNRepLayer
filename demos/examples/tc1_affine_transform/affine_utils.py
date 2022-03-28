@@ -1,3 +1,4 @@
+from cProfile import label
 import os
 import numpy as np
 import shapely.affinity as affinity
@@ -8,6 +9,7 @@ from shapely.geometry import Polygon, Point
 from matplotlib import pyplot as plt
 import matplotlib as mpl
 import pickle
+import colorsys
 
 
 def give_polys():
@@ -440,3 +442,106 @@ def plot_dataset(polys, out_dataset, label="training"):
     plt.xlabel("x", fontsize=25)
     plt.ylabel("y", fontsize=25)
     plt.show()
+
+
+def transform_mesh(x, y):
+    """_summary_
+
+    Args:
+        x (_type_): _description_
+        y (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    # transform matrices
+    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])
+    translate2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])
+    rotate = np.array(
+        [
+            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
+            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
+            [0, 0, 1],
+        ]
+    )
+    row, col = x.shape
+    x_out = np.zeros((row, col))
+    y_out = np.zeros((row, col))
+    for r in range(row):
+        for c in range(col):
+            temp = np.matmul(
+                np.matmul(np.matmul(translate1, rotate), translate2),
+                np.array([[x[r, c], y[r, c], 1]]).T,
+            )
+
+            x_out[r, c] = temp.flatten()[0]
+            y_out[r, c] = temp.flatten()[1]
+    return x_out, y_out
+
+
+def plot_meshgird(
+    poly, mesh_data, mesh_color, title, path_write, mesh_orig=None
+):
+    """_summary_
+
+    Args:
+        poly (_type_): _description_
+        mesh_data (_type_): _description_
+        mesh_color (_type_): _description_
+        title (_type_): _description_
+    """
+    x_poly, y_poly = poly.exterior.xy
+    plt.title(title)
+    plt.plot(
+        x_poly,
+        y_poly,
+        color="black",
+        alpha=0.7,
+        linewidth=1,
+        solid_capstyle="round",
+        zorder=2,
+    )
+    for r in range(mesh_data[0].shape[0]):
+        for c in range(mesh_data[0].shape[1]):
+            # if mesh_orig:
+            #     plt.scatter(
+            #         mesh_orig[0][r, c],
+            #         mesh_orig[1][r, c],
+            #         color=(0.6, 0.6, 1),
+            #         linewidth=3,
+            #     )
+
+            RGB = colorsys.hsv_to_rgb(
+                0.0, mesh_color[0][r, c] * mesh_color[1][r, c], 1.0
+            )
+            plt.scatter(
+                mesh_data[0][r, c],
+                mesh_data[1][r, c],
+                color=RGB,
+                linewidth=3,
+            )
+    plt.axis("off")
+    plt.savefig(path_write + f"/{title}.eps")
+    plt.close()
+
+
+def net_meshgrid_prediction(x, y, model):
+    """_summary_
+
+    Args:
+        x (_type_): _description_
+        y (_type_): _description_
+        model (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    row, col = x.shape
+    x_out = np.zeros((row, col))
+    y_out = np.zeros((row, col))
+    for r in range(row):
+        for c in range(col):
+            temp = model.predict(np.array([[x[r, c], y[r, c], 1]]))
+            x_out[r, c] = temp.flatten()[0]
+            y_out[r, c] = temp.flatten()[1]
+    return x_out, y_out
