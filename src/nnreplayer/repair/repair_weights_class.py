@@ -279,22 +279,28 @@ class NNRepair:
             weights,
             bias,
             param_bounds=(
-                np.min(
-                    [
-                        np.min(bias[self.layer_to_repair - 1]),
-                        np.min(weights[self.layer_to_repair - 1]),
-                    ]
-                )
-                - max_weight_bound
-                - 0.01,
-                np.max(
-                    [
-                        np.max(bias[self.layer_to_repair - 1]),
-                        np.max(weights[self.layer_to_repair - 1]),
-                    ]
-                )
-                + max_weight_bound
-                + 0.01,
+                np.round(
+                    np.min(
+                        [
+                            np.min(bias[self.layer_to_repair - 1]),
+                            np.min(weights[self.layer_to_repair - 1]),
+                        ]
+                    )
+                    - max_weight_bound
+                    - 0.01,
+                    self.param_precision,
+                ),
+                np.round(
+                    np.max(
+                        [
+                            np.max(bias[self.layer_to_repair - 1]),
+                            np.max(weights[self.layer_to_repair - 1]),
+                        ]
+                    )
+                    + max_weight_bound
+                    + 0.01,
+                    self.data_precision,
+                ),
             ),
         )
         y_ = mip_model_layer(
@@ -303,7 +309,7 @@ class NNRepair:
             (self.num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
             max_weight_bound=max_weight_bound,
-            output_bounds=(np.min(y_repair), np.max(y_repair)),
+            # output_bounds=(np.min(y_repair), np.max(y_repair)),
         )
         self.output_name = y_.name
         self.opt_model = mip_model_layer.model
