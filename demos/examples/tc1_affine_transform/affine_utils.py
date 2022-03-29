@@ -536,6 +536,15 @@ def plot_meshgird(
 
 
 def give_mesh2direc(mesh_data, mesh_orig):
+    """_summary_
+
+    Args:
+        mesh_data (_type_): _description_
+        mesh_orig (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     row, col = mesh_data[0].shape
     x_direc = np.zeros((row, col))
@@ -552,6 +561,30 @@ def give_mesh2direc(mesh_data, mesh_orig):
     return x_direc, y_direc
 
 
+def give_mesh2dist(mesh_data, mesh_orig):
+    """_summary_
+
+    Args:
+        mesh_data (_type_): _description_
+        mesh_orig (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    row, col = mesh_data[0].shape
+    dist_mesh = np.zeros((row, col))
+
+    for r in range(mesh_data[0].shape[0]):
+        for c in range(mesh_data[0].shape[1]):
+            temp = np.array(
+                [mesh_data[0][r, c], mesh_data[1][r, c]]
+            ) - np.array([mesh_orig[0][r, c], mesh_orig[1][r, c]])
+            dist_mesh[r, c] = np.linalg.norm(temp)
+
+    return dist_mesh
+
+
 def plot_quiver(
     poly_orig, poly_const, mesh_data, title, path_write, mesh_orig
 ):
@@ -563,8 +596,23 @@ def plot_quiver(
         mesh_color (_type_): _description_
         title (_type_): _description_
     """
+    cdict = {
+        "red": ((0.0, 0.25, 0.25), (0.02, 0.59, 0.59), (1.0, 1.0, 1.0)),
+        "green": ((0.0, 0.0, 0.0), (0.02, 0.45, 0.45), (1.0, 0.97, 0.97)),
+        "blue": ((0.0, 1.0, 1.0), (0.02, 0.75, 0.75), (1.0, 0.45, 0.45)),
+    }
 
     fig, ax = plt.subplots(figsize=(7, 7))
+    c = ax.pcolormesh(
+        mesh_orig[1],
+        mesh_orig[0],
+        give_mesh2dist(mesh_data, mesh_orig),
+        cmap=mpl.colors.LinearSegmentedColormap("my_colormap", cdict, 1024),
+        vmin=0,
+        vmax=0.3,
+        shading="gouraud",
+    )
+    fig.colorbar(c)
     x_poly, y_poly = poly_orig.exterior.xy
     plt.title(title)
     ax.plot(
@@ -572,7 +620,7 @@ def plot_quiver(
         y_poly,
         color="black",
         alpha=0.7,
-        linewidth=1,
+        linewidth=2,
         solid_capstyle="round",
         zorder=2,
         label="original set",
@@ -581,28 +629,30 @@ def plot_quiver(
     ax.plot(
         x_poly,
         y_poly,
-        color="red",
+        color="blue",
         alpha=0.7,
-        linewidth=1,
+        linewidth=2,
         solid_capstyle="round",
         zorder=2,
         label="constrained set",
     )
 
     u, v = give_mesh2direc(mesh_data, mesh_orig)
+    dist_mat = give_mesh2dist(mesh_data, mesh_orig)
     ax.quiver(
         mesh_orig[0],
         mesh_orig[1],
         u,
         v,
         angles="xy",
+        linewidth=1,
         scale_units="xy",
         scale=1,
     )
     ax.set_aspect("equal")
     ax.axis("off")
     ax.legend()
-    plt.savefig(path_write + f"/quiver_{title}.jpg")
+    plt.savefig(path_write + f"/quiver_{title}.eps")
     plt.close()
 
 

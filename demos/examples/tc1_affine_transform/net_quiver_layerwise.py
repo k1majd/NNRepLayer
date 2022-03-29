@@ -20,7 +20,7 @@ def main():
     direc = os.path.dirname(os.path.realpath(__file__))
     path_read_repair = direc + "/tc1/repair_net_weighted"
     path_read_orig_model = direc + "/tc1/original_net"
-    path_write = direc + "/tc1/figures_weighted"
+    path_write = direc + "/tc1/figures/figures_weighted"
     if not os.path.exists(path_write):
         os.makedirs(path_write)
 
@@ -39,7 +39,7 @@ def main():
     poly_orig, poly_trans, poly_const = give_polys()
 
     # meshgri on input
-    n_x = 15
+    n_x = 21
     X = np.linspace(1, 4, n_x)
     Y = np.linspace(1, 4, n_x)
     xx, yy = np.meshgrid(X, Y)

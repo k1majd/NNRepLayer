@@ -21,7 +21,7 @@ def main():
     path_read_backward = direc + "/tc1/repair_net_backward"
     path_read_forward = direc + "/tc1/repair_net_forward"
     path_read_orig_model = direc + "/tc1/original_net"
-    path_write = direc + "/tc1/figures_backward_forward"
+    path_write = direc + "/tc1/figures/figures_backward_forward"
     if not os.path.exists(path_write):
         os.makedirs(path_write)
 
@@ -37,7 +37,7 @@ def main():
     poly_orig, poly_trans, poly_const = give_polys()
 
     # meshgri on input
-    n_x = 15
+    n_x = 21
     X = np.linspace(1, 4, n_x)
     Y = np.linspace(1, 4, n_x)
     xx, yy = np.meshgrid(X, Y)
@@ -76,7 +76,6 @@ def main():
         path_write,
         (xx_trans, yy_trans),
     )
-
 
 
 if __name__ == "__main__":
