@@ -81,7 +81,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=2,
+        default=3,
         help="Specify the layer to repair.",
     )
     parser.add_argument(

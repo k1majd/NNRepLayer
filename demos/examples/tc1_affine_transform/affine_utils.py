@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from quadprog import solve_qp
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, units
 import matplotlib as mpl
 import pickle
 import colorsys
@@ -504,24 +504,105 @@ def plot_meshgird(
     for r in range(mesh_data[0].shape[0]):
         for c in range(mesh_data[0].shape[1]):
             # if mesh_orig:
-            #     plt.scatter(
-            #         mesh_orig[0][r, c],
-            #         mesh_orig[1][r, c],
-            #         color=(0.6, 0.6, 1),
-            #         linewidth=3,
-            #     )
-
-            RGB = colorsys.hsv_to_rgb(
-                0.0, mesh_color[0][r, c] * mesh_color[1][r, c], 1.0
-            )
-            plt.scatter(
-                mesh_data[0][r, c],
-                mesh_data[1][r, c],
-                color=RGB,
-                linewidth=3,
-            )
+            if mesh_orig:
+                plt.scatter(
+                    mesh_orig[0][r, c],
+                    mesh_orig[1][r, c],
+                    color=(0.6, 0.6, 1),
+                    linewidth=3,
+                )
+                dist = np.linalg.norm(
+                    np.array([mesh_orig[0][r, c], mesh_orig[1][r, c]])
+                    - np.array([mesh_data[0][r, c], mesh_data[1][r, c]])
+                )
+                RGB = colorsys.hsv_to_rgb(0.0, dist + 0.1, 1.0)
+                plt.scatter(
+                    mesh_data[0][r, c],
+                    mesh_data[1][r, c],
+                    color=RGB,
+                    linewidth=3,
+                )
+            else:
+                RGB = colorsys.hsv_to_rgb(0.0, 1.0, 1.0)
+                plt.scatter(
+                    mesh_data[0][r, c],
+                    mesh_data[1][r, c],
+                    color=RGB,
+                    linewidth=3,
+                )
     plt.axis("off")
-    plt.savefig(path_write + f"/{title}.eps")
+    plt.savefig(path_write + f"/mesh_{title}.jpg")
+    plt.close()
+
+
+def give_mesh2direc(mesh_data, mesh_orig):
+
+    row, col = mesh_data[0].shape
+    x_direc = np.zeros((row, col))
+    y_direc = np.zeros((row, col))
+
+    for r in range(mesh_data[0].shape[0]):
+        for c in range(mesh_data[0].shape[1]):
+            temp = np.array(
+                [mesh_data[0][r, c], mesh_data[1][r, c]]
+            ) - np.array([mesh_orig[0][r, c], mesh_orig[1][r, c]])
+            x_direc[r, c] = temp[0]
+            y_direc[r, c] = temp[1]
+
+    return x_direc, y_direc
+
+
+def plot_quiver(
+    poly_orig, poly_const, mesh_data, title, path_write, mesh_orig
+):
+    """_summary_
+
+    Args:
+        poly (_type_): _description_
+        mesh_data (_type_): _description_
+        mesh_color (_type_): _description_
+        title (_type_): _description_
+    """
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+    x_poly, y_poly = poly_orig.exterior.xy
+    plt.title(title)
+    ax.plot(
+        x_poly,
+        y_poly,
+        color="black",
+        alpha=0.7,
+        linewidth=1,
+        solid_capstyle="round",
+        zorder=2,
+        label="original set",
+    )
+    x_poly, y_poly = poly_const.exterior.xy
+    ax.plot(
+        x_poly,
+        y_poly,
+        color="red",
+        alpha=0.7,
+        linewidth=1,
+        solid_capstyle="round",
+        zorder=2,
+        label="constrained set",
+    )
+
+    u, v = give_mesh2direc(mesh_data, mesh_orig)
+    ax.quiver(
+        mesh_orig[0],
+        mesh_orig[1],
+        u,
+        v,
+        angles="xy",
+        scale_units="xy",
+        scale=1,
+    )
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.legend()
+    plt.savefig(path_write + f"/quiver_{title}.jpg")
     plt.close()
 
 
