@@ -18,6 +18,8 @@ from affine_utils import (
     original_data_loader,
     give_polys,
     give_constraints,
+    give_equidistance_samples,
+    give_mix_samples,
 )
 from shapely.affinity import scale
 from tensorflow import keras
@@ -82,7 +84,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=3,
+        default=1,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -139,16 +141,15 @@ def main(
     # setup directories
     path_read = direc + "/tc1/original_net"
     path_read_orig_repair = direc + "/tc1/repair_net"
-    path_write = direc + "/tc1/repair_net_backward"
+    path_write = direc + "/tc1/repair_net_forward_equidistance"
     check_log_directories(path_read, path_write, layer_to_repair)
 
     # load model
-    out_model = keras.models.load_model(
-        path_read_orig_repair + "/model_layer_3"
-    )
+    out_model = keras.models.load_model(path_read + "/model")
 
     # load dataset and constraints
-    x_train, y_train, x_test, y_test = original_data_loader()
+    _, _, x_test, y_test = original_data_loader()
+    x_train, y_train = give_mix_samples(discretization=15)
     poly_orig, poly_trans, poly_const = give_polys()
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
@@ -182,7 +183,7 @@ def main(
     output_constraint_list = [constraint_inside]
 
     max_weight_bound = 5
-    cost_weights = np.array([1.0, 1.0])
+    cost_weights = np.array([100.0, 1.0])
     options = Options(
         "gdp.bigm",
         "gurobi",
@@ -199,7 +200,7 @@ def main(
     )
 
     print(out_model.get_weights())
-    for layer_to_repair in [2, 1]:
+    for layer_to_repair in [1, 2, 3]:
         print(f"repair layer: {layer_to_repair}")
         repair_obj = NNRepair(out_model)
         repair_obj.compile(
@@ -244,7 +245,7 @@ def main(
     if save_model == 1:
         keras.models.save_model(
             out_model,
-            path_write + f"/model_backward",
+            path_write + f"/model_forward",
             overwrite=True,
             include_optimizer=False,
             save_format=None,
@@ -257,7 +258,7 @@ def main(
     if save_stats == 1:
         # pylint: disable=unspecified-encoding
         with open(
-            path_write + f"/stats/repair_layer_backward_accs_stats_tc1.csv",
+            path_write + f"/stats/repair_layer_forward_accs_stats_tc1.csv",
             "a+",
             newline="",
         ) as write_obj:

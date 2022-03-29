@@ -585,6 +585,90 @@ def give_mesh2dist(mesh_data, mesh_orig):
     return dist_mesh
 
 
+def give_mix_samples(discretization=10):
+    """_summary_
+
+    Args:
+        discretization (int, optional): _description_. Defaults to 15.
+
+    Returns:
+        _type_: _description_
+    """
+    x_train = []
+    y_train = []
+    # transform matrices
+    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])
+    translate2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])
+    rotate = np.array(
+        [
+            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
+            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
+            [0, 0, 1],
+        ]
+    )
+
+    x1_mesh, x2_mesh = np.meshgrid(
+        np.linspace(1, 4, discretization), np.linspace(1, 4, discretization)
+    )
+    row, col = x1_mesh.shape
+    for r in range(row):
+        for c in range(col):
+            temp = np.matmul(
+                np.matmul(np.matmul(translate1, rotate), translate2),
+                np.array([[x1_mesh[r, c], x2_mesh[r, c], 1]]).T,
+            )
+            x_train.append(np.array([x1_mesh[r, c], x2_mesh[r, c], 1]))
+            y_train.append(np.array([temp.flatten()[0], temp.flatten()[1], 1]))
+
+    poly_orig, _, _ = give_polys()
+    x_rand = gen_rand_points_within_poly(
+        poly_orig, 100, unif2edge=0.01, edge_scale=0.7
+    )
+    y_rand = np.matmul(
+        np.matmul(np.matmul(translate1, rotate), translate2),
+        x_rand.T,
+    ).T
+    return np.vstack((x_train, x_rand)), np.vstack((y_train, y_rand))
+
+
+def give_equidistance_samples(discretization=15):
+    """_summary_
+
+    Args:
+        discretization (int, optional): _description_. Defaults to 15.
+
+    Returns:
+        _type_: _description_
+    """
+    x_train = []
+    y_train = []
+    # transform matrices
+    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])
+    translate2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])
+    rotate = np.array(
+        [
+            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
+            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
+            [0, 0, 1],
+        ]
+    )
+
+    x1_mesh, x2_mesh = np.meshgrid(
+        np.linspace(1, 4, discretization), np.linspace(1, 4, discretization)
+    )
+    row, col = x1_mesh.shape
+    for r in range(row):
+        for c in range(col):
+            temp = np.matmul(
+                np.matmul(np.matmul(translate1, rotate), translate2),
+                np.array([[x1_mesh[r, c], x2_mesh[r, c], 1]]).T,
+            )
+            x_train.append(np.array([x1_mesh[r, c], x2_mesh[r, c], 1]))
+            y_train.append(np.array([temp.flatten()[0], temp.flatten()[1], 1]))
+
+    return np.array(x_train), np.array(y_train)
+
+
 def plot_quiver(
     poly_orig, poly_const, mesh_data, title, path_write, mesh_orig
 ):
@@ -604,8 +688,8 @@ def plot_quiver(
 
     fig, ax = plt.subplots(figsize=(7, 7))
     c = ax.pcolormesh(
-        mesh_orig[1],
         mesh_orig[0],
+        mesh_orig[1],
         give_mesh2dist(mesh_data, mesh_orig),
         cmap=mpl.colors.LinearSegmentedColormap("my_colormap", cdict, 1024),
         vmin=0,
