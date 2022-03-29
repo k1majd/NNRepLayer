@@ -8,7 +8,14 @@ class MIPLayer:
     """_summary_"""
 
     def __init__(
-        self, model, layer_to_repair, uin, uout, weights, bias, param_bounds=(-1, 1)
+        self,
+        model,
+        layer_to_repair,
+        uin,
+        uout,
+        weights,
+        bias,
+        param_bounds=(-1, 1),
     ):
         """_summary_
 
@@ -33,10 +40,17 @@ class MIPLayer:
             setattr(
                 model,
                 w_l,
-                pyo.Var(range(uin), range(uout), domain=pyo.Reals, bounds=param_bounds),
+                pyo.Var(
+                    range(uin),
+                    range(uout),
+                    domain=pyo.Reals,
+                    bounds=param_bounds,
+                ),
             )
             setattr(
-                model, b_l, pyo.Var(range(uout), domain=pyo.Reals, bounds=param_bounds)
+                model,
+                b_l,
+                pyo.Var(range(uout), domain=pyo.Reals, bounds=param_bounds),
             )
 
             self.w = getattr(model, w_l)
@@ -81,7 +95,12 @@ class MIPLayer:
                 x, shape, self.lout, max_weight_bound, output_bounds
             )
         return self._constraints(
-            x, shape, self.lout, output_constraint_list, max_weight_bound, output_bounds
+            x,
+            shape,
+            self.lout,
+            output_constraint_list,
+            max_weight_bound,
+            output_bounds,
         )
 
     def _relu_constraints(
@@ -127,14 +146,19 @@ class MIPLayer:
             ),
         )
         setattr(
-            self.model, theta_l, pyo.Var(range(m), range(self.uout), domain=pyo.Binary)
+            self.model,
+            theta_l,
+            pyo.Var(range(m), range(self.uout), domain=pyo.Binary),
         )
 
         def constraints(model, i, j):
             product = self.b[j]
             for k in range(self.uin):
                 product += x[i, k] * self.w[k, j]
-            return product == getattr(model, x_l)[i, j] - getattr(model, s_l)[i, j]
+            return (
+                product
+                == getattr(model, x_l)[i, j] - getattr(model, s_l)[i, j]
+            )
 
         setattr(
             self.model,
@@ -149,24 +173,30 @@ class MIPLayer:
             setattr(
                 self.model,
                 dw_l,
-                pyo.Var(within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)),
+                pyo.Var(
+                    within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
+                ),
             )
 
             def constraint_bound_w0(model, i, j):
-                return getattr(model, w_l)[i, j] - self.w_orig[i, j] <= getattr(
-                    model, dw_l
-                )
+                return getattr(model, w_l)[i, j] - self.w_orig[
+                    i, j
+                ] <= getattr(model, dw_l)
 
             def constraint_bound_w1(model, i, j):
-                return getattr(model, w_l)[i, j] - self.w_orig[i, j] >= -getattr(
+                return getattr(model, w_l)[i, j] - self.w_orig[
+                    i, j
+                ] >= -getattr(model, dw_l)
+
+            def constraint_bound_b0(model, j):
+                return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(
                     model, dw_l
                 )
 
-            def constraint_bound_b0(model, j):
-                return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(model, dw_l)
-
             def constraint_bound_b1(model, j):
-                return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(model, dw_l)
+                return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(
+                    model, dw_l
+                )
 
             setattr(
                 self.model,
@@ -195,8 +225,14 @@ class MIPLayer:
 
         def disjuncts(model, i, j):
             return [
-                (getattr(model, theta_l)[i, j] == 0, getattr(model, x_l)[i, j] <= 0),
-                (getattr(model, theta_l)[i, j] == 1, getattr(model, s_l)[i, j] <= 0),
+                (
+                    getattr(model, theta_l)[i, j] == 0,
+                    getattr(model, x_l)[i, j] <= 0,
+                ),
+                (
+                    getattr(model, theta_l)[i, j] == 1,
+                    getattr(model, s_l)[i, j] <= 0,
+                ),
             ]
 
         setattr(
@@ -228,7 +264,12 @@ class MIPLayer:
         setattr(
             self.model,
             x_l,
-            pyo.Var(range(m), range(self.uout), domain=pyo.Reals, bounds=output_bounds),
+            pyo.Var(
+                range(m),
+                range(self.uout),
+                domain=pyo.Reals,
+                bounds=output_bounds,
+            ),
         )
 
         def constraints(model, i, j):
@@ -243,8 +284,11 @@ class MIPLayer:
             pyo.Constraint(range(m), range(self.uout), rule=constraints),
         )
 
-        constraint_addition_string = generate_output_constraints(output_constraint_list)
-        exec(constraint_addition_string, locals(), globals())
+        if output_constraint_list:
+            constraint_addition_string = generate_output_constraints(
+                output_constraint_list
+            )
+            exec(constraint_addition_string, locals(), globals())
         # def constraint_inside0(model, i):
         #     return [(getattr(model, ind_l)[i, 0] == 0, getattr(model, x_l)[i, 0] + 0.0001 <= getattr(model, x_l)[i, 1],
         #             getattr(model, x_l)[i, 0] + 0.0001 <= getattr(model, x_l)[i, 2],
@@ -276,24 +320,30 @@ class MIPLayer:
             setattr(
                 self.model,
                 dw_l,
-                pyo.Var(within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)),
+                pyo.Var(
+                    within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
+                ),
             )
 
             def constraint_bound_w0(model, i, j):
-                return getattr(model, w_l)[i, j] - self.w_orig[i, j] <= getattr(
-                    model, dw_l
-                )
+                return getattr(model, w_l)[i, j] - self.w_orig[
+                    i, j
+                ] <= getattr(model, dw_l)
 
             def constraint_bound_w1(model, i, j):
-                return getattr(model, w_l)[i, j] - self.w_orig[i, j] >= -getattr(
+                return getattr(model, w_l)[i, j] - self.w_orig[
+                    i, j
+                ] >= -getattr(model, dw_l)
+
+            def constraint_bound_b0(model, j):
+                return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(
                     model, dw_l
                 )
 
-            def constraint_bound_b0(model, j):
-                return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(model, dw_l)
-
             def constraint_bound_b1(model, j):
-                return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(model, dw_l)
+                return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(
+                    model, dw_l
+                )
 
             setattr(
                 self.model,

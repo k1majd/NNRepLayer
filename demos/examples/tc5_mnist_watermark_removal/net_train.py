@@ -24,7 +24,7 @@ def arg_parser():
         nargs="?",
         const=cwd,
         default=cwd,
-        help="Specify a path to store the data",
+        help="Specify a path to store data",
     )
     args = parser.parse_args()
     return args
@@ -135,7 +135,12 @@ def main(direc):
         os.makedirs(path_write + "/data")
     with open(path_write + "/data/input_output_data_tc5.pickle", "wb") as data:
         pickle.dump(
-            [layer_outs_train[1], y_train, layer_outs_test[1], y_test],
+            [
+                layer_outs_train[1],
+                layer_outs_train[-1],
+                layer_outs_test[1],
+                layer_outs_test[-1],
+            ],
             data,
         )
     print("saved: dataset - train, test")

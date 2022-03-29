@@ -1,3 +1,4 @@
+from cProfile import label
 import os
 import numpy as np
 import shapely.affinity as affinity
@@ -5,9 +6,10 @@ from sklearn.model_selection import train_test_split
 from quadprog import solve_qp
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, units
 import matplotlib as mpl
 import pickle
+import colorsys
 
 
 def give_polys():
@@ -440,3 +442,321 @@ def plot_dataset(polys, out_dataset, label="training"):
     plt.xlabel("x", fontsize=25)
     plt.ylabel("y", fontsize=25)
     plt.show()
+
+
+def transform_mesh(x, y):
+    """_summary_
+
+    Args:
+        x (_type_): _description_
+        y (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    # transform matrices
+    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])
+    translate2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])
+    rotate = np.array(
+        [
+            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
+            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
+            [0, 0, 1],
+        ]
+    )
+    row, col = x.shape
+    x_out = np.zeros((row, col))
+    y_out = np.zeros((row, col))
+    for r in range(row):
+        for c in range(col):
+            temp = np.matmul(
+                np.matmul(np.matmul(translate1, rotate), translate2),
+                np.array([[x[r, c], y[r, c], 1]]).T,
+            )
+
+            x_out[r, c] = temp.flatten()[0]
+            y_out[r, c] = temp.flatten()[1]
+    return x_out, y_out
+
+
+def plot_meshgird(
+    poly, mesh_data, mesh_color, title, path_write, mesh_orig=None
+):
+    """_summary_
+
+    Args:
+        poly (_type_): _description_
+        mesh_data (_type_): _description_
+        mesh_color (_type_): _description_
+        title (_type_): _description_
+    """
+    x_poly, y_poly = poly.exterior.xy
+    plt.title(title)
+    plt.plot(
+        x_poly,
+        y_poly,
+        color="black",
+        alpha=0.7,
+        linewidth=1,
+        solid_capstyle="round",
+        zorder=2,
+    )
+    for r in range(mesh_data[0].shape[0]):
+        for c in range(mesh_data[0].shape[1]):
+            # if mesh_orig:
+            if mesh_orig:
+                plt.scatter(
+                    mesh_orig[0][r, c],
+                    mesh_orig[1][r, c],
+                    color=(0.6, 0.6, 1),
+                    linewidth=3,
+                )
+                dist = np.linalg.norm(
+                    np.array([mesh_orig[0][r, c], mesh_orig[1][r, c]])
+                    - np.array([mesh_data[0][r, c], mesh_data[1][r, c]])
+                )
+                RGB = colorsys.hsv_to_rgb(0.0, dist + 0.1, 1.0)
+                plt.scatter(
+                    mesh_data[0][r, c],
+                    mesh_data[1][r, c],
+                    color=RGB,
+                    linewidth=3,
+                )
+            else:
+                RGB = colorsys.hsv_to_rgb(0.0, 1.0, 1.0)
+                plt.scatter(
+                    mesh_data[0][r, c],
+                    mesh_data[1][r, c],
+                    color=RGB,
+                    linewidth=3,
+                )
+    plt.axis("off")
+    plt.savefig(path_write + f"/mesh_{title}.jpg")
+    plt.close()
+
+
+def give_mesh2direc(mesh_data, mesh_orig):
+    """_summary_
+
+    Args:
+        mesh_data (_type_): _description_
+        mesh_orig (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    row, col = mesh_data[0].shape
+    x_direc = np.zeros((row, col))
+    y_direc = np.zeros((row, col))
+
+    for r in range(mesh_data[0].shape[0]):
+        for c in range(mesh_data[0].shape[1]):
+            temp = np.array(
+                [mesh_data[0][r, c], mesh_data[1][r, c]]
+            ) - np.array([mesh_orig[0][r, c], mesh_orig[1][r, c]])
+            x_direc[r, c] = temp[0]
+            y_direc[r, c] = temp[1]
+
+    return x_direc, y_direc
+
+
+def give_mesh2dist(mesh_data, mesh_orig):
+    """_summary_
+
+    Args:
+        mesh_data (_type_): _description_
+        mesh_orig (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    row, col = mesh_data[0].shape
+    dist_mesh = np.zeros((row, col))
+
+    for r in range(mesh_data[0].shape[0]):
+        for c in range(mesh_data[0].shape[1]):
+            temp = np.array(
+                [mesh_data[0][r, c], mesh_data[1][r, c]]
+            ) - np.array([mesh_orig[0][r, c], mesh_orig[1][r, c]])
+            dist_mesh[r, c] = np.linalg.norm(temp)
+
+    return dist_mesh
+
+
+def give_mix_samples(discretization=10):
+    """_summary_
+
+    Args:
+        discretization (int, optional): _description_. Defaults to 15.
+
+    Returns:
+        _type_: _description_
+    """
+    x_train = []
+    y_train = []
+    # transform matrices
+    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])
+    translate2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])
+    rotate = np.array(
+        [
+            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
+            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
+            [0, 0, 1],
+        ]
+    )
+
+    x1_mesh, x2_mesh = np.meshgrid(
+        np.linspace(1, 4, discretization), np.linspace(1, 4, discretization)
+    )
+    row, col = x1_mesh.shape
+    for r in range(row):
+        for c in range(col):
+            temp = np.matmul(
+                np.matmul(np.matmul(translate1, rotate), translate2),
+                np.array([[x1_mesh[r, c], x2_mesh[r, c], 1]]).T,
+            )
+            x_train.append(np.array([x1_mesh[r, c], x2_mesh[r, c], 1]))
+            y_train.append(np.array([temp.flatten()[0], temp.flatten()[1], 1]))
+
+    poly_orig, _, _ = give_polys()
+    x_rand = gen_rand_points_within_poly(
+        poly_orig, 100, unif2edge=0.01, edge_scale=0.7
+    )
+    y_rand = np.matmul(
+        np.matmul(np.matmul(translate1, rotate), translate2),
+        x_rand.T,
+    ).T
+    return np.vstack((x_train, x_rand)), np.vstack((y_train, y_rand))
+
+
+def give_equidistance_samples(discretization=15):
+    """_summary_
+
+    Args:
+        discretization (int, optional): _description_. Defaults to 15.
+
+    Returns:
+        _type_: _description_
+    """
+    x_train = []
+    y_train = []
+    # transform matrices
+    translate1 = np.array([[1, 0, 2.5], [0, 1, 2.5], [0, 0, 1]])
+    translate2 = np.array([[1, 0, -2.5], [0, 1, -2.5], [0, 0, 1]])
+    rotate = np.array(
+        [
+            [np.cos(np.pi / 4), -np.sin(np.pi / 4), 0],
+            [np.sin(np.pi / 4), np.cos(np.pi / 4), 0],
+            [0, 0, 1],
+        ]
+    )
+
+    x1_mesh, x2_mesh = np.meshgrid(
+        np.linspace(1, 4, discretization), np.linspace(1, 4, discretization)
+    )
+    row, col = x1_mesh.shape
+    for r in range(row):
+        for c in range(col):
+            temp = np.matmul(
+                np.matmul(np.matmul(translate1, rotate), translate2),
+                np.array([[x1_mesh[r, c], x2_mesh[r, c], 1]]).T,
+            )
+            x_train.append(np.array([x1_mesh[r, c], x2_mesh[r, c], 1]))
+            y_train.append(np.array([temp.flatten()[0], temp.flatten()[1], 1]))
+
+    return np.array(x_train), np.array(y_train)
+
+
+def plot_quiver(
+    poly_orig, poly_const, mesh_data, title, path_write, mesh_orig
+):
+    """_summary_
+
+    Args:
+        poly (_type_): _description_
+        mesh_data (_type_): _description_
+        mesh_color (_type_): _description_
+        title (_type_): _description_
+    """
+    cdict = {
+        "red": ((0.0, 0.25, 0.25), (0.02, 0.59, 0.59), (1.0, 1.0, 1.0)),
+        "green": ((0.0, 0.0, 0.0), (0.02, 0.45, 0.45), (1.0, 0.97, 0.97)),
+        "blue": ((0.0, 1.0, 1.0), (0.02, 0.75, 0.75), (1.0, 0.45, 0.45)),
+    }
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+    c = ax.pcolormesh(
+        mesh_orig[0],
+        mesh_orig[1],
+        give_mesh2dist(mesh_data, mesh_orig),
+        cmap=mpl.colors.LinearSegmentedColormap("my_colormap", cdict, 1024),
+        vmin=0,
+        vmax=0.3,
+        shading="gouraud",
+    )
+    fig.colorbar(c)
+    x_poly, y_poly = poly_orig.exterior.xy
+    plt.title(title)
+    ax.plot(
+        x_poly,
+        y_poly,
+        color="black",
+        alpha=0.7,
+        linewidth=2,
+        solid_capstyle="round",
+        zorder=2,
+        label="original set",
+    )
+    x_poly, y_poly = poly_const.exterior.xy
+    ax.plot(
+        x_poly,
+        y_poly,
+        color="blue",
+        alpha=0.7,
+        linewidth=2,
+        solid_capstyle="round",
+        zorder=2,
+        label="constrained set",
+    )
+
+    u, v = give_mesh2direc(mesh_data, mesh_orig)
+    dist_mat = give_mesh2dist(mesh_data, mesh_orig)
+    ax.quiver(
+        mesh_orig[0],
+        mesh_orig[1],
+        u,
+        v,
+        angles="xy",
+        linewidth=1,
+        scale_units="xy",
+        scale=1,
+    )
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.legend()
+    plt.savefig(path_write + f"/quiver_{title}.eps")
+    plt.close()
+
+
+def net_meshgrid_prediction(x, y, model):
+    """_summary_
+
+    Args:
+        x (_type_): _description_
+        y (_type_): _description_
+        model (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    row, col = x.shape
+    x_out = np.zeros((row, col))
+    y_out = np.zeros((row, col))
+    for r in range(row):
+        for c in range(col):
+            temp = model.predict(np.array([[x[r, c], y[r, c], 1]]))
+            x_out[r, c] = temp.flatten()[0]
+            y_out[r, c] = temp.flatten()[1]
+    return x_out, y_out

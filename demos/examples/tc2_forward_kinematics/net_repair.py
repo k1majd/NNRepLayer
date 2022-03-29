@@ -45,7 +45,7 @@ def arg_parser():
         "--visualization",
         nargs="?",
         type=int,
-        default=1,
+        default=0,
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
     )
@@ -82,6 +82,14 @@ def arg_parser():
         nargs="?",
         type=int,
         default=3,
+        help="Specify the layer to repair.",
+    )
+    parser.add_argument(
+        "-tl",
+        "--timeLimit",
+        nargs="?",
+        type=int,
+        default=3600,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -124,6 +132,7 @@ def main(
     save_stats,
     layer_to_repair,
     save_summery,
+    time_limit,
 ):
     """_summary_
 
@@ -145,17 +154,17 @@ def main(
 
     # load dataset and constraints
     x_train, y_train, x_test, y_test = original_data_loader()
-    # with open(
-    #     path_read + "/data/input_output_data_inside_train_tc2.pickle", "rb"
-    # ) as data:
-    #     train_inside = pickle.load(data)
-    # rnd_pts = np.random.choice(train_inside[0].shape[0], 200)
-    # with open(
-    #     path_read + "/data/input_output_data_outside_train_tc2.pickle", "rb"
-    # ) as data:
-    #     train_out = pickle.load(data)
-    # x_train = np.vstack((train_inside[0][rnd_pts], train_out[0]))
-    # y_train = np.vstack((train_inside[1][rnd_pts], train_out[1]))
+    with open(
+        path_read + "/data/input_output_data_inside_train_tc2.pickle", "rb"
+    ) as data:
+        train_inside = pickle.load(data)
+    rnd_pts = np.random.choice(train_inside[0].shape[0], 100)
+    with open(
+        path_read + "/data/input_output_data_outside_train_tc2.pickle", "rb"
+    ) as data:
+        train_out = pickle.load(data)
+    x_train = np.vstack((train_inside[0][rnd_pts], train_out[0]))
+    y_train = np.vstack((train_inside[1][rnd_pts], train_out[1]))
     A = np.array([[1.0, 0.0, 0.0, 0.0]])
     b = np.array([[0.5]])
 
@@ -165,7 +174,7 @@ def main(
     constraint_inside = constraints_class("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 5
+    max_weight_bound = 1
     cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -173,10 +182,10 @@ def main(
         "python",
         "keras",
         {
-            "timelimit": 3600,
+            "timelimit": time_limit,
             "mipgap": 0.001,
-            "mipfocus": 3,
-            "improvestarttime": 3300,
+            "mipfocus": 2,
+            "improvestarttime": time_limit,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
@@ -254,6 +263,8 @@ def main(
             model_evaluation.append(max_weight_bound)
             model_evaluation.append("cost weights")
             model_evaluation.append(cost_weights)
+            model_evaluation.append("repair sample size")
+            model_evaluation.append(x_train.shape[0])
             model_evaluation.append(str(datetime.now()))
             # Add contents of list as last row in the csv file
             csv_writer.writerow(model_evaluation)
@@ -269,4 +280,5 @@ if __name__ == "__main__":
         args.saveStats,
         args.repairLayer,
         args.saveModelSummery,
+        args.timeLimit,
     )

@@ -62,9 +62,10 @@ def tf2_get_architecture(model):
     """
     architecture = []
     for lnum, lay in enumerate(model.layers):
-        architecture.append(lay.input.shape[1])
-        if lnum == len(model.layers) - 1:
-            architecture.append(lay.output.shape[1])
+        if len(lay.weights)!=0:
+            architecture.append(lay.input.shape[1])
+            if lnum == len(model.layers) - 1:
+                architecture.append(lay.output.shape[1])
 
     return architecture
 

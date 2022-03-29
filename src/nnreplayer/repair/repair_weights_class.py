@@ -57,13 +57,18 @@ class NNRepair:
         self.model_orig = model_orig
         self.architecture = tf2_get_architecture(self.model_orig)
         self.model_mlp = MLP(
-            self.architecture[0], self.architecture[-1], self.architecture[1:-1]
+            self.architecture[0],
+            self.architecture[-1],
+            self.architecture[1:-1],
         )
         self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         self.cost_function_output = give_mse_error
-        # self.__compile_flag = False
+        self.data_precision = None
+        self.param_precision = None
         self.opt_model = None
         self.layer_to_repair = None
+        self.output_name = None
+        self.num_samples = None
         self.output_constraint_list = []
 
     def compile(
@@ -75,32 +80,45 @@ class NNRepair:
         cost=give_mse_error,
         cost_weights=np.array([1.0, 1.0]),
         max_weight_bound=1.0,
+        data_precision=4,
+        param_precision=4,
     ):
-        """_summary_
+        """compile the optimization model and setup the repair optimizer
 
         Args:
             x_repair (ndarray): input repair samples
             y_repair (ndarray): output repair samples
             layer_2_repair (int): target repair layer
-            output_constraint_list (list[nnreplayer.utils.utils.constraints_class], optional): list of output constraints . Defaults to None.
+            output_constraint_list (list[nnreplayer.utils.utils.constraints_class], optional):
+                list of output constraints . Defaults to None.
             cost (function, optional): minimization loss function. Defaults to give_mse_error.
-            cost_weights (list[ndarray], optional): cost_weights[0]: weight of  min loss, cost_weights[1]: weight of weight bounding slack variable. Defaults to np.array([1.0, 1.0]).
+            cost_weights (list[ndarray], optional): cost_weights[0]: weight of  min loss,
+                cost_weights[1]: weight of weight bounding slack variable.
+                Defaults to np.array([1.0, 1.0]).
             max_weight_bound (float, optional): upper bound of weights error. Defaults to 1.0.
+            data_precision (int, optional): precision of rounding to decimal place for data.
+                Defaults to 4.
+            param_precision (int, optional): precision of rounding to decimal place for parameters.
+                Defaults to 4.
         """
         # set repair parameters:
         self.layer_to_repair = layer_2_repair
         self.cost_function_output = cost
         self.output_constraint_list = output_constraint_list
+        self.data_precision = data_precision
+        self.param_precision = param_precision
 
         self.__set_up_optimizer(
-            y_repair,
-            self.extract_network_layers_values(x_repair),
+            np.round(y_repair, data_precision),
+            self.extract_network_layers_values(
+                np.round(x_repair, data_precision)
+            ),
             max_weight_bound,
             cost_weights,
         )
 
     def repair(self, options):
-        """perform the layer-wise repair and updates the weights of model_mlp
+        """perform the layer-wise repair and update the weights of model_mlp
 
         Args:
             options (nnreplayer.utils.options.Options): optimization options
@@ -110,20 +128,24 @@ class NNRepair:
             options.solver_factory,
             options.optimizer_options,
         )
-        self.set_new_params()
-        return self.return_repaired_model(options.model_output_type)
+        self.__set_new_params()
+        return self.__return_repaired_model(options.model_output_type)
 
     def reset(self):
         """reset the model_mlp model to the original model"""
         self.architecture = tf2_get_architecture(self.model_orig)
         self.model_mlp = MLP(
-            self.architecture[0], self.architecture[-1], self.architecture[1:-1]
+            self.architecture[0],
+            self.architecture[-1],
+            self.architecture[1:-1],
         )
         self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         self.cost_function_output = give_mse_error
         # self.__compile_flag = False
         self.opt_model = None
         self.layer_to_repair = None
+        self.output_name = None
+        self.num_samples = None
         self.output_constraint_list = []
 
     def summery(self, direc=None):
@@ -165,12 +187,39 @@ class NNRepair:
 
         return layer_values
 
-    def set_new_params(self):
-        """_summary_
+    def __return_repaired_model(self, model_output_type):
+        # pylint: disable=pointless-string-statement
+        """returns the repaired model in the given format
 
         Args:
-            model_lay (_type_): _description_
+            model_output_type (str): type of returned model
+
+        Returns:
+            _type_: new repaired model
         """
+        #
+        # currently this module only supports keras models
+        #
+        """
+        TODO
+        add support for the other types of models: pytorch, hdf5, ...
+        """
+        model_new_params = self.model_mlp.get_mlp_params()
+        if model_output_type == "keras":
+            new_model = keras.models.clone_model(self.model_orig)
+            weights_bias_iterate = 0
+            for iterate in range(len(self.architecture) - 1):
+                new_model.layers[iterate].set_weights(
+                    model_new_params[
+                        weights_bias_iterate : weights_bias_iterate + 2
+                    ]
+                )
+                weights_bias_iterate = weights_bias_iterate + 2
+
+        return new_model
+
+    def __set_new_params(self):
+        """update the weight and bias terms of model_mlp for the target layer"""
         new_weight = np.zeros(
             (
                 self.architecture[self.layer_to_repair - 1],
@@ -179,39 +228,21 @@ class NNRepair:
         )
         new_bias = np.zeros(self.architecture[self.layer_to_repair])
         for keys, items in (
-            getattr(self.opt_model, f"w{self.layer_to_repair}").get_values().items()
+            getattr(self.opt_model, f"w{self.layer_to_repair}")
+            .get_values()
+            .items()
         ):
             new_weight[keys[0], keys[1]] = items
         for keys, items in (
-            getattr(self.opt_model, f"b{self.layer_to_repair}").get_values().items()
+            getattr(self.opt_model, f"b{self.layer_to_repair}")
+            .get_values()
+            .items()
         ):
             new_bias[keys] = items
 
         self.model_mlp.set_mlp_params_layer(
             [new_weight, new_bias], self.layer_to_repair
         )
-
-    def return_repaired_model(self, model_output_type):
-        """_summary_
-
-        Args:
-            model_new_params (_type_): _description_
-            model_output_type (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
-        model_new_params = self.model_mlp.get_mlp_params()
-        if model_output_type == "keras":
-            new_model = keras.models.clone_model(self.model_orig)
-            weights_bias_iterate = 0
-            for iterate in range(len(self.architecture) - 1):
-                new_model.layers[iterate].set_weights(
-                    model_new_params[weights_bias_iterate : weights_bias_iterate + 2]
-                )
-                weights_bias_iterate = weights_bias_iterate + 2
-
-        return new_model
 
     def __set_up_optimizer(
         self,
@@ -232,21 +263,55 @@ class NNRepair:
         """
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
-        # num_samples = layer_values[self.layer_to_repair - 2].shape[0]
-        num_samples = layer_values[self.layer_to_repair - 1].shape[0]
+
+        # specify the precision of weights, bias, and layer values
+        for l, w in enumerate(weights):
+            weights[l] = np.round(w, self.param_precision)
+        for l, b in enumerate(bias):
+            bias[l] = np.round(b, self.param_precision)
+        for l, value in enumerate(layer_values):
+            layer_values[l] = np.round(value, self.data_precision)
+
+        self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
             weights,
             bias,
+            param_bounds=(
+                np.round(
+                    np.min(
+                        [
+                            np.min(bias[self.layer_to_repair - 1]),
+                            np.min(weights[self.layer_to_repair - 1]),
+                        ]
+                    )
+                    - max_weight_bound
+                    - 0.01,
+                    self.param_precision,
+                ),
+                np.round(
+                    np.max(
+                        [
+                            np.max(bias[self.layer_to_repair - 1]),
+                            np.max(weights[self.layer_to_repair - 1]),
+                        ]
+                    )
+                    + max_weight_bound
+                    + 0.01,
+                    self.data_precision,
+                ),
+            ),
         )
         y_ = mip_model_layer(
             # layer_values[self.layer_to_repair - 2],
             layer_values[self.layer_to_repair - 1],
-            (num_samples, self.architecture[self.layer_to_repair - 1]),
+            (self.num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
             max_weight_bound=max_weight_bound,
+            # output_bounds=(np.min(y_repair), np.max(y_repair)),
         )
+        self.output_name = y_.name
         self.opt_model = mip_model_layer.model
 
         cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
