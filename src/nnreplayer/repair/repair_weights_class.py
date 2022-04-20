@@ -16,6 +16,7 @@ from ..mip.mip_nn_model import MIPNNModel
 from ..utils.utils import give_mse_error
 import numpy.typing as npt
 
+
 class NNRepair:
     # pylint: disable=invalid-name
     """NN
@@ -32,24 +33,24 @@ class NNRepair:
         output_name
         num_samples
         output_constraint_list
-        
-        
+
+    Methods:
+
+
     """
 
-    def __init__(
-        self,
-        model_orig,
-        model_type = "tensorflow"
-    ) -> None:
+    def __init__(self, model_orig, model_type="tensorflow") -> None:
         """Initializes the NNRepair Class
-            
+
         Args:
             model_orig (_type_): Original Model intended to be repaired.
         """
-        assert model_orig is not None, f"Expected Model. Received {type(model_orig)} instead."
+        assert (
+            model_orig is not None
+        ), f"Expected Model. Received {type(model_orig)} instead."
         self.model_orig = model_orig
         self.model_type = model_type
-        if model_type == "tensorflow":    
+        if model_type == "tensorflow":
             self.architecture = tf2_get_architecture(self.model_orig)
             self.model_mlp = MLP(
                 self.architecture[0],
@@ -58,7 +59,7 @@ class NNRepair:
             )
             self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         elif model_type == "pytorch":
-            
+
             self.architecture = pt_get_architecture(self.model_orig)
             self.model_mlp = MLP(
                 self.architecture[0],
@@ -67,7 +68,9 @@ class NNRepair:
             )
             self.model_mlp.set_mlp_params(pt_get_weights(self.model_orig))
         else:
-            raise TypeError(f"Expected tensorflow or pytorch. Received {model_type} instead.")
+            raise TypeError(
+                f"Expected tensorflow or pytorch. Received {model_type} instead."
+            )
         self.cost_function_output = give_mse_error
         self.data_precision = None
         self.param_precision = None
@@ -78,17 +81,17 @@ class NNRepair:
         self.output_constraint_list = []
 
     def compile(
-            self,
-            x_repair: npt.NDArray,
-            y_repair: npt.NDArray,
-            layer_2_repair: int,
-            output_constraint_list: Optional[List[Type[constraints_class]]]=None,
-            cost:Callable=give_mse_error,
-            cost_weights:npt.NDArray=np.array([1.0, 1.0]),
-            max_weight_bound:Union[int, float]=1.0,
-            data_precision: int=4,
-            param_precision: int=4,
-        ) -> None:
+        self,
+        x_repair: npt.NDArray,
+        y_repair: npt.NDArray,
+        layer_2_repair: int,
+        output_constraint_list: Optional[List[Type[constraints_class]]] = None,
+        cost: Callable = give_mse_error,
+        cost_weights: npt.NDArray = np.array([1.0, 1.0]),
+        max_weight_bound: Union[int, float] = 1.0,
+        data_precision: int = 4,
+        param_precision: int = 4,
+    ) -> None:
         """Compile the optimization model and setup the repair optimizer
 
         Args:
@@ -99,20 +102,29 @@ class NNRepair:
             cost (function, optional): Minimization loss function. Defaults to give_mse_error.
 
             cost_weights (npt.NDArray, optional): cost_weights[0]: weight of  min loss,
-                					                cost_weights[1]: weight of weight bounding slack variable.
-							                        Defaults to np.array([1.0, 1.0]).
+                                                                        cost_weights[1]: weight of weight bounding slack variable.
+                                                                                Defaults to np.array([1.0, 1.0]).
             max_weight_bound (Union, optional): Upper bound of weights errorDefaults to 1.0.
             data_precision (int, optional): precision of rounding to decimal place for dataDefaults to 4.
             param_precision (int, optional): precision of rounding to decimal place for parameters. Defaults to 4.
         """
-        
+
         # set repair parameters:
         if x_repair.shape[-1] != self.architecture[0]:
-            raise TypeError(f"Input Set Mismatch. Expected (X, {self.architecture[0]}). Received (X, {x_repair.shape[-1]} instead.")
+            raise TypeError(
+                f"Input Set Mismatch. Expected (X, {self.architecture[0]}). Received (X, {x_repair.shape[-1]} instead."
+            )
         if y_repair.shape[-1] != self.architecture[-1]:
-            raise TypeError(f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead.")
-        if not(layer_2_repair <= len(self.architecture)-1 and layer_2_repair >= 1):
-            raise TypeError(f"Layer to repair out of bounds. Expected [{1}, {len(self.architecture)-1}]. Received {layer_2_repair} instead.")
+            raise TypeError(
+                f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
+            )
+        if not (
+            layer_2_repair <= len(self.architecture) - 1
+            and layer_2_repair >= 1
+        ):
+            raise TypeError(
+                f"Layer to repair out of bounds. Expected [{1}, {len(self.architecture)-1}]. Received {layer_2_repair} instead."
+            )
 
         self.layer_to_repair = layer_2_repair
         self.cost_function_output = cost
@@ -145,13 +157,12 @@ class NNRepair:
             options.optimizer_options,
         )
         self.__set_new_params()
-        repaired_model = self.__return_repaired_model(self.model_type)
+        repaired_model = self.__return_repaired_model()
         return repaired_model
 
     def reset(self):
-        """Reset the model_mlp model to the original model
-        """
-        
+        """Reset the model_mlp model to the original model"""
+
         self.architecture = tf2_get_architecture(self.model_orig)
         self.model_mlp = MLP(
             self.architecture[0],
@@ -166,7 +177,7 @@ class NNRepair:
         self.num_samples = None
         self.output_constraint_list = []
 
-    def summary(self, direc:Optional[str]=None):
+    def summary(self, direc: Optional[str] = None):
         """Print and/or store the pyomo optimization model
 
         Args:
@@ -191,7 +202,9 @@ class NNRepair:
         else:
             self.opt_model.pprint()
 
-    def extract_network_layers_values(self, x_dataset:npt.NDArray) -> List[npt.NDArray]:
+    def extract_network_layers_values(
+        self, x_dataset: npt.NDArray
+    ) -> List[npt.NDArray]:
         """Extract the values of each layer for all input samples
 
         Args:
@@ -200,30 +213,22 @@ class NNRepair:
         Returns:
             list[NDArray]: values of layers give input samples
         """
-        
-        assert x_dataset.shape[-1] == self.architecture[0], \
-                f"Input Set Mismatch. Expected (X, {self.architecture[0]}). Received (X, {x_dataset.shape[-1]} instead."
+
+        assert (
+            x_dataset.shape[-1] == self.architecture[0]
+        ), f"Input Set Mismatch. Expected (X, {self.architecture[0]}). Received (X, {x_dataset.shape[-1]} instead."
 
         layer_values = self.model_mlp(x_dataset)
 
         return layer_values
 
-    def __return_repaired_model(self, model_output_type):
+    def __return_repaired_model(self):
         # pylint: disable=pointless-string-statement
-        """Returns the repaired model in the given format
+        """Returns the repaired model in the given format"""
 
-        Args:
-            model_output_type (str): type of returned model
-
-        Returns:
-            _type_: new repaired model
-        """
-        #
-        # currently this module only supports keras models
-        #
         """
         TODO
-        add support for the other types of models: pytorch, hdf5, ...
+        add support for the other types of models: hdf5, ...
         """
         model_new_params = self.model_mlp.get_mlp_params()
         print("Hello")
@@ -237,15 +242,16 @@ class NNRepair:
                     ]
                 )
                 weights_bias_iterate = weights_bias_iterate + 2
-        
+
         elif self.model_type == "pytorch":
             import copy
+
             new_model = copy.deepcopy(self.model_orig)
             weights_bias_iterate = 0
             for name, param in new_model.named_parameters():
-                
+
                 old_param = param.data.numpy()
-                
+
                 new_param = model_new_params[weights_bias_iterate]
                 if "weight" in set(name.split(".")):
                     new_param = new_param.T
@@ -262,12 +268,13 @@ class NNRepair:
             #     print(new_model.state_dict()[x])
             new_model.eval()
         else:
-            raise TypeError(f"Expected tensorflow or pytorch. Received {self.model_type} instead.")
+            raise TypeError(
+                f"Expected tensorflow or pytorch. Received {self.model_type} instead."
+            )
         return new_model
 
     def __set_new_params(self):
-        """Update the weight and bias terms of model_mlp for the target layer
-        """
+        """Update the weight and bias terms of model_mlp for the target layer"""
 
         new_weight = np.zeros(
             (
@@ -294,12 +301,12 @@ class NNRepair:
         )
 
     def __set_up_optimizer(
-            self,
-            y_repair:npt.NDArray,
-            layer_values: List[npt.NDArray],
-            max_weight_bound:Union[int, float],
-            cost_weights:npt.NDArray=np.array([1.0, 1.0]),
-        ) -> None:
+        self,
+        y_repair: npt.NDArray,
+        layer_values: List[npt.NDArray],
+        max_weight_bound: Union[int, float],
+        cost_weights: npt.NDArray = np.array([1.0, 1.0]),
+    ) -> None:
         """_summary_
 
         Args:
@@ -308,9 +315,11 @@ class NNRepair:
             max_weight_bound (Union[int, float]): _description_
             cost_weights (npt.NDArray, optional): _description_. Defaults to np.array([1.0, 1.0]).
         """
-        
+
         if y_repair.shape[-1] != self.architecture[-1]:
-            raise TypeError(f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead.")
+            raise TypeError(
+                f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
+            )
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
 
@@ -371,11 +380,11 @@ class NNRepair:
         self.opt_model.obj = pyo.Objective(expr=cost_expr)
 
     def __solve_optimization_problem(
-            self,
-            gdp_formulation:str,
-            solver_factory:str,
-            optimizer_options:dict,
-        ) -> None:
+        self,
+        gdp_formulation: str,
+        solver_factory: str,
+        optimizer_options: dict,
+    ) -> None:
         """_summary_
 
         Args:

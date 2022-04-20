@@ -2,6 +2,10 @@ import pyomo.environ as pyo
 import pyomo.gdp as pyg
 from pyomo.gdp import *
 from ..utils.utils import generate_output_constraints
+from ..utils.utils import constraints_class
+import numpy as np
+import numpy.typing as npt
+from typing import List, Union
 
 
 class MIPLayer:
@@ -10,22 +14,22 @@ class MIPLayer:
     def __init__(
         self,
         model,
-        layer_to_repair,
-        uin,
-        uout,
-        weights,
-        bias,
-        param_bounds=(-1, 1),
-    ):
+        layer_to_repair: int,
+        uin: int,
+        uout: int,
+        weights: npt.NDArray,
+        bias: npt.NDArray,
+        param_bounds: tuple = (-1, 1),
+    ) -> None:
         """_summary_
 
         Args:
             model (_type_): _description_
-            layer_to_repair (_type_): _description_
-            uin (_type_): _description_
-            uout (_type_): _description_
-            weights (_type_): _description_
-            bias (_type_): _description_
+            layer_to_repair (int): _description_
+            uin (int): _description_
+            uout (int): _description_
+            weights (npt.NDArray): _description_
+            bias (npt.NDArray): _description_
             param_bounds (tuple, optional): _description_. Defaults to (-1, 1).
         """
 
@@ -68,12 +72,12 @@ class MIPLayer:
 
     def __call__(
         self,
-        x,
+        x: npt.NDArray,
         shape,
-        output_constraint_list,
-        relu=False,
-        max_weight_bound=10,
-        output_bounds=(-1e1, 1e1),
+        output_constraint_list: List[constraints_class],
+        relu: bool = False,
+        max_weight_bound: Union[int, float] = 10,
+        output_bounds: tuple = (-1e1, 1e1),
     ):
         """_summary_
 
@@ -104,15 +108,20 @@ class MIPLayer:
         )
 
     def _relu_constraints(
-        self, x, shape, l, max_weight_bound=1, output_bounds=(-1e1, 1e1)
+        self,
+        x: npt.NDArray,
+        shape: tuple,
+        l,
+        max_weight_bound: Union[int, float] = 1,
+        output_bounds: tuple = (-1e1, 1e1),
     ):
         """_summary_
 
         Args:
-            x (_type_): _description_
-            shape (_type_): _description_
+            x (npt.NDArray): _description_
+            shape (tuple): _description_
             l (_type_): _description_
-            max_weight_bound (int, optional): _description_. Defaults to 10.
+            max_weight_bound (Union[int, float], optional): _description_. Defaults to 1.
             output_bounds (tuple, optional): _description_. Defaults to (-1e1, 1e1).
 
         Returns:
@@ -244,13 +253,27 @@ class MIPLayer:
 
     def _constraints(
         self,
-        x,
-        shape,
+        x: npt.NDArray,
+        shape: tuple,
         l,
-        output_constraint_list,
-        max_weight_bound=10,
-        output_bounds=(-1e1, 1e1),
+        output_constraint_list: List[constraints_class],
+        max_weight_bound: Union[int, float] = 10,
+        output_bounds: tuple = (-1e1, 1e1),
     ):
+        """_summary_
+
+        Args:
+            x (npt.NDArray): _description_
+            shape (tuple): _description_
+            l (_type_): _description_
+            output_constraint_list (List[constraints_class]): _description_
+            max_weight_bound (Union[int, float], optional): _description_. Defaults to 10.
+            output_bounds (tuple, optional): _description_. Defaults to (-1e1, 1e1).
+
+        Returns:
+            _type_: _description_
+        """
+
         m, n = shape
         assert n == self.uin
         if l == self.layer_to_repair + 1:

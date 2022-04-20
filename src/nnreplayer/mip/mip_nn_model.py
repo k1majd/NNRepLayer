@@ -1,28 +1,41 @@
 import pyomo.environ as pyo
 from pyomo.gdp import *
 from .mip_layer import MIPLayer
+from typing import List, Tuple
+import numpy as np
+import numpy.typing as npt
+from typing import Union
 
 
 class MIPNNModel:
     """_summary_"""
 
     def __init__(
-        self, layer_to_repair, architecture, weights, bias, param_bounds=(-1, 1)
+        self,
+        layer_to_repair: npt.NDArray,
+        architecture: List[int],
+        weights: List[npt.NDArray],
+        bias: List[npt.NDArray],
+        param_bounds: tuple = (-1, 1),
     ):
         """_summary_
 
         Args:
-            layer_to_repair (_type_): _description_
-            architecture (_type_): _description_
-            weights (_type_): _description_
-            bias (_type_): _description_
+            layer_to_repair (npt.NDArray): _description_
+            architecture (List[int]): _description_
+            weights (List[npt.NDArray]): _description_
+            bias (List[npt.NDArray]): _description_
             param_bounds (tuple, optional): _description_. Defaults to (-1, 1).
         """
+
         self.model = pyo.ConcreteModel()
 
         self.model.nlayers = layer_to_repair
 
-        self.uin, self.uout = architecture[layer_to_repair - 1], architecture[-1]
+        self.uin, self.uout = (
+            architecture[layer_to_repair - 1],
+            architecture[-1],
+        )
         uhidden = architecture[layer_to_repair:-1]
 
         self.layers = []
@@ -55,12 +68,12 @@ class MIPNNModel:
 
     def __call__(
         self,
-        x,
-        shape,
-        output_constraint_list,
-        relu=False,
-        max_weight_bound=10,
-        output_bounds=(-1e1, 1e1),
+        x: npt.NDArray,
+        shape: Tuple,
+        output_constraint_list: List[npt.NDArray],
+        relu: bool = False,
+        max_weight_bound: Union[int, float] = 10,
+        output_bounds: tuple = (-1e1, 1e1),
     ):
         """_summary_
 

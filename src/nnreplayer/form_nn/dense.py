@@ -6,16 +6,32 @@ import numpy.typing as npt
 from typing import Optional
 
 class Dense:
-    """_summary_"""
+    """Defines a dense feed forward layer.
+
+    Attributes:
+        self.weights
+        self.bias
+        self.relu
+    
+    Methods:
+        _relu()
+        set_variables()
+    """
 
     def __init__(self, n_in:int, n_out:int, relu:bool=False, seed:int = 12345) -> None:
-        """_summary_
+        """Intializes a Dense layer with random weights and relu activation if enabled
 
         Args:
-            nin (int): _description_
-            nout (int): _description_
-            relu (bool, optional): _description_. Defaults to False.
+            nin (int):  Number of input Nodes
+            nout (int): Number of output Nodes
+            relu (bool, optional): Relu Activation Applied to layer or not Defaults to False.
+            seed (int, optional): Seed to define Random weights. Defaults to 12345.
+
+        Raises:
+            ValueError: n_in should be > 0
+            ValueError: n_out should be > 0
         """
+
         if n_in <= 0:
             raise ValueError(f"n_in must be > 0. Received {n_in} instead")
         if n_out <= 0:
@@ -26,25 +42,25 @@ class Dense:
         self.relu = relu
 
     def _relu(self, x:npt.NDArray) -> npt.NDArray:
-        """_summary_
+        """Applies ReLU Activation Function
 
         Args:
-            x (npt.NDArray): _description_
+            x (npt.NDArray): Input Data
 
         Returns:
-            npt.NDArray: _description_
+            npt.NDArray: Output after applying ReLU Activation Function
         """
 
         return np.maximum(x, 0)
 
     def __call__(self, x:npt.NDArray) -> npt.NDArray:
-        """_summary_
+        """Forward Pass through the Dense Layer.
 
         Args:
-            x (npt.NDArray): _description_
+            x (npt.NDArray): Input Data
 
         Returns:
-            npt.NDArray: _description_
+            npt.NDArray: Performs Linear Transform And Applies Activation if enabled
         """
 
         x = x @ self.weights + self.bias
@@ -54,11 +70,11 @@ class Dense:
         return x
 
     def set_variables(self, weights:Optional[npt.NDArray]=None, bias:Optional[npt.NDArray]=None) -> None:
-        """_summary_
+        """Helper Function to manually set the Weights and Bias of the Dense Layer
 
         Args:
-            weights (_type_, optional): _description_. Defaults to None.
-            bias (_type_, optional): _description_. Defaults to None.
+            weights (Optional[npt.NDArray], optional): Weights of a layer. Defaults to None.
+            bias (Optional[npt.NDArray], optional): Bias of a Neural Network. Defaults to None.
         """
         if weights is not None:
             self.weights[:] = weights[:]

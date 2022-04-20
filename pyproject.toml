@@ -18,6 +18,7 @@ ipykernel = "^6.9.0"
 quadprog = "^0.1.11"
 coverage = "^6.3.2"
 torch = "^1.11.0"
+black = "^22.3.0"
 
 [tool.poetry.dev-dependencies]
 jupyter = "^1.0.0"
