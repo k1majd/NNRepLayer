@@ -1,0 +1,833 @@
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:16:49 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.07 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:19:48 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:22:03 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.04 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:24:05 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:24:48 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:40:59 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:41:47 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:42:01 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:44:10 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.04 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:45:46 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.04 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:47:21 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.04 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 21:55:05 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 22:00:55 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 22:01:48 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.04 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 22:02:22 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.05 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 22:02:48 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.06 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+
+
+Gurobi 9.5.1 (linux64) logging started Tue Apr 19 22:04:59 2022
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Pytorch/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1536 rows, 664 columns and 6849 nonzeros
+Model fingerprint: 0x9e06b56d
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-03, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [1e-02, 5e+00]
+Presolve removed 444 rows and 12 columns
+Presolve time: 0.01s
+Presolved: 1092 rows, 1072 columns, 6381 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 21
+ AA' NZ     : 6.360e+03
+ Factor NZ  : 1.741e+04 (roughly 1 MB of memory)
+ Factor Ops : 3.162e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189803e+08 -1.94462584e+08  2.41e+03 6.00e+02  9.88e+05     0s
+   1   6.90720424e+07 -7.13668330e+07  1.44e+03 3.58e+02  6.56e+05     0s
+   2   1.61668662e+04 -2.45493727e+06  2.25e+01 5.58e+00  1.32e+04     0s
+   3   1.07289904e+01 -2.13240194e+06  2.07e-02 5.13e-03  9.86e+02     0s
+   4   1.09480157e+01 -2.75163971e+03  3.37e-06 8.38e-07  1.26e+00     0s
+   5   7.87520558e+00 -2.43457117e+02  3.02e-07 7.50e-08  1.15e-01     0s
+   6   2.50805739e+00 -3.34292303e+01  3.34e-08 8.29e-09  1.64e-02     0s
+   7   4.44796080e-01 -3.42732178e+00  3.42e-14 8.44e-15  1.77e-03     0s
+   8   1.04642777e-01 -3.99802523e-01  4.44e-15 3.08e-15  2.31e-04     0s
+   9   7.63337280e-02 -7.26591540e-02  3.55e-15 1.75e-13  6.82e-05     0s
+  10   7.43291284e-02  3.24605662e-02  3.55e-15 1.39e-14  1.92e-05     0s
+  11   7.39262939e-02  7.09277546e-02  3.55e-15 8.37e-15  1.37e-06     0s
+  12   7.38928212e-02  7.38544543e-02  3.55e-15 2.04e-14  1.76e-08     0s
+  13   7.38923241e-02  7.38892982e-02  3.55e-15 3.75e-14  1.38e-09     0s
+  14   7.38922832e-02  7.38921757e-02  3.55e-15 1.24e-13  4.91e-11     0s
+
+Barrier solved model in 14 iterations and 0.06 seconds (0.02 work units)
+Optimal objective 7.38922832e-02
+

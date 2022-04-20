@@ -160,3 +160,653 @@ Iter       Primal          Dual         Primal    Dual     Compl     Time
 Barrier solved model in 19 iterations and 0.06 seconds (0.01 work units)
 Optimal objective 1.36100778e-01
 
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 04:37:14 AM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 02:37:17 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 02:38:32 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 02:39:31 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 08:39:53 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 08:40:45 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 09:07:56 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 09:52:27 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Fri 15 Apr 2022 11:52:47 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Sat 16 Apr 2022 11:22:42 AM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Sat 16 Apr 2022 12:38:57 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Sat 16 Apr 2022 12:40:33 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.01 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+
+
+Gurobi 9.5.1 (linux64) logging started Mon 18 Apr 2022 12:29:33 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/examples/tc1_affine_transform/tc1/repair_net/logs/opt_log_layer3.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 10 physical cores, 20 logical processors, using up to 20 threads
+Optimize a model with 1494 rows, 643 columns and 4878 nonzeros
+Model fingerprint: 0x1c725624
+Model has 631 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e-01, 4e+00]
+  Objective range  [5e-03, 4e-02]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [5e+00, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 420 rows and 0 columns
+Presolve time: 0.01s
+Presolved: 1074 rows, 1063 columns, 4458 nonzeros
+Presolved model has 631 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 12
+ AA' NZ     : 3.870e+03
+ Factor NZ  : 1.054e+04 (roughly 1 MB of memory)
+ Factor Ops : 1.151e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.92189533e+08 -1.94469536e+08  2.41e+03 6.04e+02  9.93e+05     0s
+   1   4.29222718e+07 -4.51330389e+07  1.14e+03 2.84e+02  5.19e+05     0s
+   2   8.19137447e+03 -2.30019924e+06  1.61e+01 4.02e+00  9.48e+03     0s
+   3   6.90153026e+00 -1.91385785e+06  1.21e-01 3.02e-02  9.47e+02     0s
+   4   8.19347454e+00 -1.89401144e+04  2.50e-04 6.24e-05  8.82e+00     0s
+   5   7.36430856e+00 -4.42938189e+02  5.93e-06 1.48e-06  2.09e-01     0s
+   6   3.36817258e+00 -3.89125378e+01  4.69e-07 1.17e-07  1.97e-02     0s
+   7   1.63023258e+00 -1.81057485e+01  1.80e-07 4.50e-08  9.18e-03     0s
+   8   4.49393744e-01 -2.29690896e+00  1.11e-08 2.77e-09  1.28e-03     0s
+   9   1.40272263e-01 -3.05147511e-01  3.57e-10 8.92e-11  2.07e-04     0s
+  10   1.34737691e-01 -2.08545682e-01  2.28e-10 5.70e-11  1.60e-04     0s
+  11   1.29911342e-01  3.93330993e-02  1.78e-15 4.62e-15  4.21e-05     0s
+  12   1.27852727e-01  1.25869141e-01  1.78e-15 2.45e-14  9.23e-07     0s
+  13   1.27825021e-01  1.27716995e-01  1.78e-15 7.89e-16  5.02e-08     0s
+  14   1.27824220e-01  1.27823837e-01  1.78e-15 9.22e-15  1.78e-10     0s
+  15   1.27824217e-01  1.27824199e-01  1.78e-15 2.31e-15  8.45e-12     0s
+
+Barrier solved model in 15 iterations and 0.03 seconds (0.01 work units)
+Optimal objective 1.27824217e-01
+

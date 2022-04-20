@@ -1,0 +1,1 @@
+0.022126223891973495,0.03467457368969917,1.0,0.9705882352941176,6.6135327828449935,1.219109873402462,0.23517118394374847,timelimit,3600,mipgap,0.001,mipfocus,2,improvestarttime,3300,logfile,/home/local/ASUAD/tkhandai/nn_repair/NNRepLayer_v2/demos/Affine Transform Demo Tensorflow/repair_net/logs/opt_log_layer3.log,max_weight_bound,5,cost weights,[1. 1.],2022-04-19 21:30:45.884121

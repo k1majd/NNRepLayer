@@ -1,46 +1,7 @@
-# def tf_get_weights(mlp):
-#     """_summary_
-
-#     Args:
-#         mlp (_type_): _description_
-
-#     Returns:
-#         _type_: _description_
-#     """
-#     weights = []
-#     bias = []
-#     exec_string = ""
-#     for iterate in range(len(mlp.layers)):
-#         w_var = "w" + str(iterate) + "_orig"
-#         b_var = "b" + str(iterate) + "_orig"
-#         vars()[w_var] = mlp.layers[iterate].kernel.numpy()
-#         vars()[b_var] = mlp.layers[iterate].bias.numpy()
-#         weights.append(vars()[w_var])
-#         bias.append(vars()[b_var])
-#         if iterate == len(mlp.layers) - 1:
-#             exec_string = (
-#                 exec_string
-#                 + "w"
-#                 + str(iterate)
-#                 + "_orig, "
-#                 + "b"
-#                 + str(iterate)
-#                 + "_orig"
-#             )
-#         else:
-#             exec_string = (
-#                 exec_string
-#                 + "w"
-#                 + str(iterate)
-#                 + "_orig, "
-#                 + "b"
-#                 + str(iterate)
-#                 + "_orig, "
-#             )
-
-#     print(list(eval(exec_string)))
-#     return list(eval(exec_string))
-
+import numpy as np
+from dataclasses import dataclass
+from typing import Any, List, Union
+import numpy.typing as npt
 
 def tf2_get_weights(mlp):
     """_summary_
@@ -53,96 +14,77 @@ def tf2_get_weights(mlp):
     """
     return mlp.get_weights()
 
+def pt_get_weights(mlp):
+    """_summary_
+
+    Args:
+        mlp (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    params = []
+    for param_tensor in mlp.state_dict():
+        param = mlp.state_dict()[param_tensor].numpy()
+        if "weight" in param_tensor.split("."):
+            params.append(param.T)
+        else:
+            params.append(param)
+    
+    return params
 
 def tf2_get_architecture(model):
-    """extracts the arhitecture of tf model (tf2)
+    """Extracts the arhitecture of tf model (tf2)
 
     Args:
         model (_type_): _description_
     """
-    architecture = []
-    for lnum, lay in enumerate(model.layers):
-        if len(lay.weights)!=0:
-            architecture.append(lay.input.shape[1])
-            if lnum == len(model.layers) - 1:
-                architecture.append(lay.output.shape[1])
-
+    if model is None:
+        raise TypeError("Model cannot be None")
+    else:
+        architecture = []
+        for lnum, lay in enumerate(model.layers):
+            if len(lay.weights)!=0:
+                architecture.append(lay.input.shape[1])
+                if lnum == len(model.layers) - 1:
+                    architecture.append(lay.output.shape[1])
     return architecture
 
+def pt_get_architecture(model):
+    """Extracts the arhitecture of tf model (tf2)
 
-# def generate_constraints(A,b):
+    Args:
+        model (_type_): _description_
+    """
+    if model is None:
+        raise TypeError("Model cannot be None")
+    else:
+        architecture = []
+        weight_count = 0
+        for lnum, lay in enumerate(model.state_dict()):
+            if("weight" in set(lay.split("."))):
+              architecture.append(model.state_dict()[lay].size()[1])
+              fin_layer = lay
 
-#     # assert len(b.shape) == 2, 'Shape of b must be N x 1 dimension'
-#     # A_m, A_n = A.shape
-#     # b_n, b_p = b.shape
-#     # assert A_m == b_n, "First dimension of A (= {}) should be equal to be first dimesnion of b(= {}).".format(A_m, b_n)
-#     # assert b_p == 1, "Second dimension of b (={}) should be 1".format(b_p)
+        architecture.append(model.state_dict()[fin_layer].size()[0])
+    return architecture
 
-#     # def_string = ""
-#     # add_attr_list = []
-#     # for i in range(A_m):
-#     #     single_def_string = ""
-#     #     temp_string = []
-
-#     #     for j in range(A_n):
-#     #         t_st = "{}*getattr(model, x_l)[i, {}]".format(A[i,j],j)
-#     #         # print(t_st)
-#     #         temp_string.append(t_st)
-#     #     add_attr_string = "setattr(self.model, 'keep_inside_constraint{}'+str(l),pyo.Constraint(range(m), rule=constraint_inside{}))".format(i,i)
-#     #     add_attr_list.append(add_attr_string)
-
-#     #     return_string = "(" + " + ".join(temp_string) + "  - {} <= 0)".format(b[i,0])
-
-#     #     single_def_string = "def constraint_inside{}(model, i): return ".format(i) + return_string
-#     #     def_string = def_string + single_def_string + "\n\n"
-
-#     # attr_string = "\n".join(add_attr_list)
-
-#     # def_string += attr_string
-#     # print(def_string)
-
-#     assert len(b.shape) == 2, 'Shape of b must be N x 1 dimension'
-#     A_m, A_n = A.shape
-#     b_n, b_p = b.shape
-#     assert A_m == b_n, "First dimension of A (= {}) should be equal to be first dimesnion of b(= {}).".format(A_m, b_n)
-#     assert b_p == 1, "Second dimension of b (={}) should be 1".format(b_p)
-
-#     def_string = ""
-#     add_attr_list = []
-#     for i in range(A_m):
-#         single_def_string = ""
-#         temp_string = []
-
-#         for j in range(A_n):
-#             t_st = "A[{},{}]*getattr(model, x_l)[i, {}]".format(i,j,j,i)
-#             temp_string.append(t_st)
-#         add_attr_string = "setattr(self.model, 'keep_inside_constraint{}'+str(l),pyo.Constraint(range(m), rule=constraint_inside{}))".format(i,i)
-#         add_attr_list.append(add_attr_string)
-#         return_string = "(" + " + ".join(temp_string) + "  - b[{}] <= 0)".format(i)
-#         single_def_string = "def constraint_inside{}(model, i):\n\treturn ".format(i) + return_string
-#         def_string = def_string + single_def_string + "\n\n"
-
-#     attr_string = "\n".join(add_attr_list)
-
-#     def_string += attr_string
-
-#     return def_string
-
-from dataclasses import dataclass
-from typing import Any
-import numpy as np
-
-
-def generate_inside_constraints(name, A, b):
-    assert len(b.shape) == 2, "Shape of b must be N x 1 dimension"
+def generate_inside_constraints(name:str, A:npt.NDArray, b:npt.NDArray):
+    if A is None:
+        raise ValueError("A cannot be empty")
+    if b is None:
+        raise ValueError("b cannot be empty")
+    if len(b.shape) != 2:
+        raise ValueError("Shape of b must be N x 1 dimension")
     A_m, A_n = A.shape
     b_n, b_p = b.shape
-    assert (
-        A_m == b_n
-    ), "First dimension of A (= {}) should be equal to be first dimesnion of b(= {}).".format(
-        A_m, b_n
-    )
-    assert b_p == 1, "Second dimension of b (={}) should be 1".format(b_p)
+    
+    if A_m != b_n:
+        raise ValueError("First dimension of A (= {}) should be equal to be first dimesnion of b(= {}).".format(
+                        A_m, b_n
+        ))
+    if b_p != 1:
+        raise ValueError("Second dimension of b (={}) should be 1".format(b_p))
 
     def_string = ""
     add_attr_list = []
@@ -170,7 +112,14 @@ def generate_inside_constraints(name, A, b):
     return def_string
 
 
-def generate_outside_constraints(name, A, B):
+def generate_outside_constraints(name:str, A, B):
+    if not A:
+        raise ValueError(f"A cannot be empty")
+    if not B:
+        raise ValueError(f"B cannot be empty")
+    if len(A) != len(B):
+        raise ValueError(f"Length Mismatch betweeb A and B. Length of A is {len(A)} and Length of B is {len(B)}.")
+    
     def_string = ""
     add_attr_list = []
     list_alleq = []
@@ -230,8 +179,8 @@ def generate_outside_constraints(name, A, B):
 @dataclass
 class constraints_class:
     constraint_type: str
-    A: Any
-    B: Any
+    A: Union[List[npt.NDArray], npt.NDArray]
+    B: Union[List[npt.NDArray], npt.NDArray]
 
 
 def generate_output_constraints(constraint):
@@ -261,3 +210,29 @@ def generate_output_constraints(constraint):
 
     fin = out_string + "\n\n" + in_string
     return fin
+
+
+
+def give_mse_error(data1: npt.NDArray, data2:npt.NDArray):
+    """return the mean square error of data1-data2 samples
+
+    Args:
+        data1 (ndarray): predicted targets
+        data2 (ndarray): original targets
+
+    Returns:
+        float: mse error
+    """
+    if data1 is None or data2 is None:
+        raise TypeError("Data cannot be None")
+    row_1, col_1 = np.array(data1).shape
+    row_2, col_2 = np.array(data2).shape
+    if row_1 != row_2 or col_1 != col_2:
+        raise ValueError(f"Possible row mismatch. Data 1 has shape {np.array(data1).shape} and Data 2 has shape {np.array(data2).shape}")
+        
+    _squared_sum = 0
+    for i in range(row_1):
+        for j in range(col_1):
+            _squared_sum += (data1[i, j] - data2[i, j]) ** 2
+
+    return _squared_sum / row_1

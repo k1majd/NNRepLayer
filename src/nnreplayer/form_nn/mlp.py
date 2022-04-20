@@ -1,10 +1,11 @@
+
 from .dense import Dense
 
 
 class MLP:
     """_summary_"""
 
-    def __init__(self, nin, uout, uhidden, relu=False):
+    def __init__(self, nin: int, uout: int, uhidden:int, relu=False):
         """_summary_
 
         Args:
@@ -63,9 +64,9 @@ class MLP:
         num_lays = len(self.layers)
         for j in range(num_lays):
             self.layers[j].weights = mlp_weights[iterate]
-            iterate = iterate + 1
+            iterate += 1
             self.layers[j].bias = mlp_weights[iterate]
-            iterate = iterate + 1
+            iterate += 1
 
     def set_mlp_params_layer(self, mlp_weights, layer):
         """_summary_
@@ -74,6 +75,9 @@ class MLP:
             mlp_weights (list of ndarray): a list of [weight, bias]
             layer (int): target layer i for i in 1,2,3,...
         """
+        if not (layer <= len(self.layers) and layer >= 1):
+            raise ValueError(f"Layer to repair out of bounds. Expected [{1}, {len(self.layers)}]. Received {layer} instead.")
+
         self.layers[layer - 1].weights = mlp_weights[0]
         self.layers[layer - 1].bias = mlp_weights[1]
 
@@ -126,6 +130,8 @@ class MLP:
         Returns:
             list of ndarray: a list of [weight(layer), bias(layer)]
         """
+        if not (layer <= len(self.layers) and layer >= 1):
+            raise ValueError(f"Layer to repair out of bounds. Expected [{1}, {len(self.layers)}]. Received {layer} instead.")
 
         return [self.layers[layer - 1].weights, self.layers[layer - 1].bias]
 
@@ -138,6 +144,8 @@ class MLP:
         Returns:
             ndarray: weight(layer)
         """
+        if not (layer <= len(self.layers) and layer >= 1):
+            raise ValueError(f"Layer to repair out of bounds. Expected [{1}, {len(self.layers)}]. Received {layer} instead.")
 
         return self.layers[layer - 1].weights
 
@@ -150,5 +158,7 @@ class MLP:
         Returns:
             ndarray: bias(layer)
         """
+        if not (layer <= len(self.layers) and layer >= 1):
+            raise ValueError(f"Layer to repair out of bounds. Expected [{1}, {len(self.layers)}]. Received {layer} instead.")
 
         return self.layers[layer - 1].bias

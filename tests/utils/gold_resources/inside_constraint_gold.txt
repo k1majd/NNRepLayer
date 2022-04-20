@@ -1,0 +1,16 @@
+def inside0(model, i):
+	return ((-1.0)*getattr(model, x_l)[i, 0] + (0.0)*getattr(model, x_l)[i, 1]  - (-0.45) <= 0)
+
+def inside1(model, i):
+	return ((-0.0)*getattr(model, x_l)[i, 0] + (1.0)*getattr(model, x_l)[i, 1]  - (0.25) <= 0)
+
+def inside2(model, i):
+	return ((-0.0)*getattr(model, x_l)[i, 0] + (-1.0)*getattr(model, x_l)[i, 1]  - (-0.1) <= 0)
+
+def inside3(model, i):
+	return ((1.0)*getattr(model, x_l)[i, 0] + (0.0)*getattr(model, x_l)[i, 1]  - (0.55) <= 0)
+
+setattr(self.model, 'inside0'+str(l),pyo.Constraint(range(m), rule=inside0))
+setattr(self.model, 'inside1'+str(l),pyo.Constraint(range(m), rule=inside1))
+setattr(self.model, 'inside2'+str(l),pyo.Constraint(range(m), rule=inside2))
+setattr(self.model, 'inside3'+str(l),pyo.Constraint(range(m), rule=inside3))
