@@ -1,20 +1,19 @@
-from typing import Any, Union, Type, Optional, Type, List, Callable
-
-from ..utils.options import Options
-from ..utils.utils import constraints_class
+from typing import Any, Union, Optional, Type, List, Callable
 import os
+import copy
+import torch
 import numpy as np
+import numpy.typing as npt
 import pyomo.environ as pyo
 from tensorflow import keras
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+
 from ..utils.utils import tf2_get_weights, tf2_get_architecture
 from ..utils.utils import pt_get_weights, pt_get_architecture
 from ..form_nn.mlp import MLP
 from ..mip.mip_nn_model import MIPNNModel
 from ..utils.utils import give_mse_error
-import numpy.typing as npt
+from ..utils.options import Options
+from ..utils.utils import constraints_class
 
 
 class NNRepair:
@@ -244,7 +243,6 @@ class NNRepair:
                 weights_bias_iterate = weights_bias_iterate + 2
 
         elif self.model_type == "pytorch":
-            import copy
 
             new_model = copy.deepcopy(self.model_orig)
             weights_bias_iterate = 0

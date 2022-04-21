@@ -1,6 +1,6 @@
-import numpy as np
 from dataclasses import dataclass
-from typing import Any, List, Union
+from typing import List, Union
+import numpy as np
 import numpy.typing as npt
 
 def tf2_get_weights(mlp):
@@ -60,11 +60,10 @@ def pt_get_architecture(model):
         raise TypeError("Model cannot be None")
     else:
         architecture = []
-        weight_count = 0
-        for lnum, lay in enumerate(model.state_dict()):
-            if("weight" in set(lay.split("."))):
-              architecture.append(model.state_dict()[lay].size()[1])
-              fin_layer = lay
+        for lay in model.state_dict():
+            if "weight" in set(lay.split(".")):
+                architecture.append(model.state_dict()[lay].size()[1])
+                fin_layer = lay
 
         architecture.append(model.state_dict()[fin_layer].size()[0])
     return architecture
@@ -78,7 +77,7 @@ def generate_inside_constraints(name:str, A:npt.NDArray, b:npt.NDArray):
         raise ValueError("Shape of b must be N x 1 dimension")
     A_m, A_n = A.shape
     b_n, b_p = b.shape
-    
+
     if A_m != b_n:
         raise ValueError("First dimension of A (= {}) should be equal to be first dimesnion of b(= {}).".format(
                         A_m, b_n
@@ -114,9 +113,9 @@ def generate_inside_constraints(name:str, A:npt.NDArray, b:npt.NDArray):
 
 def generate_outside_constraints(name:str, A, B):
     if not A:
-        raise ValueError(f"A cannot be empty")
+        raise ValueError("A cannot be empty")
     if not B:
-        raise ValueError(f"B cannot be empty")
+        raise ValueError("B cannot be empty")
     if len(A) != len(B):
         raise ValueError(f"Length Mismatch betweeb A and B. Length of A is {len(A)} and Length of B is {len(B)}.")
     

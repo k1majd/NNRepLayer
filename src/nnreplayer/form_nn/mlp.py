@@ -1,7 +1,7 @@
-from .dense import Dense
-import numpy as np
-import numpy.typing as npt
 from typing import List
+import numpy.typing as npt
+
+from .dense import Dense
 
 
 class MLP:
@@ -24,36 +24,38 @@ class MLP:
         get_mlp_bias_layer()
     """
 
-    def __init__(self, nin: int, uout: int, uhidden: List, relu=False) -> None:
+    def __init__(
+        self, n_in: int, n_out: int, n_hidden: List, relu=False
+    ) -> None:
         """Initializes the structure of the Neural Network
 
         Args:
-            nin (int): Input Layer Size
-            uout (int): Output Layer Size
-            uhidden (List): Hidden Layer Size
+            n_in (int): Input Layer Size
+            n_out (int): Output Layer Size
+            n_hidden (List): Hidden Layer Size
             relu (bool, optional): If true, Applies ReLU Activation Function. Defaults to False.
         """
-        self.num_layer = len(uhidden) + 1
-        prev = nin
+        self.num_layer = len(n_hidden) + 1
+        prev = n_in
         self.layers = []
-        for u in uhidden:
-            self.layers.append(Dense(prev, u, relu=True))
-            prev = u
-        self.layers.append(Dense(prev, uout, relu=relu))
+        for hidden in n_hidden:
+            self.layers.append(Dense(prev, hidden, relu=True))
+            prev = hidden
+        self.layers.append(Dense(prev, n_out, relu=relu))
 
-    def __call__(self, x: npt.NDArray) -> npt.NDArray:
+    def __call__(self, input_data: npt.NDArray) -> npt.NDArray:
         """Perform Feed Forward pass using Input
 
         Args:
-            x (npt.NDArray): Input Data
+            input_data (npt.NDArray): Input Data
 
         Returns:
             npt.NDArray: Output Data
         """
-        layer_values = [x]
+        layer_values = [input_data]
         for layer in self.layers:
-            x = layer(x)
-            layer_values.append(x)
+            input_data = layer(input_data)
+            layer_values.append(input_data)
         return layer_values
 
     def set_mlp_params(self, mlp_weights: List[npt.NDArray]) -> None:
