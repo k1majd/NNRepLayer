@@ -1,8 +1,8 @@
 import pyomo.environ as pyo
 import pyomo.gdp as pyg
 from pyomo.gdp import *
-from ..utils.utils import generate_output_constraints
-from ..utils.utils import constraints_class
+from nnreplayer.utils import generate_output_constraints
+from nnreplayer.utils import ConstraintsClass
 import numpy as np
 import numpy.typing as npt
 from typing import List, Union
@@ -74,7 +74,7 @@ class MIPLayer:
         self,
         x: npt.NDArray,
         shape,
-        output_constraint_list: List[constraints_class],
+        output_constraint_list: List[ConstraintsClass],
         relu: bool = False,
         max_weight_bound: Union[int, float] = 10,
         output_bounds: tuple = (-1e1, 1e1),
@@ -256,7 +256,7 @@ class MIPLayer:
         x: npt.NDArray,
         shape: tuple,
         l,
-        output_constraint_list: List[constraints_class],
+        output_constraint_list: List[ConstraintsClass],
         max_weight_bound: Union[int, float] = 10,
         output_bounds: tuple = (-1e1, 1e1),
     ):
@@ -266,7 +266,7 @@ class MIPLayer:
             x (npt.NDArray): _description_
             shape (tuple): _description_
             l (_type_): _description_
-            output_constraint_list (List[constraints_class]): _description_
+            output_constraint_list (List[ConstraintsClass]): _description_
             max_weight_bound (Union[int, float], optional): _description_. Defaults to 10.
             output_bounds (tuple, optional): _description_. Defaults to (-1e1, 1e1).
 

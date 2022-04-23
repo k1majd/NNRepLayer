@@ -5,15 +5,6 @@ import numpy.typing as npt
 
 class Dense:
     """Defines a dense feed forward layer.
-
-    Attributes:
-        self.weights
-        self.bias
-        self.relu
-
-    Methods:
-        _relu()
-        set_variables()
     """
 
     def __init__(
@@ -24,8 +15,8 @@ class Dense:
         Args:
             nin:  Number of input Nodes
             nout: Number of output Nodes
-            relu (bool, optional): Relu Activation Applied to layer or not Defaults to False.
-            seed (int, optional): Seed to define Random weights. Defaults to 12345.
+            relu: Relu Activation Applied to layer or not Defaults to False.
+            seed: Seed to define Random weights. Defaults to 12345.
 
         Raises:
             ValueError: n_in should be > 0
@@ -45,10 +36,10 @@ class Dense:
         """Applies ReLU Activation Function
 
         Args:
-            x (npt.NDArray): Input Data
+            x: Input Data
 
         Returns:
-            npt.NDArray: Output after applying ReLU Activation Function
+            Output after applying ReLU Activation Function
         """
 
         return np.maximum(input_data, 0)
@@ -57,10 +48,10 @@ class Dense:
         """Forward Pass through the Dense Layer.
 
         Args:
-            x (npt.NDArray): Input Data
+            x: Input Data
 
         Returns:
-            npt.NDArray: Performs Linear Transform And Applies Activation if enabled
+            Performs Linear Transform And Applies Activation if enabled
         """
 
         input_data = input_data @ self.weights + self.bias
@@ -77,8 +68,8 @@ class Dense:
         """Helper Function to manually set the Weights and Bias of the Dense Layer
 
         Args:
-            weights (Optional[npt.NDArray], optional): Weights of a layer. Defaults to None.
-            bias (Optional[npt.NDArray], optional): Bias of a Neural Network. Defaults to None.
+            weights: Weights of a layer. Defaults to None.
+            bias: Bias of a Neural Network. Defaults to None.
         """
         if weights is not None:
             self.weights[:] = weights[:]

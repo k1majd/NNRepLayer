@@ -6,47 +6,34 @@ import numpy as np
 import numpy.typing as npt
 import pyomo.environ as pyo
 from tensorflow import keras
-
-from ..utils.utils import tf2_get_weights, tf2_get_architecture
-from ..utils.utils import pt_get_weights, pt_get_architecture
-from ..form_nn.mlp import MLP
-from ..mip.mip_nn_model import MIPNNModel
-from ..utils.utils import give_mse_error
-from ..utils.options import Options
-from ..utils.utils import constraints_class
+from nnreplayer.utils import tf2_get_weights, tf2_get_architecture
+from nnreplayer.utils import pt_get_weights, pt_get_architecture
+from nnreplayer.form_nn import MLP
+from nnreplayer.mip import MIPNNModel
+from nnreplayer.utils import give_mse_error
+from nnreplayer.utils import Options
+from nnreplayer.utils import ConstraintsClass
 
 
 class NNRepair:
-    # pylint: disable=invalid-name
-    """NN
-
-    Attributes:
-        model_orig
-        architecture
-        model_mlp
-        cost_function_output
-        data_precision
-        param_precision
-        opt_model
-        layer_to_repair
-        output_name
-        num_samples
-        output_constraint_list
-
-    Methods:
-
-
+    """NN Repair class helps in initializing, compiling ang running the repair process.
     """
 
     def __init__(self, model_orig, model_type="tensorflow") -> None:
-        """Initializes the NNRepair Class
+        """Initialize the repair process.
 
         Args:
-            model_orig (_type_): Original Model intended to be repaired.
+            model_orig: Original Model intended for repair.
+            model_type: Type of IInput Model (Pytorch or Tensorflow). Defaults to "tensorflow".
+
+        Raises:
+            TypeError: _description_
         """
+
         assert (
             model_orig is not None
         ), f"Expected Model. Received {type(model_orig)} instead."
+
         self.model_orig = model_orig
         self.model_type = model_type
         if model_type == "tensorflow":
@@ -84,28 +71,26 @@ class NNRepair:
         x_repair: npt.NDArray,
         y_repair: npt.NDArray,
         layer_2_repair: int,
-        output_constraint_list: Optional[List[Type[constraints_class]]] = None,
+        output_constraint_list: Optional[List[Type[ConstraintsClass]]] = None,
         cost: Callable = give_mse_error,
         cost_weights: npt.NDArray = np.array([1.0, 1.0]),
         max_weight_bound: Union[int, float] = 1.0,
         data_precision: int = 4,
         param_precision: int = 4,
-    ) -> None:
+        ) -> None:
+
         """Compile the optimization model and setup the repair optimizer
 
         Args:
-            x_repair (npt.NDArray): Input repair samples
-            y_repair (npt.NDArray): Output repair samples
-            layer_2_repair (int): Target repair layer
-            output_constraint_list (Optional[list[Type[constraints_class]]], optional): List of output constraints Defaults to None.
-            cost (function, optional): Minimization loss function. Defaults to give_mse_error.
-
-            cost_weights (npt.NDArray, optional): cost_weights[0]: weight of  min loss,
-                                                                        cost_weights[1]: weight of weight bounding slack variable.
-                                                                                Defaults to np.array([1.0, 1.0]).
-            max_weight_bound (Union, optional): Upper bound of weights errorDefaults to 1.0.
-            data_precision (int, optional): precision of rounding to decimal place for dataDefaults to 4.
-            param_precision (int, optional): precision of rounding to decimal place for parameters. Defaults to 4.
+            x_repair : Input repair samples
+            y_repair : Output repair samples
+            layer_2_repair : Target repair layer
+            output_constraint_list: List of output constraints Defaults to None.
+            cost: Minimization loss function. Defaults to give_mse_error.
+            cost_weights: cost_weights[0] corresponds to weight of min loss, cost_weights[1] corresponds to weight of weight bounding slack variable. Defaults to np.array([1.0, 1.0]).
+            max_weight_bound: Upper bound of weights errorDefaults to 1.0.
+            data_precision: precision of rounding to decimal place for dataDefaults to 4.
+            param_precision: precision of rounding to decimal place for parameters. Defaults to 4.
         """
 
         # set repair parameters:
@@ -141,13 +126,14 @@ class NNRepair:
         )
 
     def repair(self, options: Type[Options]) -> Any:
+
         """Perform the layer-wise repair and update the weights of model_mlp
 
         Args:
-            options (Type[Options]): optimization options
+            options: optimization options
 
         Returns:
-            Any: _description_
+            Repaired Model.
         """
 
         self.__solve_optimization_problem(
@@ -160,6 +146,7 @@ class NNRepair:
         return repaired_model
 
     def reset(self):
+
         """Reset the model_mlp model to the original model"""
 
         self.architecture = tf2_get_architecture(self.model_orig)
@@ -177,14 +164,16 @@ class NNRepair:
         self.output_constraint_list = []
 
     def summary(self, direc: Optional[str] = None):
+
         """Print and/or store the pyomo optimization model
 
         Args:
-            direc (str, optional): directory to print (stdout) the modelled opt. Defaults to None.
+            direc: directory to print (stdout) the modelled opt. Defaults to None.
 
         Raises:
             ValueError: Raises an error if opt is not complied
         """
+
         if self.opt_model is None:
             raise ValueError(
                 "Optimization model does not exist. First compile the model!"
@@ -203,14 +192,15 @@ class NNRepair:
 
     def extract_network_layers_values(
         self, x_dataset: npt.NDArray
-    ) -> List[npt.NDArray]:
+        ) -> List[npt.NDArray]:
+
         """Extract the values of each layer for all input samples
 
         Args:
-            x_dataset (NDArray): network input samples
+            x_dataset: network input samples
 
         Returns:
-            list[NDArray]: values of layers give input samples
+            values of layers give input samples
         """
 
         assert (
@@ -225,12 +215,10 @@ class NNRepair:
         # pylint: disable=pointless-string-statement
         """Returns the repaired model in the given format"""
 
-        """
-        TODO
-        add support for the other types of models: hdf5, ...
-        """
+        
+        
         model_new_params = self.model_mlp.get_mlp_params()
-        print("Hello")
+        # print("Hello")
         if self.model_type == "tensorflow":
             new_model = keras.models.clone_model(self.model_orig)
             weights_bias_iterate = 0
@@ -255,12 +243,12 @@ class NNRepair:
                     new_param = new_param.T
                 if old_param.shape != new_param.shape:
                     raise ValueError("Check model params.")
-                print("*****************************")
-                print(name)
-                print(new_param)
+                # print("*****************************")
+                # print(name)
+                # print(new_param)
                 # new_model.state_dict()[lay] = torch.Tensor(new_param)
                 param.data = torch.Tensor(new_param)
-                print(new_model.state_dict()[name])
+                # print(new_model.state_dict()[name])
                 weights_bias_iterate += 1
             # for x in new_model.state_dict():
             #     print(new_model.state_dict()[x])
@@ -272,6 +260,7 @@ class NNRepair:
         return new_model
 
     def __set_new_params(self):
+        
         """Update the weight and bias terms of model_mlp for the target layer"""
 
         new_weight = np.zeros(
@@ -304,15 +293,19 @@ class NNRepair:
         layer_values: List[npt.NDArray],
         max_weight_bound: Union[int, float],
         cost_weights: npt.NDArray = np.array([1.0, 1.0]),
-    ) -> None:
-        """_summary_
+        ) -> None:
+        """Setting Up optimizer
 
         Args:
-            y_repair (npt.NDArray): _description_
-            layer_values (list[npt.NDArray]): _description_
-            max_weight_bound (Union[int, float]): _description_
-            cost_weights (npt.NDArray, optional): _description_. Defaults to np.array([1.0, 1.0]).
+            y_repair: Output Data
+            layer_values: Values of ReLU layers after forward pass.
+            max_weight_bound: Max Weight Bound
+            cost_weights: Weights of Cost. Defaults to np.array([1.0, 1.0]).
+
+        Raises:
+            TypeError: Mismatch between Input and Output Set.
         """
+        
 
         if y_repair.shape[-1] != self.architecture[-1]:
             raise TypeError(
@@ -382,17 +375,19 @@ class NNRepair:
         gdp_formulation: str,
         solver_factory: str,
         optimizer_options: dict,
-    ) -> None:
-        """_summary_
+        ) -> None:
+
+        """Solve the Optimization Problem
 
         Args:
-            gdp_formulation (str): _description_
-            solver_factory (str): _description_
-            optimizer_options (dict): _description_
+            gdp_formulation: Formulation of GDP
+            solver_factory: Solver Factory
+            optimizer_options: Optimizer Options Dictionary
 
         Raises:
-            ValueError: _description_
+            ValueError: "Optimization model does not exist. First compile the model!"
         """
+
         # model_lay.obj = pyo.Objective(expr=cost_expr)
         if self.opt_model is None:
             raise ValueError(

@@ -164,10 +164,10 @@ class TestUtils(unittest.TestCase):
         A2_out = [A_1, A_2, A_3]
         B2_out = [b_1,b_2,b_3]
 
-        inside_1 = utils.constraints_class("inside", A1_in, b1_in)
-        outside_1 = utils.constraints_class("outside", A1_out, B1_out)
-        inside_2 = utils.constraints_class("inside", A2_in, b2_in)
-        outside_2 = utils.constraints_class("outside", A2_out, B2_out)
+        inside_1 = utils.ConstraintsClass("inside", A1_in, b1_in)
+        outside_1 = utils.ConstraintsClass("outside", A1_out, B1_out)
+        inside_2 = utils.ConstraintsClass("inside", A2_in, b2_in)
+        outside_2 = utils.ConstraintsClass("outside", A2_out, B2_out)
         constraint = [inside_1, outside_1, inside_2, outside_2]
 
         fin_string = utils.generate_output_constraints(constraint)

@@ -92,7 +92,8 @@ def generate_inside_constraints(name:str, A:npt.NDArray, b:npt.NDArray):
         temp_string = []
 
         for j in range(A_n):
-            t_st = "({})*getattr(model, x_l)[i, {}]".format(A[i, j], j, i)
+            t_st = "({})*getattr(model, x_l)[i, {}]".format(A[i, j], j)
+            
             temp_string.append(t_st)
         add_attr_string = "setattr(self.model, '{}{}'+str(l),pyo.Constraint(range(m), rule={}{}))".format(
             name, i, name, i
@@ -176,7 +177,7 @@ def generate_outside_constraints(name:str, A, B):
 
 
 @dataclass
-class constraints_class:
+class ConstraintsClass:
     constraint_type: str
     A: Union[List[npt.NDArray], npt.NDArray]
     B: Union[List[npt.NDArray], npt.NDArray]

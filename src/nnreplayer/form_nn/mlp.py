@@ -6,22 +6,6 @@ from .dense import Dense
 
 class MLP:
     """Defines Structure of Input Network intended to Repair.
-
-    Attributes:
-        self.num_layer
-        self.layers[]
-
-    Methods:
-        __init__()
-        __call__()
-        set_mlp_params()
-        set_mlp_params_layer()
-        get_mlp_params()
-        get_mlp_weights()
-        get_mlp_biases()
-        get_mlp_params_layer()
-        get_mlp_weight_layer()
-        get_mlp_bias_layer()
     """
 
     def __init__(
@@ -30,10 +14,10 @@ class MLP:
         """Initializes the structure of the Neural Network
 
         Args:
-            n_in (int): Input Layer Size
-            n_out (int): Output Layer Size
-            n_hidden (List): Hidden Layer Size
-            relu (bool, optional): If true, Applies ReLU Activation Function. Defaults to False.
+            n_in: Input Layer Size
+            n_out: Output Layer Size
+            n_hidden: Hidden Layer Size
+            relu: If true, Applies ReLU Activation Function. Defaults to False.
         """
         self.num_layer = len(n_hidden) + 1
         prev = n_in
@@ -47,10 +31,10 @@ class MLP:
         """Perform Feed Forward pass using Input
 
         Args:
-            input_data (npt.NDArray): Input Data
+            input_data: Input Data
 
         Returns:
-            npt.NDArray: Output Data
+            Output Data
         """
         layer_values = [input_data]
         for layer in self.layers:
@@ -62,7 +46,7 @@ class MLP:
         """Manually set Weights And Bias Parameters for entire network
 
         Args:
-            mlp_weights (List[npt.NDArray]): List of [weight(layer), bias(layer)] for layer = 1,2,3,...
+            mlp_weights: List of [weight(layer), bias(layer)] for layer = 1,2,3,...
         """
 
         iterate = 0
@@ -77,8 +61,8 @@ class MLP:
         """Manually set Weights And Bias Parameters of a Particular Layer
 
         Args:
-            mlp_weights (List[npt.NDArray]): List of [weight(layer), bias(layer)] for layer = 1,2,3,...
-            layer (int): Target Layer for layer = 1,2,3,...
+            mlp_weights: List of [weight(layer), bias(layer)] for layer = 1,2,3,...
+            layer: Target Layer for layer = 1,2,3,...
 
         Raises:
             ValueError: If Target Layer outside the architecture of the neural network.
@@ -105,7 +89,7 @@ class MLP:
         """Returns all Weights Parameters of NN
 
         Returns:
-            List[npt.NDArray]: List of [weight(layer)] for layer = 1,2,3,...
+            List of [weight(layer)] for layer = 1,2,3,...
         """
 
         weight_list = []
@@ -118,7 +102,7 @@ class MLP:
         """Returns all Bias Parameters of NN
 
         Returns:
-            List[npt.NDArray]: List of [bias(layer)] for layer = 1,2,3,...
+            List of [bias(layer)] for layer = 1,2,3,...
         """
 
         bias_list = []
@@ -131,13 +115,13 @@ class MLP:
         """Returns Weights and Bias Parameters for a Particular Layer
 
         Args:
-            layer (int): Target Layer
+            Target Layer
 
         Raises:
             ValueError: If Target Layer outside the architecture of the neural network.
 
         Returns:
-            npt.NDArray: List of [weights(layer), bias(layer)] for layer = 1,2,3,...
+            List of [weights(layer), bias(layer)] for layer = 1,2,3,...
         """
         if not (layer <= len(self.layers) and layer >= 1):
             raise ValueError(
@@ -150,13 +134,13 @@ class MLP:
         """Returns Weights Parameters of a Particular Layer
 
         Args:
-            layer (int): Target Layer
+            layer: Target Layer
 
         Raises:
             ValueError: If Target Layer outside the architecture of the neural network.
 
         Returns:
-            npt.NDArray: List of [weights(layer)] for layer = 1,2,3,...
+            List of [weights(layer)] for layer = 1,2,3,...
         """
         if not (layer <= len(self.layers) and layer >= 1):
             raise ValueError(
@@ -169,13 +153,13 @@ class MLP:
         """Returns Bias Parameters of a Particular Layer
 
         Args:
-            layer (int): Target Layer
+            layer: Target Layer
 
         Raises:
             ValueError: If Target Layer outside the architecture of the neural network.
 
         Returns:
-            npt.NDArray: List of [bias(layer)] for layer = 1,2,3,...
+            List of [bias(layer)] for layer = 1,2,3,...
         """
         if not (layer <= len(self.layers) and layer >= 1):
             raise ValueError(
