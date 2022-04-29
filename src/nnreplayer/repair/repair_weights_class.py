@@ -16,8 +16,7 @@ from nnreplayer.utils import ConstraintsClass
 
 
 class NNRepair:
-    """NN Repair class helps in initializing, compiling ang running the repair process.
-    """
+    """NN Repair class helps in initializing, compiling ang running the repair process."""
 
     def __init__(self, model_orig, model_type="tensorflow") -> None:
         """Initialize the repair process.
@@ -77,7 +76,13 @@ class NNRepair:
         max_weight_bound: Union[int, float] = 1.0,
         data_precision: int = 4,
         param_precision: int = 4,
-        ) -> None:
+        ##############################
+        # TODO: param_bounds and output_bounds can be specified by the user
+        # please check if I entered the data types correctly
+        param_bounds: tuple = None,
+        output_bounds: tuple = None,
+        ##############################
+    ) -> None:
 
         """Compile the optimization model and setup the repair optimizer
 
@@ -123,6 +128,11 @@ class NNRepair:
             ),
             max_weight_bound,
             cost_weights,
+            ##############################
+            # TODO: param_bounds and output_bounds can be specified by the user
+            param_bounds,
+            output_bounds,
+            ##############################
         )
 
     def repair(self, options: Type[Options]) -> Any:
@@ -192,7 +202,7 @@ class NNRepair:
 
     def extract_network_layers_values(
         self, x_dataset: npt.NDArray
-        ) -> List[npt.NDArray]:
+    ) -> List[npt.NDArray]:
 
         """Extract the values of each layer for all input samples
 
@@ -215,8 +225,6 @@ class NNRepair:
         # pylint: disable=pointless-string-statement
         """Returns the repaired model in the given format"""
 
-        
-        
         model_new_params = self.model_mlp.get_mlp_params()
         # print("Hello")
         if self.model_type == "tensorflow":
@@ -260,7 +268,7 @@ class NNRepair:
         return new_model
 
     def __set_new_params(self):
-        
+
         """Update the weight and bias terms of model_mlp for the target layer"""
 
         new_weight = np.zeros(
@@ -293,7 +301,13 @@ class NNRepair:
         layer_values: List[npt.NDArray],
         max_weight_bound: Union[int, float],
         cost_weights: npt.NDArray = np.array([1.0, 1.0]),
-        ) -> None:
+        ##############################
+        # TODO: param_bounds and output_bounds can be specified by the user
+        # please check if I entered the data types correctly
+        param_bounds: tuple = None,
+        output_bounds: tuple = None,
+        ##############################
+    ) -> None:
         """Setting Up optimizer
 
         Args:
@@ -305,7 +319,6 @@ class NNRepair:
         Raises:
             TypeError: Mismatch between Input and Output Set.
         """
-        
 
         if y_repair.shape[-1] != self.architecture[-1]:
             raise TypeError(
@@ -323,12 +336,74 @@ class NNRepair:
             layer_values[l] = np.round(value, self.data_precision)
 
         self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
+
+        ##############################
+        # TODO: param_bounds and output_bounds can be specified by the user
+        param_bounds, output_bounds = self.__set_param_n_output_bounds(
+            param_bounds,
+            output_bounds,
+            weights,
+            bias,
+            max_weight_bound,
+        )
+        ##############################
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
             weights,
             bias,
-            param_bounds=(
+            ##############################
+            # TODO: param_bounds and output_bounds can be specified by the user
+            param_bounds=param_bounds,
+            ##############################
+        )
+        y_ = mip_model_layer(
+            # layer_values[self.layer_to_repair - 2],
+            layer_values[self.layer_to_repair - 1],
+            (self.num_samples, self.architecture[self.layer_to_repair - 1]),
+            self.output_constraint_list,
+            max_weight_bound=max_weight_bound,
+            ##############################
+            # TODO: param_bounds and output_bounds can be specified by the user
+            output_bounds=output_bounds,
+            ##############################
+        )
+        self.output_name = y_.name
+        self.opt_model = mip_model_layer.model
+
+        cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
+        # minimize error bound
+        dw_l = "dw"
+        cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l) ** 2
+        self.opt_model.obj = pyo.Objective(expr=cost_expr)
+
+    ##############################
+    # TODO: param_bounds and output_bounds can be specified by the user
+    # please add the data types and complete the docstring
+    def __set_param_n_output_bounds(
+        self,
+        param_bounds,
+        output_bounds,
+        weights,
+        bias,
+        max_weight_bound,
+    ) -> Any:
+
+        """_summary_
+
+        Args:
+            param_bounds:
+            output_bounds:
+            weights:
+            bias:
+            max_weight_bound:
+
+        Returns:
+            _type_: _description_
+        """
+
+        if param_bounds is None:
+            param_bounds = (
                 np.round(
                     np.min(
                         [
@@ -351,31 +426,20 @@ class NNRepair:
                     + 0.01,
                     self.data_precision,
                 ),
-            ),
-        )
-        y_ = mip_model_layer(
-            # layer_values[self.layer_to_repair - 2],
-            layer_values[self.layer_to_repair - 1],
-            (self.num_samples, self.architecture[self.layer_to_repair - 1]),
-            self.output_constraint_list,
-            max_weight_bound=max_weight_bound,
-            # output_bounds=(np.min(y_repair), np.max(y_repair)),
-        )
-        self.output_name = y_.name
-        self.opt_model = mip_model_layer.model
+            )
 
-        cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
-        # minimize error bound
-        dw_l = "dw"
-        cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l) ** 2
-        self.opt_model.obj = pyo.Objective(expr=cost_expr)
+        if output_bounds is None:
+            output_bounds = (-1e1, 1e1)
+
+        return param_bounds, output_bounds
+        ##############################
 
     def __solve_optimization_problem(
         self,
         gdp_formulation: str,
         solver_factory: str,
         optimizer_options: dict,
-        ) -> None:
+    ) -> None:
 
         """Solve the Optimization Problem
 
