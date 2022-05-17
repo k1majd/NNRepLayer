@@ -347,11 +347,27 @@ class NNRepair:
             max_weight_bound,
         )
         ##############################
+        weight_activations = np.array(
+            [[1.0, 1.0, 0.0], [0.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
+        )
+        bias_activations = np.array(
+            [
+                0.0,
+                0.0,
+                0.0,
+            ]
+        )
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
             weights,
             bias,
+            ##############################
+            # TODO: input the maximum weight bound to MIPNNMODEL initialization
+            # and input weight and bias activations
+            weight_activations,
+            bias_activations,
+            max_weight_bound,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
             param_bounds=param_bounds,

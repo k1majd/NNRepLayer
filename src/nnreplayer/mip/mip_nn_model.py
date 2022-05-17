@@ -16,6 +16,12 @@ class MIPNNModel:
         architecture: List[int],
         weights: List[npt.NDArray],
         bias: List[npt.NDArray],
+        ####################################
+        # TODO: add these parameters
+        weight_activations: npt.NDArray,
+        bias_activations: npt.NDArray,
+        max_weight_bound: Union[int, float] = 10,
+        ####################################
         param_bounds: tuple = (-1, 1),
     ):
         """_summary_
@@ -50,6 +56,12 @@ class MIPNNModel:
                     u,
                     weights[layer_to_repair - 1 + iterate],
                     bias[layer_to_repair - 1 + iterate],
+                    ####################################
+                    # TODO: add these parameters
+                    weight_activations,
+                    bias_activations,
+                    max_weight_bound,
+                    ####################################
                     param_bounds,
                 )
             )
@@ -62,6 +74,8 @@ class MIPNNModel:
                 architecture[-1],
                 weights[-1],
                 bias[-1],
+                weight_activations,
+                bias_activations,
                 param_bounds,
             )
         )

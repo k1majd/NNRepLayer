@@ -22,7 +22,7 @@ from affine_utils import (
 from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
-from nnreplayer.utils.utils import constraints_class
+from nnreplayer.utils.utils import ConstraintsClass
 from nnreplayer.repair.repair_weights_class import NNRepair
 
 
@@ -154,7 +154,7 @@ def main(
     print("----------------------")
     print("repair model")
     # input the constraint list
-    constraint_inside = constraints_class("inside", A, b)
+    constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
     max_weight_bound = 5
@@ -178,6 +178,8 @@ def main(
     print(x_train.shape)
     print(y_train.shape)
     # print(f)
+    x_train = x_train[0:1, :]
+    y_train = y_train[0:1, :]
     repair_obj.compile(
         x_train,
         y_train,
@@ -259,6 +261,7 @@ def main(
 
 if __name__ == "__main__":
     import tensorflow as tf
+
     gpus = tf.config.experimental.list_physical_devices("GPU")
     if gpus:
         try:
@@ -266,7 +269,9 @@ if __name__ == "__main__":
             for gpu in gpus:
                 tf.config.experimental.set_memory_growth(gpu, True)
             logical_gpus = tf.config.experimental.list_logical_devices("GPU")
-            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+            print(
+                len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs"
+            )
         except RuntimeError as e:
             # Memory growth must be set before GPUs have been initialized
             print(e)
