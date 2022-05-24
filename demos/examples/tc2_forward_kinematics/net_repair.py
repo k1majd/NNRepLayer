@@ -21,7 +21,7 @@ import pickle
 from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
-from nnreplayer.utils.utils import constraints_class
+from nnreplayer.utils.utils import ConstraintsClass
 from nnreplayer.repair.repair_weights_class import NNRepair
 
 
@@ -45,7 +45,7 @@ def arg_parser():
         "--visualization",
         nargs="?",
         type=int,
-        default=0,
+        default=1,
         choices=range(0, 2),
         help="Specify visualization variable 1 = on, 0 = off, default: 1",
     )
@@ -81,7 +81,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=3,
+        default=1,
         help="Specify the layer to repair.",
     )
     parser.add_argument(
@@ -171,10 +171,10 @@ def main(
     print("----------------------")
     print("repair model")
     # input the constraint list
-    constraint_inside = constraints_class("inside", A, b)
+    constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 1
+    max_weight_bound = 5
     cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -199,6 +199,7 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
+        repair_node_list=[0, 2],
     )
     out_model = repair_obj.repair(options)
 

@@ -185,7 +185,8 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 2],
+        repair_node_list=[1, 2],
+        # output_bounds=(-100.0, 100.0),
     )
     out_model = repair_obj.repair(options)
 

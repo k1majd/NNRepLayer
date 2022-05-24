@@ -64,7 +64,12 @@ class NNRepair:
         self.output_name = None
         self.num_samples = None
         self.output_constraint_list = []
+        ######################################
+        # TODO: add this part
         self.repair_node_list = []
+        self.__target_original_weights = []
+        self.__target_original_bias = []
+        ######################################
 
     def compile(
         self,
@@ -81,7 +86,7 @@ class NNRepair:
         # TODO: param_bounds and output_bounds can be specified by the user
         # please check if I entered the data types correctly
         # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
-        repair_node_list: list[int] = [],
+        repair_node_list: List[int] = None,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
         ##############################
@@ -178,6 +183,12 @@ class NNRepair:
         self.output_name = None
         self.num_samples = None
         self.output_constraint_list = []
+        ######################################
+        # TODO: add this part
+        self.repair_node_list = []
+        self.__target_original_weights = []
+        self.__target_original_bias = []
+        ######################################
 
     def summary(self, direc: Optional[str] = None):
 
@@ -284,18 +295,35 @@ class NNRepair:
             )
         )
         new_bias = np.zeros(self.architecture[self.layer_to_repair])
-        for keys, items in (
-            getattr(self.opt_model, f"w{self.layer_to_repair}")
-            .get_values()
-            .items()
-        ):
-            new_weight[keys[0], keys[1]] = items
-        for keys, items in (
-            getattr(self.opt_model, f"b{self.layer_to_repair}")
-            .get_values()
-            .items()
-        ):
-            new_bias[keys] = items
+        # extract repaired weight and bias terms
+
+        for c in range(self.architecture[self.layer_to_repair]):
+            if c in self.repair_node_list:
+                new_bias[c] = getattr(
+                    self.opt_model, f"b{self.layer_to_repair}"
+                ).get_values()[self.repair_node_list.index(c)]
+                for r in range(self.architecture[self.layer_to_repair - 1]):
+                    new_weight[r, c] = getattr(
+                        self.opt_model, f"w{self.layer_to_repair}"
+                    ).get_values()[(r, self.repair_node_list.index(c))]
+            else:
+                new_bias[c] = self.__target_original_bias[c]
+                for r in range(self.architecture[self.layer_to_repair - 1]):
+                    new_weight[r, c] = self.__target_original_weights[r, c]
+        # for keys, items in (
+        #     getattr(self.opt_model, f"w{self.layer_to_repair}")
+        #     .get_values()
+        #     .items()
+        # ):
+        #     new_weight[keys[0], keys[1]] = items
+        # for keys, items in (
+        #     getattr(self.opt_model, f"b{self.layer_to_repair}")
+        #     .get_values()
+        #     .items()
+        # ):
+        #     new_bias[keys] = items
+
+        # specify the untouched weight and bias values in the target layer
 
         self.model_mlp.set_mlp_params_layer(
             [new_weight, new_bias], self.layer_to_repair
@@ -352,6 +380,8 @@ class NNRepair:
             bias,
             max_weight_bound,
         )
+        self.__target_original_weights = weights[self.layer_to_repair - 1]
+        self.__target_original_bias = bias[self.layer_to_repair - 1]
         ##############################
         # weight_activations = np.array(
         #     [[1.0, 1.0, 0.0], [0.0, 0.0, 0.0], [1.0, 0.0, 0.0]]

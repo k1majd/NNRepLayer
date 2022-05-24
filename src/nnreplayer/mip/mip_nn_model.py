@@ -18,7 +18,7 @@ class MIPNNModel:
         bias: List[npt.NDArray],
         ####################################
         # TODO: add these parameters
-        repair_node_list: List[int] = [],
+        repair_node_list: List[int] = None,
         # bias_activations: npt.NDArray,
         # max_weight_bound: Union[int, float] = 10,
         ####################################
@@ -49,9 +49,13 @@ class MIPNNModel:
         prev = architecture[layer_to_repair - 1]
         ####################################
         # TODO: edit this part for inputting the target repair nodes
-        if len(repair_node_list) == 0:
+        if repair_node_list is None:
             repair_node_list = list(range(architecture[layer_to_repair]))
 
+        print(
+            f"Repair of {len(repair_node_list)} nodes out of {architecture[layer_to_repair]} nodes is being activated."
+        )
+        print(f"Activated nodes: {repair_node_list}")
         num_layers_ahead = len(architecture) - self.model.nlayers - 1
         # print("UHidden = {}".format(uhidden))
         for iterate, u in enumerate(uhidden):
