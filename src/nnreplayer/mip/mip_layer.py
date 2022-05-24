@@ -21,9 +21,11 @@ class MIPLayer:
         bias: npt.NDArray,
         ####################################
         # TODO: add these parameters
-        weight_activations: npt.NDArray,
-        bias_activations: npt.NDArray,
-        max_weight_bound: Union[int, float],
+        num_layers_ahead: int,
+        repair_node_list: List[int],
+        # weight_activations: npt.NDArray,
+        # bias_activations: npt.NDArray,
+        # max_weight_bound: Union[int, float],
         ####################################
         param_bounds: tuple = (-1, 1),
     ) -> None:
@@ -45,81 +47,33 @@ class MIPLayer:
         self.uin, self.uout = uin, uout
         ############################################
         # TODO: Speratare activated and deactivated weight and bias terms
-        self.label = model.nlayers  # label of this layer
+        # self.label = model.nlayers  # label of this layer
+        self.repair_node_list = repair_node_list  # list of repair nodes
         # specify repair weights in the repair layers
-        if model.nlayers == layer_to_repair:
-            # define weight bounding constraint
-            dw_l = "dw"
+        if model.nlayers == layer_to_repair and num_layers_ahead != 0:
+            w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
             setattr(
                 model,
-                dw_l,
+                w_l,
                 pyo.Var(
-                    within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
+                    range(uin),
+                    range(len(repair_node_list)),
+                    domain=pyo.Reals,
+                    bounds=param_bounds,
                 ),
             )
-            model.w_b_bounding_constraints = pyo.ConstraintList()
-            self.w = []
-            self.b = []
+            setattr(
+                model,
+                b_l,
+                pyo.Var(
+                    range(len(repair_node_list)),
+                    domain=pyo.Reals,
+                    bounds=param_bounds,
+                ),
+            )
+            self.w = getattr(model, w_l)
+            self.b = getattr(model, b_l)
 
-            # detect repair weights
-            for r in range(weights.shape[0]):
-                w_row = []
-                for c in range(weights.shape[1]):
-                    if weight_activations[r, c] == 1:
-                        w_l = f"w{str(model.nlayers)}_{r}_{c}"
-                        setattr(
-                            model,
-                            w_l,
-                            pyo.Var(
-                                domain=pyo.Reals,
-                                bounds=param_bounds,
-                                initialize=weights[r, c],
-                            ),
-                        )
-                        w_row.append(getattr(model, w_l))
-
-                        # add bounding constraint for this weight
-                        model.w_b_bounding_constraints.add(
-                            getattr(model, w_l) - weights[r, c]
-                            <= getattr(model, dw_l)
-                        )  # upper bound
-                        model.w_b_bounding_constraints.add(
-                            getattr(model, w_l) - weights[r, c]
-                            >= -getattr(model, dw_l)
-                        )  # lower bounds
-                    else:
-                        w_row.append(weights[r, c])
-                self.w.append(w_row)
-
-            # detect repair biases
-            for e in range(bias.shape[0]):
-                if bias_activations[e] == 1:
-                    b_l = f"b{str(model.nlayers)}_{e}"
-                    setattr(
-                        model,
-                        b_l,
-                        pyo.Var(
-                            domain=pyo.Reals,
-                            bounds=param_bounds,
-                            initialize=bias[e],
-                        ),
-                    )
-                    self.b.append(getattr(model, b_l))
-
-                    # add bounding constraint for this weight
-                    model.w_b_bounding_constraints.add(
-                        getattr(model, b_l) - weights[r, c]
-                        <= getattr(model, dw_l)
-                    )  # upper bound
-                    model.w_b_bounding_constraints.add(
-                        getattr(model, b_l) - weights[r, c]
-                        >= -getattr(model, dw_l)
-                    )  # lower bounds
-                else:
-                    self.b.append(bias[e])
-            self.w = np.array(self.w)
-            self.b = np.array(self.b)
-            ############################################
             # TODO: Remove this part
             # w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
 
@@ -141,8 +95,31 @@ class MIPLayer:
 
             # self.w = getattr(model, w_l)
             # self.b = getattr(model, b_l)
-            ##############################################
 
+            self.w_orig = weights
+            self.b_orig = bias
+        # ensure that all nodes of last layer are repaired
+        # even if this layer is the target repair layer
+        elif model.nlayers == layer_to_repair and num_layers_ahead == 0:
+            w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
+            setattr(
+                model,
+                w_l,
+                pyo.Var(
+                    range(uin),
+                    range(uout),
+                    domain=pyo.Reals,
+                    bounds=param_bounds,
+                ),
+            )
+            setattr(
+                model,
+                b_l,
+                pyo.Var(range(uout), domain=pyo.Reals, bounds=param_bounds),
+            )
+
+            self.w = getattr(model, w_l)
+            self.b = getattr(model, b_l)
             self.w_orig = weights
             self.b_orig = bias
         else:
@@ -152,6 +129,7 @@ class MIPLayer:
         model.nlayers += 1
         self.model = model
         self.layer_to_repair = layer_to_repair
+        ############################################
 
     def __call__(
         self,
@@ -214,15 +192,22 @@ class MIPLayer:
         assert n == self.uin
 
         x_l, s_l, theta_l = "x" + str(l), "s" + str(l), "theta" + str(l)
-        w_l = "w" + str(l - 1)
-        b_l = "b" + str(l - 1)
 
+        ###############################################################
+        # TODO: Edit this part
+        ## check if this layer is the repair layer
+        if l == self.layer_to_repair + 1:
+            num_next_repair_nodes = len(self.repair_node_list)
+        else:
+            num_next_repair_nodes = self.uout
+
+        # define the variables of the next nodes
         setattr(
             self.model,
             x_l,
             pyo.Var(
                 range(m),
-                range(self.uout),
+                range(num_next_repair_nodes),
                 domain=pyo.NonNegativeReals,
                 bounds=output_bounds,
             ),
@@ -232,7 +217,7 @@ class MIPLayer:
             s_l,
             pyo.Var(
                 range(m),
-                range(self.uout),
+                range(num_next_repair_nodes),
                 domain=pyo.NonNegativeReals,
                 bounds=output_bounds,
             ),
@@ -240,13 +225,14 @@ class MIPLayer:
         setattr(
             self.model,
             theta_l,
-            pyo.Var(range(m), range(self.uout), domain=pyo.Binary),
+            pyo.Var(range(m), range(num_next_repair_nodes), domain=pyo.Binary),
         )
 
+        # add the linear constraints related to the target repair nodes
         def constraints(model, i, j):
             product = self.b[j]
             for k in range(self.uin):
-                product += x[i, k] * self.w[k, j]
+                product += x[i][k] * self.w[k, j]
             return (
                 product
                 == getattr(model, x_l)[i, j] - getattr(model, s_l)[i, j]
@@ -255,9 +241,12 @@ class MIPLayer:
         setattr(
             self.model,
             "eq_constraint" + str(l),
-            pyo.Constraint(range(m), range(self.uout), rule=constraints),
+            pyo.Constraint(
+                range(m), range(num_next_repair_nodes), rule=constraints
+            ),
         )
 
+        # add the integer constraints related to the target repair nodes
         def disjuncts(model, i, j):
             return [
                 (
@@ -273,68 +262,105 @@ class MIPLayer:
         setattr(
             self.model,
             "disjunction" + str(l),
-            pyg.Disjunction(range(m), range(self.uout), rule=disjuncts),
+            pyg.Disjunction(
+                range(m), range(num_next_repair_nodes), rule=disjuncts
+            ),
         )
+
+        # collect the values of next layer
+        x_next = []  # values of next layer
+        if l == self.layer_to_repair + 1:
+            for s in range(m):
+                x_temp = []
+                for c in range(self.uout):
+                    if c in self.repair_node_list:
+                        x_temp.append(
+                            getattr(self.model, x_l)[
+                                s, self.repair_node_list.index(c)
+                            ]
+                        )
+                    else:
+                        node_value_temp = self.b_orig[c]
+                        for k in range(self.uin):
+                            node_value_temp += x[s][k] * self.w_orig[k, c]
+                        x_temp.append(node_value_temp)
+                x_next.append(x_temp)
+        else:
+            for s in range(m):
+                x_temp = []
+                for c in range(self.uout):
+                    x_temp.append(getattr(self.model, x_l)[s, c])
+                x_next.append(x_temp)
+
+        if l == self.layer_to_repair + 1:
+            print("Activating mid layer")
+            w_l = "w" + str(l - 1)
+            b_l = "b" + str(l - 1)
+
+            dw_l = "dw"
+            setattr(
+                self.model,
+                dw_l,
+                pyo.Var(
+                    within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
+                ),
+            )
+
+            def constraint_bound_w0(model, i, j):
+                return getattr(model, w_l)[
+                    i, self.repair_node_list.index(j)
+                ] - self.w_orig[i, j] <= getattr(model, dw_l)
+
+            def constraint_bound_w1(model, i, j):
+                return getattr(model, w_l)[
+                    i, self.repair_node_list.index(j)
+                ] - self.w_orig[i, j] >= -getattr(model, dw_l)
+
+            def constraint_bound_b0(model, j):
+                return getattr(model, b_l)[
+                    self.repair_node_list.index(j)
+                ] - self.b_orig[j] <= getattr(model, dw_l)
+
+            def constraint_bound_b1(model, j):
+                return getattr(model, b_l)[
+                    self.repair_node_list.index(j)
+                ] - self.b_orig[j] >= -getattr(model, dw_l)
+
+            setattr(
+                self.model,
+                "w_bounded_constraint0" + str(l),
+                pyo.Constraint(
+                    range(self.uin),
+                    self.repair_node_list,
+                    rule=constraint_bound_w0,
+                ),
+            )
+            setattr(
+                self.model,
+                "w_bounded_constraint1" + str(l),
+                pyo.Constraint(
+                    range(self.uin),
+                    self.repair_node_list,
+                    rule=constraint_bound_w1,
+                ),
+            )
+            setattr(
+                self.model,
+                "b_bounded_constraint0" + str(l),
+                pyo.Constraint(
+                    self.repair_node_list, rule=constraint_bound_b0
+                ),
+            )
+            setattr(
+                self.model,
+                "b_bounded_constraint1" + str(l),
+                pyo.Constraint(
+                    self.repair_node_list, rule=constraint_bound_b1
+                ),
+            )
+
+        return x_next
         ###############################################################
-        # TODO: Remove this part
-        # if l == self.layer_to_repair + 1:
-        #     print("Activating mid layer")
-
-        #     dw_l = "dw"
-        #     setattr(
-        #         self.model,
-        #         dw_l,
-        #         pyo.Var(
-        #             within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
-        #         ),
-        #     )
-
-        #     def constraint_bound_w0(model, i, j):
-        #         return getattr(model, w_l)[i, j] - self.w_orig[
-        #             i, j
-        #         ] <= getattr(model, dw_l)
-
-        #     def constraint_bound_w1(model, i, j):
-        #         return getattr(model, w_l)[i, j] - self.w_orig[
-        #             i, j
-        #         ] >= -getattr(model, dw_l)
-
-        #     def constraint_bound_b0(model, j):
-        #         return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(
-        #             model, dw_l
-        #         )
-
-        #     def constraint_bound_b1(model, j):
-        #         return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(
-        #             model, dw_l
-        #         )
-
-        #     setattr(
-        #         self.model,
-        #         "w_bounded_constraint0" + str(l),
-        #         pyo.Constraint(
-        #             range(self.uin), range(self.uout), rule=constraint_bound_w0
-        #         ),
-        #     )
-        #     setattr(
-        #         self.model,
-        #         "w_bounded_constraint1" + str(l),
-        #         pyo.Constraint(
-        #             range(self.uin), range(self.uout), rule=constraint_bound_w1
-        #         ),
-        #     )
-        #     setattr(
-        #         self.model,
-        #         "b_bounded_constraint0" + str(l),
-        #         pyo.Constraint(range(self.uout), rule=constraint_bound_b0),
-        #     )
-        #     setattr(
-        #         self.model,
-        #         "b_bounded_constraint1" + str(l),
-        #         pyo.Constraint(range(self.uout), rule=constraint_bound_b1),
-        #     )
-        ###############################################################
-        return getattr(self.model, x_l)
 
     def _constraints(
         self,
@@ -361,11 +387,7 @@ class MIPLayer:
 
         m, n = shape
         assert n == self.uin
-        if l == self.layer_to_repair + 1:
-            w_l = "w" + str(l - 1)
-            b_l = "b" + str(l - 1)
 
-        x_l = "x" + str(l)
         x_l = "x" + str(l)
 
         # x_l = 'x'+str(l)
@@ -383,7 +405,7 @@ class MIPLayer:
         def constraints(model, i, j):
             product = self.b[j]
             for k in range(self.uin):
-                product += x[i, k] * self.w[k, j]
+                product += x[i][k] * self.w[k, j]
             return product == getattr(model, x_l)[i, j]
 
         setattr(
@@ -422,63 +444,65 @@ class MIPLayer:
         # #####################################################################
 
         ###############################################################
-        # TODO: Remove this part
-        # if l == self.layer_to_repair + 1:
-        #     print("Activating Last layer")
+        # TODO: Edit this part
+        if l == self.layer_to_repair + 1:
+            print("Activating Last layer")
+            w_l = "w" + str(l - 1)
+            b_l = "b" + str(l - 1)
 
-        #     dw_l = "dw"
-        #     setattr(
-        #         self.model,
-        #         dw_l,
-        #         pyo.Var(
-        #             within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
-        #         ),
-        #     )
+            dw_l = "dw"
+            setattr(
+                self.model,
+                dw_l,
+                pyo.Var(
+                    within=pyo.NonNegativeReals, bounds=(0, max_weight_bound)
+                ),
+            )
 
-        #     def constraint_bound_w0(model, i, j):
-        #         return getattr(model, w_l)[i, j] - self.w_orig[
-        #             i, j
-        #         ] <= getattr(model, dw_l)
+            def constraint_bound_w0(model, i, j):
+                return getattr(model, w_l)[i, j] - self.w_orig[
+                    i, j
+                ] <= getattr(model, dw_l)
 
-        #     def constraint_bound_w1(model, i, j):
-        #         return getattr(model, w_l)[i, j] - self.w_orig[
-        #             i, j
-        #         ] >= -getattr(model, dw_l)
+            def constraint_bound_w1(model, i, j):
+                return getattr(model, w_l)[i, j] - self.w_orig[
+                    i, j
+                ] >= -getattr(model, dw_l)
 
-        #     def constraint_bound_b0(model, j):
-        #         return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(
-        #             model, dw_l
-        #         )
+            def constraint_bound_b0(model, j):
+                return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(
+                    model, dw_l
+                )
 
-        #     def constraint_bound_b1(model, j):
-        #         return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(
-        #             model, dw_l
-        #         )
+            def constraint_bound_b1(model, j):
+                return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(
+                    model, dw_l
+                )
 
-        #     setattr(
-        #         self.model,
-        #         "w_bounded_constraint0" + str(l),
-        #         pyo.Constraint(
-        #             range(self.uin), range(self.uout), rule=constraint_bound_w0
-        #         ),
-        #     )
-        #     setattr(
-        #         self.model,
-        #         "w_bounded_constraint1" + str(l),
-        #         pyo.Constraint(
-        #             range(self.uin), range(self.uout), rule=constraint_bound_w1
-        #         ),
-        #     )
-        #     setattr(
-        #         self.model,
-        #         "b_bounded_constraint0" + str(l),
-        #         pyo.Constraint(range(self.uout), rule=constraint_bound_b0),
-        #     )
-        #     setattr(
-        #         self.model,
-        #         "b_bounded_constraint1" + str(l),
-        #         pyo.Constraint(range(self.uout), rule=constraint_bound_b1),
-        #     )
+            setattr(
+                self.model,
+                "w_bounded_constraint0" + str(l),
+                pyo.Constraint(
+                    range(self.uin), range(self.uout), rule=constraint_bound_w0
+                ),
+            )
+            setattr(
+                self.model,
+                "w_bounded_constraint1" + str(l),
+                pyo.Constraint(
+                    range(self.uin), range(self.uout), rule=constraint_bound_w1
+                ),
+            )
+            setattr(
+                self.model,
+                "b_bounded_constraint0" + str(l),
+                pyo.Constraint(range(self.uout), rule=constraint_bound_b0),
+            )
+            setattr(
+                self.model,
+                "b_bounded_constraint1" + str(l),
+                pyo.Constraint(range(self.uout), rule=constraint_bound_b1),
+            )
         ###############################################################
 
         return getattr(self.model, x_l)

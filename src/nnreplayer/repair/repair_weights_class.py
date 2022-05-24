@@ -64,6 +64,7 @@ class NNRepair:
         self.output_name = None
         self.num_samples = None
         self.output_constraint_list = []
+        self.repair_node_list = []
 
     def compile(
         self,
@@ -79,6 +80,8 @@ class NNRepair:
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
         # please check if I entered the data types correctly
+        # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
+        repair_node_list: list[int] = [],
         param_bounds: tuple = None,
         output_bounds: tuple = None,
         ##############################
@@ -120,7 +123,10 @@ class NNRepair:
         self.output_constraint_list = output_constraint_list
         self.data_precision = data_precision
         self.param_precision = param_precision
-
+        ###########
+        # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
+        self.repair_node_list = repair_node_list
+        ###########
         self.__set_up_optimizer(
             np.round(y_repair, data_precision),
             self.extract_network_layers_values(
@@ -347,16 +353,16 @@ class NNRepair:
             max_weight_bound,
         )
         ##############################
-        weight_activations = np.array(
-            [[1.0, 1.0, 0.0], [0.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
-        )
-        bias_activations = np.array(
-            [
-                0.0,
-                0.0,
-                0.0,
-            ]
-        )
+        # weight_activations = np.array(
+        #     [[1.0, 1.0, 0.0], [0.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
+        # )
+        # bias_activations = np.array(
+        #     [
+        #         0.0,
+        #         0.0,
+        #         0.0,
+        #     ]
+        # )
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
@@ -365,9 +371,11 @@ class NNRepair:
             ##############################
             # TODO: input the maximum weight bound to MIPNNMODEL initialization
             # and input weight and bias activations
-            weight_activations,
-            bias_activations,
-            max_weight_bound,
+            # weight_activations,
+            # bias_activations,
+            # max_weight_bound,
+            # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
+            self.repair_node_list,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
             param_bounds=param_bounds,

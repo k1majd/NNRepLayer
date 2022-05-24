@@ -82,7 +82,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=2,
+        default=1,
         help="Specify the layer to repair.",
     )
     return parser.parse_args()
@@ -175,11 +175,9 @@ def main(
     )
 
     repair_obj = NNRepair(model_orig)
-    print(x_train.shape)
-    print(y_train.shape)
     # print(f)
-    x_train = x_train[0:1, :]
-    y_train = y_train[0:1, :]
+    # x_train = x_train[0:1, :]
+    # y_train = y_train[0:1, :]
     repair_obj.compile(
         x_train,
         y_train,
@@ -187,6 +185,7 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
+        repair_node_list=[0, 2],
     )
     out_model = repair_obj.repair(options)
 
@@ -275,7 +274,7 @@ if __name__ == "__main__":
         except RuntimeError as e:
             # Memory growth must be set before GPUs have been initialized
             print(e)
-        args = arg_parser()
+    args = arg_parser()
     main(
         args.path,
         args.visualization,

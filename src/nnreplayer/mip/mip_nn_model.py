@@ -18,9 +18,9 @@ class MIPNNModel:
         bias: List[npt.NDArray],
         ####################################
         # TODO: add these parameters
-        weight_activations: npt.NDArray,
-        bias_activations: npt.NDArray,
-        max_weight_bound: Union[int, float] = 10,
+        repair_node_list: List[int] = [],
+        # bias_activations: npt.NDArray,
+        # max_weight_bound: Union[int, float] = 10,
         ####################################
         param_bounds: tuple = (-1, 1),
     ):
@@ -31,6 +31,7 @@ class MIPNNModel:
             architecture (List[int]): _description_
             weights (List[npt.NDArray]): _description_
             bias (List[npt.NDArray]): _description_
+            repair_node_list (List[int], optional): _description_. Defaults to [].
             param_bounds (tuple, optional): _description_. Defaults to (-1, 1).
         """
 
@@ -46,6 +47,12 @@ class MIPNNModel:
 
         self.layers = []
         prev = architecture[layer_to_repair - 1]
+        ####################################
+        # TODO: edit this part for inputting the target repair nodes
+        if len(repair_node_list) == 0:
+            repair_node_list = list(range(architecture[layer_to_repair]))
+
+        num_layers_ahead = len(architecture) - self.model.nlayers - 1
         # print("UHidden = {}".format(uhidden))
         for iterate, u in enumerate(uhidden):
             self.layers.append(
@@ -56,15 +63,15 @@ class MIPNNModel:
                     u,
                     weights[layer_to_repair - 1 + iterate],
                     bias[layer_to_repair - 1 + iterate],
-                    ####################################
                     # TODO: add these parameters
-                    weight_activations,
-                    bias_activations,
-                    max_weight_bound,
-                    ####################################
+                    num_layers_ahead,
+                    repair_node_list,
+                    # bias_activations,
+                    # max_weight_bound,
                     param_bounds,
                 )
             )
+            num_layers_ahead = len(architecture) - self.model.nlayers - 1
             prev = u
         self.layers.append(
             MIPLayer(
@@ -74,11 +81,15 @@ class MIPNNModel:
                 architecture[-1],
                 weights[-1],
                 bias[-1],
-                weight_activations,
-                bias_activations,
+                # TODO: add these parameters
+                num_layers_ahead,
+                repair_node_list,
+                # bias_activations,
+                # max_weight_bound,
                 param_bounds,
             )
         )
+        ####################################
 
     def __call__(
         self,
