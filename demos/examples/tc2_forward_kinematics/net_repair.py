@@ -21,7 +21,7 @@ import pickle
 from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
-from nnreplayer.utils.utils import ConstraintsClass
+from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
 
@@ -168,6 +168,9 @@ def main(
     A = np.array([[1.0, 0.0, 0.0, 0.0]])
     b = np.array([[0.5]])
 
+    repair_set = get_sensitive_nodes(
+        model_orig, layer_to_repair, x_train, 30, A, b
+    )
     print("----------------------")
     print("repair model")
     # input the constraint list
@@ -199,7 +202,7 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 2],
+        repair_node_list=repair_set,
     )
     out_model = repair_obj.repair(options)
 
