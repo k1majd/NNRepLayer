@@ -18,7 +18,8 @@ from fk_utils import (
     original_data_loader,
 )
 import pickle
-from shapely.affinity import scale
+
+# from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
@@ -81,7 +82,7 @@ def arg_parser():
         "--repairLayer",
         nargs="?",
         type=int,
-        default=1,
+        default=2,
         help="Specify the layer to repair.",
     )
     parser.add_argument(
@@ -168,16 +169,17 @@ def main(
     A = np.array([[1.0, 0.0, 0.0, 0.0]])
     b = np.array([[0.5]])
 
-    repair_set = get_sensitive_nodes(
-        model_orig, layer_to_repair, x_train, 30, A, b
+    repair_set, _ = get_sensitive_nodes(
+        model_orig, layer_to_repair, x_train, 2, A, b
     )
+    print(repair_set)
     print("----------------------")
     print("repair model")
     # input the constraint list
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 5
+    max_weight_bound = 10
     cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -185,10 +187,10 @@ def main(
         "python",
         "keras",
         {
-            "timelimit": time_limit,
-            "mipgap": 0.001,
-            "mipfocus": 2,
-            "improvestarttime": time_limit,
+            "timelimit": 3600,
+            "mipgap": 0.1,
+            "mipfocus": 1,
+            "improvestarttime": 3600,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
@@ -202,10 +204,13 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=repair_set,
+        repair_node_list=[12, 28],
+        # output_bounds=(-100.0, 100.0),
     )
     out_model = repair_obj.repair(options)
+    repair_obj.reset()
 
+    print(repair_set)
     out_model.compile(
         optimizer=keras.optimizers.Adam(),
         loss=keras.losses.MeanSquaredError(name="MSE"),

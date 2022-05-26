@@ -22,7 +22,7 @@ from affine_utils import (
 from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
-from nnreplayer.utils.utils import ConstraintsClass
+from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
 
@@ -150,7 +150,9 @@ def main(
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
     )
-
+    repair_set = get_sensitive_nodes(
+        model_orig, layer_to_repair, x_train, 2, A, b
+    )
     print("----------------------")
     print("repair model")
     # input the constraint list

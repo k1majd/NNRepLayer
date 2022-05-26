@@ -332,6 +332,7 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
         )
     )
     costs = []
+    all_vec = []
     for L in range(num_non_sparse, num_non_sparse + 1):
         for subset in itertools.combinations(column_list, L):
             column_idx = list(subset)
@@ -351,6 +352,7 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
                 idx += 1
             cost = np.matmul(vec, np.matmul(H_dist, vec))
             costs.append(cost)
+            all_vec.append(vec)
             print(
                 f"iteration: {iteration}/{all_iters}, eval nodes: {column_idx}, cost: {cost}"
             )
@@ -359,7 +361,7 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
                 max_cost = cost
             iteration += 1
     print(f"max cost: {max_cost}")
-    return selected_vec, costs
+    return selected_vec, costs, all_vec
 
 
 def neural_net_predict(params, inputs, architechture):
@@ -387,6 +389,7 @@ def __soft_plus(x, t=10.0):  # (1/t) * Ln(1+exp(t*x))
 def get_sensitive_nodes(
     model, layer_to_repair, x_train, num_sparse_nodes, A, b
 ):
+
     A = npa.array(A)
     b = npa.array(b)
 
@@ -395,7 +398,8 @@ def get_sensitive_nodes(
         const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
         loss = npa.sum(
             #         np.maximum(np.zeros((const.shape[0],const.shape[1])), const)
-            __soft_plus(const, 10)
+            __soft_plus(const, 100)
+            / const.shape[0]
         )
         return loss
 
@@ -406,12 +410,18 @@ def get_sensitive_nodes(
         ws = ws + list(w.flatten())
     init_params = npa.array(ws)
     hessian_loss = jacobian(egrad(objective))(init_params)
-    eigenvector, cost_vec = sparse_eigenvector_reduction(
+    eigenvector, cost_vec, all_vec = sparse_eigenvector_reduction(
         hessian_loss, architecture, layer_to_repair - 1, num_sparse_nodes
     )
-    return neural_return_weights_pert(
-        eigenvector, architecture, layer_to_repair - 1
-    )
+    max_16_indices = list(np.argsort(cost_vec))
+    repair_indices = []
+    for id in max_16_indices:
+        repair_indices.append(
+            neural_return_weights_pert(
+                all_vec[id], architecture, layer_to_repair - 1
+            )
+        )
+    return repair_indices, np.sort(cost_vec)
 
 
 ###############################################################################
