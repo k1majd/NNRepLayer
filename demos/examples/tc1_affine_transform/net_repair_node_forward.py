@@ -19,6 +19,7 @@ from affine_utils import (
     give_polys,
     give_constraints,
 )
+import itertools
 from shapely.affinity import scale
 from tensorflow import keras
 from nnreplayer.utils.options import Options
@@ -150,9 +151,9 @@ def main(
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
     )
-    repair_set = get_sensitive_nodes(
-        model_orig, layer_to_repair, x_train, 2, A, b
-    )
+    # repair_set = get_sensitive_nodes(
+    #     model_orig, layer_to_repair, x_train, 2, A, b
+    # )
     print("----------------------")
     print("repair model")
     # input the constraint list
@@ -167,90 +168,94 @@ def main(
         "python",
         "keras",
         {
-            "timelimit": 3600,
+            "timelimit": 360,
             "mipgap": 0.001,
             "mipfocus": 2,
-            "improvestarttime": 3300,
+            "improvestarttime": 360,
             "logfile": path_write
-            + f"/logs/opt_log_layer{layer_to_repair}.log",
+            + f"/logs/opt_log_layer__forward_selected.log",
         },
     )
 
-    repair_obj = NNRepair(model_orig)
-    # print(f)
-    # x_train = x_train[0:1, :]
-    # y_train = y_train[0:1, :]
-    repair_obj.compile(
-        x_train,
-        y_train,
-        layer_to_repair,
-        output_constraint_list=output_constraint_list,
-        cost_weights=cost_weights,
-        max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 1, 2],
-        # output_bounds=(-100.0, 100.0),
-    )
-    out_model = repair_obj.repair(options)
+    iter = 1
+    for subset in itertools.combinations([0, 1, 2, 3, 4, 5, 6, 7, 8], 5):
+        print(f"iteration {iter}")
+        iter += 1
+        repair_indices = list(subset)
+        # repair_indices = [1, 3, 5, 6, 7]
+        counter = 0
+        col_list = []
+        arch = np.array([3, 3, 3, 3])
+        for l in range(arch.shape[0] - 1):
+            temp = [
+                c - counter
+                for c in repair_indices
+                if (c >= counter and c < counter + arch[l + 1])
+            ]
+            col_list.append(temp)
+            counter += arch[l + 1]
+        # print(f)
+        # x_train = x_train[0:1, :]
+        # y_train = y_train[0:1, :]
+        model_orig = keras.models.load_model(path_read + "/model")
+        feasib_list = []
+        for layer_to_repair, nodes in enumerate(col_list):
+            layer_to_repair = layer_to_repair + 1
+            if len(nodes) != 0:
+                if nodes == [0, 1, 2] and layer_to_repair == 1:
+                    model_orig = keras.models.load_model(
+                        path_write + "/model_layer_1"
+                    )
+                    feasib_list.append("f")
 
-    out_model.compile(
-        optimizer=keras.optimizers.Adam(),
-        loss=keras.losses.MeanSquaredError(name="MSE"),
-        metrics=["accuracy"],
-    )
+                else:
+                    repair_obj = NNRepair(model_orig)
+                    repair_obj.compile(
+                        x_train,
+                        y_train,
+                        layer_to_repair,
+                        output_constraint_list=output_constraint_list,
+                        cost_weights=cost_weights,
+                        max_weight_bound=max_weight_bound,
+                        repair_node_list=nodes,
+                        # output_bounds=(-100.0, 100.0),
+                    )
 
-    if visual == 1:
-        print("----------------------")
-        print("Visualization")
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
-            [y_train, out_model.predict(x_train)],
-            label="training",
+                    new_model = repair_obj.repair(options)
+                    if repair_obj.opt_model.dw._value is not None:
+                        model_orig = new_model
+                        feasib_list.append("f")
+                    else:
+                        feasib_list.append("nf")
+
+        model_orig.compile(
+            optimizer=keras.optimizers.Adam(),
+            loss=keras.losses.MeanSquaredError(name="MSE"),
+            metrics=["accuracy"],
         )
-        plot_dataset(
-            [poly_orig, poly_trans, poly_const],
-            [y_test, out_model.predict(x_test)],
-            label="testing",
-        )
 
-    print("----------------------")
-    print("logging")
-
-    if save_summery == 1:
-        repair_obj.summery(direc=path_write + "/summery")
-        print("saved: summery")
-
-    if save_model == 1:
-        keras.models.save_model(
-            out_model,
-            path_write + f"/model_layer_{layer_to_repair}",
-            overwrite=True,
-            include_optimizer=False,
-            save_format=None,
-            signatures=None,
-            options=None,
-            save_traces=True,
-        )
-        print("saved: model")
-
-    if save_stats == 1:
-        # pylint: disable=unspecified-encoding
+        # save stats
         with open(
             path_write
-            + f"/stats/repair_layer{layer_to_repair}_accs_stats_tc1.csv",
+            + f"/stats/repair_layer_forward_selected_accs_stats_tc1.csv",
             "a+",
             newline="",
         ) as write_obj:
             # Create a writer object from csv module
             csv_writer = writer(write_obj)
             model_evaluation = model_eval(
-                out_model,
+                model_orig,
                 keras.models.load_model(path_read + "/model"),
                 path_read,
                 poly_const,
             )
-            for key, item in options.optimizer_options.items():
-                model_evaluation.append(key)
-                model_evaluation.append(item)
+            # for key, item in options.optimizer_options.items():
+            #     model_evaluation.append(key)
+            #     model_evaluation.append(item)
+            model_evaluation.append("selected nodes")
+            model_evaluation.append(repair_indices)
+            model_evaluation.append("feasibility")
+            model_evaluation.append(feasib_list)
             model_evaluation.append("max_weight_bound")
             model_evaluation.append(max_weight_bound)
             model_evaluation.append("cost weights")
@@ -259,6 +264,40 @@ def main(
             # Add contents of list as last row in the csv file
             csv_writer.writerow(model_evaluation)
         print("saved: stats")
+
+    if visual == 1:
+        print("----------------------")
+        print("Visualization")
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_train, model_orig.predict(x_train)],
+            label="training",
+        )
+        plot_dataset(
+            [poly_orig, poly_trans, poly_const],
+            [y_test, model_orig.predict(x_test)],
+            label="testing",
+        )
+
+    print("----------------------")
+    print("logging")
+
+    # if save_summery == 1:
+    #     repair_obj.summery(direc=path_write + "/summery")
+    #     print("saved: summery")
+
+    # if save_model == 1:
+    #     keras.models.save_model(
+    #         model_orig,
+    #         path_write + f"/model_layer_forward_selected",
+    #         overwrite=True,
+    #         include_optimizer=False,
+    #         save_format=None,
+    #         signatures=None,
+    #         options=None,
+    #         save_traces=True,
+    #     )
+    #     print("saved: model")
 
 
 if __name__ == "__main__":

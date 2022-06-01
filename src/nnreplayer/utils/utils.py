@@ -409,18 +409,13 @@ def get_sensitive_nodes(
     for w in w_b:
         ws = ws + list(w.flatten())
     init_params = npa.array(ws)
-    hessian_loss = jacobian(egrad(objective))(init_params)
-    eigenvector, cost_vec, all_vec = sparse_eigenvector_reduction(
-        hessian_loss, architecture, layer_to_repair - 1, num_sparse_nodes
+    eigenvector, _, _ = sparse_eigenvector_reduction(
+        jacobian(egrad(objective))(init_params),
+        architecture,
+        layer_to_repair - 1,
+        num_sparse_nodes,
     )
-    # max_16_indices = list(np.argsort(cost_vec))
-    # repair_indices = []
-    # for id in max_16_indices:
-    #     repair_indices.append(
-    #         neural_return_weights_pert(
-    #             all_vec[id], architecture, layer_to_repair - 1
-    #         )
-    #     )
+
     return neural_return_weights_pert(
         eigenvector, architecture, layer_to_repair - 1
     )
