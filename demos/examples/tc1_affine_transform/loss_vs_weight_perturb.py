@@ -181,10 +181,26 @@ def main(given_comp):
     # constraint cost
     def objective(params):
         y_pred = neural_net_predict(params, x_train, architecture)
+        const = -(npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b)
+        loss = npa.sum(
+            # np.maximum(np.zeros(const.shape[0]), const)
+            __soft_plus(const, 100)
+            / const.shape[0]
+        )
+        # loss = 0.0
+        # for i in range(const.shape[0]):
+        #     for j in range(const.shape[1]):
+        #         if const[i, j] > 0:
+        #             loss += const[i, j]
+
+        return loss
+
+    def objective2(params):
+        y_pred = neural_net_predict(params, x_train, architecture)
         const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
-            __soft_plus(const, 10)
+            __soft_plus(const, 100)
             / const.shape[0]
         )
         # loss = 0.0
@@ -206,7 +222,8 @@ def main(given_comp):
     repair_indices, eig, hessian = get_sensitive_nodes(
         objective, init_params, architecture, 2, A, b
     )
-    if given_comp == []:
+    print(f"repair indices: {repair_indices}")
+    if len(given_comp) == 0:
         # plot 1:
         w1 = np.linspace(
             init_params[repair_indices[0]] - 1,
@@ -230,9 +247,9 @@ def main(given_comp):
             for j in range(W1.shape[1]):
                 init_params[repair_indices[0]] = W1[i, j]
                 init_params[repair_indices[1]] = W2[i, j]
-                obj[i, j] = objective(init_params)
+                obj[i, j] = objective2(init_params)
 
-        # plt.contour(W1, W2, obj, 1000, levels=[0])
+        plt.contour(W1, W2, obj, 1000, levels=[0])
         plt.contourf(W1, W2, obj, 1000, cmap="RdGy")
         plt.colorbar()
         plt.plot(
@@ -272,9 +289,7 @@ def main(given_comp):
             init_params[repair_indices[1]] + 1,
             100,
         )
-        print(
-            f"eigenvector: {[eig[repair_indices[0]], eig[repair_indices[1]]]}"
-        )
+        print(f"eigenvector: {[eig[0], eig[1]]}")
         w0 = [init_params[repair_indices[0]], init_params[repair_indices[1]]]
         print(w0)
         W1, W2 = np.meshgrid(w1, w2)
@@ -284,7 +299,7 @@ def main(given_comp):
             for j in range(W1.shape[1]):
                 init_params[repair_indices[0]] = W1[i, j]
                 init_params[repair_indices[1]] = W2[i, j]
-                obj[i, j] = objective(init_params)
+                obj[i, j] = objective2(init_params)
 
         # plt.contour(W1, W2, obj, 1000, levels=[0])
         plt.contourf(W1, W2, obj, 1000, cmap="RdGy")
@@ -292,12 +307,8 @@ def main(given_comp):
         plt.plot(
             [w1[0], w1[-1]],
             [
-                (eig[repair_indices[1]] / eig[repair_indices[0]])
-                * (w1[0] - w0[0])
-                + w0[1],
-                (eig[repair_indices[1]] / eig[repair_indices[0]])
-                * (w1[-1] - w0[0])
-                + w0[1],
+                (eig[1] / eig[0]) * (w1[0] - w0[0]) + w0[1],
+                (eig[1] / eig[0]) * (w1[-1] - w0[0]) + w0[1],
             ],
             label="eigenvector direction",
         )
@@ -314,4 +325,4 @@ def main(given_comp):
 
 
 if __name__ == "__main__":
-    main([0, 1])
+    main([])
