@@ -187,10 +187,10 @@ def main(
         "python",
         "keras",
         {
-            "timelimit": 3600,
-            "mipgap": 0.1,
+            "timelimit": 54000,
+            "mipgap": 0.04,
             "mipfocus": 1,
-            "improvestarttime": 3600,
+            "improvestarttime": 54000,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
