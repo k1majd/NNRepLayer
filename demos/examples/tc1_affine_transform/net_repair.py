@@ -159,7 +159,7 @@ def main(
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 5
+    max_weight_bound = 1
     cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -187,7 +187,7 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 2],
+        repair_node_list=[0, 1, 2],
         # output_bounds=(-100.0, 100.0),
     )
     out_model = repair_obj.repair(options)

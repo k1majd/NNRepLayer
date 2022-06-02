@@ -170,7 +170,7 @@ def main(
     b = np.array([[0.5]])
 
     repair_set, _ = get_sensitive_nodes(
-        model_orig, layer_to_repair, x_train, 2, A, b
+        model_orig, layer_to_repair, x_train, 3, A, b
     )
     print(repair_set)
     print("----------------------")
@@ -187,10 +187,17 @@ def main(
         "python",
         "keras",
         {
+<<<<<<< HEAD
             "timelimit": 54000,
             "mipgap": 0.04,
             "mipfocus": 1,
             "improvestarttime": 54000,
+=======
+            "timelimit": 7200,
+            "mipgap": 0.1,
+            "mipfocus": 1,
+            "improvestarttime": 7200,
+>>>>>>> 578220be9d094131265320980c505d5f3631079e
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",
         },
@@ -204,7 +211,8 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[12, 28],
+        # repair_node_list=[12, 28],
+        repair_node_list=repair_set[-1],
         # output_bounds=(-100.0, 100.0),
     )
     out_model = repair_obj.repair(options)

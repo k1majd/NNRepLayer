@@ -395,11 +395,11 @@ def get_sensitive_nodes(
 
     def objective(params):
         y_pred = neural_net_predict(params, x_train, architecture)
-        const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
+        const = -(npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b)
         loss = npa.sum(
-            #         np.maximum(np.zeros((const.shape[0],const.shape[1])), const)
-            __soft_plus(const, 100)
-            / const.shape[0]
+            # npa.maximum(np.zeros((const.shape[0], const.shape[1])), const)
+            __soft_plus(const, 20)
+            # / const.shape[0]
         )
         return loss
 
@@ -409,19 +409,16 @@ def get_sensitive_nodes(
     for w in w_b:
         ws = ws + list(w.flatten())
     init_params = npa.array(ws)
-    hessian_loss = jacobian(egrad(objective))(init_params)
-    eigenvector, cost_vec, all_vec = sparse_eigenvector_reduction(
-        hessian_loss, architecture, layer_to_repair - 1, num_sparse_nodes
+    eigenvector, _, _ = sparse_eigenvector_reduction(
+        jacobian(egrad(objective))(init_params),
+        architecture,
+        layer_to_repair - 1,
+        num_sparse_nodes,
     )
-    max_16_indices = list(np.argsort(cost_vec))
-    repair_indices = []
-    for id in max_16_indices:
-        repair_indices.append(
-            neural_return_weights_pert(
-                all_vec[id], architecture, layer_to_repair - 1
-            )
-        )
-    return repair_indices, np.sort(cost_vec)
+
+    return neural_return_weights_pert(
+        eigenvector, architecture, layer_to_repair - 1
+    )
 
 
 ###############################################################################

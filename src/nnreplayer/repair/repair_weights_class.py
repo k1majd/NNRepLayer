@@ -130,6 +130,8 @@ class NNRepair:
         self.param_precision = param_precision
         ###########
         # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
+        if repair_node_list is None:
+            repair_node_list = list(range(self.architecture[layer_2_repair]))
         self.repair_node_list = repair_node_list
         ###########
         self.__set_up_optimizer(
