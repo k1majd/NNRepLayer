@@ -183,11 +183,11 @@ def main(
     repair_obj.compile(
         x_train,
         y_train,
-        layer_to_repair,
+        3,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 1, 2],
+        repair_node_list=[0, 1, 5, 7, 8],
         # output_bounds=(-100.0, 100.0),
     )
     out_model = repair_obj.repair(options)

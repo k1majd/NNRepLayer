@@ -7,6 +7,7 @@ import autograd.numpy as npa
 from autograd import jacobian
 from autograd import elementwise_grad as egrad
 import scipy
+from csv import writer
 from shapely.affinity import scale
 from affine_utils import (
     original_data_loader,
@@ -179,7 +180,7 @@ def get_sensitive_nodes(
     #             all_vec[id], architecture, layer_to_repair - 1
     #         )
     #     )
-    return selected_nodes
+    return selected_nodes, cost_vec
 
 
 def main(given_comp):
@@ -200,7 +201,7 @@ def main(given_comp):
     # constraint cost
     def objective(params):
         y_pred = neural_net_predict(params, x_train, architecture)
-        const = -(npa.matmul(A[1], y_pred[:, 0 : A[0].shape[0]].T) - b[1])
+        const = -(npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b)
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
             __soft_plus(const, 100)
@@ -230,6 +231,47 @@ def main(given_comp):
 
         return loss
 
+    def objective3(params):
+        y_pred = neural_net_predict(params, x_train, architecture)
+        loss = 0
+        vertices = [
+            [npa.array([2.5, 0.767]), npa.array([0.767, 2.5])],
+            [npa.array([4.233, 2.5]), npa.array([2.5, 0.767])],
+            [npa.array([0.767, 2.5]), npa.array([2.5, 4.233])],
+            [npa.array([2.5, 4.233]), npa.array([4.233, 2.5])],
+        ]
+        for i in range(y_pred.shape[0]):
+            point = y_pred[i, 0 : A[0].shape[0]]
+            temp = npa.matmul(A, point) - b.T
+            if np.any(temp > 0):
+                locs = np.where(temp[0] > 0)[0]
+                max_dist = npa.float64(-1.0)
+                for id in list(locs):
+                    p1 = vertices[id][0]
+                    p2 = vertices[id][1]
+                    r = npa.dot(p2 - p1, point - p1)
+                    r /= npa.linalg.norm(p2 - p1) ** 2
+                    if r < 0:
+                        dist = npa.linalg.norm(point - p1)
+                    elif r > 1:
+                        dist = npa.linalg.norm(p2 - point)
+                    else:
+                        dist = npa.sqrt(
+                            npa.linalg.norm(point - p1) ** 2
+                            - (r * npa.linalg.norm(p2 - p1)) ** 2
+                        )
+                    max_dist = npa.maximum(max_dist, dist)
+                print(max_dist._value._value)
+                loss += max_dist
+
+        # loss = 0.0
+        # for i in range(const.shape[0]):
+        #     for j in range(const.shape[1]):
+        #         if const[i, j] > 0:
+        #             loss += const[i, j]
+
+        return loss
+
     architecture = np.array(tf2_get_architecture(model_orig))
     w_b = tf2_get_weights(model_orig)
     ws = []
@@ -238,9 +280,22 @@ def main(given_comp):
     init_params = npa.array(ws)
 
     # get sensitive nodes
-    repair_indices = get_sensitive_nodes(
-        objective, init_params, architecture, 5
+    repair_indices, cost_vec = get_sensitive_nodes(
+        objective3, init_params, architecture, 5
     )
+    print(f"repair indices: {repair_indices}")
+    # pylint: disable=unspecified-encoding
+    with open(
+        f"costs2.csv",
+        "a+",
+        newline="",
+    ) as write_obj:
+        # Create a writer object from csv module
+        csv_writer = writer(write_obj)
+        # Add contents of list as last row in the csv file
+        csv_writer.writerow(list(cost_vec))
+    print("saved: stats")
+
     print(f"repair indices: {repair_indices}")
 
 
