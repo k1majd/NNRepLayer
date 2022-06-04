@@ -4,20 +4,18 @@ import csv
 import pickle
 from csv import writer
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 
-import tensorboard
+
+
 import tensorflow as tf
-import tensorflow_probability as tfp
+
 from tensorflow import keras
 from tensorflow.keras import layers
-from tensorflow.keras.models import Model
 
-from shapely.geometry import Polygon
-from shapely.affinity import scale
 
-from pyomo.gdp import *
-from scipy.spatial import ConvexHull
+
+
+
 
 from datetime import datetime
 
@@ -141,7 +139,9 @@ def buildModelWindow(data_size):
     return model, tf_callback, architecture
 
 
-def plotTestData(model, train_obs, train_ctrls, test_obs, test_ctrls):
+def plotTestData(
+    model, train_obs, train_ctrls, test_obs, test_ctrls, layer_to_repair
+):
     pred_ctrls = model(test_obs, training=False)
 
     fig, (ax1, ax2) = plt.subplots(nrows=2)
@@ -170,7 +170,10 @@ def plotTestData(model, train_obs, train_ctrls, test_obs, test_ctrls):
     # plt.figure(2)
 
     print(f"average abs error: {np.sum(err)/err.shape[0]}")
-    plt.show()
+    direc = os.path.dirname(os.path.realpath(__file__))
+    path_write = os.path.join(direc, "figs")
+    plt.savefig(path_write + f"/repaired_model_64_nodes_{layer_to_repair}.png")
+    # plt.show()
 
     # plt.savefig("../figures/layer4_60_n60.pdf")
 
@@ -217,7 +220,7 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 1  # first layer-(0) last layer-(4)
+    layer_to_repair = 3  # first layer-(0) last layer-(4)
     max_weight_bound = 10  # specifying the upper bound of weights error
     cost_weights = np.array([100.0, 1.0])  # cost weights
     # output_bounds=np.array([-100.0, 100.0])
@@ -229,8 +232,8 @@ if __name__ == "__main__":
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
-        repair_node_list=[0, 1, 5, 7, 8],
-        output_bounds=(-50, 50),
+        # repair_node_list=[0, 1, 5, 7, 8],
+        output_bounds=(-30, 30),
     )
 
     direc = os.path.dirname(os.path.realpath(__file__))
@@ -262,10 +265,10 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 7200,  # max time algorithm will take in seconds
+            "timelimit": 43200,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 1,  #
-            "improvestarttime": 7200,
+            "improvestarttime": 43200,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}{now_str}.log",
         },
@@ -297,7 +300,7 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
     with open(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset{now_str}.pickle",
+        + f"/data/repair_dataset_64_nodes_{now_str}.pickle",
         "wb",
     ) as data:
         pickle.dump([x_train, y_train], data)
@@ -306,7 +309,8 @@ if __name__ == "__main__":
     pred_ctrls = out_model(test_obs, training=False)
     err = np.abs(test_ctrls - pred_ctrls)
     with open(
-        path_write + f"/stats/repair_layer{layer_to_repair}{now_str}.csv",
+        path_write
+        + f"/stats/repair_64_nodes_layer{layer_to_repair}{now_str}.csv",
         "a+",
         newline="",
     ) as write_obj:
@@ -322,6 +326,13 @@ if __name__ == "__main__":
         csv_writer.writerow(model_evaluation)
     print("saved: stats")
 
-    plotTestData(out_model, train_obs, train_ctrls, test_obs, test_ctrls)
+    plotTestData(
+        out_model,
+        train_obs,
+        train_ctrls,
+        test_obs,
+        test_ctrls,
+        layer_to_repair,
+    )
 
     pass

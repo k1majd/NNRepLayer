@@ -1,0 +1,45 @@
+
+Gurobi 9.5.1 (linux64) logging started Fri 03 Jun 2022 06:36:05 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_net/logs/opt_log_layer3_6_3_2022_18_35_17.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 59820 rows, 36261 columns and 160620 nonzeros
+Model fingerprint: 0x6536de6e
+Model has 101 quadratic objective terms
+Variable types: 17061 continuous, 19200 integer (19200 binary)
+Coefficient statistics:
+  Matrix range     [1e-03, 3e+01]
+  Objective range  [4e-01, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 3e+01]
+  RHS range        [1e-04, 3e+01]
+Presolve removed 34376 rows and 13888 columns
+Presolve time: 0.26s
+Presolved: 25444 rows, 22373 columns, 104868 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 15973 continuous, 6400 integer (6400 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   13819    8.9832277e+02   8.274657e+02   0.000000e+00      5s
+   34939    8.9832277e+02   1.473108e-03   0.000000e+00     10s
+   34960    8.9832277e+02   0.000000e+00   0.000000e+00     10s
+
+Root relaxation: objective 8.983228e+02, 34960 iterations, 6.94 seconds (20.23 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  898.32277    0 5043          -  898.32277      -     -   10s
+     0     0  898.32277    0 4751          -  898.32277      -     -   24s
+     0     0  898.32277    0 4465          -  898.32277      -     -   37s
+     0     0  898.32277    0 4959          -  898.32277      -     -   38s
+     0     0  898.32277    0 4917          -  898.32277      -     -   50s
+     0     0  898.32277    0 4867          -  898.32277      -     -   51s
+     0     0  898.32277    0 4843          -  898.32277      -     -   64s
+     0     0  898.32277    0 4790          -  898.32277      -     -   64s
+     0     0  898.32277    0 4785          -  898.32277      -     -   86s
+     0     0  898.32277    0 4745          -  898.32277      -     -   88s
+H    0     0                    16836.700340  898.32277  94.7%     -   99s
