@@ -187,7 +187,7 @@ if __name__ == "__main__":
     # ctrl_model_orig, callback, architecture = buildModelWindow(train_obs.shape)
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig/original_model"
+        + "/models/model_orig_64_nodes"
     )
     # ctrl_model_orig.load_weights('models/model1')
     # ctrl_model_orig.fit(
@@ -280,7 +280,9 @@ if __name__ == "__main__":
     # store the repaired model
     keras.models.save_model(
         out_model,
-        path_write + f"/models/model_layer_{layer_to_repair}" + now_str,
+        path_write
+        + f"/models/model_layer_64_nodes_{layer_to_repair}"
+        + now_str,
         overwrite=True,
         include_optimizer=False,
         save_format=None,

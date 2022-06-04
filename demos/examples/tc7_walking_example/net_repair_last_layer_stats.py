@@ -178,7 +178,7 @@ if __name__ == "__main__":
     # ctrl_model_orig, callback, architecture = buildModelWindow(train_obs.shape)
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig/original_model"
+        + "/models/model_orig_64_nodes"
     )
     # ctrl_model_orig = keras.models.load_model(
     #     os.path.dirname(os.path.realpath(__file__))
@@ -251,7 +251,7 @@ if __name__ == "__main__":
         2000,
     ]
     mses = []
-    num_exp = 50
+    num_exp = 5
     for samp in num_samp:
         temp_mse = 0.0
         for i in range(num_exp):

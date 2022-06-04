@@ -200,8 +200,7 @@ def main(given_comp):
         const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
-            __soft_plus(const, 100)
-            / const.shape[0]
+            __soft_plus(const, 150)
         )
         # loss = 0.0
         # for i in range(const.shape[0]):
@@ -225,7 +224,7 @@ def main(given_comp):
             temp = npa.matmul(A, point) - b.T
             if np.any(temp > 0):
                 locs = np.where(temp[0] > 0)[0]
-                # max_dist = npa.float64(-1.0)
+                max_dist = npa.float64(-1.0)
                 for id in list(locs):
                     p1 = vertices[id][0]
                     p2 = vertices[id][1]
@@ -240,10 +239,76 @@ def main(given_comp):
                             npa.linalg.norm(point - p1) ** 2
                             - (r * npa.linalg.norm(p2 - p1)) ** 2
                         )
-                    loss += dist
-                    # max_dist = npa.maximum(max_dist, dist)
+                    # loss += dist
+                    max_dist = npa.maximum(max_dist, dist)
                 # print(max_dist._value._value)
-                # loss += max_dist
+                loss += max_dist
+
+        # loss = 0.0
+        # for i in range(const.shape[0]):
+        #     for j in range(const.shape[1]):
+        #         if const[i, j] > 0:
+        #             loss += const[i, j]
+
+        return loss
+
+    def objective4(params):
+        y_pred = neural_net_predict(params, x_train, architecture)
+        loss = npa.float64(0.0)
+        # all_dists = []
+        vertices = [
+            [npa.array([2.5, 0.767]), npa.array([0.767, 2.5])],
+            [npa.array([4.233, 2.5]), npa.array([2.5, 0.767])],
+            [npa.array([0.767, 2.5]), npa.array([2.5, 4.233])],
+            [npa.array([2.5, 4.233]), npa.array([4.233, 2.5])],
+        ]
+        for i in range(y_pred.shape[0]):
+            point = y_pred[i, 0 : A[0].shape[0]]
+            temp = npa.matmul(A, point) - b.T
+            if np.any(temp > 0):
+                locs = np.where(temp[0] > 0)[0]
+                max_dist = npa.float64(-1.0)
+                for id in list(locs):
+                    p1 = vertices[id][0]
+                    p2 = vertices[id][1]
+                    r = npa.dot(p2 - p1, point - p1)
+                    r /= npa.linalg.norm(p2 - p1) ** 2
+                    if r < 0:
+                        dist = npa.linalg.norm(point - p1)
+                    elif r > 1:
+                        dist = npa.linalg.norm(p2 - point)
+                    else:
+                        dist = npa.sqrt(
+                            npa.linalg.norm(point - p1) ** 2
+                            - (r * npa.linalg.norm(p2 - p1)) ** 2
+                        )
+                    # loss += dist
+                    max_dist = npa.maximum(max_dist, dist)
+
+                # print(max_dist._value._value)
+                loss += __soft_plus(-max_dist, 100)
+            else:
+                max_dist = npa.float64(-1000.0)
+                for ver in vertices:
+                    p1 = ver[0]
+                    p2 = ver[1]
+                    r = npa.dot(p2 - p1, point - p1)
+                    r /= npa.linalg.norm(p2 - p1) ** 2
+                    if r < 0:
+                        dist = npa.linalg.norm(point - p1)
+                    elif r > 1:
+                        dist = npa.linalg.norm(p2 - point)
+                    else:
+                        dist = npa.sqrt(
+                            npa.linalg.norm(point - p1) ** 2
+                            - (r * npa.linalg.norm(p2 - p1)) ** 2
+                        )
+                    # loss += dist
+                    max_dist = npa.maximum(max_dist, dist)
+
+                # print(max_dist._value._value)
+                # loss += __soft_plus(max_dist, 10)
+                loss += 1.0
 
         # loss = 0.0
         # for i in range(const.shape[0]):
@@ -262,7 +327,7 @@ def main(given_comp):
 
     # get sensitive nodes
     repair_indices, eig, hessian = get_sensitive_nodes(
-        objective3, init_params, architecture, 2, A, b
+        objective4, init_params, architecture, 2, A, b
     )
     print(f"repair indices: {repair_indices}")
     if len(given_comp) == 0:
@@ -289,7 +354,7 @@ def main(given_comp):
             for j in range(W1.shape[1]):
                 init_params[repair_indices[0]] = W1[i, j]
                 init_params[repair_indices[1]] = W2[i, j]
-                obj[i, j] = objective3(init_params)
+                obj[i, j] = objective2(init_params)
 
         plt.contour(W1, W2, obj, 1000, levels=[0])
         plt.contourf(W1, W2, obj, 1000, cmap="RdGy")
@@ -341,7 +406,7 @@ def main(given_comp):
             for j in range(W1.shape[1]):
                 init_params[repair_indices[0]] = W1[i, j]
                 init_params[repair_indices[1]] = W2[i, j]
-                obj[i, j] = objective2(init_params)
+                obj[i, j] = objective4(init_params)
 
         # plt.contour(W1, W2, obj, 1000, levels=[0])
         plt.contourf(W1, W2, obj, 1000, cmap="RdGy")

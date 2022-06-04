@@ -82,9 +82,9 @@ def generateDataWindow(window_size):
 
 
 def buildModelWindow(data_size):
-    layer_size1 = 32
-    layer_size2 = 32
-    layer_size3 = 32
+    layer_size1 = 64
+    layer_size2 = 64
+    layer_size3 = 64
     # input_layer = tf.keras.Input(shape=(data_size[1]))
     # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
     # layer_2 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_1)
@@ -150,8 +150,8 @@ if __name__ == "__main__":
         train_obs,
         train_ctrls,
         validation_data=(test_obs, test_ctrls),
-        batch_size=8,
-        epochs=20,
+        batch_size=10,
+        epochs=40,
         use_multiprocessing=True,
         verbose=1,
         shuffle=False,
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     keras.models.save_model(
         ctrl_model_orig,
         os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig/original_model",
+        + "/models/model_orig_64_nodes",
         overwrite=True,
         include_optimizer=False,
         save_format=None,
