@@ -265,12 +265,12 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 43200,  # max time algorithm will take in seconds
+            "timelimit": 86400,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
-            "mipfocus": 1,  #
-            "improvestarttime": 43200,
+            "mipfocus": 2,  #
+            "improvestarttime": 57600,
             "logfile": path_write
-            + f"/logs/opt_log_layer{layer_to_repair}{now_str}.log",
+            + f"/logs/opt_log_64_nodes_layer{layer_to_repair}{now_str}.log",
         },
     )
 
