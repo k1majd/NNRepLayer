@@ -229,7 +229,7 @@ if __name__ == "__main__":
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
-        repair_node_list=[0, 1, 5, 7, 8],
+        repair_node_list=[0, 8, 24, 26],
         output_bounds=(-50, 50),
     )
 

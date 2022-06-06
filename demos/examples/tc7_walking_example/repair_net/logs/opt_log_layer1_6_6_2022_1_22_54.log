@@ -1,0 +1,51 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Mon Jun  6 01:24:10 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_net/logs/opt_log_layer1_6_6_2022_1_22_54.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 53264 rows, 33183 columns and 213228 nonzeros
+Model fingerprint: 0x61b057b4
+Model has 101 quadratic objective terms
+Variable types: 13383 continuous, 19800 integer (19800 binary)
+Coefficient statistics:
+  Matrix range     [2e-04, 5e+01]
+  Objective range  [3e-01, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [1e-03, 5e+01]
+Presolve removed 38629 rows and 18824 columns
+Presolve time: 1.02s
+Presolved: 14635 rows, 14359 columns, 117121 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 10045 continuous, 4314 integer (4314 binary)
+
+Root relaxation: objective 4.226205e+02, 20173 iterations, 0.97 seconds (0.96 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  422.62047    0 3012          -  422.62047      -     -    2s
+
+Cutting planes:
+  Gomory: 15
+  Cover: 282
+  Implied bound: 257
+  Clique: 532
+  MIR: 248
+  StrongCG: 2
+  Flow cover: 236
+  Zero half: 1
+  Network: 29
+  RLT: 40
+  Relax-and-lift: 33
+  BQP: 25
+  PSD: 32
+
+Explored 1 nodes (20178 simplex iterations) in 3.92 seconds (2.61 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
