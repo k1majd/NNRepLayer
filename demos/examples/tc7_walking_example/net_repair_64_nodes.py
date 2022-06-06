@@ -183,7 +183,7 @@ if __name__ == "__main__":
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
     train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
-    rnd_pts = np.random.choice(test_obs.shape[0], 100)
+    rnd_pts = np.random.choice(test_obs.shape[0], 150)
     x_train = test_obs[rnd_pts]
     y_train = test_ctrls[rnd_pts]
 
@@ -220,7 +220,7 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    layer_to_repair = 2  # first layer-(0) last layer-(4)
     max_weight_bound = 10  # specifying the upper bound of weights error
     cost_weights = np.array([100.0, 1.0])  # cost weights
     # output_bounds=np.array([-100.0, 100.0])
@@ -233,7 +233,7 @@ if __name__ == "__main__":
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
         # repair_node_list=[0, 1, 5, 7, 8],
-        output_bounds=(-30, 30),
+        output_bounds=(-40, 40),
     )
 
     direc = os.path.dirname(os.path.realpath(__file__))
@@ -268,7 +268,7 @@ if __name__ == "__main__":
             "timelimit": 86400,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
-            "improvestarttime": 57600,
+            "improvestarttime": 80000,
             "logfile": path_write
             + f"/logs/opt_log_64_nodes_layer{layer_to_repair}{now_str}.log",
         },
