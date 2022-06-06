@@ -99,10 +99,11 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
         )
     )
     costs = []
-    all_vec = []
+    column_indices = []
     for L in range(num_non_sparse, num_non_sparse + 1):
         for subset in itertools.combinations(column_list, L):
             column_idx = list(subset)
+            column_indices.append(column_idx)
             sparse_idx = get_vec_idx_sparse(arch, layer, column_idx)
             # sparse_idx = [entry_list[i] for i in idx_list]
             H_reduced = H_dist[sparse_idx][:, sparse_idx]
@@ -111,7 +112,7 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
             #                 H_reduced = nearestPD(H_reduced)
 
             ei, vi = np.linalg.eig(H_reduced)
-            vec_reduced = vi[:, 0]
+            vec_reduced = vi[:, 0].real
             vec = np.zeros(H_dist.shape[0])
             idx = 0
             for el in sparse_idx:
@@ -119,7 +120,6 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
                 idx += 1
             cost = np.matmul(vec, np.matmul(H_dist, vec))
             costs.append(cost)
-            all_vec.append(vec)
             print(
                 f"iteration: {iteration}/{all_iters}, eval nodes: {column_idx}, cost: {cost}"
             )
@@ -129,7 +129,7 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
                 selected_nodes = column_idx
             iteration += 1
     print(f"max cost: {max_cost}, selected nodes: {selected_nodes}")
-    return selected_nodes, selected_vec, costs, all_vec
+    return selected_nodes, selected_vec, costs, column_indices
 
 
 def neural_net_predict(params, inputs, architechture):
@@ -167,7 +167,7 @@ def get_sensitive_nodes(
         selected_nodes,
         eigenvector,
         cost_vec,
-        all_vec,
+        column_indices,
     ) = sparse_eigenvector_reduction(
         hessian_loss, architecture, layer_to_repair - 1, num_sparse_nodes
     )
@@ -179,7 +179,7 @@ def get_sensitive_nodes(
     #             all_vec[id], architecture, layer_to_repair - 1
     #         )
     #     )
-    return selected_nodes, cost_vec
+    return selected_nodes, cost_vec, column_indices
 
 
 def loadData(name_csv):
@@ -335,13 +335,24 @@ def main(given_comp):
 
     # get sensitive nodes
     layer_to_repair = 1
-    repair_indices, cost_vec = get_sensitive_nodes(
+    repair_indices, cost_vec, column_indices = get_sensitive_nodes(
         objective,
         init_params,
         architecture,
-        2,
+        6,
         layer_to_repair,
     )
+    with open(
+        f"costs2.csv",
+        "a+",
+        newline="",
+    ) as write_obj:
+        # Create a writer object from csv module
+        csv_writer = csv.writer(write_obj)
+        # Add contents of list as last row in the csv file
+        csv_writer.writerow(list(column_indices))
+        csv_writer.writerow(list(cost_vec))
+    print("saved: stats")
     print(f"repair indices: {repair_indices}")
 
 
