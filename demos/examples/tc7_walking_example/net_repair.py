@@ -147,8 +147,7 @@ def plotTestData(
     train_ctrls,
     test_obs,
     test_ctrls,
-    layer_to_repair,
-    num_samples,
+    now_str,
 ):
     pred_ctrls = model(test_obs, training=False)
 
@@ -182,7 +181,7 @@ def plotTestData(
     path_write = os.path.join(direc, "figs")
     plt.savefig(
         path_write
-        + f"/repaired_model_32_nodes_{layer_to_repair}_{num_samples}.png"
+        + f"/repaired_model_32_nodes{now_str}.png"
     )
 
 
@@ -196,33 +195,10 @@ if __name__ == "__main__":
     x_train = test_obs[rnd_pts]
     y_train = test_ctrls[rnd_pts]
 
-    # ctrl_model_orig, callback, architecture = buildModelWindow(train_obs.shape)
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
         + "/models/model_orig/original_model"
     )
-    # ctrl_model_orig.load_weights('models/model1')
-    # ctrl_model_orig.fit(
-    #     train_obs,
-    #     train_ctrls,
-    #     validation_data=(test_obs, test_ctrls),
-    #     batch_size=8,
-    #     epochs=20,
-    #     use_multiprocessing=True,
-    #     verbose=1,
-    #     shuffle=False,
-    #     callbacks=callback,
-    # )
-    # plotTestData(ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls)
-
-    # from keras import backend as K
-
-    # inp = ctrl_model_orig.input                                           # input placeholder
-    # outputs = [layer.output for layer in ctrl_model_orig.layers]          # all layer outputs
-    # functor = K.function([inp], outputs )   # evaluation function
-
-    # # Testing
-    # layer_outs = functor([x_train])
 
     bound_upper = 10
     bound_lower = 30
@@ -230,7 +206,6 @@ if __name__ == "__main__":
     A = np.array([[1], [-1]])
     b = np.array([[bound_upper], [bound_lower]])
 
-    # repair_set = get_sensitive_nodes(ctrl_model_orig, 3, x_train, 2, A, b)
     # input the constraint list
     constraint_inside = ConstraintsClass(
         "inside", A, b
@@ -239,9 +214,11 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 1  # first layer-(0) last layer-(4)
-    max_weight_bound = 50  # specifying the upper bound of weights error
-    cost_weights = np.array([100.0, 1.0])  # cost weights
-    # output_bounds=np.array([-100.0, 100.0])
+    max_weight_bound = 10.  # specifying the upper bound of weights error
+    cost_weights = np.array([1.0, 1.0])  # cost weights
+    output_bounds = (-30., 40.)
+    repair_node_list = [5, 6, 8, 10, 24, 26, 30]
+    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
         x_train,
         y_train,
@@ -250,8 +227,8 @@ if __name__ == "__main__":
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
-        repair_node_list=[5, 6, 8, 10, 24, 26, 30],
-        output_bounds=(-50, 100),
+        repair_node_list=repair_node_list,
+        output_bounds=output_bounds,
     )
 
     direc = os.path.dirname(os.path.realpath(__file__))
@@ -270,13 +247,13 @@ if __name__ == "__main__":
     if not os.path.exists(path_write + "/stats"):
         os.makedirs(path_write + "/stats")
 
-    # setup directory to store the repaired model
-    if not os.path.exists(path_write):
-        os.makedirs(
-            path_write
-            + f"/models/model_layer_32_nodes_{layer_to_repair}_{num_samples}"
-            + now_str
-        )
+    # # setup directory to store the repaired model
+    # if not os.path.exists(path_write):
+    #     os.makedirs(
+    #         path_write
+    #         + f"/models/model_layer_32_nodes_{layer_to_repair}_{num_samples}_{num_nodes}"
+    #         + now_str
+    #     )
 
 
     # specify options
@@ -291,7 +268,7 @@ if __name__ == "__main__":
             "mipfocus": 2,  #
             "improvestarttime": 80000,
             "logfile": path_write
-            + f"/logs/opt_log_layer_32_nodes_{layer_to_repair}_{num_samples}{now_str}.log",
+            + f"/logs/opt_log{now_str}.log",
         },
     )
 
@@ -305,7 +282,7 @@ if __name__ == "__main__":
     keras.models.save_model(
         out_model,
         path_write
-        + f"/models/model_layer_32_nodes_{layer_to_repair}_{num_samples}"
+        + f"/models/model_layer{now_str}"
         + now_str,
         overwrite=True,
         include_optimizer=False,
@@ -321,7 +298,7 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
     with open(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset_32_nodes_{num_samples}{now_str}.pickle",
+        + f"/data/repair_dataset{now_str}.pickle",
         "wb",
     ) as data:
         pickle.dump([x_train, y_train], data)
@@ -331,7 +308,7 @@ if __name__ == "__main__":
     err = np.abs(test_ctrls - pred_ctrls)
     with open(
         path_write
-        + f"/stats/repair_layer_{layer_to_repair}_32_nodes_{num_samples}{now_str}.csv",
+        + f"/stats/repair_layer{now_str}.csv",
         "a+",
         newline="",
     ) as write_obj:
@@ -342,6 +319,26 @@ if __name__ == "__main__":
             layer_to_repair,
             "mae",
             np.sum(err) / err.shape[0],
+            "num_samples",
+            num_samples,
+            "num of repaired nodes",
+            num_nodes,
+            "repair node list",
+            repair_node_list,
+            "repair layer",
+            layer_to_repair,
+            "Num of nodes in repair layer",
+            32,
+            "timelimit",
+            options.optimizer_options["timelimit"],
+            "mipfocus",
+            options.optimizer_options["mipfocus"],
+            "max weight bunds",
+            cost_weights,
+            "cost weights",
+            cost_weights,
+            "output bounds",
+            output_bounds,
         ]
         # Add contents of list as last row in the csv file
         csv_writer.writerow(model_evaluation)
@@ -353,8 +350,7 @@ if __name__ == "__main__":
         train_ctrls,
         test_obs,
         test_ctrls,
-        layer_to_repair,
-        num_samples,
+        now_str,
     )
 
     pass
