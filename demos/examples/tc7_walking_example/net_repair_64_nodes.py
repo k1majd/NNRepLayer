@@ -140,7 +140,13 @@ def buildModelWindow(data_size):
 
 
 def plotTestData(
-    model, train_obs, train_ctrls, test_obs, test_ctrls, layer_to_repair
+    model, 
+    train_obs, 
+    train_ctrls, 
+    test_obs, 
+    test_ctrls, 
+    layer_to_repair, 
+    num_samples,
 ):
     pred_ctrls = model(test_obs, training=False)
 
@@ -172,7 +178,7 @@ def plotTestData(
     print(f"average abs error: {np.sum(err)/err.shape[0]}")
     direc = os.path.dirname(os.path.realpath(__file__))
     path_write = os.path.join(direc, "figs")
-    plt.savefig(path_write + f"/repaired_model_64_nodes_{layer_to_repair}.png")
+    plt.savefig(path_write + f"/repaired_model_64_nodes_{layer_to_repair}_{num_samples}.png")
     # plt.show()
 
     # plt.savefig("../figures/layer4_60_n60.pdf")
@@ -182,8 +188,9 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
+    num_samples = 100
     train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
-    rnd_pts = np.random.choice(test_obs.shape[0], 150)
+    rnd_pts = np.random.choice(test_obs.shape[0], num_samples)
     x_train = test_obs[rnd_pts]
     y_train = test_ctrls[rnd_pts]
 
@@ -206,6 +213,16 @@ if __name__ == "__main__":
     # )
     # plotTestData(ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls)
 
+
+    # from keras import backend as K
+
+    # inp = ctrl_model_orig.input                                           # input placeholder
+    # outputs = [layer.output for layer in ctrl_model_orig.layers]          # all layer outputs
+    # functor = K.function([inp], outputs )   # evaluation function
+
+    # # Testing
+    # layer_outs = functor([x_train])
+
     bound_upper = 10
     bound_lower = 30
 
@@ -220,7 +237,7 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 2  # first layer-(0) last layer-(4)
+    layer_to_repair = 4  # first layer-(0) last layer-(4)
     max_weight_bound = 10  # specifying the upper bound of weights error
     cost_weights = np.array([100.0, 1.0])  # cost weights
     # output_bounds=np.array([-100.0, 100.0])
@@ -255,7 +272,7 @@ if __name__ == "__main__":
     # setup directory to store the repaired model
     if not os.path.exists(path_write):
         os.makedirs(
-            path_write + f"/models/model_layer_{layer_to_repair}" + now_str
+            path_write + f"/models/model_layer_{layer_to_repair}_{num_samples}" + now_str
         )
 
     # specify options
@@ -270,7 +287,7 @@ if __name__ == "__main__":
             "mipfocus": 2,  #
             "improvestarttime": 80000,
             "logfile": path_write
-            + f"/logs/opt_log_64_nodes_layer{layer_to_repair}{now_str}.log",
+            + f"/logs/opt_log_64_nodes_layer{layer_to_repair}_{num_samples}{now_str}.log",
         },
     )
 
@@ -300,7 +317,7 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
     with open(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset_64_nodes_{now_str}.pickle",
+        + f"/data/repair_dataset_64_nodes_{num_samples}_{now_str}.pickle",
         "wb",
     ) as data:
         pickle.dump([x_train, y_train], data)
@@ -310,7 +327,7 @@ if __name__ == "__main__":
     err = np.abs(test_ctrls - pred_ctrls)
     with open(
         path_write
-        + f"/stats/repair_64_nodes_layer{layer_to_repair}{now_str}.csv",
+        + f"/stats/repair_64_nodes_layer{layer_to_repair}_{num_samples}{now_str}.csv",
         "a+",
         newline="",
     ) as write_obj:
@@ -333,6 +350,7 @@ if __name__ == "__main__":
         test_obs,
         test_ctrls,
         layer_to_repair,
+        num_samples,
     )
 
     pass

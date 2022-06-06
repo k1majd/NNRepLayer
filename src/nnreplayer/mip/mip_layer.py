@@ -21,6 +21,7 @@ class MIPLayer:
         bias: npt.NDArray,
         ####################################
         # TODO: add these parameters
+        data_precision: int,
         num_layers_ahead: int,
         repair_node_list: List[int],
         # weight_activations: npt.NDArray,
@@ -48,6 +49,7 @@ class MIPLayer:
         ############################################
         # TODO: Speratare activated and deactivated weight and bias terms
         # self.label = model.nlayers  # label of this layer
+        self.data_precision = data_precision
         self.repair_node_list = repair_node_list  # list of repair nodes
         # specify repair weights in the repair layers
         if model.nlayers == layer_to_repair and num_layers_ahead != 0:
@@ -231,8 +233,22 @@ class MIPLayer:
         # add the linear constraints related to the target repair nodes
         def constraints(model, i, j):
             product = self.b[j]
+            # ensure valued variables are rounded to the specified precision
             for k in range(self.uin):
-                product += x[i][k] * self.w[k, j]
+                temp = x[i][k] * self.w[k, j]
+                # ensure valued variables are rounded to the specified precision
+                if type(temp).__name__ == 'float64' or type(temp).__name__ == 'float': 
+                    temp = np.round(temp, self.data_precision)
+                product += temp
+                # ensure valued variables are rounded to the specified precision
+                # if type(product).__name__ == 'float64' or type(product).__name__ == 'float':
+                #     product = np.round(product, self.data_precision)
+            
+            # ensure valued variables are rounded to the specified precision
+            if type(product._args_[0]).__name__ == 'float64' or type(product._args_[0]).__name__ == 'float':
+                product._args_[0] = np.round(
+                    product._args_[0], self.data_precision
+                    )
             return (
                 product
                 == getattr(model, x_l)[i, j] - getattr(model, s_l)[i, j]
@@ -283,7 +299,13 @@ class MIPLayer:
                         node_value_temp = self.b_orig[c]
                         for k in range(self.uin):
                             node_value_temp += x[s][k] * self.w_orig[k, c]
-                        x_temp.append(node_value_temp)
+                        x_val_temp = np.round(
+                            node_value_temp, self.data_precision
+                            )
+                        x_temp.append(x_val_temp) if x_val_temp >= 0. else x_temp.append(0.)
+                        # x_temp.append(
+                        #     np.round(node_value_temp, self.data_precision)
+                        #     )
                 x_next.append(x_temp)
         else:
             for s in range(m):
@@ -406,6 +428,11 @@ class MIPLayer:
             product = self.b[j]
             for k in range(self.uin):
                 product += x[i][k] * self.w[k, j]
+            # ensure valued variables are rounded to the specified precision
+            if type(product._args_[0]).__name__ == 'float64' or type(product._args_[0]).__name__ == 'float':
+                product._args_[0] = np.round(
+                    product._args_[0], self.data_precision
+                    )
             return product == getattr(model, x_l)[i, j]
 
         setattr(

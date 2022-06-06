@@ -215,6 +215,15 @@ if __name__ == "__main__":
     # )
     # plotTestData(ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls)
 
+    # from keras import backend as K
+
+    # inp = ctrl_model_orig.input                                           # input placeholder
+    # outputs = [layer.output for layer in ctrl_model_orig.layers]          # all layer outputs
+    # functor = K.function([inp], outputs )   # evaluation function
+
+    # # Testing
+    # layer_outs = functor([x_train])
+
     bound_upper = 10
     bound_lower = 30
 
@@ -229,8 +238,8 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 4  # first layer-(0) last layer-(4)
-    max_weight_bound = 10  # specifying the upper bound of weights error
+    layer_to_repair = 1  # first layer-(0) last layer-(4)
+    max_weight_bound = 50  # specifying the upper bound of weights error
     cost_weights = np.array([100.0, 1.0])  # cost weights
     # output_bounds=np.array([-100.0, 100.0])
     repair_obj.compile(
@@ -241,8 +250,8 @@ if __name__ == "__main__":
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
-        repair_node_list=[5, 6, 8, 10, 26],
-        output_bounds=(-50, 50),
+        repair_node_list=[5, 6, 8, 10, 24, 26, 30],
+        output_bounds=(-50, 100),
     )
 
     direc = os.path.dirname(os.path.realpath(__file__))
@@ -269,6 +278,7 @@ if __name__ == "__main__":
             + now_str
         )
 
+
     # specify options
     options = Options(
         "gdp.bigm",
@@ -276,12 +286,12 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 7200,  # max time algorithm will take in seconds
+            "timelimit": 86400,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
-            "mipfocus": 1,  #
-            "improvestarttime": 7200,
+            "mipfocus": 2,  #
+            "improvestarttime": 80000,
             "logfile": path_write
-            + f"/logs/opt_log_layer_32_nodes{layer_to_repair}_{num_samples}{now_str}.log",
+            + f"/logs/opt_log_layer_32_nodes_{layer_to_repair}_{num_samples}{now_str}.log",
         },
     )
 
@@ -295,7 +305,7 @@ if __name__ == "__main__":
     keras.models.save_model(
         out_model,
         path_write
-        + f"/models/model_layer_32_nodes{layer_to_repair}"
+        + f"/models/model_layer_32_nodes_{layer_to_repair}_{num_samples}"
         + now_str,
         overwrite=True,
         include_optimizer=False,
@@ -311,7 +321,7 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
     with open(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset_32_nodes{now_str}.pickle",
+        + f"/data/repair_dataset_32_nodes_{num_samples}{now_str}.pickle",
         "wb",
     ) as data:
         pickle.dump([x_train, y_train], data)
@@ -321,7 +331,7 @@ if __name__ == "__main__":
     err = np.abs(test_ctrls - pred_ctrls)
     with open(
         path_write
-        + f"/stats/repair_layer{layer_to_repair}_32_nodes{now_str}.csv",
+        + f"/stats/repair_layer_{layer_to_repair}_32_nodes_{num_samples}{now_str}.csv",
         "a+",
         newline="",
     ) as write_obj:

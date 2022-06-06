@@ -1,0 +1,44 @@
+
+Gurobi 9.5.1 (linux64) logging started Mon 06 Jun 2022 03:40:13 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_net/logs/opt_log_layer_32_nodes_1_100_6_6_2022_15_39_25.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 55910 rows, 34806 columns and 239820 nonzeros
+Model fingerprint: 0x8b4affd8
+Model has 101 quadratic objective terms
+Variable types: 14106 continuous, 20700 integer (20700 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+02]
+  Objective range  [3e-02, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [4e-04, 1e+02]
+Presolve removed 35494 rows and 14671 columns
+Presolve time: 0.84s
+Presolved: 20416 rows, 20135 columns, 175862 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 13528 continuous, 6607 integer (6607 binary)
+Root relaxation presolve removed 6514 rows and 6514 columns
+Root relaxation presolved: 13902 rows, 13621 columns, 162834 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root relaxation: objective 7.109244e+02, 17198 iterations, 2.74 seconds (6.20 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  710.92436    0 1669          -  710.92436      -     -    4s
+     0     0  710.92436    0 1924          -  710.92436      -     -    8s
+     0     0  710.92436    0 2059          -  710.92436      -     -   12s
+     0     0  710.92436    0 1977          -  710.92436      -     -   15s
+     0     0  710.92436    0 2076          -  710.92436      -     -   18s
+     0     0  710.92436    0 2120          -  710.92436      -     -   23s
+     0     0  710.92436    0 2092          -  710.92436      -     -   27s
+     0     0  710.92436    0 2114          -  710.92436      -     -   30s
+     0     0  710.92436    0 2114          -  710.92436      -     -   34s
+     0     2  710.92436    0 2114          -  710.92436      -     -   73s
+     1     4  710.92436    1 2113          -  710.92436      -  27.0   75s
+    15    32  710.96080    4 2131          -  710.92436      -   726   87s
+    31    64  710.96080    5 2176          -  710.92436      -  3047   98s
