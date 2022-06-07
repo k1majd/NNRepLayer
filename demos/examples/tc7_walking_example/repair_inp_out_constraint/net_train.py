@@ -49,15 +49,22 @@ def generateDataWindow(window_size):
     Dfut = loadData(
         os.path.dirname(os.path.realpath(__file__)) + "/data/GeoffFTF_3.csv"
     )  # foot? pose?, angle, velocity
-    n = 20364
-    Dankle = np.subtract(Dtib[:n, 1], Dfut[:n, 1])
+    n = 20363
+    Dankle = np.subtract(Dtib[: n + 1, 1], Dfut[: n + 1, 1])
     observations = np.concatenate((Dfem[:n, 1:], Dtib[:n, 1:]), axis=1)
     observations = (observations - observations.mean(0)) / observations.std(0)
+    observations = np.concatenate(
+        (
+            observations,
+            Dankle[:n].reshape(n, 1),
+        ),
+        axis=1,
+    )
     controls = Dankle  # (Dankle - Dankle.mean(0))/Dankle.std(0)
     n_train = 18200
     # n_train = 500
-    train_observation = np.array([]).reshape(0, 4 * window_size)
-    test_observation = np.array([]).reshape(0, 4 * window_size)
+    train_observation = np.array([]).reshape(0, 5 * window_size)
+    test_observation = np.array([]).reshape(0, 5 * window_size)
     for i in range(n_train):
         temp_obs = np.array([]).reshape(1, 0)
         for j in range(window_size):
@@ -78,7 +85,12 @@ def generateDataWindow(window_size):
             )
         test_observation = np.concatenate((test_observation, temp_obs), axis=0)
     test_controls = controls[n_train + window_size :].reshape(-1, 1)
-    return train_observation, train_controls, test_observation, test_controls
+    return (
+        train_observation,
+        train_controls,
+        test_observation,
+        test_controls[:-1],
+    )
 
 
 def buildModelWindow(data_size):
@@ -143,14 +155,19 @@ def plotTestData(model, train_obs, train_ctrls, test_obs, test_ctrls):
 
 if __name__ == "__main__":
     # Train window model
-    train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
+    (
+        train_obs,
+        train_ctrls,
+        test_obs,
+        test_ctrls,
+    ) = generateDataWindow(10)
     ctrl_model_orig, callback, architecture = buildModelWindow(train_obs.shape)
     # ctrl_model_orig.load_weights('models/model1')
     ctrl_model_orig.fit(
         train_obs,
         train_ctrls,
         validation_data=(test_obs, test_ctrls),
-        batch_size=15,
+        batch_size=8,
         epochs=20,
         use_multiprocessing=True,
         verbose=1,
@@ -159,8 +176,7 @@ if __name__ == "__main__":
     )
     keras.models.save_model(
         ctrl_model_orig,
-        os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig_64_nodes",
+        os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig",
         overwrite=True,
         include_optimizer=False,
         save_format=None,

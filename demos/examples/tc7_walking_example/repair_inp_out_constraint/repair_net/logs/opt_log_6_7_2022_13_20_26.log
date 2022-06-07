@@ -1,0 +1,40 @@
+
+Gurobi 9.5.0 (win64) logging started Tue Jun  7 13:21:34 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc7_walking_example\repair_inp_out_constraint\repair_net/logs/opt_log_6_7_2022_13_20_26.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 59820 rows, 36261 columns and 177516 nonzeros
+Model fingerprint: 0x92f06f18
+Model has 101 quadratic objective terms
+Variable types: 17061 continuous, 19200 integer (19200 binary)
+Coefficient statistics:
+  Matrix range     [4e-04, 4e+01]
+  Objective range  [2e-03, 4e-01]
+  QObjective range [2e-02, 2e+00]
+  Bounds range     [1e+00, 4e+01]
+  RHS range        [1e-04, 4e+01]
+Presolve removed 35784 rows and 14592 columns
+Presolve time: 0.42s
+Presolved: 24036 rows, 21669 columns, 118948 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 15269 continuous, 6400 integer (6400 binary)
+Root relaxation presolve removed 6400 rows and 6400 columns
+Root relaxation presolved: 17636 rows, 15269 columns, 106148 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   12070    1.0767307e+00   9.591646e+02   0.000000e+00      5s
+   22200    1.0767307e+00   0.000000e+00   0.000000e+00      7s
+   22200    1.0767307e+00   0.000000e+00   0.000000e+00      7s
+
+Root relaxation: objective 1.076731e+00, 22200 iterations, 4.48 seconds (8.98 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    1.07673    0 1059          -    1.07673      -     -    7s
+     0     0    1.07673    0  697          -    1.07673      -     -   39s
