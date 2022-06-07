@@ -155,14 +155,16 @@ def buildModelWindow(data_size):
 
 
 def plotTestData(
-    model,
+    orig_model,
+    repair_model,
     train_obs,
     train_ctrls,
     test_obs,
     test_ctrls,
     now_str,
 ):
-    pred_ctrls = model.predict(test_obs)
+    pred_ctrls = orig_model.predict(test_obs)
+    pred_ctrls = repair_model.predict(test_obs)
     delta_u = np.subtract(pred_ctrls.flatten(), test_obs[:, -1].flatten())
     fig, (ax1, ax2, ax3) = plt.subplots(nrows=3)
     ax1.plot(test_ctrls, color="#173f5f")
@@ -170,20 +172,20 @@ def plotTestData(
     ax1.grid(alpha=0.5, linestyle="dashed")
     ax1.set_ylabel("Ankle Angle Control (rad)")
     ax1.set_xlabel("Time (s)")
-    ax1.set_xlim([0, 400])
+    ax1.set_xlim([0, 1000])
 
     err = np.abs(test_ctrls - pred_ctrls)
     ax2.plot(err, color="#173f5f")
     ax2.grid(alpha=0.5, linestyle="dashed")
     ax2.set_ylabel("Ankle Angle Control Error (rad)")
     ax2.set_xlabel("Time (s)")
-    ax2.set_xlim([0, 400])
+    ax2.set_xlim([0, 1000])
 
     ax3.plot(delta_u, color="#173f5f")
     ax3.grid(alpha=0.5, linestyle="dashed")
     ax3.set_ylabel("Ankle Angle Control Change (rad)")
     ax3.set_xlabel("Time (s)")
-    ax3.set_xlim([0, 400])
+    ax3.set_xlim([0, 1000])
     plt.show()
 
     # plt.figure(1)
@@ -203,7 +205,10 @@ def plotTestData(
 
 
 def generate_repair_dataset(obs, ctrl, num_samples):
-    delta_u = np.subtract(ctrl.flatten(), obs[:, -1].flatten())
+    max_window_size = 1000
+    delta_u = np.subtract(
+        ctrl[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
+    )
     violation_idx = np.where(np.abs(delta_u) > 2.0)[0]
     nonviolation_idx = np.where(np.abs(delta_u) <= 2.0)[0]
     if violation_idx.shape[0] == 0:
@@ -213,10 +218,10 @@ def generate_repair_dataset(obs, ctrl, num_samples):
         return obs[nonviolation_idx], ctrl[nonviolation_idx]
     else:
         violation_idx = np.random.choice(
-            violation_idx, size=int(num_samples / 2), replace=False
+            violation_idx, size=int(num_samples * 0.75), replace=False
         )
         nonviolation_idx = np.random.choice(
-            nonviolation_idx, size=int(num_samples / 2), replace=False
+            nonviolation_idx, size=int(num_samples * 0.25), replace=False
         )
         idx = np.concatenate((violation_idx, nonviolation_idx))
         return obs[idx], ctrl[idx]
@@ -238,14 +243,14 @@ if __name__ == "__main__":
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
-    plotTestData(
-        ctrl_model_orig,
-        train_obs,
-        train_ctrls,
-        test_obs,
-        test_ctrls,
-        now_str,
-    )
+    # plotTestData(
+    #     ctrl_model_orig,
+    #     train_obs,
+    #     train_ctrls,
+    #     test_obs,
+    #     test_ctrls,
+    #     now_str,
+    # )
 
     def out_constraint1(model, i):
         return (
@@ -261,7 +266,7 @@ if __name__ == "__main__":
 
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    layer_to_repair = 4  # first layer-(0) last layer-(4)
     max_weight_bound = 10.0  # specifying the upper bound of weights error
     cost_weights = np.array([1.0, 1.0])  # cost weights
     output_bounds = (-30.0, 40.0)
@@ -398,6 +403,7 @@ if __name__ == "__main__":
     print("saved: stats")
 
     plotTestData(
+        ctrl_model_orig,
         out_model,
         train_obs,
         train_ctrls,
