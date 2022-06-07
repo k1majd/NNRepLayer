@@ -234,7 +234,7 @@ def generateDataWindow(window_size):
 
 def main(given_comp):
     train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
-    rnd_pts = np.random.choice(test_obs.shape[0], 100)
+    rnd_pts = np.random.choice(test_obs.shape[0], test_obs.shape[0])
     x_train = test_obs[rnd_pts]
     y_train = test_ctrls[rnd_pts]
     # check_log_directories(path_read, path_write, layer_to_repair)
@@ -339,7 +339,7 @@ def main(given_comp):
         objective,
         init_params,
         architecture,
-        6,
+        5,
         layer_to_repair,
     )
     with open(
