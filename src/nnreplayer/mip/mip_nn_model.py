@@ -18,7 +18,6 @@ class MIPNNModel:
         bias: List[npt.NDArray],
         ####################################
         # TODO: add these parameters
-        data_precision: int,
         repair_node_list: List[int] = None,
         # bias_activations: npt.NDArray,
         # max_weight_bound: Union[int, float] = 10,
@@ -69,7 +68,6 @@ class MIPNNModel:
                     weights[layer_to_repair - 1 + iterate],
                     bias[layer_to_repair - 1 + iterate],
                     # TODO: add these parameters
-                    data_precision,
                     num_layers_ahead,
                     repair_node_list,
                     # bias_activations,
@@ -88,7 +86,6 @@ class MIPNNModel:
                 weights[-1],
                 bias[-1],
                 # TODO: add these parameters
-                data_precision,
                 num_layers_ahead,
                 repair_node_list,
                 # bias_activations,

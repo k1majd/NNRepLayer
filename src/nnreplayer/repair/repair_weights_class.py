@@ -411,7 +411,6 @@ class NNRepair:
             # bias_activations,
             # max_weight_bound,
             # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
-            self.data_precision,
             self.repair_node_list,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
