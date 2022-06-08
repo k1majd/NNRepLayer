@@ -1,0 +1,40 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 02:24:48 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_phase_constraint/repair_net/logs/opt_log_6_8_2022_2_24_29.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 2898 rows, 1700 columns and 7334 nonzeros
+Model fingerprint: 0x8f36a03d
+Model has 101 quadratic objective terms
+Variable types: 800 continuous, 900 integer (900 binary)
+Coefficient statistics:
+  Matrix range     [8e-03, 1e+02]
+  Objective range  [1e-01, 5e+00]
+  QObjective range [2e-01, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [2e-03, 1e+02]
+Presolve removed 1845 rows and 727 columns
+Presolve time: 0.02s
+Presolved: 1053 rows, 973 columns, 4364 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 722 continuous, 251 integer (251 binary)
+Root relaxation presolve removed 251 rows and 251 columns
+Root relaxation presolved: 802 rows, 722 columns, 3862 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root relaxation: infeasible, 1479 iterations, 0.03 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 1 nodes (1479 simplex iterations) in 0.07 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -

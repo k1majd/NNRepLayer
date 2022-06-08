@@ -1,0 +1,75 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 02:21:46 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_phase_constraint/repair_net/logs/opt_log_6_8_2022_2_21_9.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 28012 rows, 17157 columns and 76420 nonzeros
+Model fingerprint: 0x09622bcf
+Model has 101 quadratic objective terms
+Variable types: 7557 continuous, 9600 integer (9600 binary)
+Coefficient statistics:
+  Matrix range     [5e-04, 1e+02]
+  Objective range  [3e-02, 5e+00]
+  QObjective range [2e-01, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [7e-04, 1e+02]
+Presolve removed 16584 rows and 6592 columns
+Presolve time: 0.18s
+Presolved: 11428 rows, 10565 columns, 49852 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 7365 continuous, 3200 integer (3200 binary)
+Root relaxation presolve removed 3200 rows and 3200 columns
+Root relaxation presolved: 8228 rows, 7365 columns, 43452 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root relaxation: objective 2.754015e+02, 10802 iterations, 1.15 seconds (1.61 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  275.40146    0 1103          -  275.40146      -     -    2s
+     0     0  275.40146    0  344          -  275.40146      -     -   15s
+     0     0  275.40146    0  807          -  275.40146      -     -   21s
+     0     0  275.40146    0 1009          -  275.40146      -     -   21s
+     0     0  275.40146    0 1005          -  275.40146      -     -   21s
+     0     0  275.40146    0 1062          -  275.40146      -     -   23s
+H    0     0                    1159.6043265  275.40146  76.3%     -   48s
+     0     2  275.40146    0 1062 1159.60433  275.40146  76.3%     -   49s
+     1     4  275.46748    1 1141 1159.60433  275.40146  76.3%  1555   50s
+     7    12  275.46748    3 1204 1159.60433  275.40146  76.3%  5788   56s
+H   31    36                    1157.7409489  275.40146  76.2%  1821   61s
+H   32    36                    1151.5286996  275.40146  76.1%  1765   61s
+    68   106  275.46748   20 1174 1151.52870  275.40146  76.1%   864   83s
+H  114   190                    1112.5948618  275.40146  75.2%   928   84s
+H  135   190                    1099.1262691  275.40146  74.9%   787   84s
+   189   260  275.46748   58 1121 1099.12627  275.40146  74.9%   573   89s
+H  203   260                    1012.2031321  275.40146  72.8%   535   89s
+   259   264  275.46748   73 1080 1012.20313  275.40146  72.8%   427   96s
+H  274   401                     997.4558882  275.40146  72.4%   406   99s
+H  399   401                     982.0854903  275.40146  72.0%   286   99s
+   400  1063  275.46748   86 1065  982.08549  275.40146  72.0%   285  105s
+H 1406  1438                     970.6345216  275.40146  71.6%   167  118s
+H 1407  1438                     970.4121092  275.40146  71.6%   191  118s
+H 1437  1508                     958.8951806  275.40146  71.3%   214  122s
+H 1491  1508                     947.9925443  275.40146  70.9%   207  122s
+  1507  1781  277.63058  353 1642  947.99254  275.40146  70.9%   207  126s
+  1780  2014  277.74058  547 1405  947.99254  275.40146  70.9%   194  131s
+  2013  2039  291.29083  553 1419  947.99254  275.40146  70.9%   195  145s
+H 2039  2043                     947.9925438  275.40146  70.9%   268  146s
+
+Cutting planes:
+  Cover: 2
+  Implied bound: 114
+  MIR: 1180
+  Flow cover: 545
+  Relax-and-lift: 3
+
+Explored 2042 nodes (633015 simplex iterations) in 146.51 seconds (260.11 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 947.993 947.993 958.895 ... 1112.59
+
+Solve interrupted
+Best objective 9.479925437741e+02, best bound 2.754014628530e+02, gap 70.9490%

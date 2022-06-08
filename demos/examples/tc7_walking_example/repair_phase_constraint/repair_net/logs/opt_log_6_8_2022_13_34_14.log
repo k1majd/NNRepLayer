@@ -1,0 +1,41 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 13:34:50 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_phase_constraint/repair_net/logs/opt_log_6_8_2022_13_34_14.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 28012 rows, 17157 columns and 78692 nonzeros
+Model fingerprint: 0x9c6582a1
+Model has 101 quadratic objective terms
+Variable types: 7557 continuous, 9600 integer (9600 binary)
+Coefficient statistics:
+  Matrix range     [5e-04, 1e+02]
+  Objective range  [8e-02, 5e+00]
+  QObjective range [2e-01, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [7e-04, 1e+02]
+Presolve removed 16584 rows and 6592 columns
+Presolve time: 0.16s
+Presolved: 11428 rows, 10565 columns, 52124 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 7365 continuous, 3200 integer (3200 binary)
+Root relaxation presolve removed 3200 rows and 3200 columns
+Root relaxation presolved: 8228 rows, 7365 columns, 45724 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root relaxation: objective 4.957329e+01, 10996 iterations, 1.17 seconds (1.72 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   49.57329    0 1122          -   49.57329      -     -    2s
+     0     0   49.57329    0  590          -   49.57329      -     -   15s
+     0     0   49.57330    0  843          -   49.57330      -     -   16s
+     0     0   49.57330    0  960          -   49.57330      -     -   17s
+     0     0   49.57330    0  931          -   49.57330      -     -   18s
+     0     0   49.57330    0  571          -   49.57330      -     -   20s
+H    0     0                     119.2016083   49.57330  58.4%     -   38s
+     0     2   49.57330    0  571  119.20161   49.57330  58.4%     -   43s
+     1     4   49.58902    1 1072  119.20161   49.57330  58.4%   996   45s
+     3     8   49.58902    2 1049  119.20161   49.57330  58.4%   469   51s

@@ -142,30 +142,51 @@ def buildModelWindow(data_size):
 
 
 def plotTestData(
-    model,
+    original_model,
+    repaired_model,
     train_obs,
     train_ctrls,
     test_obs,
     test_ctrls,
     now_str,
+    bound_upper,
+    bound_lower,
+    layer_to_repair,
 ):
-    pred_ctrls = model(test_obs, training=False)
+    pred_ctrls_orig = original_model(test_obs, training=False)
+    pred_ctrls_repair = repaired_model(test_obs, training=False)
 
     fig, (ax1, ax2) = plt.subplots(nrows=2)
-    ax1.plot(test_ctrls, color="#173f5f")
-    ax1.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
-    ax1.grid(alpha=0.5, linestyle="dashed")
+    ax1.plot(test_ctrls, color="#167fb8", label="Reference")
+    ax1.plot(pred_ctrls_orig, color="#1abd15", label="Original Predictions")
+    ax1.plot(
+        pred_ctrls_repair,
+        color="#b81662",
+        label="Repaired Predictions",
+    )
+    bound_lower = -1 * bound_lower
+    ax1.axhline(y=bound_upper, color="k", linestyle="dashed")  # upper bound
+    ax1.axhline(y=bound_lower, color="k", linestyle="dashed")  # lower bound
     ax1.set_ylabel("Ankle Angle Control (rad)")
     ax1.set_xlabel("Time (s)")
-    ax1.set_xlim([0, 400])
+    ax1.set_xlim([0, 1000])
+    ax1.legend()
 
-    err = np.abs(test_ctrls - pred_ctrls)
-    ax2.plot(err, color="#173f5f")
+    err_orig = np.abs(test_ctrls - pred_ctrls_orig)
+    err_repair = np.abs(test_ctrls - pred_ctrls_repair)
+    ax2.plot(err_orig, color="#1abd15")
+    ax2.plot(err_repair, color="#b81662")
     ax2.grid(alpha=0.5, linestyle="dashed")
     ax2.set_ylabel("Ankle Angle Control Error (rad)")
     ax2.set_xlabel("Time (s)")
-    ax2.set_xlim([0, 400])
+    ax2.set_xlim([0, 1000])
 
+    # calculate mae
+
+    idx = np.where((test_ctrls > bound_lower) & (bound_upper > test_ctrls))[0]
+    fig.suptitle(
+        f"Upper-Lower Bound, Layer: {layer_to_repair}, MAE original: {np.mean(err_orig[idx]):.3f}, MAE repaired: {np.mean(err_repair[idx]):.3f}"
+    )
     # plt.figure(1)
     # plt.plot(test_ctrls, color="#173f5f")
     # plt.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
@@ -177,12 +198,10 @@ def plotTestData(
     # plt.figure(2)
 
     print(f"average abs error: {np.sum(err)/err.shape[0]}")
-    direc = os.path.dirname(os.path.realpath(__file__))
-    path_write = os.path.join(direc, "figs")
-    plt.savefig(
-        path_write
-        + f"/repaired_model_32_nodes{now_str}.png"
-    )
+    plt.show()
+    # direc = os.path.dirname(os.path.realpath(__file__))
+    # path_write = os.path.join(direc, "figs")
+    # plt.savefig(path_write + f"/repaired_model_32_nodes{now_str}.png")
 
 
 if __name__ == "__main__":
@@ -199,7 +218,7 @@ if __name__ == "__main__":
         os.path.dirname(os.path.realpath(__file__))
         + "/models/model_orig/original_model"
     )
-
+    
     bound_upper = 10
     bound_lower = 30
 
@@ -213,10 +232,10 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 1  # first layer-(0) last layer-(4)
-    max_weight_bound = 10.  # specifying the upper bound of weights error
+    layer_to_repair = 4  # first layer-(0) last layer-(4)
+    max_weight_bound = 10.0  # specifying the upper bound of weights error
     cost_weights = np.array([1.0, 1.0])  # cost weights
-    output_bounds = (-30., 40.)
+    output_bounds = (-30.0, 40.0)
     repair_node_list = [5, 6, 8, 10, 24, 26, 30]
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
@@ -255,7 +274,6 @@ if __name__ == "__main__":
     #         + now_str
     #     )
 
-
     # specify options
     options = Options(
         "gdp.bigm",
@@ -267,8 +285,7 @@ if __name__ == "__main__":
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "improvestarttime": 80000,
-            "logfile": path_write
-            + f"/logs/opt_log{now_str}.log",
+            "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
     )
 
@@ -281,9 +298,7 @@ if __name__ == "__main__":
     # store the repaired model
     keras.models.save_model(
         out_model,
-        path_write
-        + f"/models/model_layer{now_str}"
-        + now_str,
+        path_write + f"/models/model_layer{now_str}" + now_str,
         overwrite=True,
         include_optimizer=False,
         save_format=None,
@@ -307,8 +322,7 @@ if __name__ == "__main__":
     pred_ctrls = out_model(test_obs, training=False)
     err = np.abs(test_ctrls - pred_ctrls)
     with open(
-        path_write
-        + f"/stats/repair_layer{now_str}.csv",
+        path_write + f"/stats/repair_layer{now_str}.csv",
         "a+",
         newline="",
     ) as write_obj:
@@ -344,13 +358,21 @@ if __name__ == "__main__":
         csv_writer.writerow(model_evaluation)
     print("saved: stats")
 
+    out_model = keras.models.load_model(
+        os.path.dirname(os.path.realpath(__file__))
+        + "/repair_net/models/model_layer_3_5_31_2022_16_35_50"
+    )
     plotTestData(
+        ctrl_model_orig,
         out_model,
         train_obs,
         train_ctrls,
         test_obs,
         test_ctrls,
         now_str,
+        bound_upper,
+        bound_lower,
+        3,
     )
 
     pass

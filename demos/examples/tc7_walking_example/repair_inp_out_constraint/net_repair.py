@@ -8,7 +8,8 @@ from mpl_toolkits import mplot3d
 
 
 import tensorflow as tf
-import tensorflow_probability as tfp
+
+# import tensorflow_probability as tfp
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Model
@@ -155,37 +156,55 @@ def buildModelWindow(data_size):
 
 
 def plotTestData(
-    orig_model,
-    repair_model,
+    original_model,
+    repaired_model,
     train_obs,
     train_ctrls,
     test_obs,
     test_ctrls,
     now_str,
+    layer_to_repair,
 ):
-    pred_ctrls = orig_model.predict(test_obs)
-    pred_ctrls = repair_model.predict(test_obs)
-    delta_u = np.subtract(pred_ctrls.flatten(), test_obs[:, -1].flatten())
+    pred_ctrls_orig = original_model.predict(test_obs)
+    pred_ctrls_repair = repaired_model.predict(test_obs)
+    delta_u_orig = np.subtract(
+        pred_ctrls_orig.flatten(), test_obs[:, -1].flatten()
+    )
+    delta_u_repaired = np.subtract(
+        pred_ctrls_repair.flatten(), test_obs[:, -1].flatten()
+    )
     fig, (ax1, ax2, ax3) = plt.subplots(nrows=3)
-    ax1.plot(test_ctrls, color="#173f5f")
-    ax1.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
-    ax1.grid(alpha=0.5, linestyle="dashed")
+    ax1.plot(test_ctrls, color="#167fb8", label="Reference")
+    ax1.plot(pred_ctrls_orig, color="#1abd15", label="Original Predictions")
+    ax1.plot(
+        pred_ctrls_repair,
+        color="#b81662",
+        label="Repaired Predictions",
+    )
     ax1.set_ylabel("Ankle Angle Control (rad)")
     ax1.set_xlabel("Time (s)")
     ax1.set_xlim([0, 1000])
+    ax1.legend()
 
-    err = np.abs(test_ctrls - pred_ctrls)
-    ax2.plot(err, color="#173f5f")
+    err_orig = np.abs(test_ctrls - pred_ctrls_orig)
+    err_repair = np.abs(test_ctrls - pred_ctrls_repair)
+    ax2.plot(err_orig, color="#1abd15")
+    ax2.plot(err_repair, color="#b81662")
     ax2.grid(alpha=0.5, linestyle="dashed")
     ax2.set_ylabel("Ankle Angle Control Error (rad)")
     ax2.set_xlabel("Time (s)")
     ax2.set_xlim([0, 1000])
 
-    ax3.plot(delta_u, color="#173f5f")
+    ax3.plot(delta_u_orig, color="#1abd15")
+    ax3.plot(delta_u_repaired, color="#b81662")
     ax3.grid(alpha=0.5, linestyle="dashed")
+    ax3.axhline(y=2, color="k", linestyle="dashed")  # upper bound
+    ax3.axhline(y=-2, color="k", linestyle="dashed")  # lower bound
     ax3.set_ylabel("Ankle Angle Control Change (rad)")
     ax3.set_xlabel("Time (s)")
     ax3.set_xlim([0, 1000])
+
+    fig.suptitle(f"Bounded Control, Layer: {layer_to_repair}")
     plt.show()
 
     # plt.figure(1)
@@ -209,6 +228,7 @@ def generate_repair_dataset(obs, ctrl, num_samples):
     delta_u = np.subtract(
         ctrl[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
     )
+    # violation_idx = np.argsort(np.abs(delta_u))[::-1]
     violation_idx = np.where(np.abs(delta_u) > 2.0)[0]
     nonviolation_idx = np.where(np.abs(delta_u) <= 2.0)[0]
     if violation_idx.shape[0] == 0:
@@ -217,9 +237,10 @@ def generate_repair_dataset(obs, ctrl, num_samples):
         )
         return obs[nonviolation_idx], ctrl[nonviolation_idx]
     else:
-        violation_idx = np.random.choice(
-            violation_idx, size=int(num_samples * 0.75), replace=False
-        )
+        # violation_idx = np.random.choice(
+        #     violation_idx, size=int(num_samples * 0.75), replace=False
+        # )
+        # violation_idx = violation_idx[0 : int(144)]
         nonviolation_idx = np.random.choice(
             nonviolation_idx, size=int(num_samples * 0.25), replace=False
         )
@@ -231,14 +252,14 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
-    num_samples = 100
     train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
-    rnd_pts = np.random.choice(test_obs.shape[0], num_samples)
+    num_samples = 100
+    rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
         test_obs, test_ctrls, num_samples
     )
-    # x_train = test_obs[rnd_pts]
-    # y_train = test_ctrls[rnd_pts]
+    # x_train = test_obs[0:1, :]
+    # y_train = test_ctrls[0:1]
 
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
@@ -255,21 +276,21 @@ if __name__ == "__main__":
     def out_constraint1(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
-            <= 2.0
+            <= 1.9
         )
 
     def out_constraint2(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
-            >= -2.0
+            >= -1.9
         )
 
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 4  # first layer-(0) last layer-(4)
-    max_weight_bound = 10.0  # specifying the upper bound of weights error
-    cost_weights = np.array([1.0, 1.0])  # cost weights
-    output_bounds = (-30.0, 40.0)
+    layer_to_repair = 2  # first layer-(0) last layer-(4)
+    max_weight_bound = 10  # specifying the upper bound of weights error
+    cost_weights = np.array([10.0, 1.0])  # cost weights
+    output_bounds = (-30.0, 50.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
@@ -279,6 +300,8 @@ if __name__ == "__main__":
         # output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
+        data_precision=4,
+        param_precision=4,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
         output_bounds=output_bounds,
@@ -327,8 +350,8 @@ if __name__ == "__main__":
         {
             "timelimit": 3600,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
-            "mipfocus": 2,  #
-            "improvestarttime": 3000,
+            "mipfocus": 1,  #
+            "improvestarttime": 2500,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
     )
@@ -410,6 +433,7 @@ if __name__ == "__main__":
         test_obs,
         test_ctrls,
         now_str,
+        layer_to_repair,
     )
 
     pass

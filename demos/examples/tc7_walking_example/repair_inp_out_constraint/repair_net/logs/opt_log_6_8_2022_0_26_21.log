@@ -1,0 +1,43 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 00:26:43 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_inp_out_constraint/repair_net/logs/opt_log_6_8_2022_0_26_21.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 521 rows, 268 columns and 1067 nonzeros
+Model fingerprint: 0x814fea83
+Model has 2 quadratic objective terms
+Variable types: 247 continuous, 21 integer (21 binary)
+Coefficient statistics:
+  Matrix range     [7e-02, 1e+02]
+  Objective range  [4e+01, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [5e-04, 1e+02]
+Found heuristic solution: objective 103.8345879
+Presolve removed 429 rows and 210 columns
+Presolve time: 0.01s
+Presolved: 92 rows, 58 columns, 225 nonzeros
+Presolved model has 2 quadratic objective terms
+Variable types: 51 continuous, 7 integer (7 binary)
+
+Root relaxation: objective 0.000000e+00, 138 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    6  103.83459    0.00000   100%     -    0s
+H    0     0                       0.0000512    0.00000   100%     -    0s
+     0     0    0.00000    0    1    0.00005    0.00000   100%     -    0s
+
+Cutting planes:
+  MIR: 1
+  Flow cover: 4
+
+Explored 1 nodes (191 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 5.12472e-05 103.835 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 5.124718882143e-05, best bound 5.124718882143e-05, gap 0.0000%
