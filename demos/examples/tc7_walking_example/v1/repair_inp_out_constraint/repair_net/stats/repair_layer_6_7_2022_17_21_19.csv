@@ -1,1 +1,0 @@
-repair layer,4,mae,0.7166864277316535,num_samples,100,num of repaired nodes,32,repair node list,[],repair layer,4,Num of nodes in repair layer,32,timelimit,3600,mipfocus,2,max weight bunds,[1. 1.],cost weights,[1. 1.],output bounds,"(-30.0, 40.0)"
