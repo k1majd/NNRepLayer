@@ -1,0 +1,52 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 15:25:10 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_phase_constraint/repair_net/logs/opt_log_6_8_2022_15_24_28.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 28012 rows, 17157 columns and 77156 nonzeros
+Model fingerprint: 0xec1fb6d8
+Model has 101 quadratic objective terms
+Variable types: 7557 continuous, 9600 integer (9600 binary)
+Coefficient statistics:
+  Matrix range     [5e-04, 1e+02]
+  Objective range  [7e-03, 5e+00]
+  QObjective range [2e-01, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [7e-04, 1e+02]
+Presolve removed 16584 rows and 6592 columns
+Presolve time: 0.19s
+Presolved: 11428 rows, 10565 columns, 50588 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 7365 continuous, 3200 integer (3200 binary)
+Root relaxation presolve removed 3200 rows and 3200 columns
+Root relaxation presolved: 8228 rows, 7365 columns, 44188 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root relaxation: objective 7.441836e+01, 10862 iterations, 1.15 seconds (1.61 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   74.41836    0 1137          -   74.41836      -     -    3s
+     0     0   74.41837    0  938          -   74.41837      -     -   15s
+     0     0   74.41837    0  892          -   74.41837      -     -   16s
+     0     0   74.41837    0  990          -   74.41837      -     -   20s
+     0     0   74.41837    0  988          -   74.41837      -     -   22s
+     0     0   74.41837    0 1072          -   74.41837      -     -   24s
+
+Cutting planes:
+  Gomory: 1
+  Implied bound: 13
+  MIR: 641
+  Flow cover: 273
+  Relax-and-lift: 3
+
+Explored 1 nodes (78925 simplex iterations) in 56.38 seconds (84.41 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 0
+
+Solve interrupted
+Best objective -, best bound 7.441836881199e+01, gap -

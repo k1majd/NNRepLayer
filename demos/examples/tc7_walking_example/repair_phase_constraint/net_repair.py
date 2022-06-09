@@ -156,6 +156,8 @@ def plotTestData(
     train_ctrls,
     test_obs,
     test_ctrls,
+    repair_obs,
+    repair_ctrls,
     now_str,
     layer_to_repair,
 ):
@@ -198,19 +200,51 @@ def plotTestData(
     lim_u = np.interp(new_x, lim_x, lim_u)
     lim_l = np.interp(new_x, lim_x, lim_l)
 
-    pred_ctrls_repair = repaired_model.predict(train_obs)
-    pred_ctrls_orig = original_model.predict(train_obs)
-    plt.scatter(
-        train_obs[:, -1], pred_ctrls_repair[:], alpha=0.1, label="repaired"
+    pred_ctrls_repair_test = repaired_model.predict(test_obs)
+    pred_ctrls_orig_test = original_model.predict(test_obs)
+    pred_ctrls_repair_train = repaired_model.predict(train_obs)
+    pred_ctrls_orig_train = original_model.predict(train_obs)
+    pred_ctrls_repair_repair = repaired_model.predict(repair_obs)
+    pred_ctrls_orig_repair = original_model.predict(repair_obs)
+
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3)
+    ax1.scatter(test_obs[:, -1], pred_ctrls_orig_test, label="original - test")
+    ax1.scatter(
+        test_obs[:, -1], pred_ctrls_repair_test, label="repaired - test"
     )
-    plt.scatter(
-        train_obs[:, -1], pred_ctrls_orig[:], alpha=0.1, label="original"
+
+    ax2.scatter(
+        train_obs[:, -1], pred_ctrls_orig_train, label="original - train"
     )
-    plt.plot(new_x, lim_uc(new_x), "--r")
-    plt.plot(new_x, lim_lc(new_x), "--r")
+    ax2.scatter(
+        train_obs[:, -1], pred_ctrls_repair_train, label="repaired - train"
+    )
+
+    ax3.scatter(
+        repair_obs[:, -1], pred_ctrls_orig_repair, label="original - repair"
+    )
+    ax3.scatter(
+        repair_obs[:, -1], pred_ctrls_repair_repair, label="repaired - repair"
+    )
+
+    ax1.plot(new_x, lim_uc(new_x), "--r", label="upper limit")
+    ax1.plot(new_x, lim_lc(new_x), "--r", label="lower limit")
+
+    ax2.plot(new_x, lim_uc(new_x), "--r", label="upper limit")
+    ax2.plot(new_x, lim_lc(new_x), "--r", label="lower limit")
+
+    ax3.plot(new_x, lim_uc(new_x), "--r", label="upper limit")
+    ax3.plot(new_x, lim_lc(new_x), "--r", label="lower limit")
+
+    ax1.legend()
+    ax2.legend()
+    ax3.legend()
+
+    ax1.grid()
+    ax2.grid()
+    ax3.grid()
     # plt.plot(new_x, lim_u, 'k')
     # plt.plot(new_x, lim_l, 'k')
-    plt.grid()
     plt.show()
 
     # # pred_ctrls_orig = original_model.predict(test_obs)
@@ -271,7 +305,7 @@ def plotTestData(
     # plt.savefig(path_write + f"/repaired_model_32_nodes{now_str}.png")
 
 
-def generate_repair_dataset(obs, ctrl, num_samples, num_bins=5):
+def generate_repair_dataset(obs, ctrl, num_samples, num_bins=10):
     x_train = np.array([]).reshape(0, obs.shape[1])
     y_train = np.array([]).reshape(0, ctrl.shape[1])
     phase_vs_limits = loadData(
@@ -283,8 +317,8 @@ def generate_repair_dataset(obs, ctrl, num_samples, num_bins=5):
         diff = np.abs(phase_vs_limits[:, 0] - obs[i, -1])
         idx = diff.argmin()
         if not (
-            ctrl[i] <= phase_vs_limits[idx, 1]
-            and ctrl[i] >= phase_vs_limits[idx, 2]
+            (ctrl[i] <= phase_vs_limits[idx, 1])
+            and (ctrl[i] >= phase_vs_limits[idx, 2])
         ):
             adv_id.append(i)
             # x_train.append(obs[i])
@@ -301,7 +335,7 @@ def generate_repair_dataset(obs, ctrl, num_samples, num_bins=5):
     nonadv_obs = obs[nonadv_id, :]
     nonadv_ctrl = ctrl[nonadv_id]
 
-    bin = np.linspace(0, 1, 6)
+    bin = np.linspace(0, 1, num_bins + 1)
     for i in range(num_bins):
         adv_idx = np.random.choice(
             np.where(
@@ -335,10 +369,9 @@ if __name__ == "__main__":
     )
     num_samples = 100
     train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
-    x_adv, y_adv = generate_repair_dataset(train_obs, train_ctrls, num_samples)
-    rnd_pts = np.random.choice(x_adv.shape[0], num_samples)
-    x_train = x_adv[rnd_pts, :]
-    y_train = y_adv[rnd_pts]
+    x_train, y_train = generate_repair_dataset(
+        train_obs, train_ctrls, num_samples
+    )
 
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
@@ -370,7 +403,7 @@ if __name__ == "__main__":
 
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    layer_to_repair = 4  # first layer-(0) last layer-(4)
     max_weight_bound = 10  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     output_bounds = (-30.0, 100.0)
@@ -519,8 +552,10 @@ if __name__ == "__main__":
         train_ctrls,
         test_obs,
         test_ctrls,
+        x_train,
+        y_train,
         now_str,
-        layer_to_repair,
+        3,
     )
 
     pass
