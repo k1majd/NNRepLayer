@@ -1,0 +1,19 @@
+Dataset 
+The dataset current has three main files labeled GeoffFTF_1,2,3 each file contains data for an imu placed on the femur, shin, and foot respectively. Inside each file there are three collums of data which are time, angle, and angular velocity. The angle and angular velocity are in the world coordinate frame. I process the data from the foot and shin to get the angle and angular velocity of the ankle joint.
+
+Model
+The NN model takes in the angle and velocity from the femur and shin sensors as well as the phase to predict the ankle angle which will be used as a control parameter for the prosthetic. To make the network smoother and more accurate I use a sliding window of inputs thefore the input to the network is window_size * 5, or more specifically the current and previous n sensor readings. I am currently using a window size of 10 which is why the full input size is 50.
+
+Network inputs - [femur angle, femur velocity, shin angle, shin velocity, phase] * window size
+Network output - ankle angle
+
+
+EXPERIMENT 1 - GLOBAL CONSTRAINTS
+contrain the ankle angle control to between +24 and -14 
+We can compare global constraints using the last and second to last layers
+
+EXPERIMENT 2 - LOCALIZED CONSTRAINTS
+I have included the approximate phase of each datapoint which is a value from 0-1 this phase shows the approximate temporal position of the walking stride. In the data folder is a file named GeoffFTF_limits which contains three collums for phase, max control, and min control. Using the known phase as an input to the network we can constrain the output to between the limits. The image phase_based_limits.pdf in the data directory shows a plot of the limits as a function of the phase overlaying the data. This experiment will show more complex and nonlinear constrains for robot control.
+
+EXPERIMENT 3 - DYNAMIC CONSTRAINTS
+Here we need to show the ability to apply constraints iteratively such that the difference from one output to the next stays within some bounds, we could potentially add noise to the inputs to show a smooth output even with significant noise.

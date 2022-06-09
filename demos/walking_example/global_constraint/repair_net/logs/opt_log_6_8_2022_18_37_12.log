@@ -1,0 +1,48 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 18:37:27 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/walking_example/repair_bound_constraint/repair_net/logs/opt_log_6_8_2022_18_37_12.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 366 rows, 134 columns and 1467 nonzeros
+Model fingerprint: 0xf26cab4c
+Model has 101 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [3e-03, 1e+01]
+  Objective range  [9e-04, 4e-01]
+  QObjective range [2e-02, 2e+00]
+  Bounds range     [5e+00, 3e+01]
+  RHS range        [3e-03, 2e+01]
+Presolve removed 216 rows and 8 columns
+Presolve time: 0.01s
+Presolved: 150 rows, 126 columns, 1235 nonzeros
+Presolved model has 101 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 19
+ AA' NZ     : 1.427e+03
+ Factor NZ  : 2.198e+03
+ Factor Ops : 4.111e+04 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.62581046e+07 -1.72798973e+07  5.99e+03 4.13e+02  8.73e+05     0s
+   1   6.83315536e+06 -7.95944231e+06  3.78e+03 2.60e+02  5.99e+05     0s
+   2   2.98590922e+04 -1.78490109e+06  2.58e+02 1.78e+01  6.40e+04     0s
+   3   1.17692001e+02 -1.54717787e+06  8.13e+00 5.60e-01  6.75e+03     0s
+   4   7.43586256e+01 -9.86063721e+04  8.13e-06 5.60e-07  3.27e+02     0s
+   5   7.06020227e+01 -4.57770282e+02  2.19e-08 1.51e-09  1.75e+00     0s
+   6   1.21713871e+01 -4.69356577e+01  4.32e-10 2.97e-11  1.96e-01     0s
+   7   2.80167403e+00 -2.41789595e+00  1.07e-14 4.02e-15  1.73e-02     0s
+   8   1.87884724e+00  1.03479090e+00  1.07e-14 1.36e-15  2.79e-03     0s
+   9   1.74432834e+00  1.61561816e+00  7.46e-14 1.67e-15  4.26e-04     0s
+  10   1.73098002e+00  1.72801525e+00  1.46e-13 4.44e-16  9.82e-06     0s
+  11   1.73054465e+00  1.73026378e+00  1.40e-12 2.24e-15  9.30e-07     0s
+  12   1.73051690e+00  1.73051475e+00  5.86e-13 2.55e-15  7.10e-09     0s
+  13   1.73051649e+00  1.73051649e+00  1.61e-12 5.66e-15  7.20e-12     0s
+
+Barrier solved model in 13 iterations and 0.01 seconds (0.00 work units)
+Optimal objective 1.73051649e+00
+
