@@ -1,0 +1,53 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 00:11:50 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_inp_out_constraint/repair_net/logs/opt_log_6_8_2022_0_10_45.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 45883 rows, 28266 columns and 130171 nonzeros
+Model fingerprint: 0x8e12531b
+Model has 170 quadratic objective terms
+Variable types: 12042 continuous, 16224 integer (16224 binary)
+Coefficient statistics:
+  Matrix range     [1e-03, 1e+02]
+  Objective range  [1e-03, 2e-01]
+  QObjective range [1e-02, 2e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [2e-04, 1e+02]
+Presolve removed 27570 rows and 10912 columns
+Presolve time: 0.41s
+Presolved: 18313 rows, 17354 columns, 86185 nonzeros
+Presolved model has 170 quadratic objective terms
+Variable types: 11946 continuous, 5408 integer (5408 binary)
+Root relaxation presolve removed 5408 rows and 5408 columns
+Root relaxation presolved: 12905 rows, 11946 columns, 75369 nonzeros
+Root relaxation presolved model has 170 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+    9891    2.3652399e+00   4.618700e+02   0.000000e+00      5s
+   14780    2.3652399e+00   0.000000e+00   0.000000e+00      6s
+   14780    2.3652399e+00   0.000000e+00   0.000000e+00      6s
+
+Root relaxation: objective 2.365240e+00, 14780 iterations, 2.09 seconds (3.19 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    2.36524    0  893          -    2.36524      -     -    5s
+     0     0    2.36658    0  462          -    2.36658      -     -   25s
+     0     0    2.36658    0  712          -    2.36658      -     -   26s
+     0     0    2.36658    0  806          -    2.36658      -     -   28s
+     0     0    2.36658    0  781          -    2.36658      -     -   28s
+     0     0    2.36658    0  858          -    2.36658      -     -   30s
+     0     0    2.36658    0  828          -    2.36658      -     -   30s
+     0     0    2.36658    0  850          -    2.36658      -     -   33s
+H    0     0                      34.6944065    2.36658  93.2%     -  104s
+H    0     0                      34.6861435    2.36658  93.2%     -  111s
+     0     2    2.36658    0  850   34.68614    2.36658  93.2%     -  111s
+     3     8    2.36658    2  880   34.68614    2.36658  93.2%  1089  121s
+     7    12    2.36658    3  858   34.68614    2.36658  93.2%  3160  131s
+    11    16    2.36658    4  877   34.68614    2.36658  93.2%  3109  139s
+    15    20    2.36658    5  858   34.68614    2.36658  93.2%  3480  147s

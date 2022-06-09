@@ -1,0 +1,47 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 00:49:28 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_inp_out_constraint/repair_net/logs/opt_log_6_8_2022_0_49_6.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 299 rows, 154 columns and 611 nonzeros
+Model fingerprint: 0xe8afcb27
+Model has 2 quadratic objective terms
+Variable types: 142 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 2e+02]
+  Objective range  [4e+02, 4e+02]
+  QObjective range [2e+00, 2e+01]
+  Bounds range     [1e+00, 2e+02]
+  RHS range        [5e-04, 2e+02]
+Found heuristic solution: objective 138.3472233
+Presolve removed 246 rows and 120 columns
+Presolve time: 0.01s
+Presolved: 53 rows, 34 columns, 129 nonzeros
+Presolved model has 2 quadratic objective terms
+Variable types: 30 continuous, 4 integer (4 binary)
+Root relaxation presolve removed 4 rows and 4 columns
+Root relaxation presolved: 49 rows, 30 columns, 121 nonzeros
+Root relaxation presolved model has 2 quadratic objective terms
+
+
+Root relaxation: objective 0.000000e+00, 66 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    2  138.34722    0.00000   100%     -    0s
+H    0     0                       0.0000509    0.00000   100%     -    0s
+     0     0    0.00005    0    1    0.00005    0.00005  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 1
+  Flow cover: 1
+
+Explored 1 nodes (100 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 5.09076e-05 138.347 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 5.090758622828e-05, best bound 5.090758622828e-05, gap 0.0000%

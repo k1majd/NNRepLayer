@@ -1,0 +1,73 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Jun  8 08:59:19 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_inp_out_constraint/repair_net/logs/opt_log_6_8_2022_8_56_31.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 89147 rows, 55306 columns and 402683 nonzeros
+Model fingerprint: 0xd3be532a
+Model has 170 quadratic objective terms
+Variable types: 22858 continuous, 32448 integer (32448 binary)
+Coefficient statistics:
+  Matrix range     [2e-04, 5e+01]
+  Objective range  [1e-02, 2e+00]
+  QObjective range [1e-01, 2e+00]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [5e-04, 5e+01]
+Presolve removed 54418 rows and 21632 columns
+Presolve time: 1.01s
+Presolved: 34729 rows, 33674 columns, 315817 nonzeros
+Presolved model has 170 quadratic objective terms
+Variable types: 22858 continuous, 10816 integer (10816 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   15722    2.3652060e+01   2.837757e+03   0.000000e+00      5s
+   28772    2.3652060e+01   1.173992e+03   0.000000e+00     10s
+   49643    2.3652830e+01   0.000000e+00   0.000000e+00     13s
+
+Root relaxation: objective 2.365283e+01, 49643 iterations, 10.90 seconds (22.69 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   23.65283    0 8595          -   23.65283      -     -   12s
+     0     0   23.65283    0 8624          -   23.65283      -     -   37s
+     0     0   23.65283    0 8601          -   23.65283      -     -   76s
+     0     0   23.65283    0 8532          -   23.65283      -     -   80s
+     0     0   23.65283    0 8532          -   23.65283      -     -  149s
+     0     0   23.65283    0 8430          -   23.65283      -     -  152s
+     0     0   23.65283    0 8401          -   23.65283      -     -  247s
+     0     0   23.65283    0 8320          -   23.65283      -     -  250s
+     0     0   23.65283    0 8254          -   23.65283      -     -  334s
+     0     0   23.65283    0 8164          -   23.65283      -     -  338s
+     0     2   23.65283    0 8164          -   23.65283      -     -  693s
+     3     8   23.65340    2 8187          -   23.65283      -  1469  697s
+     7    12   23.65340    3 8167          -   23.65283      -  3381  702s
+    11    16   23.65341    3 8138          -   23.65283      -  5058  712s
+    15    20   23.65341    4 8131          -   23.65283      -  5840  716s
+    28    49   23.66311    6 7857          -   23.65283      -  4041  727s
+    48    83   23.66823   12 7767          -   23.65283      -  2851  734s
+    82   106   23.66823   14 7739          -   23.65283      -  1905  738s
+   105   140   23.77180   16 7656          -   23.65283      -  2668  859s
+   139   186   23.70012   16 7698          -   23.65283      -  2094  864s
+   185   243   23.70012   21 7670          -   23.65283      -  1707  868s
+   242   291   23.70802   30 7634          -   23.65283      -  1372  873s
+   290   339   23.70802   36 7573          -   23.65283      -  1204  877s
+   338   391   23.70886   45 7584          -   23.65283      -  1082  880s
+   456   523   23.70886   70 7498          -   23.65283      -   867  888s
+   522   577   23.70886   75 7527          -   23.65283      -   787  892s
+   576   634   23.70886   77 7524          -   23.65283      -   751  895s
+   633   678   23.70886   86 7495          -   23.65283      -   712  900s
+   742   819   23.70886   97 7494          -   23.65283      -   662  909s
+   818   879   23.70886  104 7496          -   23.65283      -   628  913s
+   878   930   23.70886  117 7535          -   23.65283      -   607  917s
+   929   988   23.70886  127 7535          -   23.65283      -   592  921s
+   987  1051   23.70886  137 7534          -   23.65283      -   576  926s
+  1050  1132   23.70886  148 7455          -   23.65283      -   561  931s
+  1131  1198   23.71820  153 7407          -   23.65283      -   542  937s
+  1197  1244   23.71820  155 7410          -   23.65283      -   532  942s
+  1243  1292   23.71820  162 7381          -   23.65283      -   531  947s
+  1291  1348   23.71820  167 7397          -   23.65283      -   530  952s
+  1347  1407   23.71820  172 7364          -   23.65283      -   529 3047s
