@@ -223,7 +223,7 @@ def plotTestData(
 
 
 def generate_repair_dataset(obs, ctrl, num_samples, bound):
-    max_window_size = obs.shape[0]
+    max_window_size = 1000
     delta_u = np.subtract(
         ctrl[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
     )
@@ -243,7 +243,7 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound):
         )
         violation_idx = violation_idx[rnd_pts]
         nonviolation_idx = np.random.choice(
-            nonviolation_idx, size=int(num_samples * 0.25), replace=False
+            nonviolation_idx, size=int(num_samples * 0.60), replace=False
         )
         idx = np.concatenate((violation_idx, nonviolation_idx))
         return obs[idx], ctrl[idx]
@@ -255,7 +255,7 @@ if __name__ == "__main__":
     # Train window model
     bound = 2.0
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
-    num_samples = 200
+    num_samples = 100
     # rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
         test_obs, test_ctrls, num_samples, bound
@@ -384,7 +384,7 @@ if __name__ == "__main__":
         + f"/data/repair_dataset{now_str}.pickle",
         "wb",
     ) as data:
-        pickle.dump([x_train, y_train, x_test, y_train], data)
+        pickle.dump([x_train, y_train, x_test, y_test], data)
 
     # save summary
     pred_ctrls = out_model(test_obs, training=False)
