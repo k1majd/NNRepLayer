@@ -1,14 +1,5 @@
 #!/bin/bash
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-echo "remove the existing stats in:"
-echo $SCRIPT_DIR/tc1/finetuned_net/stats
-rm -rf $SCRIPT_DIR/tc1/finetuned_net/stats
-echo "Finetuning"
-for i in {1..50}
-do
-   echo "Fine-tuning - test: $i"
-   python3 net_finetune.py -vi 0 -sm 0 -sd 0 -vb 0
-done
+
 
 # echo "remove the existing stats in:"
 # echo $SCRIPT_DIR/tc1/retrained_net/stats
@@ -26,6 +17,7 @@ done
 #    echo "Retrain - test: $i"
 #    python net_repair.py -rl $i
 # done
+python3 $SCRIPT_DIR/net_repair.py
 git add .
-git commit -m "update affine finetune"
+git commit -m "tc7 dynamic constraint layer 3"
 git push
