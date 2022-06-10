@@ -1,0 +1,47 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Fri Jun 10 00:48:53 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_6_10_2022_0_47_53.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 40962 rows, 25207 columns and 115394 nonzeros
+Model fingerprint: 0x488a79b6
+Model has 151 quadratic objective terms
+Variable types: 10807 continuous, 14400 integer (14400 binary)
+Coefficient statistics:
+  Matrix range     [7e-04, 6e+01]
+  Objective range  [2e-02, 3e+00]
+  QObjective range [1e-01, 2e+00]
+  Bounds range     [1e+00, 6e+01]
+  RHS range        [2e-04, 6e+01]
+Presolve removed 24620 rows and 9760 columns
+Presolve time: 0.42s
+Presolved: 16342 rows, 15447 columns, 76054 nonzeros
+Presolved model has 151 quadratic objective terms
+Variable types: 10647 continuous, 4800 integer (4800 binary)
+Root relaxation presolve removed 4800 rows and 4800 columns
+Root relaxation presolved: 11542 rows, 10647 columns, 66454 nonzeros
+Root relaxation presolved model has 151 quadratic objective terms
+
+
+Root relaxation: objective 8.044245e+01, 13100 iterations, 1.77 seconds (2.45 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   80.44245    0  863          -   80.44245      -     -    3s
+     0     0          -    0               -   80.44245      -     -   15s
+
+Cutting planes:
+  Cover: 114
+  MIR: 331
+  Flow cover: 939
+  Zero half: 1
+
+Explored 1 nodes (18399 simplex iterations) in 15.07 seconds (16.40 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 0
+
+Solve interrupted
+Best objective -, best bound 8.044244850452e+01, gap -

@@ -7,6 +7,7 @@ from csv import writer
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from matplotlib.lines import Line2D
+from matplotlib import gridspec
 
 import tensorflow as tf
 from scipy.interpolate import interp1d
@@ -29,7 +30,7 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
-plt.rcParams.update({"text.usetex": True})
+# plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -352,9 +353,34 @@ if __name__ == "__main__":
 
     model_lay4, _ = generate_model_n_data(load_str4)
     y_pred_lay4 = model_lay4.predict(x_test)
+    # # find intersection points of y_test and bound
+    # y_test_bound = y_test - bound
+    # crossing_indices = np.where(np.abs(y_test_bound) <= 0.1)[0]
+    # if y_test_bound[crossing_indices[0] - 1] > 0:
+    #     crossing_pairs_idx = [(0, crossing_indices[0])]
+    #     for i in range(len(crossing_indices) - 2):
+    #         crossing_pairs_idx.append(
+    #             (crossing_indices[i + 1], crossing_indices[i + 2])
+    #         )
+    # else:
+    #     crossing_pairs_idx = []
+    #     for i in range(len(crossing_indices) - 1):
+    #         crossing_pairs_idx.append(
+    #             (crossing_indices[i], crossing_indices[i + 1])
+    #         )
+    # create two subplots with share x axis
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
 
     # load original model data
-    fig, (ax1, ax2) = plt.subplots(figsize=(15, 8), nrows=2)
+    # fig, (ax1, ax2) = plt.subplots(figsize=(15, 8), nrows=2)
+    # fig = plt.figure(figsize=(13, 5))
+    # gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1])
+    # ax1 = plt.subplot(gs[0])
+    ax1.axvspan(0, 6, color="#DDA0DD", alpha=0.5)
+    ax1.axvspan(98.7, 122.8, color="#DDA0DD", alpha=0.5)
+    ax1.axvspan(211.3, 239.7, color="#DDA0DD", alpha=0.5)
+    ax1.axvspan(330.7, 355, color="#DDA0DD", alpha=0.5)
     ax1.axhline(
         y=bound, color="#8B8878", linewidth=3, linestyle="dashed"
     )  # upper bound
@@ -377,17 +403,22 @@ if __name__ == "__main__":
         label="Repaired Predictions - Layer 4",
     )
     ax1.set_ylabel("Ankle Angle Control (rad)", fontsize=16)
-    ax1.set_xlabel("Time (s)", fontsize=16)
-    ax1.set_xlim([0, 400])
+    # ax1.set_xlabel("Time (s)", fontsize=16)
+    # ax1.set_xlim([0, 400])
     ax1.set_ylim([-18.0, 21.2])
     ax1.grid(alpha=0.8, linestyle="dashed")
-    ax1.set_xticks(np.linspace(0, 400, 5, endpoint=True))
+    # ax1.set_xticks(np.linspace(0, 400, 5, endpoint=True))
     ax1.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax1.tick_params(axis="both", which="major", labelsize=14)
 
     err_orig = np.abs(y_test - y_pred_orig)
     err_lay3 = np.abs(y_test - y_pred_lay3)
     err_lay4 = np.abs(y_test - y_pred_lay4)
+    # ax2 = plt.subplot(gs[1], sharex=ax1)
+    ax2.axvspan(0, 6, color="#DDA0DD", alpha=0.5)
+    ax2.axvspan(98.7, 122.8, color="#DDA0DD", alpha=0.5)
+    ax2.axvspan(211.3, 239.7, color="#DDA0DD", alpha=0.5)
+    ax2.axvspan(330.7, 355, color="#DDA0DD", alpha=0.5)
     ax2.plot(err_orig, linewidth=3, color="red")
     ax2.plot(err_lay3, linewidth=3, color="g")
     ax2.plot(err_lay4, linewidth=3, color="b")
@@ -418,11 +449,12 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.5, 0.3),
+        bbox_to_anchor=(0.5, 0.0),
         bbox_transform=fig.transFigure,
         ncol=4,
-        fontsize=20,
+        fontsize=15,
     )
     leg.get_frame().set_facecolor("white")
+    plt.tight_layout()
 
     plt.show()

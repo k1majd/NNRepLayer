@@ -11,6 +11,11 @@ New bounds:
 
 bound 2.
 layer3: _6_9_2022_21_32_23
+layer4: _6_9_2022_23_59_1
 
 bound 1.5
 layer3: _6_9_2022_22_11_13
+layer4: infeasible
+
+bound 1.
+layer3: 

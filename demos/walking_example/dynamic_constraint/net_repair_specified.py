@@ -253,7 +253,7 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
-    bound = 1.5
+    bound = 0.3
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
     num_samples = 100
     # rnd_pts = np.random.choice(1000, num_samples)
@@ -276,6 +276,9 @@ if __name__ == "__main__":
 
     x_train = dataset[0]
     y_train = dataset[1]
+    # rnd_pts = np.random.choice(150, 50)
+    # x_train = x_train[rnd_pts]
+    # y_train = y_train[rnd_pts]
 
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
@@ -303,7 +306,7 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 3  # first layer-(0) last layer-(4)
-    max_weight_bound = 0.2  # specifying the upper bound of weights error
+    max_weight_bound = 1  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     output_bounds = (-30.0, 60.0)
     repair_node_list = []

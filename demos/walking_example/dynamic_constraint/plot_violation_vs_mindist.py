@@ -333,8 +333,8 @@ if __name__ == "__main__":
     # parameter
     bound = 2.0
 
-    load_str3 = "_6_9_2022_22_11_13"
-    load_str4 = "_6_9_2022_22_11_13"
+    load_str3 = "_6_9_2022_21_32_23"
+    load_str4 = "_6_9_2022_23_59_1"
 
     # load test data and original model
     model_orig = keras.models.load_model(
