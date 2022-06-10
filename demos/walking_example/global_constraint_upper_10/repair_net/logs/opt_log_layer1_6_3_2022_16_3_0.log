@@ -1,0 +1,61 @@
+
+Gurobi 9.5.0 (win64) logging started Fri Jun  3 16:04:01 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc7_walking_example\repair_net/logs/opt_log_layer1_6_3_2022_16_3_0.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 55910 rows, 34806 columns and 239720 nonzeros
+Model fingerprint: 0xbae79625
+Model has 101 quadratic objective terms
+Variable types: 14106 continuous, 20700 integer (20700 binary)
+Coefficient statistics:
+  Matrix range     [2e-04, 5e+01]
+  Objective range  [3e-01, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [1e-03, 5e+01]
+Presolve removed 35048 rows and 14180 columns
+Presolve time: 1.31s
+Presolved: 20862 rows, 20626 columns, 181781 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 13862 continuous, 6764 integer (6764 binary)
+Root relaxation presolve removed 6746 rows and 6746 columns
+Root relaxation presolved: 14116 rows, 13880 columns, 168289 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root relaxation: objective 8.294814e+02, 15566 iterations, 2.31 seconds (4.66 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  829.48141    0 1886          -  829.48141      -     -    4s
+     0     0  829.48141    0 2343          -  829.48141      -     -   11s
+     0     0  829.48141    0 2190          -  829.48141      -     -   15s
+     0     0  829.48141    0 2181          -  829.48141      -     -   20s
+     0     0  829.48141    0 2226          -  829.48141      -     -   22s
+     0     0  829.48141    0 2173          -  829.48141      -     -   25s
+     0     0          -    0               -  829.48141      -     -   27s
+
+Cutting planes:
+  Gomory: 3
+  Cover: 409
+  Implied bound: 172
+  Projected implied bound: 1
+  Clique: 19
+  MIR: 994
+  StrongCG: 8
+  Flow cover: 1341
+  Zero half: 5
+  RLT: 1
+  Relax-and-lift: 45
+  BQP: 1
+  PSD: 1
+
+Explored 1 nodes (50534 simplex iterations) in 27.73 seconds (52.77 work units)
+Thread count was 16 (of 16 available processors)
+
+Solution count 0
+
+Solve interrupted
+Best objective -, best bound 8.294814088714e+02, gap -
