@@ -1,0 +1,57 @@
+
+Gurobi 9.5.1 (linux64) logging started Fri 10 Jun 2022 12:12:07 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_6_10_2022_12_11_30.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 40962 rows, 25207 columns and 115394 nonzeros
+Model fingerprint: 0xebeb94dd
+Model has 151 quadratic objective terms
+Variable types: 10807 continuous, 14400 integer (14400 binary)
+Coefficient statistics:
+  Matrix range     [7e-04, 6e+01]
+  Objective range  [2e-02, 3e+00]
+  QObjective range [1e-01, 2e+00]
+  Bounds range     [1e-01, 6e+01]
+  RHS range        [2e-04, 6e+01]
+Presolve removed 29715 rows and 14832 columns
+Presolve time: 0.27s
+Presolved: 11247 rows, 10375 columns, 53752 nonzeros
+Presolved model has 151 quadratic objective terms
+Variable types: 7279 continuous, 3096 integer (3096 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   38033    7.6221686e+01   5.867342e+01   0.000000e+00      5s
+   61792    7.6325546e+01   0.000000e+00   0.000000e+00      9s
+
+Root relaxation: objective 7.632555e+01, 61792 iterations, 9.07 seconds (19.20 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   76.32555    0 2415          -   76.32555      -     -   10s
+     0     0   76.33087    0 2319          -   76.33087      -     -   13s
+     0     0   76.34373    0 2274          -   76.34373      -     -   15s
+     0     0 infeasible    0               - infeasible      -     -   30s
+
+Cutting planes:
+  Cover: 102
+  Implied bound: 422
+  Clique: 72
+  MIR: 498
+  StrongCG: 5
+  Flow cover: 1165
+  RLT: 4
+  Relax-and-lift: 111
+  BQP: 1
+  PSD: 9
+
+Explored 1 nodes (174321 simplex iterations) in 30.52 seconds (52.17 work units)
+Thread count was 32 (of 96 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
