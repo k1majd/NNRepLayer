@@ -17,5 +17,5 @@ bound 1.5
 layer3: _6_9_2022_22_11_13
 layer4: infeasible
 
-bound 1.
-layer3: 
+bound .5
+layer3: _6_10_2022_12_27_27
