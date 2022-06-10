@@ -1,0 +1,47 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Thu Jun  9 19:11:04 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_6_9_2022_19_10_12.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 37077 rows, 22792 columns and 105173 nonzeros
+Model fingerprint: 0x02bd7a20
+Model has 136 quadratic objective terms
+Variable types: 9832 continuous, 12960 integer (12960 binary)
+Coefficient statistics:
+  Matrix range     [7e-04, 5e+01]
+  Objective range  [2e-02, 3e+00]
+  QObjective range [1e-01, 2e+00]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [2e-04, 5e+01]
+Presolve removed 22254 rows and 8832 columns
+Presolve time: 0.32s
+Presolved: 14823 rows, 13960 columns, 69575 nonzeros
+Presolved model has 136 quadratic objective terms
+Variable types: 9640 continuous, 4320 integer (4320 binary)
+Found heuristic solution: objective 63.0873315
+Root relaxation presolve removed 4320 rows and 4320 columns
+Root relaxation presolved: 10503 rows, 9640 columns, 60935 nonzeros
+Root relaxation presolved model has 136 quadratic objective terms
+
+
+Root relaxation: objective 4.754099e+01, 12306 iterations, 1.65 seconds (2.40 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   47.54099    0  863   63.08733   47.54099  24.6%     -    3s
+H    0     0                      63.0515151   47.54099  24.6%     -    3s
+H    0     0                      63.0247372   47.54099  24.6%     -   12s
+H    0     0                      62.9949416   47.54099  24.5%     -   12s
+H    0     0                      62.9596024   47.54099  24.5%     -   12s
+     0     0   47.54099    0  718   62.95960   47.54099  24.5%     -   12s
+     0     0   47.54099    0  676   62.95960   47.54099  24.5%     -   18s
+     0     0   47.54099    0  790   62.95960   47.54099  24.5%     -   19s
+     0     0   47.54099    0  771   62.95960   47.54099  24.5%     -   27s
+     0     0   47.54099    0  798   62.95960   47.54099  24.5%     -   28s
+     0     0   47.54099    0  785   62.95960   47.54099  24.5%     -   28s
+     0     0   47.54099    0  794   62.95960   47.54099  24.5%     -   30s
+H    0     0                      62.8871168   47.54099  24.4%     -   55s
+H    0     2                      62.2296639   47.54099  23.6%     -   55s
+     0     2   47.54099    0  794   62.22966   47.54099  23.6%     -   55s
