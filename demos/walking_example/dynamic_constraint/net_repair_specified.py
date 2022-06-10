@@ -437,6 +437,8 @@ if __name__ == "__main__":
             cost_weights,
             "output bounds",
             output_bounds,
+            "bound",
+            bound,
         ]
         # Add contents of list as last row in the csv file
         csv_writer.writerow(model_evaluation)

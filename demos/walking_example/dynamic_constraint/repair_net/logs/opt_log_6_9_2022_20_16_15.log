@@ -1,0 +1,57 @@
+
+Gurobi 9.5.1 (linux64) logging started Thu 09 Jun 2022 08:16:52 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_6_9_2022_20_16_15.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 37077 rows, 22792 columns and 105173 nonzeros
+Model fingerprint: 0xa5d74443
+Model has 136 quadratic objective terms
+Variable types: 9832 continuous, 12960 integer (12960 binary)
+Coefficient statistics:
+  Matrix range     [7e-04, 5e+01]
+  Objective range  [2e-01, 3e+01]
+  QObjective range [1e+00, 2e+00]
+  Bounds range     [5e-01, 5e+01]
+  RHS range        [2e-04, 5e+01]
+Presolve removed 22254 rows and 8832 columns
+Presolve time: 0.14s
+Presolved: 14823 rows, 13960 columns, 69594 nonzeros
+Presolved model has 136 quadratic objective terms
+Variable types: 9640 continuous, 4320 integer (4320 binary)
+Root relaxation presolve removed 4320 rows and 4320 columns
+Root relaxation presolved: 10503 rows, 9640 columns, 60954 nonzeros
+Root relaxation presolved model has 136 quadratic objective terms
+
+
+Root relaxation: objective 4.754099e+02, 12271 iterations, 1.07 seconds (2.54 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  475.40987    0  796          -  475.40987      -     -    3s
+     0     0  475.40987    0  836          -  475.40987      -     -    9s
+     0     0  475.40987    0  837          -  475.40987      -     -    9s
+     0     0  475.40988    0  676          -  475.40988      -     -   12s
+     0     0  475.40996    0  645          -  475.40996      -     -   12s
+     0     0  475.41014    0  619          -  475.41014      -     -   13s
+     0     0  475.41014    0  636          -  475.41014      -     -   13s
+     0     0  475.41045    0  620          -  475.41045      -     -   14s
+     0     0  475.41084    0  602          -  475.41084      -     -   14s
+     0     0  475.41092    0  610          -  475.41092      -     -   14s
+
+Cutting planes:
+  Gomory: 1
+  Cover: 1
+  Implied bound: 5
+  MIR: 362
+  Flow cover: 257
+  Relax-and-lift: 5
+
+Explored 1 nodes (35316 simplex iterations) in 26.11 seconds (48.49 work units)
+Thread count was 32 (of 96 available processors)
+
+Solution count 0
+
+Solve interrupted
+Best objective -, best bound 4.754114915091e+02, gap -
