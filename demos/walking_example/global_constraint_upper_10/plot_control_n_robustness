@@ -427,19 +427,19 @@ if __name__ == "__main__":
         y_test, color="k", linewidth=3, linestyle="dashed", label="Reference"
     )
     ax1.plot(
-        y_pred_orig, color="red", linewidth=3, label="Original Predictions"
+        y_pred_orig, color="red", linewidth=3, label="Original predictions"
     )
     ax1.plot(
         y_pred_lay3,
         color="g",
         linewidth=3,
-        label="Repaired Predictions - Layer 3",
+        label="Repaired predictions - mid layer",
     )
     ax1.plot(
         y_pred_lay4,
         color="b",
         linewidth=3,
-        label="Repaired Predictions - Layer 4",
+        label="Repaired predictions - last layer",
     )
     ax1.set_ylabel("Control (rad)", fontsize=16)
     # ax1.set_xlabel("Time (s)", fontsize=16)
