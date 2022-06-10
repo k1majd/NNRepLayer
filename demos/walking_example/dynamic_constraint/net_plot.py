@@ -1,4 +1,3 @@
-from cProfile import label
 import numpy as np
 import os
 import csv
@@ -9,7 +8,6 @@ from mpl_toolkits import mplot3d
 
 
 import tensorflow as tf
-from scipy.interpolate import interp1d
 
 # import tensorflow_probability as tfp
 from tensorflow import keras
@@ -28,8 +26,6 @@ from datetime import datetime
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
-
-plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -252,15 +248,20 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound):
         return obs[idx], ctrl[idx]
 
 
-def generate_model_n_data(str):
+if __name__ == "__main__":
+    load_str = "_6_9_2022_10_58_35"
+
+    # Train window model
+    bound = 2.0
+
     # load model
-    # ctrl_model_orig = keras.models.load_model(
-    #     os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
-    # )
+    ctrl_model_orig = keras.models.load_model(
+        os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
+    )
 
     ctrl_model_repair = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{str}{str}"
+        + f"/repair_net/models/model_layer{load_str}{load_str}"
     )
 
     # load data
@@ -270,152 +271,24 @@ def generate_model_n_data(str):
         os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
     with open(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset{str}.pickle",
+        + f"/data/repair_dataset{load_str}.pickle",
         "rb",
     ) as data:
         dataset = pickle.load(data)
 
-    return ctrl_model_repair, dataset
+    x_train = dataset[0]
+    y_train = dataset[1]
+    x_test = dataset[2]
+    y_test = dataset[3]
 
-
-def give_mean_and_upperstd(model, x_train, x_test, bound):
-    dist = []
-    violation = []
-    test_pred = model.predict(x_test)
-    for i in range(x_test.shape[0]):
-        dist.append(
-            np.min(np.linalg.norm(x_train[:, :-1] - x_test[i, :-1], axis=1))
-        )
-        temp = np.abs(test_pred[i] - x_test[i, -1]) - bound
-        if temp > 0:
-            violation.append(temp[0])
-        else:
-            violation.append(0.0)
-
-    dist = np.array(dist)
-    violation = np.array(violation)
-    num_bins = 14
-    bins = np.linspace(0, np.max(dist), num_bins + 1)
-    # mean and std of each bin in violation
-    violation_mean = []
-    violation_std = []
-    for i in range(num_bins):
-        idx = np.where(np.logical_and(dist >= bins[i], dist < bins[i + 1]))[0]
-        violation_mean.append(np.mean(violation[idx]))
-        violation_std.append(np.std(violation[idx]))
-
-    violation_mean = np.array(violation_mean)
-    violation_std = np.array(violation_std)
-
-    # plot interpolated violation error bars with mean and fill areas for std
-    upper_limit = violation_mean + violation_std
-    # lower_limit = violation_mean - violation_std
-    lim_uc = interp1d(bins[:-1], upper_limit, kind="cubic")
-    # lim_lc = interp1d(bins[:-1], lower_limit, kind="cubic")
-    mean = interp1d(bins[:-1], violation_mean, kind="cubic")
-    distance = np.linspace(0, np.max(bins[:-1]), 1000)
-    return lim_uc, mean, distance
-
-
-def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
-    ax.fill_between(
-        distance,
-        mean(distance),
-        lim_uc(distance),
-        alpha=0.5,
-        color=color,
-    )
-    ax.plot(distance, mean(distance), color=color, label=label)
-    return ax
-
-
-if __name__ == "__main__":
-    # parameter
     bound = 2.0
+    x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
 
-    load_str3 = "_6_9_2022_13_3_1"
-    load_str4 = "_6_9_2022_13_9_26"
-
-    # load test data and original model
-    model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
+    plotTestData(
+        ctrl_model_orig,
+        ctrl_model_repair,
+        x_test,
+        y_test,
+        bound,
+        3,
     )
-    x_test, y_test, _, _ = generateDataWindow(10)
-    y_pred = model_orig.predict(x_test)
-    err = np.abs(y_pred.flatten() - x_test[:, -1].flatten())
-    violate_ids = np.where(err > bound)[0]
-    x_test = x_test[violate_ids]
-    y_test = y_test[violate_ids]
-
-    # load layer 3 data
-
-    model_lay3, dataset_lay3 = generate_model_n_data(load_str3)
-
-    x_train_lay3 = dataset_lay3[0]
-    y_train_lay3 = dataset_lay3[1]
-
-    lim_uc_lay3, mean_lay3, dist_lay3 = give_mean_and_upperstd(
-        model_lay3, x_train_lay3, x_test, bound
-    )
-
-    # load layer 4 data
-
-    model_lay4, dataset_lay4 = generate_model_n_data(load_str4)
-
-    x_train_lay4 = dataset_lay4[0]
-    y_train_lay4 = dataset_lay4[1]
-
-    lim_uc_lay4, mean_lay4, dist_lay4 = give_mean_and_upperstd(
-        model_lay4, x_train_lay4, x_test, bound
-    )
-
-    # load original model data
-    lim_uc_orig, mean_orig, dist_orig = give_mean_and_upperstd(
-        model_orig, x_train_lay4, x_test, bound
-    )
-
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.set_facecolor("lavender")
-    ax.grid(alpha=0.8, linestyle="dashed")
-    ax = plot_mean_vs_std(
-        ax,
-        dist_orig,
-        mean_orig,
-        lim_uc_orig,
-        color="r",
-        label="Original model",
-    )
-    ax = plot_mean_vs_std(
-        ax,
-        dist_lay3,
-        mean_lay3,
-        lim_uc_lay3,
-        color="g",
-        label="Repaired model - mid layer",
-    )
-    ax = plot_mean_vs_std(
-        ax,
-        dist_lay4,
-        mean_lay4,
-        lim_uc_lay4,
-        color="b",
-        label="Repaired model - last layer",
-    )
-    ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
-    ax.set_ylabel("Degree of violation", fontsize=16)
-    ax.set_title(
-        "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
-    )
-    ax.set_xlim(0, np.max(dist_orig))
-    ax.set_ylim(0 - 0.1, np.max(lim_uc_orig(dist_orig) + 0.1))
-    ax.set_xticks(np.linspace(0, np.max(dist_orig), 5))
-    ax.set_yticks(np.linspace(0, np.max(lim_uc_orig(dist_orig)), 5))
-    ax.tick_params(axis="x", labelsize=16)
-    ax.tick_params(axis="y", labelsize=16)
-    plt.legend(
-        loc="upper left",
-        fontsize=16,
-        frameon=True,
-    )
-
-    plt.show()
