@@ -255,7 +255,7 @@ if __name__ == "__main__":
     # Train window model
     bound = 2.0
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
-    num_samples = 100
+    num_samples = 200
     # rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
         test_obs, test_ctrls, num_samples, bound
@@ -366,7 +366,7 @@ if __name__ == "__main__":
     # store the repaired model
     keras.models.save_model(
         out_model,
-        path_write + f"/models/model_layer{now_str}" + now_str,
+        path_write + f"/models/model_layer{now_str}"
         overwrite=True,
         include_optimizer=False,
         save_format=None,
