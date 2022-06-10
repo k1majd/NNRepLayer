@@ -1,0 +1,55 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Tue May 31 21:23:55 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_net/logs/opt_log_layer2_5_31_2022_21_22_43.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 53612 rows, 33157 columns and 242796 nonzeros
+Model fingerprint: 0x127fb39a
+Model has 101 quadratic objective terms
+Variable types: 13957 continuous, 19200 integer (19200 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 4e+01]
+  Objective range  [1e-02, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 4e+01]
+  RHS range        [6e-04, 4e+01]
+Presolve removed 32200 rows and 12800 columns
+Presolve time: 0.94s
+Presolved: 21412 rows, 20357 columns, 191396 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 13957 continuous, 6400 integer (6400 binary)
+Root relaxation presolve removed 6400 rows and 6400 columns
+Root relaxation presolved: 15012 rows, 13957 columns, 178596 nonzeros
+Root relaxation presolved model has 101 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.0487249e+03   0.000000e+00   0.000000e+00      5s
+   18248    1.0487249e+03   0.000000e+00   0.000000e+00      8s
+   18248    1.0487249e+03   0.000000e+00   0.000000e+00      8s
+
+Root relaxation: objective 1.048725e+03, 18248 iterations, 3.49 seconds (7.90 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 1048.72492    0 1472          - 1048.72492      -     -    8s
+     0     0 1048.72492    0 1317          - 1048.72492      -     -   20s
+     0     0 1048.72493    0 1344          - 1048.72493      -     -   29s
+     0     0 1048.72493    0 1349          - 1048.72493      -     -   30s
+     0     0 1048.72493    0 1353          - 1048.72493      -     -   30s
+     0     0 1048.72493    0 1351          - 1048.72493      -     -   32s
+     0     0 1048.72493    0 1347          - 1048.72493      -     -   32s
+     0     0 1048.72493    0 1348          - 1048.72493      -     -   33s
+H    0     0                    13406.912622 1048.72493  92.2%     -  131s
+     0     2 1048.72493    0 1348 13406.9126 1048.72493  92.2%     -  138s
+     3     8 1048.74984    2 1523 13406.9126 1048.72493  92.2%   943  145s
+     7    12 1048.74984    3 1583 13406.9126 1048.72493  92.2%  1058  158s
+    53   121 1048.74984   15 1547 13406.9126 1048.72493  92.2%   245  162s
+H  106   121                    13406.912615 1048.72493  92.2%   145  162s
+   120   209 1048.74984   33 1541 13406.9126 1048.72493  92.2%   133  188s
+H  132   209                    13406.912604 1048.72493  92.2%   126  188s
+H  172   209                    13387.030981 1048.72493  92.2%   110  188s

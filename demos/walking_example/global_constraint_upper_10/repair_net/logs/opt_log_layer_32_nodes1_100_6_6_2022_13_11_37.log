@@ -1,0 +1,21 @@
+
+Gurobi 9.5.1 (linux64) logging started Mon 06 Jun 2022 01:14:17 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_net/logs/opt_log_layer_32_nodes1_100_6_6_2022_13_11_37.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 55910 rows, 34806 columns and 239820 nonzeros
+Model fingerprint: 0xf9dbfe04
+Model has 101 quadratic objective terms
+Variable types: 14106 continuous, 20700 integer (20700 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 5e+01]
+  Objective range  [4e-02, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [5e-03, 5e+01]
+Presolve removed 35840 rows and 15079 columns
+Presolve time: 0.74s
+Presolved: 20070 rows, 19727 columns, 170292 nonzeros
+Presolved model has 101 quadratic objective terms
+Variable types: 13263 continuous, 6464 integer (6464 binary)
