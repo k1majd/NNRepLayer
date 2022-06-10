@@ -463,7 +463,7 @@ if __name__ == "__main__":
     ax2.plot(err_lay3, linewidth=3, color="g")
     ax2.plot(err_lay4, linewidth=3, color="b")
     ax2.grid(alpha=0.8, linestyle="dashed")
-    ax2.set_ylabel("Control rate (rad/s)", fontsize=16)
+    ax2.set_ylabel("Control error (rad)", fontsize=16)
     ax2.set_xlabel("Time (s)", fontsize=16)
     ax2.set_xlim([0, 400])
     ax2.set_ylim([-0.23, 11.5])
