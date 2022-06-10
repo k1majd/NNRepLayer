@@ -223,7 +223,7 @@ def plotTestData(
 
 
 def generate_repair_dataset(obs, ctrl, num_samples, bound):
-    max_window_size = 1000
+    max_window_size = 1500
     delta_u = np.subtract(
         ctrl[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
     )
@@ -243,7 +243,7 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound):
         )
         violation_idx = violation_idx[rnd_pts]
         nonviolation_idx = np.random.choice(
-            nonviolation_idx, size=int(num_samples * 0.60), replace=False
+            nonviolation_idx, size=int(num_samples * 0.75), replace=False
         )
         idx = np.concatenate((violation_idx, nonviolation_idx))
         return obs[idx], ctrl[idx]
@@ -253,17 +253,15 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
-    bound = 1
+    bound = 1.5
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
     num_samples = 100
     # rnd_pts = np.random.choice(1000, num_samples)
     # x_train, y_train = generate_repair_dataset(
     #     test_obs, test_ctrls, num_samples, bound
     # )
-    # x_train = test_obs[0:1, :]
-    # y_train = test_ctrls[0:1]
 
-    load_str = "_6_9_2022_10_58_35"
+    load_str = "_6_9_2022_21_32_23"
     # load data
     if not os.path.exists(
         os.path.dirname(os.path.realpath(__file__)) + "/data"
@@ -305,9 +303,9 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 3  # first layer-(0) last layer-(4)
-    max_weight_bound = 0.5  # specifying the upper bound of weights error
+    max_weight_bound = 0.2  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
-    output_bounds = (-30.0, 50.0)
+    output_bounds = (-30.0, 60.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
@@ -447,7 +445,7 @@ if __name__ == "__main__":
     plotTestData(
         ctrl_model_orig,
         out_model,
-        test_obs, 
+        test_obs,
         test_ctrls,
         now_str,
         bound,
@@ -457,7 +455,7 @@ if __name__ == "__main__":
     plotTestData(
         ctrl_model_orig,
         out_model,
-        x_test, 
+        x_test,
         y_test,
         now_str,
         bound,

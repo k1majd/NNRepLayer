@@ -29,7 +29,7 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
-plt.rcParams.update({"text.usetex": True})
+# plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -333,8 +333,8 @@ if __name__ == "__main__":
     # parameter
     bound = 2.0
 
-    load_str3 = "_6_9_2022_13_3_1"
-    load_str4 = "_6_9_2022_13_9_26"
+    load_str3 = "_6_9_2022_22_11_13"
+    load_str4 = "_6_9_2022_22_11_13"
 
     # load test data and original model
     model_orig = keras.models.load_model(

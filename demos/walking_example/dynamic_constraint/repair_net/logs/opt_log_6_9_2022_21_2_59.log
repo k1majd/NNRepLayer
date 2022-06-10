@@ -1,0 +1,49 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Thu Jun  9 21:03:21 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_6_9_2022_21_2_59.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 2371 rows, 1218 columns and 4963 nonzeros
+Model fingerprint: 0x5055203b
+Model has 2 quadratic objective terms
+Variable types: 1122 continuous, 96 integer (96 binary)
+Coefficient statistics:
+  Matrix range     [7e-04, 5e+01]
+  Objective range  [4e+02, 4e+02]
+  QObjective range [2e+00, 2e+01]
+  Bounds range     [2e-01, 5e+01]
+  RHS range        [2e-04, 5e+01]
+Presolve removed 1863 rows and 925 columns
+Presolve time: 0.01s
+Presolved: 508 rows, 293 columns, 1277 nonzeros
+Presolved model has 2 quadratic objective terms
+Variable types: 268 continuous, 25 integer (25 binary)
+Found heuristic solution: objective 0.0191732
+Root relaxation presolve removed 25 rows and 25 columns
+Root relaxation presolved: 483 rows, 268 columns, 1227 nonzeros
+Root relaxation presolved model has 2 quadratic objective terms
+
+
+Root relaxation: objective 0.000000e+00, 564 iterations, 0.01 seconds (0.01 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    1    0.01917    0.00000   100%     -    0s
+H    0     0                       0.0060898    0.00000   100%     -    0s
+H    0     0                       0.0000361    0.00000   100%     -    0s
+     0     0    0.00000    0    1    0.00004    0.00000   100%     -    0s
+     0     0    0.00000    0    2    0.00004    0.00000   100%     -    0s
+
+Cutting planes:
+  MIR: 3
+  Flow cover: 2
+
+Explored 1 nodes (590 simplex iterations) in 0.06 seconds (0.02 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 3.60722e-05 0.00608977 0.0191732 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 3.607215649026e-05, best bound 3.607215649026e-05, gap 0.0000%

@@ -1,0 +1,47 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Thu Jun  9 19:49:57 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/GitHub/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_6_9_2022_19_48_2.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 71637 rows, 44392 columns and 319733 nonzeros
+Model fingerprint: 0x7c55c76c
+Model has 136 quadratic objective terms
+Variable types: 18472 continuous, 25920 integer (25920 binary)
+Coefficient statistics:
+  Matrix range     [2e-04, 5e+01]
+  Objective range  [2e-02, 3e+00]
+  QObjective range [1e-01, 2e+00]
+  Bounds range     [1e-01, 5e+01]
+  RHS range        [2e-04, 5e+01]
+Presolve removed 51190 rows and 24993 columns
+Presolve time: 1.65s
+Presolved: 20447 rows, 19399 columns, 148987 nonzeros
+Presolved model has 136 quadratic objective terms
+Variable types: 13427 continuous, 5972 integer (5972 binary)
+Root relaxation presolve removed 5972 rows and 5972 columns
+Root relaxation presolved: 14475 rows, 13427 columns, 137043 nonzeros
+Root relaxation presolved model has 136 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   18679    2.1365648e+01   7.242876e+01   0.000000e+00      5s
+   27817    2.1365648e+01   0.000000e+00   0.000000e+00      8s
+   27820    2.1365648e+01   0.000000e+00   0.000000e+00      8s
+Extra simplex iterations after uncrush: 3
+
+Root relaxation: objective 2.136565e+01, 27820 iterations, 6.47 seconds (14.52 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   21.36565    0 1343          -   21.36565      -     -    9s
+     0     0   21.36565    0 1482          -   21.36565      -     -   26s
+     0     0   21.36565    0 1511          -   21.36565      -     -   27s
+     0     0   21.36566    0 1533          -   21.36566      -     -   32s
+     0     0   21.36566    0 1519          -   21.36566      -     -   33s
+     0     0   21.36566    0 1508          -   21.36566      -     -   37s
+     0     2   21.36567    0 1508          -   21.36567      -     -  103s
+     1     4   22.12501    1 2080          -   21.36567      - 29703  151s

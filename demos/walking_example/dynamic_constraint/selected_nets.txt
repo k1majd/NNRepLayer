@@ -5,3 +5,12 @@ layer3: _6_9_2022_10_58_35
 bound 1.5
 layer4: 
 layer3: _6_9_2022_15_39_38
+
+
+New bounds: 
+
+bound 2.
+layer3: _6_9_2022_21_32_23
+
+bound 1.5
+layer3: _6_9_2022_22_11_13
