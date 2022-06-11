@@ -2,12 +2,12 @@
 <!-- Created with Vectornator (http://vectornator.io/) -->
 
 <svg
-   height="60072.441"
+   height="88610.398"
    stroke-miterlimit="10"
    style="clip-rule:evenodd;fill-rule:nonzero;stroke-linecap:round;stroke-linejoin:round"
    version="1.1"
-   viewBox="0 0 50101.377 60072.444"
-   width="50101.375"
+   viewBox="0 0 176047.38 88610.402"
+   width="176047.38"
    xml:space="preserve"
    id="svg46"
    sodipodi:docname="foot.svg"
@@ -43,8 +43,7 @@
    id="defs5" />
 <g
    id="Layer-1"
-   vectornator:layerName="Layer 1"
-   transform="translate(-37470.843,-21907.241)">
+   vectornator:layerName="Layer 1">
 <path
    d="M 89.7056,73.9945 H 208.314 V 275 H 89.7056 Z"
    fill="#ffffff"
@@ -245,7 +244,7 @@
    id="g43" />
 </g>
 <g
-   transform="matrix(0.87144951,0,0,0.8953486,-37324.557,-21722.285)"
+   transform="matrix(0.87144951,0,0,0.8953486,146.28592,184.9563)"
    ns3:version="1.8.1"
    ns3:texconverter="pdflatex"
    ns3:pdfconverter="inkscape"
@@ -287,7 +286,7 @@
    style="stroke-width:1.20756" />
       </g></g>
 </g><g
-   transform="matrix(0.9477696,0,0,0.94341003,-37359.257,-21754.15)"
+   transform="matrix(0.9477696,0,0,0.94341003,111.58518,153.09134)"
    ns3:version="1.8.1"
    ns3:texconverter="pdflatex"
    ns3:pdfconverter="inkscape"
@@ -343,7 +342,7 @@
    style="stroke-width:1.12804" />
       </g></g>
 </g><g
-   transform="matrix(0.89272574,0,0,0.94341003,-37353.49,-21703.149)"
+   transform="matrix(0.89272574,0,0,0.94341003,117.35211,204.09223)"
    ns3:version="1.8.1"
    ns3:texconverter="pdflatex"
    ns3:pdfconverter="inkscape"
@@ -385,7 +384,7 @@
    style="stroke-width:1.1623" />
       </g></g>
 </g><g
-   transform="matrix(0.91786664,0,0,0.9524524,-37332.288,-21709.535)"
+   transform="matrix(0.91786664,0,0,0.9524524,138.55502,197.70654)"
    ns3:version="1.8.1"
    ns3:texconverter="pdflatex"
    ns3:pdfconverter="inkscape"
