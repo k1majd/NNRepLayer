@@ -366,7 +366,7 @@ if __name__ == "__main__":
     # store the repaired model
     keras.models.save_model(
         out_model,
-        path_write + f"/models/model_layer{now_str}"
+        path_write + f"/models/model_layer{now_str}",
         overwrite=True,
         include_optimizer=False,
         save_format=None,

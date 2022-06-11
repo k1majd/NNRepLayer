@@ -419,7 +419,7 @@ if __name__ == "__main__":
     ax1.axvspan(0, 6, color="#DDA0DD", alpha=0.5)
     ax1.axvspan(98.7, 122.8, color="#DDA0DD", alpha=0.5)
     ax1.axvspan(211.3, 239.7, color="#DDA0DD", alpha=0.5)
-    ax1.axvspan(330.7, 355, color="#DDA0DD", alpha=0.5)
+    ax1.axvspan(330.7, 355, color="#ax00", alpha=0.5)
     ax1.axhline(
         y=bound, color="#8B8878", linewidth=3, linestyle="dashed"
     )  # upper bound
