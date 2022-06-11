@@ -347,8 +347,8 @@ if __name__ == "__main__":
     bound1_5 = 1.5
     bound0_5 = 0.5
 
-    load_str3_bound2 = "_6_9_2022_21_32_23"
-    load_str3_bound1_5 = "_6_9_2022_22_11_13"
+    load_str3_bound2 = "_6_11_2022_10_56_16"
+    load_str3_bound1_5 = "_6_11_2022_11_26_30"
     load_str3_bound0_5 = "_6_10_2022_12_27_27"
     load_str4_bound2 = "_6_9_2022_23_59_1"
 
@@ -357,6 +357,7 @@ if __name__ == "__main__":
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
     _, _, x_test, y_test = generateDataWindow(10)
+    # x_test, y_test, _, _ = generateDataWindow(10)
     y_pred_orig = model_orig.predict(x_test)
     delta_u_orig = np.subtract(y_pred_orig.flatten(), x_test[:, -1].flatten())
 
@@ -406,20 +407,20 @@ if __name__ == "__main__":
 
     fig = plt.figure(figsize=(13, 5))
     xlim_max = 1000
-    gs = fig.add_gridspec(2, 3)
+    gs = fig.add_gridspec(2, 2)
     ax00 = fig.add_subplot(gs[0, 0])
     ax10 = fig.add_subplot(gs[1, 0])
     ax01 = fig.add_subplot(gs[0, 1])
     ax11 = fig.add_subplot(gs[1, 1])
-    ax02 = fig.add_subplot(gs[0, 2])
-    ax12 = fig.add_subplot(gs[1, 2])
+    # ax02 = fig.add_subplot(gs[0, 2])
+    # ax12 = fig.add_subplot(gs[1, 2])
 
     ax00.get_shared_x_axes().join(ax00, ax10)
     ax10.get_shared_x_axes().join(ax00, ax10)
     ax01.get_shared_x_axes().join(ax01, ax11)
     ax11.get_shared_x_axes().join(ax01, ax11)
-    ax02.get_shared_x_axes().join(ax02, ax12)
-    ax12.get_shared_x_axes().join(ax02, ax12)
+    # ax02.get_shared_x_axes().join(ax02, ax12)
+    # ax12.get_shared_x_axes().join(ax02, ax12)
 
     # plot bound 2 plots
     ax00.plot(
@@ -578,75 +579,75 @@ if __name__ == "__main__":
     ax11.tick_params(axis="x", labelsize=14)
     ax11.tick_params(axis="y", labelsize=14)
 
-    # plot bound 0.5 plots
-    ax02.plot(
-        y_test.flatten(),
-        color="black",
-        linewidth=1.5,
-        linestyle="dashed",
-    )
-    ax02.plot(
-        y_pred_orig.flatten(),
-        color="red",
-        linewidth=1.5,
-    )
-    ax02.plot(
-        y_pred_lay3_bound0_5.flatten(),
-        color="green",
-        linewidth=1.5,
-    )
-    ax02.fill_between(
-        np.linspace(
-            0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
-        ),
-        0,
-        1,
-        where=np.abs(delta_u_orig.flatten()) > bound0_5,
-        color="#DDA0DD",
-        alpha=0.5,
-        transform=ax02.get_xaxis_transform(),
-    )
-    ax02.grid(alpha=0.8, linestyle="dashed")
-    ax02.set_ylim([-18.0, 21.2])
-    ax02.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
-    ax02.xaxis.set_ticklabels([])
-    ax02.tick_params(axis="both", which="major", labelsize=14)
+    # # plot bound 0.5 plots
+    # ax02.plot(
+    #     y_test.flatten(),
+    #     color="black",
+    #     linewidth=1.5,
+    #     linestyle="dashed",
+    # )
+    # ax02.plot(
+    #     y_pred_orig.flatten(),
+    #     color="red",
+    #     linewidth=1.5,
+    # )
+    # ax02.plot(
+    #     y_pred_lay3_bound0_5.flatten(),
+    #     color="green",
+    #     linewidth=1.5,
+    # )
+    # ax02.fill_between(
+    #     np.linspace(
+    #         0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
+    #     ),
+    #     0,
+    #     1,
+    #     where=np.abs(delta_u_orig.flatten()) > bound0_5,
+    #     color="#DDA0DD",
+    #     alpha=0.5,
+    #     transform=ax02.get_xaxis_transform(),
+    # )
+    # ax02.grid(alpha=0.8, linestyle="dashed")
+    # ax02.set_ylim([-18.0, 21.2])
+    # ax02.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
+    # ax02.xaxis.set_ticklabels([])
+    # ax02.tick_params(axis="both", which="major", labelsize=14)
 
-    ax12.plot(
-        delta_u_orig,
-        color="red",
-        linewidth=1.5,
-    )
-    ax12.plot(
-        delta_u_laye3_bound0_5,
-        color="green",
-        linewidth=1.5,
-    )
-    ax12.fill_between(
-        np.linspace(
-            0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
-        ),
-        0,
-        1,
-        where=np.abs(delta_u_orig.flatten()) > bound0_5,
-        color="#DDA0DD",
-        alpha=0.5,
-        transform=ax12.get_xaxis_transform(),
-    )
-    ax12.axhline(
-        y=bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
-    )  # upper bound
-    ax12.axhline(
-        y=-bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
-    )  # lower bound
-    ax12.grid(alpha=0.8, linestyle="dashed")
-    ax12.set_xlabel("Time (s)", fontsize=14)
-    ax12.set_xlim([0, xlim_max])
-    ax12.set_ylim([-4.1, 4.1])
-    ax12.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
-    ax12.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    ax12.tick_params(axis="x", labelsize=14)
-    ax12.tick_params(axis="y", labelsize=14)
+    # ax12.plot(
+    #     delta_u_orig,
+    #     color="red",
+    #     linewidth=1.5,
+    # )
+    # ax12.plot(
+    #     delta_u_laye3_bound0_5,
+    #     color="green",
+    #     linewidth=1.5,
+    # )
+    # ax12.fill_between(
+    #     np.linspace(
+    #         0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
+    #     ),
+    #     0,
+    #     1,
+    #     where=np.abs(delta_u_orig.flatten()) > bound0_5,
+    #     color="#DDA0DD",
+    #     alpha=0.5,
+    #     transform=ax12.get_xaxis_transform(),
+    # )
+    # ax12.axhline(
+    #     y=bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
+    # )  # upper bound
+    # ax12.axhline(
+    #     y=-bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
+    # )  # lower bound
+    # ax12.grid(alpha=0.8, linestyle="dashed")
+    # ax12.set_xlabel("Time (s)", fontsize=14)
+    # ax12.set_xlim([0, xlim_max])
+    # ax12.set_ylim([-4.1, 4.1])
+    # ax12.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
+    # ax12.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
+    # ax12.tick_params(axis="x", labelsize=14)
+    # ax12.tick_params(axis="y", labelsize=14)
 
     lines, labels = ax00.get_legend_handles_labels()
     leg = fig.legend(

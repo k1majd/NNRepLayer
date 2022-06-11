@@ -19,3 +19,12 @@ layer4: infeasible
 
 bound .5
 layer3: _6_10_2022_12_27_27
+
+Bounds with delta_t:
+bound 2.
+layer3: _6_11_2022_10_56_16
+layer4: 
+
+bound 1.5
+layer3: _6_11_2022_11_26_30
+layer4: 

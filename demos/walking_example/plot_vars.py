@@ -242,5 +242,5 @@ def plot_pahse(var1, var2):
 
 if __name__ == "__main__":
     # Train window model
-    plot_pair_vars("femur", "ankle", dim=1)
-    plot_pahse("femur", "ankle")
+    plot_pair_vars("shin", "ankle", dim=1)
+    plot_pahse("shin", "ankle")

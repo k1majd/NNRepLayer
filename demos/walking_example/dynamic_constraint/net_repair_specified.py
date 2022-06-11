@@ -253,7 +253,7 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
-    bound = 0.3
+    bound = 1.5
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
     num_samples = 100
     # rnd_pts = np.random.choice(1000, num_samples)
@@ -295,18 +295,18 @@ if __name__ == "__main__":
     def out_constraint1(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
-            <= bound - 0.1
+            <= bound * 0.7 - 0.1
         )
 
     def out_constraint2(model, i):
         return getattr(model, repair_obj.output_name)[i, 0] - x_train[
             i, -1
-        ] >= -(bound - 0.1)
+        ] >= -(bound * 0.7 - 0.1)
 
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 3  # first layer-(0) last layer-(4)
-    max_weight_bound = 1  # specifying the upper bound of weights error
+    max_weight_bound = 0.2  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     output_bounds = (-30.0, 60.0)
     repair_node_list = []
