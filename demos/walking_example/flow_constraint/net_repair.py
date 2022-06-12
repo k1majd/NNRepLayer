@@ -282,7 +282,7 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # load model
-    box = [-2., -0.5, 1.0, 3.0]  # xmin,xmax,ymin,ymax
+    box = [-2.0, -0.5, 1.0, 3.0]  # xmin,xmax,ymin,ymax
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
@@ -297,6 +297,9 @@ if __name__ == "__main__":
     x_train, y_train = generate_repair_dataset(
         train_obs, train_ctrls, ctrl_model_orig, num_samples, box
     )
+    rnd_pts = np.random.choice(x_train.shape[0], 200)
+    x_train = x_train[rnd_pts, :]
+    y_train = y_train[rnd_pts]
     plot_pahse(
         ctrl_model_orig,
         train_obs,
@@ -353,12 +356,12 @@ if __name__ == "__main__":
     def constraint_outside(model, i):
         return (
             x_train[i, -1] + getattr(model, repair_obj.output_name)[i, 0]
-            <= 0.8
+            <= 0.9
         )
 
     ######
 
-    layer_to_repair = 2  # first layer-(0) last layer-(4)
+    layer_to_repair = 3  # first layer-(0) last layer-(4)
     max_weight_bound = 0.1  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     output_bounds = (-30.0, 50.0)
