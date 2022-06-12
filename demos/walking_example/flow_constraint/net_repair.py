@@ -268,13 +268,13 @@ def generate_repair_dataset(obs, ctrl, model, num_samples, box, dt=1.0):
         if is_in_box(point, box):
             x_train.append(obs[i])
             y_train.append(ctrl[i])
-        # else:
-        #     if samples_alread < 100:
-        #         point = np.array([obs[i, -5], obs[i, -1]])
-        #         if is_in_box(point, [-2.0, -0.5, 1.0, 2.0]):
-        #             x_train.append(obs[i])
-        #             y_train.append(ctrl[i])
-        #             samples_alread += 1
+        else:
+            if (samples_alread < 100) and (np.random.randint(2) == 1):
+                point = np.array([obs[i, -5], obs[i, -1]])
+                if is_in_box(point, [-2.0, -0.5, 1.0, 2.0]):
+                    x_train.append(obs[i])
+                    y_train.append(ctrl[i])
+                    samples_alread += 1
     return np.array(x_train), np.array(y_train)
 
 
@@ -282,7 +282,7 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # load model
-    box = [-2.0, -0.5, 1.0, 3.0]  # xmin,xmax,ymin,ymax
+    box = [-2.5, -0.5, 0.5, 3.5]  # xmin,xmax,ymin,ymax
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     x_train, y_train = generate_repair_dataset(
         train_obs, train_ctrls, ctrl_model_orig, num_samples, box
     )
-    rnd_pts = np.random.choice(x_train.shape[0], 200)
+    rnd_pts = np.random.choice(x_train.shape[0], 300)
     x_train = x_train[rnd_pts, :]
     y_train = y_train[rnd_pts]
     plot_pahse(

@@ -245,6 +245,32 @@ def plot_pahse(ctrl_model_orig, obs, ctrls, var1, var2, box, ax1, c, alpha):
 
     return ax1
 
+def plot_signal(x_train, y_train, y_pred, dt=1.):
+
+    
+
+    fig, (ax1, ax2) = plt.subplots(nrows=2)
+    out_orig = [x_train[i, -1] + dt*y_train[i][0] for i in range(x_train.shape[0])]
+    out_repaired = [x_train[i, -1] + dt*y_pred[i][0] for i in range(x_train.shape[0])]
+    ax1.plot(out_orig, label="original")
+    ax1.plot(out_repaired, label="repaired")
+    ax1.fill_between(
+        np.linspace(
+            0, x_train[:, -5].shape[0], x_train[:, -5].shape[0], endpoint=True
+        ),
+        0,
+        1,
+        where=x_train[:, -5].flatten() < -0.5,
+        color="#DDA0DD",
+        alpha=0.5,
+        transform=ax1.get_xaxis_transform(),
+    )
+    ax1.axhline(
+        y=1, color="#8B8878", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax2.plot(x_train[:, -5])
+    plt.show()
+
 
 def is_in_box(point, box):
     return box[0] <= point[0] <= box[1] and box[2] <= point[1] <= box[3]
@@ -262,11 +288,11 @@ def generate_repair_dataset(obs, ctrl, num_samples, box, dt=1.0):
 
 
 if __name__ == "__main__":
-    str = "_6_11_2022_18_40_2"
+    str = "_6_11_2022_20_48_45"
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # load model
-    box = [-1.6, -0.8, 2.0, 5.0]  # xmin,xmax,ymin,ymax
+    box = [-2.0, -0.5, 1.0, 3.0]  # xmin,xmax,ymin,ymax
     ctrl_model_repair = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
         + f"/repair_net/models/model_layer{str}"
@@ -311,6 +337,13 @@ if __name__ == "__main__":
     )
 
     plt.show()
+
+    plot_signal(
+        train_obs, 
+        train_ctrls, 
+        ctrl_model_repair.predict(train_obs), 
+        dt=0.667,
+        )
     # plotTestData(
     #     ctrl_model_orig,
     #     out_model,
