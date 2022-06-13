@@ -59,8 +59,9 @@ def generateDataWindow(window_size):
     controls = Dankle  # (Dankle - Dankle.mean(0))/Dankle.std(0)
     phase = phase[:n]
     n_train = 19000
-    train_observation = np.array([]).reshape(0, 4 * window_size + 1)
-    test_observation = np.array([]).reshape(0, 4 * window_size + 1)
+    observations = np.concatenate((observations, phase), axis=1)
+    train_observation = np.array([]).reshape(0, 5 * window_size)
+    test_observation = np.array([]).reshape(0, 5 * window_size)
 
     for i in range(n_train):
         temp_obs = np.array([]).reshape(1, 0)
@@ -68,15 +69,12 @@ def generateDataWindow(window_size):
             temp_obs = np.concatenate(
                 (temp_obs, observations[i + j, :].reshape(1, -1)), axis=1
             )
-        temp_obs = np.concatenate(
-            (temp_obs, phase[i + window_size - 1].reshape(1, 1)), axis=1
-        )
         train_observation = np.concatenate(
             (train_observation, temp_obs), axis=0
         )
-    train_controls = controls[window_size : n_train + window_size].reshape(
-        -1, 1
-    )
+    train_controls = controls[
+        window_size - 1 : n_train + window_size - 1
+    ].reshape(-1, 1)
 
     for i in range(n_train, n - window_size):
         temp_obs = np.array([]).reshape(1, 0)
@@ -84,13 +82,15 @@ def generateDataWindow(window_size):
             temp_obs = np.concatenate(
                 (temp_obs, observations[i + j, :].reshape(1, -1)), axis=1
             )
-        temp_obs = np.concatenate(
-            (temp_obs, phase[i + window_size - 1].reshape(1, 1)), axis=1
-        )
         test_observation = np.concatenate((test_observation, temp_obs), axis=0)
-    test_controls = controls[n_train + window_size :].reshape(-1, 1)
+    test_controls = controls[n_train + window_size - 1 :].reshape(-1, 1)
 
-    return train_observation, train_controls, test_observation, test_controls
+    return (
+        train_observation,
+        train_controls,
+        test_observation,
+        test_controls[:-1],
+    )
 
 
 def buildModelWindow(data_size):
@@ -305,77 +305,110 @@ def plotTestData(
     # plt.savefig(path_write + f"/repaired_model_32_nodes{now_str}.png")
 
 
-def generate_repair_dataset(obs, ctrl, num_samples, num_bins=10):
-    x_train = np.array([]).reshape(0, obs.shape[1])
-    y_train = np.array([]).reshape(0, ctrl.shape[1])
-    phase_vs_limits = loadData(
-        "demos/walking_example/data/GeoffFTF_limits.csv"
-    )
-    adv_id = []
-    nonadv_id = []
-    for i in range(ctrl.shape[0]):
-        diff = np.abs(phase_vs_limits[:, 0] - obs[i, -1])
-        idx = diff.argmin()
-        if not (
-            (ctrl[i] <= phase_vs_limits[idx, 1])
-            and (ctrl[i] >= phase_vs_limits[idx, 2])
-        ):
-            adv_id.append(i)
-            # x_train.append(obs[i])
-            # y_train.append(ctrl[i])
+def is_in_bound(angle, phase, ulim, llim):
+    return angle <= ulim(phase) and angle >= llim(phase)
+
+
+def generate_repair_dataset(obs, ctrl, model, num_bins=10):
+    x_train = []
+    y_train = []
+    samples_alread = 0
+    pred_ctrl = model.predict(obs)
+    u_lim, l_lim = upper_lower_bounds()
+    for i in range(obs.shape[0]):
+        if not is_in_bound(pred_ctrl[i][0], obs[i][-1], u_lim, l_lim):
+            x_train.append(obs[i])
+            y_train.append(ctrl[i])
         else:
-            nonadv_id.append(i)
+            if (samples_alread < 100) and (np.random.randint(2) == 1):
+                x_train.append(obs[i])
+                y_train.append(ctrl[i])
+                samples_alread += 1
 
-    num_adv_per_bin = int(0.75 * num_samples / num_bins)
-    num_nonadv_per_bin = int(0.25 * num_samples / num_bins)
+    return np.array(x_train), np.array(y_train)
 
-    adv_obs = obs[adv_id, :]
-    adv_ctrl = ctrl[adv_id]
 
-    nonadv_obs = obs[nonadv_id, :]
-    nonadv_ctrl = ctrl[nonadv_id]
+def upper_lower_bounds():
+    Dfem = loadData("demos/walking_example/data/GeoffFTF_1.csv")
+    Dtib = loadData("demos/walking_example/data/GeoffFTF_2.csv")
+    Dfut = loadData("demos/walking_example/data/GeoffFTF_3.csv")
+    phase = loadData("demos/walking_example/data/GeoffFTF_phase.csv")
+    n = 20364
+    Dankle = np.subtract(Dtib[:n, 1], Dfut[:n, 1])
+    observations = np.concatenate((Dfem[:n, 1:], Dtib[:n, 1:]), axis=1)
+    observations = (observations - observations.mean(0)) / observations.std(0)
+    controls = Dankle  # (Dankle - Dankle.mean(0))/Dankle.std(0)
+    phase = phase[:n]
 
-    bin = np.linspace(0, 1, num_bins + 1)
-    for i in range(num_bins):
-        adv_idx = np.random.choice(
-            np.where(
-                (adv_obs[:, -1] > bin[i]) & (adv_obs[:, -1] < bin[i + 1])
-            )[0],
-            num_adv_per_bin,
-            replace=False,
+    lim_x = np.array(
+        [
+            0.00,
+            0.075,
+            0.12,
+            0.30,
+            0.40,
+            0.46,
+            0.485,
+            0.56,
+            0.625,
+            0.675,
+            0.78,
+            0.885,
+            0.98,
+            1,
+        ]
+    )
+    lim_u = (
+        np.array(
+            [9, 3.0, 4.0, 13, 18, 22.0, 23.0, 15.0, 0.0, 1.0, 9.0, 4.5, 11, 9]
         )
-
-        nonadv_idx = np.random.choice(
-            np.where(
-                (nonadv_obs[:, -1] > bin[i]) & (nonadv_obs[:, -1] < bin[i + 1])
-            )[0],
-            num_nonadv_per_bin,
-            replace=False,
+        + 1
+    )
+    lim_l = (
+        np.array(
+            [0, -5, -4.0, 6.0, 11, 14.0, 15, -2.0, -14, -11, -1.0, -6.5, 1, 0]
         )
-        x_train = np.concatenate((x_train, adv_obs[adv_idx, :]), axis=0)
-        y_train = np.concatenate((y_train, adv_ctrl[adv_idx]), axis=0)
-        x_train = np.concatenate((x_train, nonadv_obs[nonadv_idx, :]), axis=0)
-        y_train = np.concatenate((y_train, nonadv_ctrl[nonadv_idx]), axis=0)
+        - 0.8
+    )
 
-    return x_train, y_train
+    lim_uc = interp1d(lim_x, lim_u, kind="cubic")
+    lim_lc = interp1d(lim_x, lim_l, kind="cubic")
+
+    return lim_uc, lim_lc
+
+
+def plot_model_out(model, obs, ctrl):
+    up_lim, low_lim = upper_lower_bounds()
+    pred_ctrls = model.predict(obs)
+    new_x = np.linspace(0, 1, 51)
+    x = obs[:, -1].flatten()
+    y = pred_ctrls.flatten()
+    plt.scatter(x, y, color="#173f5f", label="predict")
+    plt.scatter(x, ctrl.flatten(), color="#b81662", label="control")
+    plt.plot(new_x, up_lim(new_x), "--r")
+    plt.plot(new_x, low_lim(new_x), "--r")
+    plt.legend()
+    plt.show()
 
 
 if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
-    # Train window model
-    phase_vs_limits = loadData(
-        "demos/walking_example/data/GeoffFTF_limits.csv"
-    )
-    num_samples = 100
-    train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
-    x_train, y_train = generate_repair_dataset(
-        train_obs, train_ctrls, num_samples
-    )
-
+    # load_model
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
+    # Train window model
+    u_lim, l_lim = upper_lower_bounds()
+    num_samples = 300
+    train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
+    x_train, y_train = generate_repair_dataset(
+        train_obs, train_ctrls, ctrl_model_orig, num_bins=10
+    )
+    rnd_pts = np.random.choice(x_train.shape[0], 300)
+    x_train = x_train[rnd_pts, :]
+    y_train = y_train[rnd_pts]
+    plot_model_out(ctrl_model_orig, x_train, y_train)
     # plotTestData(
     #     ctrl_model_orig,
     #     train_obs,
@@ -386,27 +419,23 @@ if __name__ == "__main__":
     # )
 
     def out_constraint_upper(model, i):
-        diff = np.abs(phase_vs_limits[:, 0] - x_train[i, -1])
-        idx = diff.argmin()
         return (
             getattr(model, repair_obj.output_name)[i, 0]
-            <= phase_vs_limits[idx, 1]
+            <= np.round(u_lim(x_train[i][-1]).max(), 2)
         )
 
     def out_constraint_lower(model, i):
-        diff = np.abs(phase_vs_limits[:, 0] - x_train[i, -1])
-        idx = diff.argmin()
         return (
             getattr(model, repair_obj.output_name)[i, 0]
-            >= phase_vs_limits[idx, 2]
+            >= np.round(l_lim(x_train[i][-1]).max(), 2)
         )
 
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 4  # first layer-(0) last layer-(4)
-    max_weight_bound = 10  # specifying the upper bound of weights error
+    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    max_weight_bound = .5  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
-    output_bounds = (-30.0, 100.0)
+    output_bounds = (-30.0, 50.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
@@ -416,8 +445,8 @@ if __name__ == "__main__":
         # output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        data_precision=4,
-        param_precision=4,
+        data_precision=6,
+        param_precision=6,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
         output_bounds=output_bounds,
@@ -545,17 +574,4 @@ if __name__ == "__main__":
         csv_writer.writerow(model_evaluation)
     print("saved: stats")
 
-    plotTestData(
-        ctrl_model_orig,
-        out_model,
-        train_obs,
-        train_ctrls,
-        test_obs,
-        test_ctrls,
-        x_train,
-        y_train,
-        now_str,
-        3,
-    )
-
-    pass
+    plot_model_out(out_model, x_train, y_train)
