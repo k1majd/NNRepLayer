@@ -1,0 +1,60 @@
+
+Gurobi 9.5.1 (linux64) logging started Mon 13 Jun 2022 01:26:26 AM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/examples/tc7_walking_example/repair_phase_constraint/repair_net/logs/opt_log_6_13_2022_1_25_11.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 79812 rows, 49357 columns and 260580 nonzeros
+Model fingerprint: 0x0a941fc1
+Model has 301 quadratic objective terms
+Variable types: 20557 continuous, 28800 integer (28800 binary)
+Coefficient statistics:
+  Matrix range     [3e-03, 5e+01]
+  Objective range  [1e-02, 2e+00]
+  QObjective range [7e-02, 2e+00]
+  Bounds range     [5e-01, 5e+01]
+  RHS range        [7e-04, 5e+01]
+Presolve removed 48700 rows and 19268 columns
+Presolve time: 0.51s
+Presolved: 31112 rows, 30089 columns, 182922 nonzeros
+Presolved model has 301 quadratic objective terms
+Variable types: 20501 continuous, 9588 integer (9588 binary)
+Root relaxation presolve removed 9588 rows and 9588 columns
+Root relaxation presolved: 21524 rows, 20501 columns, 163746 nonzeros
+Root relaxation presolved model has 301 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+    6051    2.4763498e+02   3.499227e+03   0.000000e+00      5s
+   27581    2.4764865e+02   0.000000e+00   0.000000e+00      7s
+   27616    2.4764865e+02   0.000000e+00   0.000000e+00      7s
+Extra simplex iterations after uncrush: 35
+
+Root relaxation: objective 2.476487e+02, 27616 iterations, 2.47 seconds (4.43 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  247.64865    0 2732          -  247.64865      -     -    6s
+     0     0  247.72347    0 3979          -  247.72347      -     -   16s
+     0     0  247.72406    0 3497          -  247.72406      -     -   19s
+     0     0  247.72509    0 3846          -  247.72509      -     -   25s
+     0     0  247.72580    0 3987          -  247.72580      -     -   41s
+     0     0  247.72724    0 4085          -  247.72724      -     -   50s
+     0     0  247.72867    0 4110          -  247.72867      -     -   54s
+     0     0  247.77820    0 3910          -  247.77820      -     -   69s
+     0     0  247.79108    0 3836          -  247.79108      -     -   73s
+     0     0  248.06122    0 4826          -  248.06122      -     -   90s
+     0     0  248.12511    0 4331          -  248.12511      -     -   99s
+     0     0  248.47371    0 4537          -  248.47371      -     -  123s
+     0     0  248.61352    0 4485          -  248.61352      -     -  125s
+     0     0  248.67193    0 4742          -  248.67193      -     -  142s
+     0     0  248.68774    0 4643          -  248.68774      -     -  145s
+     0     0  249.25483    0 4606          -  249.25483      -     -  149s
+     0     0  249.55512    0 4606          -  249.55512      -     -  152s
+     0     0  249.55512    0 4625          -  249.55512      -     -  152s
+     0     0  249.55512    0 4645          -  249.55512      -     -  152s
+     0     0  249.55512    0 4644          -  249.55512      -     -  152s
+     0     0  252.35804    0 4370          -  252.35804      -     -  187s

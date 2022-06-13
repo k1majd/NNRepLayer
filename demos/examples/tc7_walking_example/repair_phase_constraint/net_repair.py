@@ -421,21 +421,21 @@ if __name__ == "__main__":
     def out_constraint_upper(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0]
-            <= u_lim(x_train[i][-1]) - 0.1
+            <= np.round(u_lim(x_train[i][-1]).max(), 2)
         )
 
     def out_constraint_lower(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0]
-            >= l_lim(x_train[i][-1]) + 0.1
+            >= np.round(l_lim(x_train[i][-1]).max(), 2)
         )
 
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 4  # first layer-(0) last layer-(4)
-    max_weight_bound = 2  # specifying the upper bound of weights error
+    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    max_weight_bound = .5  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
-    output_bounds = (-30.0, 60.0)
+    output_bounds = (-30.0, 50.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
@@ -445,8 +445,8 @@ if __name__ == "__main__":
         # output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        data_precision=4,
-        param_precision=4,
+        data_precision=6,
+        param_precision=6,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
         output_bounds=output_bounds,
