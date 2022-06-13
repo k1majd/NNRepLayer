@@ -38,16 +38,16 @@ dyanmic_data = loadData(
 angle_global = global_data[:, -1].flatten()
 angle_dynamic = dyanmic_data[:, -1].flatten()
 angle_error = angle_dynamic[1:] - angle_dynamic[:-1]
-plt.plot(0.667 * angle_error)
+plt.plot(angle_global)
 plt.axhline(
-    y=2,
+    y=24,
     color="black",
     linewidth=1,
     linestyle=(0, (5, 7)),
     alpha=1,
 )  # upper bound
 plt.axhline(
-    y=-2,
+    y=-14,
     color="black",
     linewidth=1,
     linestyle=(0, (5, 7)),

@@ -27,6 +27,22 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
+def arg_parser():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-it",
+        "--iteration",
+        nargs="?",
+        type=int,
+        default=1,
+        help="iteration of finetune",
+    )
+    return parser.parse_args()
 
 def loadData(name_csv):
     with open(name_csv) as csv_file:
@@ -226,7 +242,7 @@ def hand_label_samples(x_train, y_train, model, bound, gap=0.2):
     y = []
 
     for i in range(x_train.shape[0]):
-        if y_pred[i][0] > bound:
+        if y_pred[i][0] > bound - gap:
             x.append(x_train[i])
             y.append(np.array([bound - gap]))
         else:
@@ -235,21 +251,6 @@ def hand_label_samples(x_train, y_train, model, bound, gap=0.2):
 
     return np.array(x), np.array(y)
 
-
-def arg_parser():
-    """_summary_
-
-    Returns:
-        _type_: _description_
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-it",
-        "--iteration",
-        nargs="?",
-        default=1,
-        help="iteration of finetune",
-    )
 
 
 def give_stats(model, x, y, y_pred_orig, bound):
@@ -286,11 +287,31 @@ def give_stats(model, x, y, y_pred_orig, bound):
 
     return satisfaction_rate, mae
 
+def give_sat_rate(model, x, y, y_pred_orig, bound):
+    y_pred_new = model.predict(x)
+
+    # find violations
+    x_temp = []
+    y_temp = []
+    for i in range(x.shape[0]):
+        if y_pred_orig[i][0] > bound:
+            x_temp.append(x[i])
+            y_temp.append(y_pred_new[i])
+
+    num_violations = len(x_temp) * 1.0
+    num_no_violations = num_violations
+    for i in range(len(x_temp)):
+        if y_temp[i][0] > bound:
+            num_no_violations -= 1.0
+    satisfaction_rate = num_no_violations / num_violations
+
+    return satisfaction_rate
+
 
 if __name__ == "__main__":
 
-    # args = arg_parser()
-    iteration = 1
+    args = arg_parser()
+    iteration = args.iteration
     # create fine tune folder
     if not os.path.exists(
         os.path.dirname(os.path.realpath(__file__)) + "/finetune_model/models"
@@ -320,7 +341,6 @@ if __name__ == "__main__":
         os.path.dirname(os.path.realpath(__file__))
         + "/models/model_orig/original_model"
     )
-    ctrl_test_pred_orig = model_orig.predict(test_obs)
     # load the repaired dat set
     load_str = "_5_31_2022_16_35_50"
     x_repair, y_repair = load_rep_data(load_str)
@@ -331,7 +351,12 @@ if __name__ == "__main__":
     x_train, y_train = hand_label_samples(
         x_repair, y_repair, model_orig, bound_upper, gap=0.4
     )
-    # substitute the output layer with a new layer and freeze the base model
+
+    # original predictions
+    ctrl_test_pred_orig = model_orig.predict(test_obs)
+    ctrl_train_pred_orig = model_orig.predict(x_repair)
+
+    
 
     ###################################################
     # load finetune model
@@ -382,8 +407,8 @@ if __name__ == "__main__":
         callbacks=[callback_es, callback_reduce_lr],
     )
     time_2 = time.time()
-    print("Model Loss + Accuracy on Test Data Set: ")
-    model_orig.evaluate(test_obs, test_ctrls, verbose=2)
+    # print("Model Loss + Accuracy on Test Data Set: ")
+    # model_orig.evaluate(test_obs, test_ctrls, verbose=2)
 
     ####################################################
     print("-----------------------")
@@ -392,29 +417,36 @@ if __name__ == "__main__":
         layer.trainable = True
 
     loss = keras.losses.MeanSquaredError(name="MSE")
-    optimizer = keras.optimizers.Adam(learning_rate=learning_rate, name="Adam")
+    optimizer = keras.optimizers.Adam(learning_rate=0.002, name="Adam")
     model_orig.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=5, min_lr=0.001
+        monitor="loss", factor=0.2, patience=5, min_lr=0.0002
     )  # reduce learning rate
     callback_es = EarlyStopping(
         monitor="loss", patience=20, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
+    check_iers = 5
+    satisfied = False
     time_3 = time.time()
-    his = model_orig.fit(
-        x_train,
-        y_train,
-        epochs=50,
-        batch_size=batch_size_train,
-        use_multiprocessing=True,
-        verbose=net_verbose,
-        callbacks=[callback_es, callback_reduce_lr],
-    )
+    for i in range(check_iers):
+        his = model_orig.fit(
+            x_train,
+            y_train,
+            epochs=10,
+            batch_size=batch_size_train,
+            use_multiprocessing=True,
+            verbose=net_verbose,
+            callbacks=[callback_es, callback_reduce_lr],
+        )
+        if give_sat_rate(model_orig, x_repair, y_repair, ctrl_train_pred_orig, bound_upper) > 0.98:
+            satisfied = True
+            i = check_iers-1
+    
     time_4 = time.time()
-    print("Model Loss + Accuracy on Test Data Set: ")
-    model_orig.evaluate(test_obs, test_ctrls, verbose=2)
+    # print("Model Loss + Accuracy on Test Data Set: ")
+    # model_orig.evaluate(test_obs, test_ctrls, verbose=2)
 
     #############################################
     print("-----------------------")
@@ -447,6 +479,9 @@ if __name__ == "__main__":
     print(f"The overall time is {overall_time}")
     print(f"mae is {mae}")
     print(f"sat_rate is {sat_rate}")
+    print(f"does satisfied is {satisfied}")
+    sat_repair = give_sat_rate(model_orig, x_repair, y_repair, ctrl_train_pred_orig, bound_upper)
+    print(f"sat_rate for repair samples {sat_repair}")
     # hand label the data set
 
     # store the modeled MIP and parameters
@@ -475,45 +510,20 @@ if __name__ == "__main__":
     # ) as data:
     #     pickle.dump([x_train, y_train], data)
 
-    # # save summary
-    # pred_ctrls = out_model(test_obs, training=False)
-    # err = np.abs(test_ctrls - pred_ctrls)
-    # with open(
-    #     path_write + f"/stats/repair_layer{now_str}.csv",
-    #     "a+",
-    #     newline="",
-    # ) as write_obj:
-    #     # Create a writer object from csv module
-    #     csv_writer = writer(write_obj)
-    #     model_evaluation = [
-    #         "repair layer",
-    #         layer_to_repair,
-    #         "mae",
-    #         np.sum(err) / err.shape[0],
-    #         "num_samples",
-    #         num_samples,
-    #         "num of repaired nodes",
-    #         num_nodes,
-    #         "repair node list",
-    #         repair_node_list,
-    #         "repair layer",
-    #         layer_to_repair,
-    #         "Num of nodes in repair layer",
-    #         32,
-    #         "timelimit",
-    #         options.optimizer_options["timelimit"],
-    #         "mipfocus",
-    #         options.optimizer_options["mipfocus"],
-    #         "max weight bunds",
-    #         cost_weights,
-    #         "cost weights",
-    #         cost_weights,
-    #         "output bounds",
-    #         output_bounds,
-    #     ]
-    #     # Add contents of list as last row in the csv file
-    #     csv_writer.writerow(model_evaluation)
-    # print("saved: stats")
+    # save summary
+
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/finetune_model/stats.csv",
+        "a+",
+        newline="",
+    ) as write_obj:
+        # Create a writer object from csv module
+        csv_writer = writer(write_obj)
+        model_evaluation = [overall_time, mae, sat_rate, str(satisfied), sat_repair]
+        # Add contents of list as last row in the csv file
+        csv_writer.writerow(model_evaluation)
+    print("saved: stats")
 
     # # out_model = keras.models.load_model(
     # #     os.path.dirname(os.path.realpath(__file__))
