@@ -30,7 +30,7 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
-# plt.rcParams.update({"text.usetex": True})
+plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -334,7 +334,7 @@ def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
         distance,
         mean_vec,
         lim_uc_vec,
-        alpha=0.5,
+        alpha=0.8,
         color=color,
     )
     ax.plot(distance, mean_vec, color=color, label=label)
@@ -368,12 +368,22 @@ if __name__ == "__main__":
     delta_u_laye3_bound2 = np.subtract(
         y_pred_lay3_bound2.flatten(), x_test[:, -1].flatten()
     )
+    for i in range(delta_u_laye3_bound2.shape[0]):
+        if delta_u_laye3_bound2[i] > bound2:
+            delta_u_laye3_bound2[i] = bound2
+        elif delta_u_laye3_bound2[i] < -bound2:
+            delta_u_laye3_bound2[i] = -bound2
 
     model_lay3_bound1_5, _ = generate_model_n_data(load_str3_bound1_5)
     y_pred_lay3_bound1_5 = model_lay3_bound1_5.predict(x_test)
     delta_u_laye3_bound1_5 = np.subtract(
         y_pred_lay3_bound1_5.flatten(), x_test[:, -1].flatten()
     )
+    for i in range(delta_u_laye3_bound1_5.shape[0]):
+        if delta_u_laye3_bound1_5[i] > bound1_5:
+            delta_u_laye3_bound1_5[i] = bound1_5
+        elif delta_u_laye3_bound1_5[i] < -bound1_5:
+            delta_u_laye3_bound1_5[i] = -bound1_5
 
     model_lay3_bound0_5, _ = generate_model_n_data(load_str3_bound0_5)
     y_pred_lay3_bound0_5 = model_lay3_bound0_5.predict(x_test)
@@ -406,7 +416,15 @@ if __name__ == "__main__":
     # create two subplots with share x axis
 
     fig = plt.figure(figsize=(13, 5))
-    xlim_max = 1000
+    color_orig = "#2E8B57"
+    color_lay3 = "#DC143C"
+    color_lay4 = "#800080"
+    color_test = "black"
+    color_xline = "#696969"
+    color_fill = "#D4D4D4"
+    line_width = 2
+
+    xlim_max = 200
     gs = fig.add_gridspec(2, 2)
     ax00 = fig.add_subplot(gs[0, 0])
     ax10 = fig.add_subplot(gs[1, 0])
@@ -425,27 +443,27 @@ if __name__ == "__main__":
     # plot bound 2 plots
     ax00.plot(
         y_test.flatten(),
-        label="Reference",
+        label="Ref.",
         color="black",
         linewidth=1.5,
         linestyle="dashed",
     )
     ax00.plot(
         y_pred_orig.flatten(),
-        label="Original predictions",
-        color="red",
+        label="Orig. predictions",
+        color=color_orig,
         linewidth=1.5,
     )
-    ax00.plot(
-        y_pred_lay4_bound2.flatten(),
-        label="Repaired predictions - last layer",
-        color="blue",
-        linewidth=1.5,
-    )
+    # ax00.plot(
+    #     y_pred_lay4_bound2.flatten(),
+    #     label="Repaired predictions - last layer",
+    #     color="blue",
+    #     linewidth=1.5,
+    # )
     ax00.plot(
         y_pred_lay3_bound2.flatten(),
-        label="Repaired predictions - mid layer",
-        color="green",
+        label="Rep. predictions - mid layer",
+        color=color_lay3,
         linewidth=1.5,
     )
     ax00.fill_between(
@@ -455,31 +473,32 @@ if __name__ == "__main__":
         0,
         1,
         where=np.abs(delta_u_orig.flatten()) > bound2,
-        color="#DDA0DD",
-        alpha=0.5,
+        color=color_fill,
+        alpha=0.8,
         transform=ax00.get_xaxis_transform(),
-        label="violation regions",
+        label="Violated region",
     )
-    ax00.set_ylabel("Control (rad)", fontsize=14)
+    ax00.set_ylabel("Control (rad)", fontsize=16)
     ax00.grid(alpha=0.8, linestyle="dashed")
     ax00.set_ylim([-18.0, 21.2])
     ax00.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax00.xaxis.set_ticklabels([])
-    ax00.tick_params(axis="both", which="major", labelsize=14)
+    ax00.tick_params(axis="both", which="major", labelsize=16)
+    ax00.set_title("Control bound = 2", fontsize=16)
 
     ax10.plot(
         delta_u_orig,
-        color="red",
+        color=color_orig,
         linewidth=1.5,
     )
-    ax10.plot(
-        delta_u_laye4_bound2,
-        color="blue",
-        linewidth=1.5,
-    )
+    # ax10.plot(
+    #     delta_u_laye4_bound2,
+    #     color="blue",
+    #     linewidth=1.5,
+    # )
     ax10.plot(
         delta_u_laye3_bound2,
-        color="green",
+        color=color_lay3,
         linewidth=1.5,
     )
     ax10.fill_between(
@@ -489,8 +508,8 @@ if __name__ == "__main__":
         0,
         1,
         where=np.abs(delta_u_orig.flatten()) > bound2,
-        color="#DDA0DD",
-        alpha=0.5,
+        color=color_fill,
+        alpha=0.8,
         transform=ax10.get_xaxis_transform(),
     )
     ax10.axhline(
@@ -499,15 +518,15 @@ if __name__ == "__main__":
     ax10.axhline(
         y=-bound2, color="#8B8878", linewidth=1.5, linestyle="dashed"
     )  # lower bound
-    ax10.set_ylabel("Control rate (rad/s)", fontsize=14)
+    ax10.set_ylabel("Control rate (rad/s)", fontsize=16)
     ax10.grid(alpha=0.8, linestyle="dashed")
-    ax10.set_xlabel("Time (s)", fontsize=14)
+    ax10.set_xlabel("Time (s)", fontsize=16)
     ax10.set_xlim([0, xlim_max])
     ax10.set_ylim([-4.1, 4.1])
     ax10.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
     ax10.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    ax10.tick_params(axis="x", labelsize=14)
-    ax10.tick_params(axis="y", labelsize=14)
+    ax10.tick_params(axis="x", labelsize=16)
+    ax10.tick_params(axis="y", labelsize=16)
 
     # plot bound 1.5 plots
     ax01.plot(
@@ -518,12 +537,12 @@ if __name__ == "__main__":
     )
     ax01.plot(
         y_pred_orig.flatten(),
-        color="red",
+        color=color_orig,
         linewidth=1.5,
     )
     ax01.plot(
         y_pred_lay3_bound1_5.flatten(),
-        color="green",
+        color=color_lay3,
         linewidth=1.5,
     )
     ax01.fill_between(
@@ -533,24 +552,26 @@ if __name__ == "__main__":
         0,
         1,
         where=np.abs(delta_u_orig.flatten()) > bound1_5,
-        color="#DDA0DD",
-        alpha=0.5,
+        color=color_fill,
+        alpha=0.8,
         transform=ax01.get_xaxis_transform(),
     )
     ax01.grid(alpha=0.8, linestyle="dashed")
     ax01.set_ylim([-18.0, 21.2])
     ax01.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax01.xaxis.set_ticklabels([])
-    ax01.tick_params(axis="both", which="major", labelsize=14)
+    ax01.yaxis.set_ticklabels([])
+    ax01.tick_params(axis="both", which="major", labelsize=16)
+    ax01.set_title("Control bound = 1.5", fontsize=16)
 
     ax11.plot(
         delta_u_orig,
-        color="red",
+        color=color_orig,
         linewidth=1.5,
     )
     ax11.plot(
         delta_u_laye3_bound1_5,
-        color="green",
+        color=color_lay3,
         linewidth=1.5,
     )
     ax11.fill_between(
@@ -560,8 +581,8 @@ if __name__ == "__main__":
         0,
         1,
         where=np.abs(delta_u_orig.flatten()) > bound1_5,
-        color="#DDA0DD",
-        alpha=0.5,
+        color=color_fill,
+        alpha=0.8,
         transform=ax11.get_xaxis_transform(),
     )
     ax11.axhline(
@@ -571,13 +592,14 @@ if __name__ == "__main__":
         y=-bound1_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
     )  # lower bound
     ax11.grid(alpha=0.8, linestyle="dashed")
-    ax11.set_xlabel("Time (s)", fontsize=14)
+    ax11.set_xlabel("Time (s)", fontsize=16)
     ax11.set_xlim([0, xlim_max])
     ax11.set_ylim([-4.1, 4.1])
+    ax11.yaxis.set_ticklabels([])
     ax11.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
     ax11.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    ax11.tick_params(axis="x", labelsize=14)
-    ax11.tick_params(axis="y", labelsize=14)
+    ax11.tick_params(axis="x", labelsize=16)
+    ax11.tick_params(axis="y", labelsize=16)
 
     # # plot bound 0.5 plots
     # ax02.plot(
@@ -588,12 +610,12 @@ if __name__ == "__main__":
     # )
     # ax02.plot(
     #     y_pred_orig.flatten(),
-    #     color="red",
+    #     color=color_orig,
     #     linewidth=1.5,
     # )
     # ax02.plot(
     #     y_pred_lay3_bound0_5.flatten(),
-    #     color="green",
+    #     color=color_lay3,
     #     linewidth=1.5,
     # )
     # ax02.fill_between(
@@ -603,24 +625,24 @@ if __name__ == "__main__":
     #     0,
     #     1,
     #     where=np.abs(delta_u_orig.flatten()) > bound0_5,
-    #     color="#DDA0DD",
-    #     alpha=0.5,
+    #     color=color_fill,
+    #     alpha=0.8,
     #     transform=ax02.get_xaxis_transform(),
     # )
     # ax02.grid(alpha=0.8, linestyle="dashed")
     # ax02.set_ylim([-18.0, 21.2])
     # ax02.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     # ax02.xaxis.set_ticklabels([])
-    # ax02.tick_params(axis="both", which="major", labelsize=14)
+    # ax02.tick_params(axis="both", which="major", labelsize=16)
 
     # ax12.plot(
     #     delta_u_orig,
-    #     color="red",
+    #     color=color_orig,
     #     linewidth=1.5,
     # )
     # ax12.plot(
     #     delta_u_laye3_bound0_5,
-    #     color="green",
+    #     color=color_lay3,
     #     linewidth=1.5,
     # )
     # ax12.fill_between(
@@ -630,8 +652,8 @@ if __name__ == "__main__":
     #     0,
     #     1,
     #     where=np.abs(delta_u_orig.flatten()) > bound0_5,
-    #     color="#DDA0DD",
-    #     alpha=0.5,
+    #     color=color_fill,
+    #     alpha=0.8,
     #     transform=ax12.get_xaxis_transform(),
     # )
     # ax12.axhline(
@@ -641,13 +663,13 @@ if __name__ == "__main__":
     #     y=-bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
     # )  # lower bound
     # ax12.grid(alpha=0.8, linestyle="dashed")
-    # ax12.set_xlabel("Time (s)", fontsize=14)
+    # ax12.set_xlabel("Time (s)", fontsize=16)
     # ax12.set_xlim([0, xlim_max])
     # ax12.set_ylim([-4.1, 4.1])
     # ax12.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
     # ax12.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    # ax12.tick_params(axis="x", labelsize=14)
-    # ax12.tick_params(axis="y", labelsize=14)
+    # ax12.tick_params(axis="x", labelsize=16)
+    # ax12.tick_params(axis="y", labelsize=16)
 
     lines, labels = ax00.get_legend_handles_labels()
     leg = fig.legend(
@@ -655,7 +677,7 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.5, 0.05),
+        bbox_to_anchor=(0.5, 0.0),
         bbox_transform=fig.transFigure,
         ncol=5,
         fontsize=15,

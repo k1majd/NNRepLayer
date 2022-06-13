@@ -31,6 +31,7 @@ from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
 plt.rcParams.update({"text.usetex": True})
+# plt.rcParams["font.family"] = "Times New Roman"
 
 
 def loadData(name_csv):
@@ -181,14 +182,14 @@ def plotTestData(
     err_repair = np.abs(y_test - pred_ctrls_repair)
     ax2.plot(err_orig, color="#1abd15")
     ax2.plot(err_repair, color="#b81662")
-    ax2.grid(alpha=0.5, linestyle="dashed")
+    # ax2.grid(alpha=0.5, linestyle="dashed")
     ax2.set_ylabel("Ankle Angle Control Error (rad)")
     ax2.set_xlabel("Time (s)")
     ax2.set_xlim([0, 1000])
 
     ax3.plot(delta_u_orig, color="#1abd15")
     ax3.plot(delta_u_repaired, color="#b81662")
-    ax3.grid(alpha=0.5, linestyle="dashed")
+    # ax3.grid(alpha=0.5, linestyle="dashed")
     ax3.axhline(y=bound, color="k", linestyle="dashed")  # upper bound
     ax3.axhline(y=-bound, color="k", linestyle="dashed")  # lower bound
     ax3.set_ylabel("Ankle Angle Control Change (rad)")
@@ -401,12 +402,19 @@ if __name__ == "__main__":
     # create two subplots with share x axis
 
     # fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-    fig = plt.figure(figsize=(13, 5))
-
+    fig = plt.figure(figsize=(13, 4))
+    color_orig = "#2E8B57"
+    color_lay3 = "#DC143C"
+    color_lay4 = "#800080"
+    color_test = "black"
+    color_xline = "#696969"
+    color_fill = "#D4D4D4"
+    line_width = 2
     gs = fig.add_gridspec(2, 2)
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[1, 0])
     ax3 = fig.add_subplot(gs[:, 1])
+
     # share x axis of ax1 and ax2
     ax1.get_shared_x_axes().join(ax1, ax2)
     ax2.get_shared_x_axes().join(ax1, ax2)
@@ -416,36 +424,51 @@ if __name__ == "__main__":
     # fig = plt.figure(figsize=(13, 5))
     # gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1])
     # ax1 = plt.subplot(gs[0])
-    ax1.axvspan(0, 6, color="#DDA0DD", alpha=0.5)
-    ax1.axvspan(98.7, 122.8, color="#DDA0DD", alpha=0.5)
-    ax1.axvspan(211.3, 239.7, color="#DDA0DD", alpha=0.5)
-    ax1.axvspan(330.7, 355, color="#ax00", alpha=0.5)
     ax1.axhline(
-        y=bound, color="#8B8878", linewidth=3, linestyle="dashed"
+        y=bound,
+        color=color_xline,
+        linewidth=1,
+        linestyle=(0, (5, 7)),
+        alpha=1,
     )  # upper bound
     ax1.plot(
-        y_test, color="k", linewidth=3, linestyle="dashed", label="Reference"
+        y_test,
+        color=color_test,
+        linewidth=line_width,
+        linestyle="dashed",
+        label="Ref.",
     )
     ax1.plot(
-        y_pred_orig, color="red", linewidth=3, label="Original predictions"
+        y_pred_orig,
+        color=color_orig,
+        linewidth=line_width,
+        label="Orig. predictions",
     )
     ax1.plot(
         y_pred_lay3,
-        color="g",
-        linewidth=3,
-        label="Repaired predictions - mid layer",
+        color=color_lay3,
+        linewidth=line_width,
+        label="Rep. predictions - mid layer",
     )
     ax1.plot(
         y_pred_lay4,
-        color="b",
-        linewidth=3,
-        label="Repaired predictions - last layer",
+        color=color_lay4,
+        linewidth=line_width,
+        label="Rep. predictions - last layer",
+    )
+
+    ax1.axvspan(0, 6, color=color_fill, alpha=0.5)
+    ax1.axvspan(98.7, 122.8, color=color_fill, alpha=0.5)
+    ax1.axvspan(211.3, 239.7, color=color_fill, alpha=0.5)
+    ax1.axvspan(
+        330.7, 355, color=color_fill, alpha=0.5, label="Violated region"
     )
     ax1.set_ylabel("Control (rad)", fontsize=16)
     # ax1.set_xlabel("Time (s)", fontsize=16)
     # ax1.set_xlim([0, 400])
     ax1.set_ylim([-18.0, 21.2])
-    ax1.grid(alpha=0.8, linestyle="dashed")
+    # ax1.axes.xaxis.set_visible(False)
+    ax1.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
     ax1.xaxis.set_ticklabels([])
     # ax1.set_xticks(np.linspace(0, 400, 5, endpoint=True))
     ax1.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
@@ -455,14 +478,15 @@ if __name__ == "__main__":
     err_lay3 = np.abs(y_test - y_pred_lay3)
     err_lay4 = np.abs(y_test - y_pred_lay4)
     # ax2 = plt.subplot(gs[1], sharex=ax1)
-    ax2.axvspan(0, 6, color="#DDA0DD", alpha=0.5)
-    ax2.axvspan(98.7, 122.8, color="#DDA0DD", alpha=0.5)
-    ax2.axvspan(211.3, 239.7, color="#DDA0DD", alpha=0.5)
-    ax2.axvspan(330.7, 355, color="#DDA0DD", alpha=0.5)
-    ax2.plot(err_orig, linewidth=3, color="red")
-    ax2.plot(err_lay3, linewidth=3, color="g")
-    ax2.plot(err_lay4, linewidth=3, color="b")
-    ax2.grid(alpha=0.8, linestyle="dashed")
+    ax2.axvspan(0, 6, color=color_fill, alpha=0.5)
+    ax2.axvspan(98.7, 122.8, color=color_fill, alpha=0.5)
+    ax2.axvspan(211.3, 239.7, color=color_fill, alpha=0.5)
+    ax2.axvspan(330.7, 355, color=color_fill, alpha=0.5)
+    ax2.plot(err_orig, linewidth=line_width, color=color_orig)
+    ax2.plot(err_lay3, linewidth=line_width, color=color_lay3)
+    ax2.plot(err_lay4, linewidth=line_width, color=color_lay4)
+
+    ax2.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
     ax2.set_ylabel("Control error (rad)", fontsize=16)
     ax2.set_xlabel("Time (s)", fontsize=16)
     ax2.set_xlim([0, 400])
@@ -472,16 +496,16 @@ if __name__ == "__main__":
     ax2.tick_params(axis="x", labelsize=16)
     ax2.tick_params(axis="y", labelsize=16)
 
-    ax3.set_facecolor("lavender")
+    ax3.set_facecolor(color_fill)
     ax3.yaxis.set_label_position("right")
     ax3.yaxis.tick_right()
-    ax3.grid(alpha=0.8, linestyle="dashed")
+    ax3.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
     ax3 = plot_mean_vs_std(
         ax3,
         dist_orig,
         mean_orig,
         lim_uc_orig,
-        color="r",
+        color=color_orig,
         label="Original model",
     )
     ax3 = plot_mean_vs_std(
@@ -489,7 +513,7 @@ if __name__ == "__main__":
         dist_lay3,
         mean_lay3,
         lim_uc_lay3,
-        color="g",
+        color=color_lay3,
         label="Repaired model - mid layer",
     )
     ax3 = plot_mean_vs_std(
@@ -497,9 +521,10 @@ if __name__ == "__main__":
         dist_lay4,
         mean_lay4,
         lim_uc_lay4,
-        color="b",
+        color=color_lay4,
         label="Repaired model - last layer",
     )
+
     ax3.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
     ax3.set_ylabel("Degree of violation", fontsize=16)
     # ax3.set_title(
@@ -529,9 +554,9 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.5, 0.05),
+        bbox_to_anchor=(0.5, 0.0),
         bbox_transform=fig.transFigure,
-        ncol=4,
+        ncol=5,
         fontsize=15,
     )
     leg.get_frame().set_facecolor("white")

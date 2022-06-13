@@ -196,17 +196,18 @@ def plot_pahse(ctrl_model_orig, obs, ctrls, var1, var2, box, ax1, c, alpha):
     # gs = fig.add_gridspec(2, 1)
     # ax1 = fig.add_subplot(gs[0, 0])
     # ax2 = fig.add_subplot(gs[1, 0])
-    ax1.quiver(
-        x,
-        y,
-        x_vel,
-        y_vel,
-        angles="xy",
-        scale_units="xy",
-        scale=1,
-        color=c,
-        alpha=alpha,
-    )
+    # ax1.quiver(
+    #     x,
+    #     y,
+    #     x_vel,
+    #     y_vel,
+    #     angles="xy",
+    #     scale_units="xy",
+    #     # scale=1,
+    #     color=c,
+    #     alpha=alpha,
+    # )
+    ax1.scatter(x + x_vel, y + y_vel, color=c, alpha=1, s=0.8)
     ax1.grid(alpha=0.5, linestyle="dashed")
     ax1.set_xlabel(var1 + " angle")
     ax1.set_ylabel(var2 + " angle")
@@ -245,13 +246,16 @@ def plot_pahse(ctrl_model_orig, obs, ctrls, var1, var2, box, ax1, c, alpha):
 
     return ax1
 
-def plot_signal(x_train, y_train, y_pred, dt=1.):
 
-    
+def plot_signal(x_train, y_train, y_pred, dt=1.0):
 
     fig, (ax1, ax2) = plt.subplots(nrows=2)
-    out_orig = [x_train[i, -1] + dt*y_train[i][0] for i in range(x_train.shape[0])]
-    out_repaired = [x_train[i, -1] + dt*y_pred[i][0] for i in range(x_train.shape[0])]
+    out_orig = [
+        x_train[i, -1] + dt * y_train[i][0] for i in range(x_train.shape[0])
+    ]
+    out_repaired = [
+        x_train[i, -1] + dt * y_pred[i][0] for i in range(x_train.shape[0])
+    ]
     ax1.plot(out_orig, label="original")
     ax1.plot(out_repaired, label="repaired")
     ax1.fill_between(
@@ -339,11 +343,11 @@ if __name__ == "__main__":
     plt.show()
 
     plot_signal(
-        train_obs, 
-        train_ctrls, 
-        ctrl_model_repair.predict(train_obs), 
+        train_obs,
+        train_ctrls,
+        ctrl_model_repair.predict(train_obs),
         dt=0.667,
-        )
+    )
     # plotTestData(
     #     ctrl_model_orig,
     #     out_model,

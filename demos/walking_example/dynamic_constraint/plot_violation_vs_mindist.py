@@ -24,12 +24,13 @@ import pyomo.environ as pyo
 from scipy.spatial import ConvexHull
 
 from datetime import datetime
+from matplotlib.ticker import FormatStrFormatter
 
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
-# plt.rcParams.update({"text.usetex": True})
+plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -318,14 +319,14 @@ def give_mean_and_upperstd(model, x_train, x_test, bound):
 
 
 def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
-    ax.fill_between(
-        distance,
-        mean(distance),
-        lim_uc(distance),
-        alpha=0.5,
-        color=color,
-    )
-    ax.plot(distance, mean(distance), color=color, label=label)
+    # ax.fill_between(
+    #     distance,
+    #     mean(distance),
+    #     lim_uc(distance),
+    #     alpha=0.5,
+    #     color=color,
+    # )
+    ax.plot(distance, mean(distance), color=color, label=label, linewidth=3)
     return ax
 
 
@@ -335,6 +336,10 @@ if __name__ == "__main__":
 
     load_str3 = "_6_11_2022_10_56_16"
     load_str4 = "_6_11_2022_11_26_30"
+
+    color_orig = "#2E8B57"
+    color_lay3 = "#DC143C"
+    color_lay4 = "#800080"
 
     # load test data and original model
     model_orig = keras.models.load_model(
@@ -374,47 +379,53 @@ if __name__ == "__main__":
         model_orig, x_train_lay4, x_test, bound
     )
 
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.set_facecolor("lavender")
+    fig, ax = plt.subplots(figsize=(4, 4))
+    # ax.set_facecolor("lavender")
     ax.grid(alpha=0.8, linestyle="dashed")
     ax = plot_mean_vs_std(
         ax,
         dist_orig,
         mean_orig,
         lim_uc_orig,
-        color="r",
-        label="Original model",
+        color=color_orig,
+        label="Orig. model",
     )
     ax = plot_mean_vs_std(
         ax,
         dist_lay3,
         mean_lay3,
         lim_uc_lay3,
-        color="g",
-        label="Repaired model - mid layer",
+        color=color_lay3,
+        label="Rep. model - mid layer, control bound = 2",
     )
     ax = plot_mean_vs_std(
         ax,
         dist_lay4,
         mean_lay4,
         lim_uc_lay4,
-        color="b",
-        label="Repaired model - last layer",
+        color=color_lay4,
+        label="Rep. model - last layer, control bound = 1.5",
     )
     ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
     ax.set_ylabel("Degree of violation", fontsize=16)
-    ax.set_title(
-        "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
-    )
-    ax.set_xlim(0, np.max(dist_orig))
-    ax.set_ylim(0 - 0.1, np.max(lim_uc_orig(dist_orig) + 0.1))
-    ax.set_xticks(np.linspace(0, np.max(dist_orig), 5))
-    ax.set_yticks(np.linspace(0, np.max(lim_uc_orig(dist_orig)), 5))
+    # ax.set_title(
+    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
+    # )
+    y_maxlim = 2
+    ax.set_xticks(np.linspace(0, np.max(dist_orig), 4))
+    ax.set_yticks(np.linspace(0, y_maxlim, 4))
+    ax.tick_params(axis="y", labelrotation=90)
     ax.tick_params(axis="x", labelsize=16)
     ax.tick_params(axis="y", labelsize=16)
+    ax.yaxis.set_label_position("right")
+    ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
+    ax.xaxis.set_major_formatter(FormatStrFormatter("%.2f"))
+    ax.yaxis.tick_right()
+    ax.set_xlim([0, np.max(dist_orig)])
+    ax.set_ylim([0 - 0.1, y_maxlim])
     plt.legend(
         loc="upper left",
-        fontsize=16,
+        fontsize=14,
         frameon=True,
     )
 
