@@ -377,15 +377,17 @@ def upper_lower_bounds():
     return lim_uc, lim_lc
 
 
-def plot_model_out(model, obs):
+def plot_model_out(model, obs, ctrl):
     up_lim, low_lim = upper_lower_bounds()
     pred_ctrls = model.predict(obs)
     new_x = np.linspace(0, 1, 51)
     x = obs[:, -1].flatten()
     y = pred_ctrls.flatten()
-    plt.scatter(x, y, color="#173f5f")
+    plt.scatter(x, y, color="#173f5f", label="predict")
+    plt.scatter(x, ctrl.flatten(), color="#b81662", label="control")
     plt.plot(new_x, up_lim(new_x), "--r")
     plt.plot(new_x, low_lim(new_x), "--r")
+    plt.legend()
     plt.show()
 
 
@@ -406,7 +408,7 @@ if __name__ == "__main__":
     rnd_pts = np.random.choice(x_train.shape[0], 300)
     x_train = x_train[rnd_pts, :]
     y_train = y_train[rnd_pts]
-    plot_model_out(ctrl_model_orig, x_train)
+    plot_model_out(ctrl_model_orig, x_train, y_train)
     # plotTestData(
     #     ctrl_model_orig,
     #     train_obs,
@@ -425,8 +427,8 @@ if __name__ == "__main__":
     def out_constraint_lower(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0]
-            >= l_lim(x_train[i][-1])
-        ) + 0.1
+            >= l_lim(x_train[i][-1]) + 0.1
+        )
 
     repair_obj = NNRepair(ctrl_model_orig)
 
@@ -572,4 +574,4 @@ if __name__ == "__main__":
         csv_writer.writerow(model_evaluation)
     print("saved: stats")
 
-    plot_model_out(out_model, x_train)
+    plot_model_out(out_model, x_train, y_train)
