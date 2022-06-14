@@ -4,10 +4,10 @@
 # echo $SCRIPT_DIR/tc1/finetuned_net/stats
 # rm -rf $SCRIPT_DIR/tc1/finetuned_net/stats
 echo "Finetuning"
-for i in {1..50}
+for i in {1..10}
 do
    echo "Fine-tuning - test: $i"
-   python3 fine_tune.py -it $i
+   python3 retrain.py -it $i
 done
 
 # echo "remove the existing stats in:"
