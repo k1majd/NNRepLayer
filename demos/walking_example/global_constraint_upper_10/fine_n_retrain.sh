@@ -7,7 +7,7 @@ echo "Finetuning"
 for i in {1..50}
 do
    echo "Fine-tuning - test: $i"
-   python3 fine_tune.py -it $i
+   python3 retrain.py -it $i
 done
 
 # echo "remove the existing stats in:"

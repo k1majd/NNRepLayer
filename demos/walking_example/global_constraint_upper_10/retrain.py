@@ -533,7 +533,7 @@ if __name__ == "__main__":
 
     with open(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/finetune_model/stats.csv",
+        + f"/retrain_model/stats.csv",
         "a+",
         newline="",
     ) as write_obj:
