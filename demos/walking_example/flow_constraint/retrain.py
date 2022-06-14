@@ -342,7 +342,7 @@ if __name__ == "__main__":
     # x_repair, y_repair = load_rep_data(load_str)
 
     box = [-2.0, -0.5, 1.0, 3.0]
-    gap = 0.5
+    gap = 1
 
     box_inflate = np.array(
         [box[0] - gap, box[1] + gap, box[2] - gap, box[3] + gap]
@@ -392,8 +392,8 @@ if __name__ == "__main__":
     print("Train model!")
     regularizer_rate = 0.003
     learning_rate = 0.01
-    train_epochs = 10
-    batch_size_train = 8
+    train_epochs = 20
+    batch_size_train = 10
     net_verbose = 1
 
     loss = keras.losses.MeanSquaredError(name="MSE")
@@ -426,14 +426,14 @@ if __name__ == "__main__":
     print("Start fine-tuning the whole model!")
 
     loss = keras.losses.MeanSquaredError(name="MSE")
-    optimizer = keras.optimizers.Adam(learning_rate=0.002, name="Adam")
+    optimizer = keras.optimizers.Adam(learning_rate=0.01, name="Adam")
     model.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
     # compile the model
     callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=5, min_lr=0.0002
+        monitor="loss", factor=0.2, patience=3, min_lr=0.0002
     )  # reduce learning rate
     callback_es = EarlyStopping(
-        monitor="loss", patience=20, restore_best_weights=True
+        monitor="loss", patience=3, restore_best_weights=True
     )  # early stopping callback
     ## model fitting
     check_iers = 5
@@ -445,7 +445,7 @@ if __name__ == "__main__":
         his = model.fit(
             x_train,
             y_train,
-            epochs=1,
+            epochs=5,
             batch_size=batch_size_train,
             use_multiprocessing=True,
             verbose=net_verbose,
@@ -459,7 +459,7 @@ if __name__ == "__main__":
                 ctrl_train_pred_orig,
                 box,
             )
-            > 0.95
+            > 0.85
         ):
             satisfied = True
 
