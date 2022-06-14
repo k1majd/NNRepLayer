@@ -404,7 +404,7 @@ if __name__ == "__main__":
         mean_lay4,
         lim_uc_lay4,
         color=color_lay4,
-        label="Rep. model - last layer, control bound = 1.5",
+        label="Rep. model - mid layer, control bound = 1.5",
     )
     ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
     ax.set_ylabel("Degree of violation", fontsize=16)
@@ -430,3 +430,22 @@ if __name__ == "__main__":
     )
 
     plt.show()
+
+    # save data
+    print("save data")
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/OM_min_dist_dynamic.pickle",
+        "wb",
+    ) as data:
+        pickle.dump(
+            [
+                mean_orig(dist_orig),
+                dist_orig,
+                mean_lay3(dist_lay3),
+                dist_lay3,
+                mean_lay4(dist_lay4),
+                dist_lay4,
+            ],
+            data,
+        )
