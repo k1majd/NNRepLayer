@@ -459,7 +459,7 @@ if __name__ == "__main__":
                 ctrl_train_pred_orig,
                 box,
             )
-            > 0.98
+            > 0.95
         ):
             satisfied = True
 
