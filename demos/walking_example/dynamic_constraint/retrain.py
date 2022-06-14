@@ -1,3 +1,4 @@
+from threading import BoundedSemaphore
 import numpy as np
 import os
 import csv
@@ -27,6 +28,7 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
+
 def arg_parser():
     """_summary_
 
@@ -43,6 +45,7 @@ def arg_parser():
         help="iteration of finetune",
     )
     return parser.parse_args()
+
 
 def loadData(name_csv):
     with open(name_csv) as csv_file:
@@ -64,22 +67,29 @@ def squared_sum(x, y):
 def generateDataWindow(window_size):
     Dfem = loadData(
         os.path.dirname(os.path.realpath(__file__)) + "/data/GeoffFTF_1.csv"
-    )
+    )  # femur pose?, angle, velocity
     Dtib = loadData(
         os.path.dirname(os.path.realpath(__file__)) + "/data/GeoffFTF_2.csv"
-    )
+    )  # shin pose?, angle, velocity
     Dfut = loadData(
         os.path.dirname(os.path.realpath(__file__)) + "/data/GeoffFTF_3.csv"
-    )
-    n = 20364
-    Dankle = np.subtract(Dtib[:n, 1], Dfut[:n, 1])
+    )  # foot? pose?, angle, velocity
+    n = 20363
+    Dankle = np.subtract(Dtib[: n + 1, 1], Dfut[: n + 1, 1])
     observations = np.concatenate((Dfem[:n, 1:], Dtib[:n, 1:]), axis=1)
     observations = (observations - observations.mean(0)) / observations.std(0)
+    observations = np.concatenate(
+        (
+            observations,
+            Dankle[:n].reshape(n, 1),
+        ),
+        axis=1,
+    )
     controls = Dankle  # (Dankle - Dankle.mean(0))/Dankle.std(0)
     n_train = 18200
     # n_train = 500
-    train_observation = np.array([]).reshape(0, 4 * window_size)
-    test_observation = np.array([]).reshape(0, 4 * window_size)
+    train_observation = np.array([]).reshape(0, 5 * window_size)
+    test_observation = np.array([]).reshape(0, 5 * window_size)
     for i in range(n_train):
         temp_obs = np.array([]).reshape(1, 0)
         for j in range(window_size):
@@ -100,7 +110,12 @@ def generateDataWindow(window_size):
             )
         test_observation = np.concatenate((test_observation, temp_obs), axis=0)
     test_controls = controls[n_train + window_size :].reshape(-1, 1)
-    return train_observation, train_controls, test_observation, test_controls
+    return (
+        train_observation,
+        train_controls,
+        test_observation,
+        test_controls[:-1],
+    )
 
 
 def buildModelWindow(data_size):
@@ -236,15 +251,21 @@ def load_rep_data(str):
     return dataset[0], dataset[1]
 
 
-def hand_label_samples(x_train, y_train, model, bound, gap=0.2):
+def hand_label_samples(x_train, y_train, model, bound, gap=0.1):
     y_pred = model.predict(x_train)
+    delta_u_pred = np.subtract(
+        y_pred.flatten(), x_train[:, -1].flatten()
+    ).flatten()
     x = []
     y = []
 
     for i in range(x_train.shape[0]):
-        if y_pred[i][0] > bound - gap:
+        if delta_u_pred[i] > 0.7 * bound - gap:
             x.append(x_train[i])
-            y.append(np.array([bound - gap]))
+            y.append(np.array([x_train[i, -1] + 0.7 * bound - gap]))
+        elif delta_u_pred[i] < -0.7 * bound + gap:
+            x.append(x_train[i])
+            y.append(np.array([x_train[i, -1] - 0.7 * bound + gap]))
         else:
             x.append(x_train[i])
             y.append(y_train[i])
@@ -252,31 +273,51 @@ def hand_label_samples(x_train, y_train, model, bound, gap=0.2):
     return np.array(x), np.array(y)
 
 
+def give_sat_rate(model, x, y, y_pred_prev, bound):
+    delta_u_prev = np.subtract(
+        y_pred_prev.flatten(), x[:, -1].flatten()
+    ).flatten()
+    delta_u_pred = np.subtract(
+        model.predict(x).flatten(), x[:, -1].flatten()
+    ).flatten()
+    delta_u_prev = np.abs(delta_u_prev)
+    delta_u_pred = np.abs(delta_u_pred)
+    idx = np.where(delta_u_prev > bound)[0]
+    new_delta_u_pred = delta_u_pred[idx]
+    idx_new = np.where(new_delta_u_pred <= bound)[0]
+    return len(idx_new) / len(idx)
 
-def give_stats(model, x, y, y_pred_orig, bound):
+    # # find violations
+    # x_temp = []
+    # y_temp = []
+    # for i in range(x.shape[0]):
+    #     if y_pred_prev[i][0] > bound:
+    #         x_temp.append(x[i])
+    #         y_temp.append(y_pred_new[i])
+
+    # num_violations = len(x_temp) * 1.0
+    # num_no_violations = num_violations
+    # for i in range(len(x_temp)):
+    #     if y_temp[i][0] > bound:
+    #         num_no_violations -= 1.0
+    # satisfaction_rate = num_no_violations / num_violations
+
+    # return satisfaction_rate
+
+
+def give_stats(model, x, y, y_pred_prev, bound):
+    satisfaction_rate = give_sat_rate(model, x, y, y_pred_prev, bound)
+    delta_u_prev = np.subtract(
+        y_pred_prev.flatten(), x[:, -1].flatten()
+    ).flatten()
     y_pred_new = model.predict(x)
-
-    # find violations
-    x_temp = []
-    y_temp = []
-    for i in range(x.shape[0]):
-        if y_pred_orig[i][0] > bound:
-            x_temp.append(x[i])
-            y_temp.append(y_pred_new[i])
-
-    num_violations = len(x_temp) * 1.0
-    num_no_violations = num_violations
-    for i in range(len(x_temp)):
-        if y_temp[i][0] > bound:
-            num_no_violations -= 1.0
-    satisfaction_rate = num_no_violations / num_violations
 
     # find mae
     x_temp = []
     y_orig = []
     y_new = []
     for i in range(x.shape[0]):
-        if y_pred_orig[i][0] <= bound:
+        if np.abs(delta_u_prev[i]) <= bound:
             x_temp.append(x[i])
             y_orig.append(y[i])
             y_new.append(y_pred_new[i])
@@ -286,26 +327,6 @@ def give_stats(model, x, y, y_pred_orig, bound):
     mae = np.mean(np.abs(y_orig - y_new))
 
     return satisfaction_rate, mae
-
-def give_sat_rate(model, x, y, y_pred_orig, bound):
-    y_pred_new = model.predict(x)
-
-    # find violations
-    x_temp = []
-    y_temp = []
-    for i in range(x.shape[0]):
-        if y_pred_orig[i][0] > bound:
-            x_temp.append(x[i])
-            y_temp.append(y_pred_new[i])
-
-    num_violations = len(x_temp) * 1.0
-    num_no_violations = num_violations
-    for i in range(len(x_temp)):
-        if y_temp[i][0] > bound:
-            num_no_violations -= 1.0
-    satisfaction_rate = num_no_violations / num_violations
-
-    return satisfaction_rate
 
 
 if __name__ == "__main__":
@@ -331,32 +352,29 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
-    num_samples = 100
+    # num_samples = 100
     train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
     # rnd_pts = np.random.choice(test_obs.shape[0], num_samples)
     # x_train = test_obs[rnd_pts]
     # y_train = test_ctrls[rnd_pts]
     # load the original model
     model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig/original_model"
+        os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
     # load the repaired dat set
-    load_str = "_5_31_2022_16_35_50"
+    load_str = "_6_11_2022_10_56_16"
     x_repair, y_repair = load_rep_data(load_str)
 
-    bound_upper = 10
-    bound_lower = 30
+    bound = 2.0
+
     # hand label the dataset
     x_train, y_train = hand_label_samples(
-        x_repair, y_repair, model_orig, bound_upper, gap=0.4
+        x_repair, y_repair, model_orig, bound, gap=0.1
     )
 
     # original predictions
     ctrl_test_pred_orig = model_orig.predict(test_obs)
     ctrl_train_pred_orig = model_orig.predict(x_repair)
-
-    
 
     ###################################################
     # load finetune model
@@ -428,23 +446,32 @@ if __name__ == "__main__":
     )  # early stopping callback
     ## model fitting
     check_iers = 5
+    iter = 0
     satisfied = False
     time_3 = time.time()
-    # for i in range(check_iers):
-    while (not satisfied):
+    while (not satisfied) and (iter < iteration):
+        iter += 1
         his = model_orig.fit(
             x_train,
             y_train,
-            epochs=1,
+            epochs=10,
             batch_size=batch_size_train,
             use_multiprocessing=True,
             verbose=net_verbose,
             callbacks=[callback_es, callback_reduce_lr],
         )
-        if give_sat_rate(model_orig, x_repair, y_repair, ctrl_train_pred_orig, bound_upper) > 0.98:
+        if (
+            give_sat_rate(
+                model_orig,
+                x_repair,
+                y_repair,
+                ctrl_train_pred_orig,
+                bound,
+            )
+            > 0.98
+        ):
             satisfied = True
-            i = check_iers-1
-    
+
     time_4 = time.time()
     # print("Model Loss + Accuracy on Test Data Set: ")
     # model_orig.evaluate(test_obs, test_ctrls, verbose=2)
@@ -473,15 +500,17 @@ if __name__ == "__main__":
         pickle.dump([x_train, y_train], data)
 
     sat_rate, mae = give_stats(
-        model_orig, test_obs, test_ctrls, ctrl_test_pred_orig, bound_upper
+        model_orig, test_obs, test_ctrls, ctrl_test_pred_orig, bound
     )
-    overall_time = time_4 - time_3 + time_2 - time_1
+    over_time = time_4 - time_3 + time_2 - time_1
 
-    print(f"The overall time is {overall_time}")
+    print(f"The overall time is {over_time}")
     print(f"mae is {mae}")
     print(f"sat_rate is {sat_rate}")
     print(f"does satisfied is {satisfied}")
-    sat_repair = give_sat_rate(model_orig, x_repair, y_repair, ctrl_train_pred_orig, bound_upper)
+    sat_repair = give_sat_rate(
+        model_orig, x_repair, y_repair, ctrl_train_pred_orig, bound
+    )
     print(f"sat_rate for repair samples {sat_repair}")
     # hand label the data set
 
@@ -521,7 +550,13 @@ if __name__ == "__main__":
     ) as write_obj:
         # Create a writer object from csv module
         csv_writer = writer(write_obj)
-        model_evaluation = [overall_time, mae, sat_rate, str(satisfied), sat_repair]
+        model_evaluation = [
+            over_time,
+            mae,
+            sat_rate,
+            str(satisfied),
+            sat_repair,
+        ]
         # Add contents of list as last row in the csv file
         csv_writer.writerow(model_evaluation)
     print("saved: stats")
