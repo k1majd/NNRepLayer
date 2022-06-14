@@ -333,20 +333,6 @@ if __name__ == "__main__":
 
     args = arg_parser()
     iteration = args.iteration
-    # create fine tune folder
-    if not os.path.exists(
-        os.path.dirname(os.path.realpath(__file__)) + "/retrain_model/models"
-    ):
-        os.makedirs(
-            os.path.dirname(os.path.realpath(__file__))
-            + "/retrain_model/models"
-        )
-    if not os.path.exists(
-        os.path.dirname(os.path.realpath(__file__)) + "/retrain_model/data"
-    ):
-        os.makedirs(
-            os.path.dirname(os.path.realpath(__file__)) + "/retrain_model/data"
-        )
 
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
@@ -360,167 +346,28 @@ if __name__ == "__main__":
     model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
+
     # load the repaired dat set
     load_str = "_6_11_2022_10_56_16"
-    # x_repair, y_repair = load_rep_data(load_str)
+    model_repaired = keras.models.load_model(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/repair_net/models/model_layer{load_str}{load_str}"
+    )
+    x_repair, y_repair = load_rep_data(load_str)
 
     bound = 2.0
 
-    # hand label the dataset
-    x_train, y_train = hand_label_samples(
-        train_obs, train_ctrls, model_orig, bound, gap=0.1
-    )
-
     # original predictions
     ctrl_test_pred_orig = model_orig.predict(test_obs)
-    ctrl_train_pred_orig = model_orig.predict(x_train)
 
-    ###################################################
-    # load retrain  model
-    print("-----------------------")
-    print("create model!")
-    layer_size1 = 32
-    layer_size2 = 32
-    layer_size3 = 32
-    # input_layer = tf.keras.Input(shape=(data_size[1]))
-    # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
-    # layer_2 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_1)
-    # layer_3 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_2)
-    # output_layer = layers.Dense(1)(layer_3)
-    # model = Model(inputs=[input_layer], outputs=[output_layer])
-    model = keras.Sequential(
-        [
-            layers.Dense(
-                layer_size1,
-                activation=tf.nn.relu,
-                input_shape=[x_train.shape[1]],
-            ),
-            layers.Dense(layer_size2, activation=tf.nn.relu),
-            layers.Dense(layer_size3, activation=tf.nn.relu),
-            layers.Dense(1),
-        ]
+    _, mae = give_stats(
+        model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound
     )
-    model.compile(
-        optimizer="adam",
-        loss=[tf.keras.losses.MeanAbsoluteError()],
-        metrics=["accuracy"],
+    sat_rate, _ = give_stats(
+        model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound + 0.1
     )
-    model.summary()
-    print("-----------------------")
-    print("Train model!")
-    regularizer_rate = 0.003
-    learning_rate = 0.01
-    train_epochs = 10
-    batch_size_train = 8
-    net_verbose = 1
-
-    loss = keras.losses.MeanSquaredError(name="MSE")
-    optimizer = keras.optimizers.Adam(learning_rate=learning_rate, name="Adam")
-    model.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
-    # compile the model
-    callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=10, min_lr=0.0004
-    )  # reduce learning rate
-    callback_es = EarlyStopping(
-        monitor="loss", patience=10, restore_best_weights=True
-    )  # early stopping callback
-    ## model fitting
-    time_1 = time.time()
-    his = model.fit(
-        x_train,
-        y_train,
-        epochs=train_epochs,
-        batch_size=batch_size_train,
-        use_multiprocessing=True,
-        verbose=net_verbose,
-        callbacks=[callback_es, callback_reduce_lr],
-    )
-    time_2 = time.time()
-    # print("Model Loss + Accuracy on Test Data Set: ")
-    # model_orig.evaluate(test_obs, test_ctrls, verbose=2)
-
-    ####################################################
-    print("-----------------------")
-    print("Start fine-tuning the whole model!")
-
-    loss = keras.losses.MeanSquaredError(name="MSE")
-    optimizer = keras.optimizers.Adam(learning_rate=0.002, name="Adam")
-    model.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
-    # compile the model
-    callback_reduce_lr = ReduceLROnPlateau(
-        monitor="loss", factor=0.2, patience=5, min_lr=0.0002
-    )  # reduce learning rate
-    callback_es = EarlyStopping(
-        monitor="loss", patience=20, restore_best_weights=True
-    )  # early stopping callback
-    ## model fitting
-    check_iers = 5
-    iter = 0
-    satisfied = False
-    time_3 = time.time()
-    while not satisfied:
-        iter += 1
-        his = model.fit(
-            x_train,
-            y_train,
-            epochs=1,
-            batch_size=batch_size_train,
-            use_multiprocessing=True,
-            verbose=net_verbose,
-            callbacks=[callback_es, callback_reduce_lr],
-        )
-        if (
-            give_sat_rate(
-                model,
-                x_train,
-                y_train,
-                ctrl_train_pred_orig,
-                bound,
-            )
-            > 0.98
-        ):
-            satisfied = True
-
-    time_4 = time.time()
-    # print("Model Loss + Accuracy on Test Data Set: ")
-    # model_orig.evaluate(test_obs, test_ctrls, verbose=2)
-
-    #############################################
-    print("-----------------------")
-    print(f"the data set and model are saved!")
-    print("save model")
-    keras.models.save_model(
-        model,
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/retrain_model/models/model_{iteration}",
-        overwrite=True,
-        include_optimizer=False,
-        save_format=None,
-        signatures=None,
-        options=None,
-        save_traces=True,
-    )
-    print("save data")
-    with open(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/retrain_model/data/dataset{iteration}.pickle",
-        "wb",
-    ) as data:
-        pickle.dump([x_train, y_train], data)
-
-    sat_rate, mae = give_stats(
-        model, test_obs, test_ctrls, ctrl_test_pred_orig, bound
-    )
-    over_time = time_4 - time_3 + time_2 - time_1
-
-    print(f"The overall time is {over_time}")
     print(f"mae is {mae}")
     print(f"sat_rate is {sat_rate}")
-    print(f"does satisfied is {satisfied}")
-    sat_repair = give_sat_rate(
-        model, x_train, y_train, ctrl_train_pred_orig, bound
-    )
-    print(f"sat_rate for repair samples {sat_repair}")
     # hand label the data set
 
     # store the modeled MIP and parameters
@@ -550,25 +397,6 @@ if __name__ == "__main__":
     #     pickle.dump([x_train, y_train], data)
 
     # save summary
-
-    with open(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/finetune_model/stats.csv",
-        "a+",
-        newline="",
-    ) as write_obj:
-        # Create a writer object from csv module
-        csv_writer = writer(write_obj)
-        model_evaluation = [
-            over_time,
-            mae,
-            sat_rate,
-            str(satisfied),
-            sat_repair,
-        ]
-        # Add contents of list as last row in the csv file
-        csv_writer.writerow(model_evaluation)
-    print("saved: stats")
 
     # # out_model = keras.models.load_model(
     # #     os.path.dirname(os.path.realpath(__file__))
