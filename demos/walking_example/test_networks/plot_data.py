@@ -71,7 +71,8 @@ color_test = "black"
 color_xline = "#696969"
 color_fill = "#D4D4D4"
 line_width = 2
-
+x_min = 14950
+x_max = 15000
 gs = fig.add_gridspec(2, 1)
 ax00 = fig.add_subplot(gs[0, 0])
 ax10 = fig.add_subplot(gs[1, 0])
@@ -159,9 +160,9 @@ ax10.axhline(
 ax10.set_ylabel("Control rate (rad/s)", fontsize=16)
 ax10.grid(alpha=0.8, linestyle="dashed")
 ax10.set_xlabel("Time (s)", fontsize=16)
-ax10.set_xlim([11740, 11900])
+ax10.set_xlim([x_min, x_max])
 ax10.set_ylim([-3, 3])
-ax10.set_xticks(np.linspace(11740, 11840, 5, endpoint=True))
+ax10.set_xticks(np.linspace(x_min, x_max, 5, endpoint=True))
 ax10.set_yticks(np.linspace(-2, 2, 5, endpoint=True))
 ax10.tick_params(axis="x", labelsize=16)
 ax10.tick_params(axis="y", labelsize=16)
