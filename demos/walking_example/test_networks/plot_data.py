@@ -43,24 +43,24 @@ error_dynamic = 0.7 * (angle_dynamic[1:] - angle_dynamic[:-1])
 # angle_dynamic = (angle_dynamic - angle_dynamic.mean(0)) / angle_dynamic.std(0)
 error_dynamic = error_dynamic
 angle_dynamic = angle_dynamic
-plt.plot(angle_global)
-plt.plot(angle_dynamic)
-# plt.plot(0.7 * angle_error)
-plt.axhline(
-    y=2,
-    color="black",
-    linewidth=1,
-    linestyle=(0, (5, 7)),
-    alpha=1,
-)  # upper bound
-plt.axhline(
-    y=-2,
-    color="black",
-    linewidth=1,
-    linestyle=(0, (5, 7)),
-    alpha=1,
-)  # upper bound
-plt.show()
+# plt.plot(angle_global)
+# plt.plot(angle_dynamic)
+# # plt.plot(0.7 * angle_error)
+# plt.axhline(
+#     y=2,
+#     color="black",
+#     linewidth=1,
+#     linestyle=(0, (5, 7)),
+#     alpha=1,
+# )  # upper bound
+# plt.axhline(
+#     y=-2,
+#     color="black",
+#     linewidth=1,
+#     linestyle=(0, (5, 7)),
+#     alpha=1,
+# )  # upper bound
+# plt.show()
 
 
 fig = plt.figure(figsize=(13, 5))
@@ -71,7 +71,7 @@ color_test = "black"
 color_xline = "#696969"
 color_fill = "#D4D4D4"
 line_width = 2
-x_min = 14950
+x_min = 12000
 x_max = 15000
 gs = fig.add_gridspec(2, 1)
 ax00 = fig.add_subplot(gs[0, 0])

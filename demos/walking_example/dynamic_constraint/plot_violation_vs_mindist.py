@@ -318,7 +318,7 @@ def give_mean_and_upperstd(model, x_train, x_test, bound):
     return lim_uc, mean, distance
 
 
-def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
+def plot_mean_vs_std(ax, distance, mean, color, label):
     # ax.fill_between(
     #     distance,
     #     mean(distance),
@@ -326,20 +326,50 @@ def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
     #     alpha=0.5,
     #     color=color,
     # )
-    ax.plot(distance, mean(distance), color=color, label=label, linewidth=3)
+    ax.plot(distance, mean, color=color, label=label, linewidth=3)
     return ax
 
 
 if __name__ == "__main__":
+    # load finetune and retrain data
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/FR_min_dist_dynamic.pickle",
+        "rb",
+    ) as data:
+        dataset2 = pickle.load(data)
+    mean_fine_dyn = dataset2[0]
+    dist_fine_dyn = dataset2[1]
+    mean_retrain_dyn = dataset2[2]
+    dist_retrain_dyn = dataset2[3]
+
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/FR_min_dist_flow.pickle",
+        "rb",
+    ) as data:
+        dataset2 = pickle.load(data)
+    mean_fine_flow = dataset2[0]
+    dist_fine_flow = dataset2[1]
+    mean_retrain_flow = dataset2[2]
+    dist_retrain_flow = dataset2[3]
+
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/OM_min_dist_flow.pickle",
+        "rb",
+    ) as data:
+        dataset2 = pickle.load(data)
+    mean_orig_flow = dataset2[0]
+    dist_orig_flow = dataset2[1]
+    mean_rep_flow = dataset2[2]
+    dist_rep_flow = dataset2[3]
+
     # parameter
     bound = 2.0
 
     load_str3 = "_6_11_2022_10_56_16"
     load_str4 = "_6_11_2022_11_26_30"
-
-    color_orig = "#2E8B57"
-    color_lay3 = "#DC143C"
-    color_lay4 = "#800080"
 
     # load test data and original model
     model_orig = keras.models.load_model(
@@ -379,73 +409,139 @@ if __name__ == "__main__":
         model_orig, x_train_lay4, x_test, bound
     )
 
-    fig, ax = plt.subplots(figsize=(4, 4))
-    # ax.set_facecolor("lavender")
-    ax.grid(alpha=0.8, linestyle="dashed")
-    ax = plot_mean_vs_std(
-        ax,
-        dist_orig,
-        mean_orig,
-        lim_uc_orig,
+    mean_orig_dyn = mean_orig(dist_orig)
+    dist_orig_dyn = dist_orig
+    mean_rep_dyn = mean_lay3(dist_lay3)
+    dist_rep_dyn = dist_lay3
+
+    fig = plt.figure(figsize=(8, 3))
+    gs = fig.add_gridspec(1, 2)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+
+    color_orig = "#2E8B57"
+    color_lay3 = "k"
+    color_retrain = "#8E388E"
+    color_fine = "#7EC0EE"
+    color_test = "black"
+    color_xline = "#696969"
+    color_fill = "#D4D4D4"
+    fontsize = 14
+    ax1_xlim = [0, 15.0]
+    ax1_ylim = [-0.1, 1.1]
+    ax2_xlim = [0, 2.0]
+    ax2_ylim = [-0.1, 1.0]
+
+    # dynamic constraint
+    ax1.grid(alpha=0.8, linestyle="dashed")
+    ax1 = plot_mean_vs_std(
+        ax1,
+        dist_orig_dyn,
+        mean_orig_dyn,
         color=color_orig,
-        label="Orig. model",
+        label="Original",
     )
-    ax = plot_mean_vs_std(
-        ax,
-        dist_lay3,
-        mean_lay3,
-        lim_uc_lay3,
+    ax1 = plot_mean_vs_std(
+        ax1,
+        dist_rep_dyn,
+        mean_rep_dyn,
         color=color_lay3,
-        label="Rep. model - mid layer, control bound = 2",
+        label="Repaired - mid layer",
     )
-    ax = plot_mean_vs_std(
-        ax,
-        dist_lay4,
-        mean_lay4,
-        lim_uc_lay4,
-        color=color_lay4,
-        label="Rep. model - mid layer, control bound = 1.5",
+    ax1 = plot_mean_vs_std(
+        ax1,
+        dist_fine_dyn,
+        mean_fine_dyn,
+        color=color_fine,
+        label="Fine-tuned",
     )
-    ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
-    ax.set_ylabel("Degree of violation", fontsize=16)
-    # ax.set_title(
+    ax1 = plot_mean_vs_std(
+        ax1,
+        dist_retrain_dyn,
+        mean_retrain_dyn,
+        color=color_retrain,
+        label="Retrained",
+    )
+    ax1.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
+    ax1.set_ylabel("Degree of violation", fontsize=fontsize)
+    # ax1.set_title(
     #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
     # )
     y_maxlim = 2
-    ax.set_xticks(np.linspace(0, np.max(dist_orig), 4))
-    ax.set_yticks(np.linspace(0, y_maxlim, 4))
-    ax.tick_params(axis="y", labelrotation=90)
-    ax.tick_params(axis="x", labelsize=16)
-    ax.tick_params(axis="y", labelsize=16)
-    ax.yaxis.set_label_position("right")
-    ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
-    ax.xaxis.set_major_formatter(FormatStrFormatter("%.2f"))
-    ax.yaxis.tick_right()
-    ax.set_xlim([0, np.max(dist_orig)])
-    ax.set_ylim([0 - 0.1, y_maxlim])
-    plt.legend(
-        loc="upper left",
-        fontsize=14,
-        frameon=True,
+    ax1.set_xticks(np.linspace(0, ax1_xlim[1], 4))
+    ax1.set_yticks(np.linspace(0, ax1_ylim[1], 4))
+    ax1.tick_params(axis="y", labelrotation=90)
+    ax1.tick_params(axis="x", labelsize=fontsize)
+    ax1.tick_params(axis="y", labelsize=fontsize)
+    # ax1.yaxis.set_label_position("left")
+    ax1.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax1.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    # ax1.yaxis.tick_right()
+    ax1.set_title("Input-output constraint", fontsize=fontsize)
+    ax1.set_xlim(ax1_xlim)
+    ax1.set_ylim(ax1_ylim)
+
+    # flow constraint
+    ax2.grid(alpha=0.8, linestyle="dashed")
+    ax2 = plot_mean_vs_std(
+        ax2,
+        dist_orig_flow,
+        mean_orig_flow(dist_orig_flow),
+        color=color_orig,
+        label="Original",
     )
+    ax2 = plot_mean_vs_std(
+        ax2,
+        dist_rep_flow,
+        mean_rep_flow(dist_rep_flow),
+        color=color_lay3,
+        label="Repaired - mid layer",
+    )
+    ax2 = plot_mean_vs_std(
+        ax2,
+        dist_fine_flow,
+        mean_fine_flow,
+        color=color_fine,
+        label="Fine-tuned",
+    )
+    ax2 = plot_mean_vs_std(
+        ax2,
+        dist_retrain_flow,
+        mean_retrain_flow,
+        color=color_retrain,
+        label="Retrained",
+    )
+    ax2.set_title("Conditional constraint", fontsize=fontsize)
+    ax2.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
+    ax2.set_ylabel("Degree of violation", fontsize=fontsize)
+    # ax2.set_title(
+    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
+    # )
+    y_maxlim = 2
+    ax2.set_xticks(np.linspace(0, ax2_xlim[1], 4))
+    ax2.set_yticks(np.linspace(0, ax2_ylim[1], 4))
+    ax2.tick_params(axis="y", labelrotation=90)
+    ax2.tick_params(axis="x", labelsize=fontsize)
+    ax2.tick_params(axis="y", labelsize=fontsize)
+    ax2.yaxis.set_label_position("right")
+    ax2.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax2.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax2.yaxis.tick_right()
+    ax2.set_xlim(ax2_xlim)
+    ax2.set_ylim(ax2_ylim)
+
+    lines, labels = ax1.get_legend_handles_labels()
+    leg = fig.legend(
+        lines,
+        labels,
+        loc="center",
+        # bbox_to_anchor=(0.5, -0.5),
+        bbox_to_anchor=(0.5, 0.0),
+        bbox_transform=fig.transFigure,
+        ncol=7,
+        fontsize=fontsize,
+    )
+    leg.get_frame().set_facecolor("white")
+    plt.tight_layout()
 
     plt.show()
-
-    # save data
-    print("save data")
-    with open(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/data/OM_min_dist_dynamic.pickle",
-        "wb",
-    ) as data:
-        pickle.dump(
-            [
-                mean_orig(dist_orig),
-                dist_orig,
-                mean_lay3(dist_lay3),
-                dist_lay3,
-                mean_lay4(dist_lay4),
-                dist_lay4,
-            ],
-            data,
-        )

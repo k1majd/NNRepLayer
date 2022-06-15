@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from matplotlib.lines import Line2D
 from matplotlib import gridspec
+from matplotlib.ticker import FormatStrFormatter
 
 import tensorflow as tf
 from scipy.interpolate import interp1d
@@ -184,8 +185,8 @@ def plotTestData(
         color="#b81662",
         label="Repaired Predictions",
     )
-    ax1.set_ylabel("Ankle Angle Control (rad)")
-    ax1.set_xlabel("Time (s)")
+    ax1.set_ylabel("Ankle Angle Control [deg]")
+    ax1.set_xlabel("Time [s]")
     ax1.set_xlim([0, 1000])
     ax1.legend()
 
@@ -194,8 +195,8 @@ def plotTestData(
     ax2.plot(err_orig, color="#1abd15")
     ax2.plot(err_repair, color="#b81662")
     ax2.grid(alpha=0.5, linestyle="dashed")
-    ax2.set_ylabel("Ankle Angle Control Error (rad)")
-    ax2.set_xlabel("Time (s)")
+    ax2.set_ylabel("Ankle Angle Control Error [deg]")
+    ax2.set_xlabel("Time [s]")
     ax2.set_xlim([0, 1000])
 
     ax3.plot(delta_u_orig, color="#1abd15")
@@ -203,8 +204,8 @@ def plotTestData(
     ax3.grid(alpha=0.5, linestyle="dashed")
     ax3.axhline(y=bound, color="k", linestyle="dashed")  # upper bound
     ax3.axhline(y=-bound, color="k", linestyle="dashed")  # lower bound
-    ax3.set_ylabel("Ankle Angle Control Change (rad)")
-    ax3.set_xlabel("Time (s)")
+    ax3.set_ylabel("Ankle Angle Control Change [deg]")
+    ax3.set_xlabel("Time [s]")
     ax3.set_xlim([0, 1000])
 
     fig.suptitle(f"Bounded Control, Layer: {layer_to_repair}")
@@ -215,8 +216,8 @@ def plotTestData(
     # plt.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
     # plt.grid(alpha=0.5, linestyle="dashed")
     # # plt.xlim([800,1050])
-    # plt.ylabel("Ankle Angle Control (rad)")
-    # plt.xlabel("Time (s)")
+    # plt.ylabel("Ankle Angle Control [deg]")
+    # plt.xlabel("Time [s]")
 
     # plt.figure(2)
 
@@ -416,15 +417,15 @@ if __name__ == "__main__":
     # create two subplots with share x axis
 
     fig = plt.figure(figsize=(13, 5))
-    color_orig = "#2E8B57"
-    color_lay3 = "#DC143C"
+    color_orig = "#DC143C"
+    color_lay3 = "k"
     color_lay4 = "#800080"
     color_test = "black"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
     line_width = 2
 
-    xlim_max = 200
+    xlim_max = 150
     gs = fig.add_gridspec(2, 2)
     ax00 = fig.add_subplot(gs[0, 0])
     ax10 = fig.add_subplot(gs[1, 0])
@@ -478,13 +479,14 @@ if __name__ == "__main__":
         transform=ax00.get_xaxis_transform(),
         label="Violated region",
     )
-    ax00.set_ylabel("Control (rad)", fontsize=16)
+    ax00.yaxis.set_major_formatter(FormatStrFormatter("%d"))
+    ax00.set_ylabel("Control [deg]", fontsize=14)
     ax00.grid(alpha=0.8, linestyle="dashed")
     ax00.set_ylim([-18.0, 21.2])
     ax00.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax00.xaxis.set_ticklabels([])
-    ax00.tick_params(axis="both", which="major", labelsize=16)
-    ax00.set_title("Control bound = 2", fontsize=16)
+    ax00.tick_params(axis="both", which="major", labelsize=14)
+    ax00.set_title("Control bound = 2", fontsize=14)
 
     ax10.plot(
         delta_u_orig,
@@ -518,15 +520,17 @@ if __name__ == "__main__":
     ax10.axhline(
         y=-bound2, color="#8B8878", linewidth=1.5, linestyle="dashed"
     )  # lower bound
-    ax10.set_ylabel("Control rate (rad/s)", fontsize=16)
+    ax10.yaxis.set_major_formatter(FormatStrFormatter("%d"))
+    ax10.xaxis.set_major_formatter(FormatStrFormatter("%d"))
+    ax10.set_ylabel("Control rate [deg/s]", fontsize=14)
     ax10.grid(alpha=0.8, linestyle="dashed")
-    ax10.set_xlabel("Time (s)", fontsize=16)
+    ax10.set_xlabel("Time [s]", fontsize=14)
     ax10.set_xlim([0, xlim_max])
     ax10.set_ylim([-4.1, 4.1])
     ax10.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
     ax10.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    ax10.tick_params(axis="x", labelsize=16)
-    ax10.tick_params(axis="y", labelsize=16)
+    ax10.tick_params(axis="x", labelsize=14)
+    ax10.tick_params(axis="y", labelsize=14)
 
     # plot bound 1.5 plots
     ax01.plot(
@@ -561,8 +565,8 @@ if __name__ == "__main__":
     ax01.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax01.xaxis.set_ticklabels([])
     ax01.yaxis.set_ticklabels([])
-    ax01.tick_params(axis="both", which="major", labelsize=16)
-    ax01.set_title("Control bound = 1.5", fontsize=16)
+    ax01.tick_params(axis="both", which="major", labelsize=14)
+    ax01.set_title("Control bound = 1.5", fontsize=14)
 
     ax11.plot(
         delta_u_orig,
@@ -574,6 +578,7 @@ if __name__ == "__main__":
         color=color_lay3,
         linewidth=1.5,
     )
+    ax11.yaxis.set_major_formatter(FormatStrFormatter("%d"))
     ax11.fill_between(
         np.linspace(
             0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
@@ -591,15 +596,16 @@ if __name__ == "__main__":
     ax11.axhline(
         y=-bound1_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
     )  # lower bound
+    ax11.xaxis.set_major_formatter(FormatStrFormatter("%d"))
     ax11.grid(alpha=0.8, linestyle="dashed")
-    ax11.set_xlabel("Time (s)", fontsize=16)
+    ax11.set_xlabel("Time [s]", fontsize=14)
     ax11.set_xlim([0, xlim_max])
     ax11.set_ylim([-4.1, 4.1])
     ax11.yaxis.set_ticklabels([])
     ax11.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
     ax11.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    ax11.tick_params(axis="x", labelsize=16)
-    ax11.tick_params(axis="y", labelsize=16)
+    ax11.tick_params(axis="x", labelsize=14)
+    ax11.tick_params(axis="y", labelsize=14)
 
     # # plot bound 0.5 plots
     # ax02.plot(
@@ -633,7 +639,7 @@ if __name__ == "__main__":
     # ax02.set_ylim([-18.0, 21.2])
     # ax02.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     # ax02.xaxis.set_ticklabels([])
-    # ax02.tick_params(axis="both", which="major", labelsize=16)
+    # ax02.tick_params(axis="both", which="major", labelsize=14)
 
     # ax12.plot(
     #     delta_u_orig,
@@ -663,7 +669,7 @@ if __name__ == "__main__":
     #     y=-bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
     # )  # lower bound
     # ax12.grid(alpha=0.8, linestyle="dashed")
-    # ax12.set_xlabel("Time (s)", fontsize=16)
+    # ax12.set_xlabel("Time [s]", fontsize=14)
     # ax12.set_xlim([0, xlim_max])
     # ax12.set_ylim([-4.1, 4.1])
     # ax12.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
@@ -680,7 +686,7 @@ if __name__ == "__main__":
         bbox_to_anchor=(0.5, 0.0),
         bbox_transform=fig.transFigure,
         ncol=5,
-        fontsize=15,
+        fontsize=14,
     )
     leg.get_frame().set_facecolor("white")
     plt.tight_layout()

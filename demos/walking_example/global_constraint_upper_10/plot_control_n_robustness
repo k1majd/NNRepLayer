@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from matplotlib.lines import Line2D
 from matplotlib import gridspec
-
+from matplotlib.ticker import FormatStrFormatter
 import tensorflow as tf
 from scipy.interpolate import interp1d
 
@@ -173,7 +173,7 @@ def plotTestData(
         color="#b81662",
         label="Repaired Predictions",
     )
-    ax1.set_ylabel("Ankle Angle Control (rad)")
+    ax1.set_ylabel("Ankle Angle Control (deg)")
     ax1.set_xlabel("Time (s)")
     ax1.set_xlim([0, 1000])
     ax1.legend()
@@ -183,7 +183,7 @@ def plotTestData(
     ax2.plot(err_orig, color="#1abd15")
     ax2.plot(err_repair, color="#b81662")
     # ax2.grid(alpha=0.5, linestyle="dashed")
-    ax2.set_ylabel("Ankle Angle Control Error (rad)")
+    ax2.set_ylabel("Ankle Angle Control Error (deg)")
     ax2.set_xlabel("Time (s)")
     ax2.set_xlim([0, 1000])
 
@@ -192,7 +192,7 @@ def plotTestData(
     # ax3.grid(alpha=0.5, linestyle="dashed")
     ax3.axhline(y=bound, color="k", linestyle="dashed")  # upper bound
     ax3.axhline(y=-bound, color="k", linestyle="dashed")  # lower bound
-    ax3.set_ylabel("Ankle Angle Control Change (rad)")
+    ax3.set_ylabel("Ankle Angle Control Change (deg)")
     ax3.set_xlabel("Time (s)")
     ax3.set_xlim([0, 1000])
 
@@ -204,7 +204,7 @@ def plotTestData(
     # plt.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
     # plt.grid(alpha=0.5, linestyle="dashed")
     # # plt.xlim([800,1050])
-    # plt.ylabel("Ankle Angle Control (rad)")
+    # plt.ylabel("Ankle Angle Control (deg)")
     # plt.xlabel("Time (s)")
 
     # plt.figure(2)
@@ -305,19 +305,10 @@ def give_mean_and_upperstd(model, x_train, x_test, bound):
     return lim_uc, mean, distance
 
 
-def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
+def plot_mean_vs_std(ax, distance, mean, color, label):
     mean_vec = []
     for i in range(len(distance)):
-        mean_vec.append(mean(distance[i])) if mean(
-            distance[i]
-        ) > 0 else mean_vec.append(0.0)
-    lim_uc_vec = []
-    for i in range(len(distance)):
-        lim_uc_vec.append(lim_uc(distance[i])) if lim_uc(
-            distance[i]
-        ) > mean_vec[i] else lim_uc_vec.append(
-            lim_uc(distance[i]) + 2 * (mean_vec[i] - lim_uc(distance[i]))
-        )
+        mean_vec.append(mean[i]) if mean[i] > 0 else mean_vec.append(0.0)
 
     # ax.fill_between(
     #     distance,
@@ -337,6 +328,19 @@ def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
 
 
 if __name__ == "__main__":
+
+    # load finetune and retrain data
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/FR_min_dist_global.pickle",
+        "rb",
+    ) as data:
+        dataset2 = pickle.load(data)
+    mean_fine = dataset2[0]
+    dist_fine = dataset2[1]
+    mean_retrain = dataset2[2]
+    dist_retrain = dataset2[3]
+
     # parameter
     bound = 10.0
 
@@ -404,8 +408,10 @@ if __name__ == "__main__":
     # fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     fig = plt.figure(figsize=(13, 4))
     color_orig = "#2E8B57"
-    color_lay3 = "#DC143C"
-    color_lay4 = "#800080"
+    color_lay3 = "k"
+    color_lay4 = "#DC143C"
+    color_retrain = "#8E388E"
+    color_fine = "#7EC0EE"
     color_test = "black"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
@@ -424,6 +430,7 @@ if __name__ == "__main__":
     # fig = plt.figure(figsize=(13, 5))
     # gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1])
     # ax1 = plt.subplot(gs[0])
+    xlim = [75, 275]
     ax1.axhline(
         y=bound,
         color=color_xline,
@@ -432,43 +439,45 @@ if __name__ == "__main__":
         alpha=1,
     )  # upper bound
     ax1.plot(
-        y_test,
+        y_test[xlim[0] : xlim[1]],
         color=color_test,
         linewidth=line_width,
         linestyle="dashed",
         label="Ref.",
     )
     ax1.plot(
-        y_pred_orig,
+        y_pred_orig[xlim[0] : xlim[1]],
         color=color_orig,
         linewidth=line_width,
-        label="Orig. predictions",
+        label="Original",
     )
     ax1.plot(
-        y_pred_lay3,
+        y_pred_lay3[xlim[0] : xlim[1]],
         color=color_lay3,
         linewidth=line_width,
-        label="Rep. predictions - mid layer",
+        label="Repaired - mid layer",
     )
     ax1.plot(
-        y_pred_lay4,
+        y_pred_lay4[xlim[0] : xlim[1]],
         color=color_lay4,
         linewidth=line_width,
-        label="Rep. predictions - last layer",
+        label="Repaired - last layer",
     )
-
-    ax1.axvspan(0, 6, color=color_fill, alpha=0.5)
-    ax1.axvspan(98.7, 122.8, color=color_fill, alpha=0.5)
-    ax1.axvspan(211.3, 239.7, color=color_fill, alpha=0.5)
+    ax1.yaxis.set_major_formatter(FormatStrFormatter("%d"))
+    ax1.axvspan(23, 47, color=color_fill, alpha=0.5)
+    ax1.axvspan(134, 165, color=color_fill, alpha=0.5)
     ax1.axvspan(
         330.7, 355, color=color_fill, alpha=0.5, label="Violated region"
     )
-    ax1.set_ylabel("Control (rad)", fontsize=16)
-    # ax1.set_xlabel("Time (s)", fontsize=16)
+    ax1.set_ylabel("Control [deg]", fontsize=14)
+    # ax1.set_xlabel("Time (s)", fontsize=14)
     # ax1.set_xlim([0, 400])
     ax1.set_ylim([-18.0, 21.2])
     # ax1.axes.xaxis.set_visible(False)
     ax1.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
+    ax2.set_xticks(
+        np.linspace(xlim[0] - xlim[0], xlim[1] - xlim[0], 5, endpoint=True)
+    )
     ax1.xaxis.set_ticklabels([])
     # ax1.set_xticks(np.linspace(0, 400, 5, endpoint=True))
     ax1.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
@@ -478,69 +487,98 @@ if __name__ == "__main__":
     err_lay3 = np.abs(y_test - y_pred_lay3)
     err_lay4 = np.abs(y_test - y_pred_lay4)
     # ax2 = plt.subplot(gs[1], sharex=ax1)
-    ax2.axvspan(0, 6, color=color_fill, alpha=0.5)
-    ax2.axvspan(98.7, 122.8, color=color_fill, alpha=0.5)
-    ax2.axvspan(211.3, 239.7, color=color_fill, alpha=0.5)
-    ax2.axvspan(330.7, 355, color=color_fill, alpha=0.5)
-    ax2.plot(err_orig, linewidth=line_width, color=color_orig)
-    ax2.plot(err_lay3, linewidth=line_width, color=color_lay3)
-    ax2.plot(err_lay4, linewidth=line_width, color=color_lay4)
-
+    ax2.axvspan(23, 47, color=color_fill, alpha=0.5)
+    ax2.axvspan(134, 165, color=color_fill, alpha=0.5)
+    # ax2.axvspan(211.3, 239.7, color=color_fill, alpha=0.5)
+    # ax2.axvspan(330.7, 355, color=color_fill, alpha=0.5)
+    ax2.plot(
+        err_orig[xlim[0] : xlim[1]], linewidth=line_width, color=color_orig
+    )
+    ax2.plot(
+        err_lay3[xlim[0] : xlim[1]], linewidth=line_width, color=color_lay3
+    )
+    ax2.plot(
+        err_lay4[xlim[0] : xlim[1]], linewidth=line_width, color=color_lay4
+    )
+    ax2.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax2.xaxis.set_major_formatter(FormatStrFormatter("%d"))
     ax2.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
-    ax2.set_ylabel("Control error (rad)", fontsize=16)
-    ax2.set_xlabel("Time (s)", fontsize=16)
-    ax2.set_xlim([0, 400])
+    ax2.set_ylabel("Control error [deg]", fontsize=14)
+    ax2.set_xlabel("Time [s]", fontsize=14)
+    ax2.set_xlim([xlim[0] - xlim[0], xlim[1] - xlim[0]])
     ax2.set_ylim([-0.23, 11.5])
-    ax2.set_xticks(np.linspace(0, 400, 5, endpoint=True))
+    ax2.set_xticks(
+        np.linspace(xlim[0] - xlim[0], xlim[1] - xlim[0], 5, endpoint=True)
+    )
     ax2.set_yticks(np.linspace(0, 10, 4, endpoint=True))
-    ax2.tick_params(axis="x", labelsize=16)
-    ax2.tick_params(axis="y", labelsize=16)
+    ax2.tick_params(axis="x", labelsize=14)
+    ax2.tick_params(axis="y", labelsize=14)
 
-    ax3.set_facecolor(color_fill)
+    ax3.set_facecolor("white")
     ax3.yaxis.set_label_position("right")
     ax3.yaxis.tick_right()
     ax3.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
     ax3 = plot_mean_vs_std(
         ax3,
         dist_orig,
-        mean_orig,
-        lim_uc_orig,
+        mean_orig(dist_orig),
+        # lim_uc_orig,
         color=color_orig,
         label="Original model",
     )
     ax3 = plot_mean_vs_std(
         ax3,
         dist_lay3,
-        mean_lay3,
-        lim_uc_lay3,
+        mean_lay3(dist_lay3),
+        # lim_uc_lay3,
         color=color_lay3,
         label="Repaired model - mid layer",
     )
     ax3 = plot_mean_vs_std(
         ax3,
         dist_lay4,
-        mean_lay4,
-        lim_uc_lay4,
+        mean_lay4(dist_lay4),
+        # lim_uc_lay4,
         color=color_lay4,
         label="Repaired model - last layer",
     )
+    ax3 = plot_mean_vs_std(
+        ax3,
+        dist_fine,
+        mean_fine,
+        # lim_uc_fine,
+        color=color_fine,
+        label="Fine-tuned",
+    )
+    ax3 = plot_mean_vs_std(
+        ax3,
+        dist_retrain,
+        mean_retrain,
+        # lim_uc_retrain,
+        color=color_retrain,
+        label="Retrained",
+    )
 
-    ax3.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
-    ax3.set_ylabel("Degree of violation", fontsize=16)
+    ax3.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=14)
+    ax3.set_ylabel("Violation degree", fontsize=14)
     # ax3.set_title(
-    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
+    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=14
     # )
-    ax3.set_xlim(0, np.max(dist_orig))
-    ax3.set_ylim(0 - 0.1, np.max(lim_uc_orig(dist_orig) + 0.1))
-    ax3.set_xticks(np.linspace(0, np.max(dist_orig), 5))
-    ax3.set_yticks(np.linspace(0, np.max(lim_uc_orig(dist_orig)), 5))
-    ax3.tick_params(axis="x", labelsize=16)
-    ax3.tick_params(axis="y", labelsize=16)
+    xlim = 2.0
+    ylim = 8.8
+    ax3.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax3.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax3.set_xlim(0, xlim)
+    ax3.set_ylim(0 - 0.1, ylim)
+    ax3.set_xticks(np.linspace(0, xlim, 5))
+    ax3.set_yticks(np.linspace(0, ylim, 3))
+    ax3.tick_params(axis="x", labelsize=14)
+    ax3.tick_params(axis="y", labelsize=14)
 
-    # ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=16)
-    # ax.set_ylabel("Degree of violation", fontsize=16)
+    # ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=14)
+    # ax.set_ylabel("Degree of violation", fontsize=14)
     # ax.set_title(
-    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
+    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=14
     # )
     # ax.set_xlim(0, np.max(dist_orig))
     # ax.set_ylim(0 - 0.1, np.max(lim_uc_orig(dist_orig) + 0.1))
@@ -549,6 +587,9 @@ if __name__ == "__main__":
     # ax.tick_params(axis="x", labelsize=16)
     # ax.tick_params(axis="y", labelsize=16)
     lines, labels = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax3.get_legend_handles_labels()
+    lines = lines + lines2[3:]
+    labels = labels + labels2[3:]
     leg = fig.legend(
         lines,
         labels,
@@ -556,10 +597,28 @@ if __name__ == "__main__":
         # bbox_to_anchor=(0.5, -0.5),
         bbox_to_anchor=(0.5, 0.0),
         bbox_transform=fig.transFigure,
-        ncol=5,
-        fontsize=15,
+        ncol=7,
+        fontsize=14,
     )
     leg.get_frame().set_facecolor("white")
     plt.tight_layout()
 
     plt.show()
+    # save data
+    print("save data")
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/OM_min_dist_dynamic.pickle",
+        "wb",
+    ) as data:
+        pickle.dump(
+            [
+                mean_orig(dist_orig),
+                dist_orig,
+                mean_lay3(dist_lay3),
+                dist_lay3,
+                mean_lay4(dist_lay4),
+                dist_lay4,
+            ],
+            data,
+        )

@@ -651,6 +651,20 @@ if __name__ == "__main__":
     plt.tight_layout()
 
     plt.show()
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/OM_min_dist_dynamic.pickle",
+        "wb",
+    ) as data:
+        pickle.dump(
+            [
+                mean_orig,
+                distance,
+                mean_rep,
+                distance,
+            ],
+            data,
+        )
     # plot_signal(
     #     train_obs,
     #     train_ctrls,
