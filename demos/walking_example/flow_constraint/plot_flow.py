@@ -570,7 +570,7 @@ if __name__ == "__main__":
     )
     color_orig = "#DC143C"
     color_lay3 = "k"
-    color_box = "#3D3D3D"
+    color_box = "#838B8B"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
     font_size = 12
@@ -608,7 +608,7 @@ if __name__ == "__main__":
         size=1,
         repair=True,
         t_max=t_max,
-        label="Repaired - mid layer",
+        label="Repaired",
     )
 
     center = [
@@ -657,8 +657,8 @@ if __name__ == "__main__":
             alpha=1,
         )
 
-    ax1.set_ylabel("Ankle angle (rad)", fontsize=font_size)
-    ax1.set_xlabel("Femur angle (rad)", fontsize=font_size)
+    ax1.set_ylabel("Ankle angle [deg]", fontsize=font_size)
+    ax1.set_xlabel("Femur angle [deg]", fontsize=font_size)
     ax1.grid(alpha=0.8, linestyle="dashed")
     ax1.tick_params(axis="both", labelsize=font_size)
     ax1.set_xlim([-3.0, 2.6])
@@ -747,11 +747,11 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.3, 0.1),
+        bbox_to_anchor=(0.7, 0.3),
         bbox_transform=fig.transFigure,
         ncol=1,
         fontsize=font_size,
-        frameon=False,
+        # frameon=False,
     )
     leg.get_frame().set_facecolor("white")
     # leg.get_frame().set_framealpha(0.0)
