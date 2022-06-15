@@ -424,6 +424,8 @@ if __name__ == "__main__":
     Dfem = dyanmic_data[:, 0:2]
     Dtib = dyanmic_data[:, 2:4]
     Dankle = dyanmic_data[:, 4]
+    Dfem = (Dfem - Dfem.mean(0)) / Dfem.std(0)
+    Dtib = (Dtib - Dtib.mean(0)) / Dtib.std(0)
     observations = np.concatenate((Dfem, Dtib), axis=1)
     observations = np.concatenate(
         (
