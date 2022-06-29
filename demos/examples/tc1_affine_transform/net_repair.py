@@ -11,6 +11,7 @@ import os
 import argparse
 from csv import writer
 from datetime import datetime
+from black import out
 import numpy as np
 from affine_utils import (
     plot_dataset,
@@ -159,7 +160,7 @@ def main(
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 1
+    max_weight_bound = 1.0
     cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -183,11 +184,12 @@ def main(
     repair_obj.compile(
         x_train,
         y_train,
-        3,
+        1,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 1, 5, 7, 8],
+        repair_node_list=[],
+        w_error_norm=1,
         # output_bounds=(-100.0, 100.0),
     )
     out_model = repair_obj.repair(options)
@@ -197,7 +199,10 @@ def main(
         loss=keras.losses.MeanSquaredError(name="MSE"),
         metrics=["accuracy"],
     )
-
+    print("weight error")
+    print(out_model.get_weights()[0] - model_orig.get_weights()[0])
+    print("bias error")
+    print(out_model.get_weights()[1] - model_orig.get_weights()[1])
     if visual == 1:
         print("----------------------")
         print("Visualization")

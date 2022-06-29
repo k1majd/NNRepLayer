@@ -19,6 +19,7 @@ class MIPNNModel:
         ####################################
         # TODO: add these parameters
         repair_node_list: List[int] = None,
+        w_error_norm: int = 0,
         # bias_activations: npt.NDArray,
         # max_weight_bound: Union[int, float] = 10,
         ####################################
@@ -32,6 +33,7 @@ class MIPNNModel:
             weights (List[npt.NDArray]): _description_
             bias (List[npt.NDArray]): _description_
             repair_node_list (List[int], optional): _description_. Defaults to [].
+            w_error_norm (int, optional): weight error norm type 0 = L-inf, 1 = L-1. Defaults to 0.
             param_bounds (tuple, optional): _description_. Defaults to (-1, 1).
         """
 
@@ -72,6 +74,7 @@ class MIPNNModel:
                     repair_node_list,
                     # bias_activations,
                     # max_weight_bound,
+                    w_error_norm,
                     param_bounds,
                 )
             )
@@ -90,6 +93,7 @@ class MIPNNModel:
                 repair_node_list,
                 # bias_activations,
                 # max_weight_bound,
+                w_error_norm,
                 param_bounds,
             )
         )

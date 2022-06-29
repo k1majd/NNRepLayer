@@ -1,0 +1,88 @@
+
+Gurobi 9.5.0 (win64) logging started Tue Jun 28 17:03:37 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\walking_example\dynamic_constraint\repair_net/logs/opt_log_6_28_2022_17_0_3.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 142219 rows, 90895 columns and 641739 nonzeros
+Model fingerprint: 0xeae4a7dd
+Model has 270 quadratic objective terms
+Variable types: 37999 continuous, 52896 integer (52896 binary)
+Coefficient statistics:
+  Matrix range     [2e-04, 5e+01]
+  Objective range  [3e-03, 2e+00]
+  QObjective range [7e-02, 7e-02]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [2e-04, 5e+01]
+Presolve removed 86940 rows and 34560 columns
+Presolve time: 2.77s
+Presolved: 55279 rows, 56335 columns, 502959 nonzeros
+Presolved model has 270 quadratic objective terms
+Variable types: 37999 continuous, 18336 integer (18336 binary)
+Root relaxation presolve removed 19392 rows and 18336 columns
+Root relaxation presolved: 35887 rows, 37999 columns, 464175 nonzeros
+Root relaxation presolved model has 270 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+    4135    2.8236494e+01   1.852485e+04   0.000000e+00      5s
+   23438    2.8236494e+01   9.795736e+03   0.000000e+00     10s
+   34909    2.8236494e+01   8.183550e+03   0.000000e+00     15s
+   44752    2.8236494e+01   7.771114e+03   0.000000e+00     20s
+   53870    2.8236494e+01   7.715946e+03   0.000000e+00     25s
+   62636    2.8236494e+01   7.101587e+03   0.000000e+00     30s
+   70762    2.8236494e+01   6.836829e+03   0.000000e+00     35s
+   78582    2.6650472e+01   6.286288e+03   0.000000e+00     40s
+   85558    2.3435208e+01   6.622404e+03   0.000000e+00     45s
+   92142    1.3473810e+01   6.777727e+03   0.000000e+00     50s
+   98224    1.3581170e+01   5.895829e+03   0.000000e+00     55s
+  104256    1.3723036e+01   6.329100e+03   0.000000e+00     60s
+  110398    1.3825183e+01   5.488250e+03   0.000000e+00     65s
+  116418   -1.6228113e+01   5.255917e+03   0.000000e+00     70s
+  122829   -1.5875992e+01   5.474892e+03   0.000000e+00     75s
+  128816   -1.5619613e+01   6.512401e+03   0.000000e+00     80s
+  134782   -1.5488010e+01   4.984761e+03   0.000000e+00     85s
+  140754   -1.5333573e+01   5.685961e+03   0.000000e+00     90s
+  146606   -1.5124087e+01   5.406751e+03   0.000000e+00     95s
+  152477   -1.4998500e+01   6.312207e+03   0.000000e+00    100s
+  158160   -1.4838248e+01   4.711854e+03   0.000000e+00    105s
+  163938   -1.4626965e+01   6.327487e+03   0.000000e+00    110s
+  169788   -1.4516320e+01   4.532884e+03   0.000000e+00    115s
+  175275   -1.4397714e+01   6.161879e+03   0.000000e+00    120s
+  180874   -1.4257094e+01   5.750780e+03   0.000000e+00    125s
+  186642   -1.4035303e+01   5.306699e+03   0.000000e+00    130s
+  192090   -1.3879445e+01   4.749580e+03   0.000000e+00    135s
+  197696   -1.3791611e+01   6.815017e+03   0.000000e+00    140s
+  203332   -1.3678908e+01   1.809361e+04   0.000000e+00    145s
+  208800   -1.3490335e+01   4.010694e+03   0.000000e+00    150s
+  214432   -1.3265658e+01   4.029508e+03   0.000000e+00    155s
+  220199   -1.3184012e+01   4.563950e+03   0.000000e+00    160s
+  225982   -1.2918463e+01   5.258388e+03   0.000000e+00    165s
+  231890   -1.2520490e+01   5.295273e+03   0.000000e+00    170s
+  237642   -1.2305376e+01   4.488872e+03   0.000000e+00    175s
+  243540   -1.2048309e+01   4.213956e+03   0.000000e+00    180s
+  249348   -1.1852888e+01   4.866555e+03   0.000000e+00    185s
+  254698   -1.1700782e+01   3.778392e+03   0.000000e+00    190s
+  260261   -1.1462447e+01   9.148376e+03   0.000000e+00    195s
+Warning: 1 variables dropped from basis
+  265557    2.8236494e+01   9.622957e+04   0.000000e+00    200s
+  272871   -6.1984837e+01   2.187102e+05   0.000000e+00    205s
+  279059   -6.0515760e+01   2.412472e+05   0.000000e+00    210s
+  285416   -5.9610538e+01   3.169669e+06   0.000000e+00    215s
+
+Root relaxation: interrupted, 289182 iterations, 216.31 seconds (558.21 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0          -    0               -   28.23649      -     -  219s
+
+Explored 1 nodes (289182 simplex iterations) in 219.59 seconds (562.27 work units)
+Thread count was 16 (of 16 available processors)
+
+Solution count 0
+
+Solve interrupted
+Best objective -, best bound 2.823649357239e+01, gap -

@@ -87,6 +87,7 @@ class NNRepair:
         # please check if I entered the data types correctly
         # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
         repair_node_list: List[int] = None,
+        w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
         ##############################
@@ -104,6 +105,7 @@ class NNRepair:
             max_weight_bound: Upper bound of weights errorDefaults to 1.0.
             data_precision: precision of rounding to decimal place for dataDefaults to 4.
             param_precision: precision of rounding to decimal place for parameters. Defaults to 4.
+            w_error_norm (int, optional): weight error norm type 0 = L-inf, 1 = L-1. Defaults to 0.
         """
 
         # set repair parameters:
@@ -147,6 +149,7 @@ class NNRepair:
             cost_weights,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
+            w_error_norm,
             param_bounds,
             output_bounds,
             ##############################
@@ -344,6 +347,7 @@ class NNRepair:
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
         # please check if I entered the data types correctly
+        w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
         ##############################
@@ -355,6 +359,7 @@ class NNRepair:
             layer_values: Values of ReLU layers after forward pass.
             max_weight_bound: Max Weight Bound
             cost_weights: Weights of Cost. Defaults to np.array([1.0, 1.0]).
+            w_error_norm (int, optional): weight error norm type 0 = L-inf, 1 = L-1. Defaults to 0.
 
         Raises:
             TypeError: Mismatch between Input and Output Set.
@@ -412,6 +417,7 @@ class NNRepair:
             # max_weight_bound,
             # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
             self.repair_node_list,
+            w_error_norm=w_error_norm,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
             param_bounds=param_bounds,
@@ -434,7 +440,8 @@ class NNRepair:
         cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
         # minimize error bound
         dw_l = "dw"
-        cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l) ** 2
+        # cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l) ** 2
+        cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l)
         self.opt_model.obj = pyo.Objective(expr=cost_expr)
 
     ##############################
