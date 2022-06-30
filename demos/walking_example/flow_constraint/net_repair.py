@@ -282,7 +282,7 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # load model
-    box = [-2.5, -0.5, 0.5, 3.5]  # xmin,xmax,ymin,ymax
+    box = [-2.5, 0.0, 0.0, 3.5]  # xmin,xmax,ymin,ymax
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
@@ -361,7 +361,7 @@ if __name__ == "__main__":
 
     ######
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    layer_to_repair = 2  # first layer-(0) last layer-(4)
     max_weight_bound = 0.1  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     output_bounds = (-30.0, 50.0)
@@ -421,6 +421,7 @@ if __name__ == "__main__":
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "improvestarttime": 16000,
+            "cuts": 0,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
     )

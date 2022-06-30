@@ -70,9 +70,11 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
     for i in range(len(arch) - 1):
         num_w_b += arch[i] * arch[i + 1] + arch[i + 1]
 
-    idx_range = [0, num_w_b]
-    entry_list = list(range(idx_range[0], idx_range[1]))
-    column_list = list(range(arch[layer + 1]))
+    # idx_range = [0, num_w_b]
+    # entry_list = list(range(idx_range[0], idx_range[1]))
+    weight_range = get_weight_range(arch, layer)
+    entry_list = list(range(weight_range[0], 9))
+    # column_list = list(range(arch[layer + 1]))
 
     # test all num_non_sparse combinations of weights
     # and check which one maximizes w.T*H*w
@@ -181,7 +183,7 @@ def main(given_comp):
     # constraint cost
     def objective(params):
         y_pred = neural_net_predict(params, x_train, architecture)
-        const = -(npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b)
+        const = -(npa.matmul(A[1], y_pred[:, 0 : A[0].shape[0]].T) - b[1])
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
             __soft_plus(const, 100)
@@ -327,7 +329,7 @@ def main(given_comp):
 
     # get sensitive nodes
     repair_indices, eig, hessian = get_sensitive_nodes(
-        objective4, init_params, architecture, 2, A, b
+        objective3, init_params, architecture, 2, A, b
     )
     print(f"repair indices: {repair_indices}")
     if len(given_comp) == 0:
@@ -387,14 +389,14 @@ def main(given_comp):
         eig = ev2[:, 0]
         # plot 2:
         w1 = np.linspace(
-            init_params[repair_indices[0]] - 1,
-            init_params[repair_indices[0]] + 1,
-            100,
+            init_params[repair_indices[0]] - 2,
+            init_params[repair_indices[0]] + 2,
+            2000,
         )
         w2 = np.linspace(
-            init_params[repair_indices[1]] - 1,
-            init_params[repair_indices[1]] + 1,
-            100,
+            init_params[repair_indices[1]] - 2,
+            init_params[repair_indices[1]] + 2,
+            2000,
         )
         print(f"eigenvector: {[eig[0], eig[1]]}")
         w0 = [init_params[repair_indices[0]], init_params[repair_indices[1]]]
@@ -406,7 +408,7 @@ def main(given_comp):
             for j in range(W1.shape[1]):
                 init_params[repair_indices[0]] = W1[i, j]
                 init_params[repair_indices[1]] = W2[i, j]
-                obj[i, j] = objective4(init_params)
+                obj[i, j] = objective2(init_params)
 
         # plt.contour(W1, W2, obj, 1000, levels=[0])
         plt.contourf(W1, W2, obj, 1000, cmap="RdGy")
@@ -432,4 +434,6 @@ def main(given_comp):
 
 
 if __name__ == "__main__":
-    main([])
+    # for subset in itertools.combinations([0, 1, 2, 3, 4, 5, 6, 7, 8], 2):
+    #     print()
+    main([2, 5])

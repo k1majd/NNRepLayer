@@ -207,7 +207,7 @@ def plotTestData(
     ax3.set_xlabel("Time (s)")
     ax3.set_xlim([0, 1000])
 
-    fig.suptitle(f"Bounded Control, Layer: {layer_to_repair}")
+    # fig.suptitle(f"Bounded Control, Layer: {layer_to_repair}")
     plt.show()
 
     # plt.figure(1)
@@ -414,10 +414,10 @@ if __name__ == "__main__":
     mean_rep_dyn = mean_lay3(dist_lay3)
     dist_rep_dyn = dist_lay3
 
-    fig = plt.figure(figsize=(8, 3))
-    gs = fig.add_gridspec(1, 2)
+    fig = plt.figure(figsize=(4, 6))
+    gs = fig.add_gridspec(2, 1)
     ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
+    ax2 = fig.add_subplot(gs[1, 0])
 
     color_orig = "#2E8B57"
     color_lay3 = "k"
@@ -446,7 +446,7 @@ if __name__ == "__main__":
         dist_rep_dyn,
         mean_rep_dyn,
         color=color_lay3,
-        label="Repaired - mid layer",
+        label="Repaired",
     )
     ax1 = plot_mean_vs_std(
         ax1,
@@ -463,7 +463,7 @@ if __name__ == "__main__":
         label="Retrained",
     )
     ax1.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
-    ax1.set_ylabel("Degree of violation", fontsize=fontsize)
+    ax1.set_ylabel("Violation degree", fontsize=fontsize)
     # ax1.set_title(
     #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
     # )
@@ -476,8 +476,9 @@ if __name__ == "__main__":
     # ax1.yaxis.set_label_position("left")
     ax1.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax1.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax1.xaxis.set_ticklabels([])
     # ax1.yaxis.tick_right()
-    ax1.set_title("Input-output constraint", fontsize=fontsize)
+    # ax1.set_title("Input-output constraint", fontsize=fontsize)
     ax1.set_xlim(ax1_xlim)
     ax1.set_ylim(ax1_ylim)
 
@@ -511,9 +512,9 @@ if __name__ == "__main__":
         color=color_retrain,
         label="Retrained",
     )
-    ax2.set_title("Conditional constraint", fontsize=fontsize)
+    # ax2.set_title("Conditional constraint", fontsize=fontsize)
     ax2.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
-    ax2.set_ylabel("Degree of violation", fontsize=fontsize)
+    ax2.set_ylabel("Violation degree", fontsize=fontsize)
     # ax2.set_title(
     #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
     # )
@@ -523,10 +524,10 @@ if __name__ == "__main__":
     ax2.tick_params(axis="y", labelrotation=90)
     ax2.tick_params(axis="x", labelsize=fontsize)
     ax2.tick_params(axis="y", labelsize=fontsize)
-    ax2.yaxis.set_label_position("right")
+    # ax2.yaxis.set_label_position("le")
     ax2.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax2.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    ax2.yaxis.tick_right()
+    # ax2.yaxis.tick_right()
     ax2.set_xlim(ax2_xlim)
     ax2.set_ylim(ax2_ylim)
 
@@ -536,9 +537,9 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.5, 0.0),
+        bbox_to_anchor=(0.6, 0.5),
         bbox_transform=fig.transFigure,
-        ncol=7,
+        ncol=1,
         fontsize=fontsize,
     )
     leg.get_frame().set_facecolor("white")
