@@ -30,7 +30,10 @@ class MIPLayer:
         ####################################
         param_bounds: tuple = (-1, 1),
     ) -> None:
-        """_summary_
+        """Initialize the MIPLayer class.
+           Specify the weight and bias terms of the given layer.
+           Non-repair layers and nodes are fixed to the original weight and bias terms.
+           OPT variables for repair nodes are created.
 
         Args:
             model (_type_): _description_
@@ -46,15 +49,15 @@ class MIPLayer:
         """
 
         model.nlayers = getattr(model, "nlayers", 0)
-        # print("Model layers = {}".format(model.nlayers))
         self.layer_num = model.nlayers
         self.uin, self.uout = uin, uout
         ############################################
-        # TODO: Speratare activated and deactivated weight and bias terms
-        # self.label = model.nlayers  # label of this layer
+        # TODO: Speratare activated and deactivated nodes
         self.w_error_norm = w_error_norm
         self.repair_node_list = repair_node_list  # list of repair nodes
-        # specify repair weights in the repair layers
+        # detect if this layer is a repair layer and if so,
+        # which nodes are repaired. If this layer is not a repair layer,
+        # then its weight and bias terms are fixed to the original values.
         if model.nlayers == layer_to_repair and num_layers_ahead != 0:
             w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
             setattr(
@@ -78,28 +81,6 @@ class MIPLayer:
             )
             self.w = getattr(model, w_l)
             self.b = getattr(model, b_l)
-
-            # TODO: Remove this part
-            # w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
-
-            # setattr(
-            #     model,
-            #     w_l,
-            #     pyo.Var(
-            #         range(uin),
-            #         range(uout),
-            #         domain=pyo.Reals,
-            #         bounds=param_bounds,
-            #     ),
-            # )
-            # setattr(
-            #     model,
-            #     b_l,
-            #     pyo.Var(range(uout), domain=pyo.Reals, bounds=param_bounds),
-            # )
-
-            # self.w = getattr(model, w_l)
-            # self.b = getattr(model, b_l)
 
             self.w_orig = weights
             self.b_orig = bias
@@ -159,15 +140,17 @@ class MIPLayer:
             _type_: _description_
         """
 
-        self.lout = getattr(self, "layer_num", 0) + 1
+        self.layer_num_next = (
+            getattr(self, "layer_num", 0) + 1
+        )  # next layer number
         if relu:
             return self._relu_constraints(
-                x, shape, self.lout, max_weight_bound, output_bounds
+                x, shape, max_weight_bound, output_bounds
             )
         return self._constraints(
             x,
             shape,
-            self.lout,
+            # self.layer_num_next,
             output_constraint_list,
             max_weight_bound,
             output_bounds,
@@ -177,7 +160,7 @@ class MIPLayer:
         self,
         x: npt.NDArray,
         shape: tuple,
-        l,
+        # l,
         max_weight_bound: Union[int, float] = 1,
         output_bounds: tuple = (-1e1, 1e1),
     ):
@@ -196,12 +179,16 @@ class MIPLayer:
         m, n = shape
         assert n == self.uin
 
-        x_l, s_l, theta_l = "x" + str(l), "s" + str(l), "theta" + str(l)
+        x_l, s_l, theta_l = (
+            "x" + str(self.layer_num_next),
+            "s" + str(self.layer_num_next),
+            "theta" + str(self.layer_num_next),
+        )
 
         ###############################################################
         # TODO: Edit this part
         ## check if this layer is the repair layer
-        if l == self.layer_to_repair + 1:
+        if self.layer_num == self.layer_to_repair:
             num_next_repair_nodes = len(self.repair_node_list)
         else:
             num_next_repair_nodes = self.uout
@@ -245,7 +232,7 @@ class MIPLayer:
 
         setattr(
             self.model,
-            "eq_constraint" + str(l),
+            "eq_constraint" + str(self.layer_num_next),
             pyo.Constraint(
                 range(m), range(num_next_repair_nodes), rule=constraints
             ),
@@ -266,7 +253,7 @@ class MIPLayer:
 
         setattr(
             self.model,
-            "disjunction" + str(l),
+            "disjunction" + str(self.layer_num_next),
             pyg.Disjunction(
                 range(m), range(num_next_repair_nodes), rule=disjuncts
             ),
@@ -274,7 +261,7 @@ class MIPLayer:
 
         # collect the values of next layer
         x_next = []  # values of next layer
-        if l == self.layer_to_repair + 1:
+        if self.layer_num == self.layer_to_repair:
             for s in range(m):
                 x_temp = []
                 for c in range(self.uout):
@@ -299,10 +286,10 @@ class MIPLayer:
                     x_temp.append(getattr(self.model, x_l)[s, c])
                 x_next.append(x_temp)
 
-        if l == self.layer_to_repair + 1:
+        if self.layer_num == self.layer_to_repair:
             print("Activating mid layer")
-            w_l = "w" + str(l - 1)
-            b_l = "b" + str(l - 1)
+            w_l = "w" + str(self.layer_num)
+            b_l = "b" + str(self.layer_num)
 
             dw_l = "dw"
             setattr(
@@ -336,7 +323,7 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "w_bounded_constraint0" + str(l),
+                    "w_bounded_constraint0" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         self.repair_node_list,
@@ -345,7 +332,7 @@ class MIPLayer:
                 )
                 setattr(
                     self.model,
-                    "w_bounded_constraint1" + str(l),
+                    "w_bounded_constraint1" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         self.repair_node_list,
@@ -354,14 +341,14 @@ class MIPLayer:
                 )
                 setattr(
                     self.model,
-                    "b_bounded_constraint0" + str(l),
+                    "b_bounded_constraint0" + str(self.layer_num_next),
                     pyo.Constraint(
                         self.repair_node_list, rule=constraint_bound_b0
                     ),
                 )
                 setattr(
                     self.model,
-                    "b_bounded_constraint1" + str(l),
+                    "b_bounded_constraint1" + str(self.layer_num_next),
                     pyo.Constraint(
                         self.repair_node_list, rule=constraint_bound_b1
                     ),
@@ -417,7 +404,7 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_bound_equiality_w0" + str(l),
+                    "constraint_bound_equiality_w0" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         self.repair_node_list,
@@ -438,7 +425,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_positive_constraint_w0" + str(l),
+                    "constraint_positive_constraint_w0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         self.repair_node_list,
@@ -458,7 +446,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_negative_constraint_w0" + str(l),
+                    "constraint_negative_constraint_w0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         self.repair_node_list,
@@ -512,7 +501,7 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_bound_equiality_b0" + str(l),
+                    "constraint_bound_equiality_b0" + str(self.layer_num_next),
                     pyo.Constraint(
                         self.repair_node_list,
                         rule=constraint_bound_equiality_b,
@@ -532,7 +521,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_positive_constraint_b0" + str(l),
+                    "constraint_positive_constraint_b0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         self.repair_node_list,
                         rule=constraint_positive_constraint_b,
@@ -551,7 +541,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_negative_constraint_b0" + str(l),
+                    "constraint_negative_constraint_b0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         self.repair_node_list,
                         rule=constraint_negative_constraint_b,
@@ -581,7 +572,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_sum_positive_negative0" + str(l),
+                    "constraint_sum_positive_negative0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(rule=constraint_sum_positive_negative),
                 )
 
@@ -592,7 +584,7 @@ class MIPLayer:
         self,
         x: npt.NDArray,
         shape: tuple,
-        l,
+        # l,
         output_constraint_list: List[ConstraintsClass],
         max_weight_bound: Union[int, float] = 10,
         output_bounds: tuple = (-1e1, 1e1),
@@ -614,9 +606,9 @@ class MIPLayer:
         m, n = shape
         assert n == self.uin
 
-        x_l = "x" + str(l)
+        x_l = "x" + str(self.layer_num_next)
 
-        # x_l = 'x'+str(l)
+        # x_l = 'x'+str(self.layer_num_next)
         setattr(
             self.model,
             x_l,
@@ -636,7 +628,7 @@ class MIPLayer:
 
         setattr(
             self.model,
-            "eq_constraint" + str(l),
+            "eq_constraint" + str(self.layer_num_next),
             pyo.Constraint(range(m), range(self.uout), rule=constraints),
         )
 
@@ -655,7 +647,7 @@ class MIPLayer:
         #             getattr(model, x_l)[i, 1] + 0.0001 <= getattr(model, x_l)[i, 3],
         #             getattr(model, x_l)[i, 1] + 0.0001 <= getattr(model, x_l)[i, 4])]
 
-        # setattr(self.model, 'keep_inside_constraint0'+str(l),
+        # setattr(self.model, 'keep_inside_constraint0'+str(self.layer_num_next),
         #                 pyg.Disjunction(range(m), rule=constraint_inside0))
 
         # ########## Define the output constraint here ########################
@@ -665,16 +657,16 @@ class MIPLayer:
         #             [getattr(model, x_l)[i, 0] - 0.55 <= 0, 0.45 - getattr(model, x_l)[i, 0] <= 0, 0.25 - getattr(model, x_l)[i, 1] <= 0],
         #             [getattr(model, x_l)[i, 0] - 0.55 <= 0, 0.45 - getattr(model, x_l)[i, 0] <= 0, getattr(model, x_l)[i, 1] - 0.1 <= 0]]
 
-        # setattr(self.model, 'keep_inside_constraint0'+str(l),
+        # setattr(self.model, 'keep_inside_constraint0'+str(self.layer_num_next),
         #          pyg.Disjunction(range(m), rule=constraint_inside0))
         # #####################################################################
 
         ###############################################################
         # TODO: Edit this part
-        if l == self.layer_to_repair + 1:
+        if self.layer_num == self.layer_to_repair:
             print("Activating Last layer")
-            w_l = "w" + str(l - 1)
-            b_l = "b" + str(l - 1)
+            w_l = "w" + str(self.layer_num)
+            b_l = "b" + str(self.layer_num)
 
             dw_l = "dw"
             setattr(
@@ -709,7 +701,7 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "w_bounded_constraint0" + str(l),
+                    "w_bounded_constraint0" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         range(self.uout),
@@ -718,7 +710,7 @@ class MIPLayer:
                 )
                 setattr(
                     self.model,
-                    "w_bounded_constraint1" + str(l),
+                    "w_bounded_constraint1" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         range(self.uout),
@@ -727,12 +719,12 @@ class MIPLayer:
                 )
                 setattr(
                     self.model,
-                    "b_bounded_constraint0" + str(l),
+                    "b_bounded_constraint0" + str(self.layer_num_next),
                     pyo.Constraint(range(self.uout), rule=constraint_bound_b0),
                 )
                 setattr(
                     self.model,
-                    "b_bounded_constraint1" + str(l),
+                    "b_bounded_constraint1" + str(self.layer_num_next),
                     pyo.Constraint(range(self.uout), rule=constraint_bound_b1),
                 )
             else:
@@ -786,7 +778,7 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_bound_equiality_w0" + str(l),
+                    "constraint_bound_equiality_w0" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         range(self.uout),
@@ -807,7 +799,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_positive_constraint_w0" + str(l),
+                    "constraint_positive_constraint_w0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         range(self.uout),
@@ -827,7 +820,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_negative_constraint_w0" + str(l),
+                    "constraint_negative_constraint_w0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uin),
                         range(self.uout),
@@ -881,7 +875,7 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_bound_equiality_b0" + str(l),
+                    "constraint_bound_equiality_b0" + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uout),
                         rule=constraint_bound_equiality_b,
@@ -901,7 +895,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_positive_constraint_b0" + str(l),
+                    "constraint_positive_constraint_b0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uout),
                         rule=constraint_positive_constraint_b,
@@ -920,7 +915,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_negative_constraint_b0" + str(l),
+                    "constraint_negative_constraint_b0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(
                         range(self.uout),
                         rule=constraint_negative_constraint_b,
@@ -948,7 +944,8 @@ class MIPLayer:
 
                 setattr(
                     self.model,
-                    "constraint_sum_positive_negative0" + str(l),
+                    "constraint_sum_positive_negative0"
+                    + str(self.layer_num_next),
                     pyo.Constraint(rule=constraint_sum_positive_negative),
                 )
         ###############################################################

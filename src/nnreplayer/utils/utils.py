@@ -109,7 +109,7 @@ def generate_inside_constraints(name: str, A: npt.NDArray, b: npt.NDArray):
             t_st = "({})*getattr(model, x_l)[i, {}]".format(A[i, j], j)
 
             temp_string.append(t_st)
-        add_attr_string = "setattr(self.model, '{}{}'+str(l),pyo.Constraint(range(m), rule={}{}))".format(
+        add_attr_string = "setattr(self.model, '{}{}'+str(self.layer_num_next),pyo.Constraint(range(m), rule={}{}))".format(
             name, i, name, i
         )
         add_attr_list.append(add_attr_string)
@@ -190,7 +190,7 @@ def generate_outside_constraints(name: str, A, B):
     single_def_string += (
         "setattr(self.model, '"
         + name
-        + "0' +str(l), pyg.Disjunction(range(m), rule={}{}))".format(
+        + "0' +str(self.layer_num_next), pyg.Disjunction(range(m), rule={}{}))".format(
             name, str(0)
         )
     )
