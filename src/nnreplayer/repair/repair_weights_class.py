@@ -440,8 +440,17 @@ class NNRepair:
         cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
         # minimize error bound
         dw_l = "dw"
+        db_l = "db"
         # cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l) ** 2
-        cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l)
+        if len(getattr(self.opt_model, dw_l)) == 1:
+            cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l)
+        else:
+            for item in getattr(self.opt_model, dw_l)._data.items():
+                cost_expr += cost_weights[1] * item[1]
+            for item in getattr(self.opt_model, db_l)._data.items():
+                cost_expr += cost_weights[1] * item[1]
+        # else:
+
         self.opt_model.obj = pyo.Objective(expr=cost_expr)
 
     ##############################

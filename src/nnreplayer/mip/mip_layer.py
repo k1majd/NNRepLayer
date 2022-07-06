@@ -163,7 +163,7 @@ class MIPLayer:
             if self.w_error_norm == 0:  # l-inf norm error
                 self._weight_bound_constraint_linf(max_weight_bound)
             else:  # l-1 norm error
-                self._weight_bound_constraint_l1(max_weight_bound)
+                self._weight_bound_constraint_l1_new(max_weight_bound)
         return x_next
 
     def _relu_constraints(
@@ -358,6 +358,103 @@ class MIPLayer:
             exec(constraint_addition_string, locals(), globals())
 
         return getattr(self.model, x_l)
+
+    def _weight_bound_constraint_l1_new(self, max_weight_bound):
+        w_l = "w" + str(self.layer_num)
+        b_l = "b" + str(self.layer_num)
+
+        dw_l = "dw"
+        setattr(
+            self.model,
+            dw_l,
+            pyo.Var(
+                range(self.uin),
+                range(len(self.repair_node_list)),
+                domain=pyo.NonNegativeReals,
+                bounds=(0, max_weight_bound),
+            ),
+        )
+
+        def constraint_upper_bound_inequiality_w(model, i, j):
+            return (
+                getattr(model, w_l)[i, self.repair_node_list.index(j)]
+                - self.w_orig[i, j]
+                <= getattr(model, dw_l)[i, self.repair_node_list.index(j)]
+            )
+
+        setattr(
+            self.model,
+            "w_inequality_upper_bound_l1_constraint_lay"
+            + str(self.layer_num_next),
+            pyo.Constraint(
+                range(self.uin),
+                self.repair_node_list,
+                rule=constraint_upper_bound_inequiality_w,
+            ),
+        )
+
+        def constraint_lower_bound_inequiality_w(model, i, j):
+            return (
+                getattr(model, w_l)[i, self.repair_node_list.index(j)]
+                - self.w_orig[i, j]
+                >= -getattr(model, dw_l)[i, self.repair_node_list.index(j)]
+            )
+
+        setattr(
+            self.model,
+            "w_inequality_lower_bound_l1_constraint_lay"
+            + str(self.layer_num_next),
+            pyo.Constraint(
+                range(self.uin),
+                self.repair_node_list,
+                rule=constraint_lower_bound_inequiality_w,
+            ),
+        )
+
+        db_l = "db"
+        setattr(
+            self.model,
+            db_l,
+            pyo.Var(
+                range(len(self.repair_node_list)),
+                domain=pyo.NonNegativeReals,
+                bounds=(0, max_weight_bound),
+            ),
+        )
+
+        def constraint_upper_bound_inequiality_b(model, j):
+            return (
+                getattr(model, b_l)[self.repair_node_list.index(j)]
+                - self.b_orig[j]
+                <= getattr(model, db_l)[self.repair_node_list.index(j)]
+            )
+
+        setattr(
+            self.model,
+            "b_inequality_upper_bound_l1_constraint_lay"
+            + str(self.layer_num_next),
+            pyo.Constraint(
+                self.repair_node_list,
+                rule=constraint_upper_bound_inequiality_b,
+            ),
+        )
+
+        def constraint_lower_bound_inequiality_b(model, j):
+            return (
+                getattr(model, b_l)[self.repair_node_list.index(j)]
+                - self.b_orig[j]
+                >= -getattr(model, db_l)[self.repair_node_list.index(j)]
+            )
+
+        setattr(
+            self.model,
+            "b_inequality_lower_bound_l1_constraint_lay"
+            + str(self.layer_num_next),
+            pyo.Constraint(
+                self.repair_node_list,
+                rule=constraint_lower_bound_inequiality_b,
+            ),
+        )
 
     def _weight_bound_constraint_l1(self, max_weight_bound):
         w_l = "w" + str(self.layer_num)

@@ -189,9 +189,10 @@ def main(
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         repair_node_list=[0, 2],
-        w_error_norm=0,
+        w_error_norm=1,
         # output_bounds=(-100.0, 100.0),
     )
+    # repair_obj.summary(direc=path_write + "/summery")
     out_model = repair_obj.repair(options)
 
     out_model.compile(
