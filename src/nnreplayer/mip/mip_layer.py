@@ -144,10 +144,12 @@ class MIPLayer:
             getattr(self, "layer_num", 0) + 1
         )  # next layer number
         if relu:
+            # define relu layer constraints
             x_next = self._relu_constraints(
                 x, shape, max_weight_bound, output_bounds
             )
         else:
+            # define linear layer constraints
             x_next = self._constraints(
                 x,
                 shape,
