@@ -140,6 +140,11 @@ class NNRepair:
             repair_node_list = list(range(self.architecture[layer_2_repair]))
         self.repair_node_list = repair_node_list
         ###########
+        # TODO: recive node bounds
+        self.model_mlp.give_mlp_node_bounds(
+            layer_2_repair, x_repair, max_weight_bound
+        )
+        ##########
         self.__set_up_optimizer(
             np.round(y_repair, data_precision),
             self.extract_network_layers_values(

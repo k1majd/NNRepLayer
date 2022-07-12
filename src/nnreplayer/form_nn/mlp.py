@@ -1,12 +1,11 @@
-from typing import List
+from typing import List, Union
 import numpy.typing as npt
-
+import numpy as np
 from .dense import Dense
 
 
 class MLP:
-    """Defines Structure of Input Network intended to Repair.
-    """
+    """Defines Structure of Input Network intended to Repair."""
 
     def __init__(
         self, n_in: int, n_out: int, n_hidden: List, relu=False
@@ -19,6 +18,7 @@ class MLP:
             n_hidden: Hidden Layer Size
             relu: If true, Applies ReLU Activation Function. Defaults to False.
         """
+        self.architecture = [n_in] + n_hidden + [n_out]
         self.num_layer = len(n_hidden) + 1
         prev = n_in
         self.layers = []
@@ -41,6 +41,81 @@ class MLP:
             input_data = layer(input_data)
             layer_values.append(input_data)
         return layer_values
+
+    def give_mlp_node_bounds(
+        self,
+        from_layer: int,
+        input_data: npt.NDArray,
+        weigh_purturb: Union[int, float],
+    ):
+        """Returns the bounds of the nodes from the from_layer to the end.
+        Args:
+            from_layer: Target Layer
+            x_train: Training Data
+        """
+        self.give_nodes_active_status(from_layer, input_data, weigh_purturb)
+        pass
+
+    def give_nodes_active_status(
+        self,
+        from_layer: int,
+        input_data: npt.NDArray,
+        weigh_purturb: Union[int, float],
+    ):
+        """Returns the active status of the nodes from the from_layer to the end.
+        Args:
+            from_layer: Target Layer
+            input_data: input Data. Shape = (n_samples, n_features)
+        """
+        layer_values = self.__call__(input_data)
+        weights = self.get_mlp_weights()
+        bias = self.get_mlp_biases()
+
+        intervals = []
+        # get the intervals of the inputs of from_layer layer
+        interval_temp = []
+        for node in range(self.architecture[from_layer - 1]):
+            interval_temp.append(
+                [
+                    layer_values[from_layer - 1][:, node].min(),
+                    layer_values[from_layer - 1][:, node].max(),
+                ]
+            )
+        intervals.append(interval_temp)
+
+        # get the intervals of the outputs of from_layer layer
+        for layer in range(from_layer, len(self.architecture)):
+            interval_temp = []
+            for node_next in range(self.architecture[layer]):
+                lb = bias[layer - 1][node_next] - weigh_purturb
+                ub = bias[layer - 1][node_next] + weigh_purturb
+                for node_prev in range(self.architecture[layer - 1]):
+                    if layer == from_layer:
+                        if weights[layer - 1][node_prev][node_next] >= 0:
+                            w_temp = (
+                                weights[layer - 1][node_prev][node_next]
+                                + weigh_purturb
+                            )
+                        else:
+                            w_temp = (
+                                weights[layer - 1][node_prev][node_next]
+                                - weigh_purturb
+                            )
+                    else:
+                        w_temp = weights[layer - 1][node_prev][node_next]
+
+                    lb += intervals[0][node_prev][0] * max(
+                        w_temp, 0
+                    ) + intervals[0][node_prev][1] * min(w_temp, 0)
+                    ub += intervals[0][node_prev][1] * max(
+                        w_temp, 0
+                    ) + intervals[0][node_prev][0] * min(w_temp, 0)
+                interval_temp.append([lb, ub])
+            intervals.append(interval_temp)
+
+        print("here")
+
+        pass
 
     def set_mlp_params(self, mlp_weights: List[npt.NDArray]) -> None:
         """Manually set Weights And Bias Parameters for entire network

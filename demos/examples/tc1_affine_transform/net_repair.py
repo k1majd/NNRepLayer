@@ -184,7 +184,7 @@ def main(
     repair_obj.compile(
         x_train,
         y_train,
-        3,
+        2,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
