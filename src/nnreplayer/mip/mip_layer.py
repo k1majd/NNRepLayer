@@ -301,8 +301,8 @@ class MIPLayer:
             else:
                 return (
                     product
-                    - (1 - getattr(model, theta_l)[i, j])
-                    * lb[i, self.repair_node_list[j]]
+                    - lb[i, self.repair_node_list[j]]
+                    * (1 - getattr(model, theta_l)[i, j])
                     >= getattr(model, x_l)[i, j]
                 )
 
@@ -328,8 +328,8 @@ class MIPLayer:
                 return pyo.Constraint.Skip
             else:
                 return (
-                    getattr(model, theta_l)[i, j]
-                    * ub[i, self.repair_node_list[j]]
+                    ub[i, self.repair_node_list[j]]
+                    * getattr(model, theta_l)[i, j]
                     >= getattr(model, x_l)[i, j]
                 )
 

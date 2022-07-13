@@ -74,7 +74,7 @@ def arg_parser():
         "--saveModelSummery",
         nargs="?",
         type=int,
-        default=0,
+        default=1,
         choices=range(0, 2),
         help="Specify whether to save model summery or not 1 = on, 0 = off, default: 1",
     )
@@ -184,7 +184,7 @@ def main(
     repair_obj.compile(
         x_train,
         y_train,
-        2,
+        1,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
@@ -222,7 +222,7 @@ def main(
     print("logging")
 
     if save_summery == 1:
-        repair_obj.summery(direc=path_write + "/summery")
+        repair_obj.summary(direc=path_write + "/summery")
         print("saved: summery")
 
     if save_model == 1:
