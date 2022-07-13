@@ -139,17 +139,12 @@ class NNRepair:
         ):
             repair_node_list = list(range(self.architecture[layer_2_repair]))
         self.repair_node_list = repair_node_list
-        ###########
-        # TODO: recive node bounds
-        self.model_mlp.give_mlp_node_bounds(
-            layer_2_repair, x_repair, max_weight_bound
-        )
-        ##########
         self.__set_up_optimizer(
             np.round(y_repair, data_precision),
-            self.extract_network_layers_values(
-                np.round(x_repair, data_precision)
-            ),
+            ####################
+            # TODO: (12_&_2022) x_repair is inputed
+            x_repair,
+            ####################
             max_weight_bound,
             cost_weights,
             ##############################
@@ -346,7 +341,10 @@ class NNRepair:
     def __set_up_optimizer(
         self,
         y_repair: npt.NDArray,
-        layer_values: List[npt.NDArray],
+        ###################
+        # TODO: (12_7_2022) x_repair is inputed
+        x_repair: npt.NDArray,
+        ###################
         max_weight_bound: Union[int, float],
         cost_weights: npt.NDArray = np.array([1.0, 1.0]),
         ##############################
@@ -376,14 +374,27 @@ class NNRepair:
             )
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
-
-        # specify the precision of weights, bias, and layer values
+        ##############################
+        # TODO: (12_7_2022) layer values calculated here
+        layer_values = self.extract_network_layers_values(x_repair)
+        ##############################
+        ###########
+        # TODO: recive node bounds
+        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
+            self.layer_to_repair, x_repair, max_weight_bound
+        )
+        ##########
+        # specify the precision of weights, bias, layer values, upper and lower bounds
         for l, w in enumerate(weights):
             weights[l] = np.round(w, self.param_precision)
         for l, b in enumerate(bias):
             bias[l] = np.round(b, self.param_precision)
         for l, value in enumerate(layer_values):
             layer_values[l] = np.round(value, self.data_precision)
+        for l, ub in enumerate(ub_mat):
+            ub_mat[l] = np.round(ub, self.data_precision)
+        for l, lb in enumerate(lb_mat):
+            lb_mat[l] = np.round(lb, self.data_precision)
 
         self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
 
@@ -395,31 +406,18 @@ class NNRepair:
             weights,
             bias,
             max_weight_bound,
+            ub_mat,
+            lb_mat,
         )
         self.__target_original_weights = weights[self.layer_to_repair - 1]
         self.__target_original_bias = bias[self.layer_to_repair - 1]
         ##############################
-        # weight_activations = np.array(
-        #     [[1.0, 1.0, 0.0], [0.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
-        # )
-        # bias_activations = np.array(
-        #     [
-        #         0.0,
-        #         0.0,
-        #         0.0,
-        #     ]
-        # )
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
             weights,
             bias,
             ##############################
-            # TODO: input the maximum weight bound to MIPNNMODEL initialization
-            # and input weight and bias activations
-            # weight_activations,
-            # bias_activations,
-            # max_weight_bound,
             # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
             self.repair_node_list,
             w_error_norm=w_error_norm,
@@ -433,6 +431,12 @@ class NNRepair:
             layer_values[self.layer_to_repair - 1],
             (self.num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
+            ##############################
+            # TODO: (12_7_2022) input the upper and lower bounds of nodes for
+            #  each sample
+            nodes_upper=ub_mat,
+            nodes_lower=lb_mat,
+            ##############################
             max_weight_bound=max_weight_bound,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
@@ -468,6 +472,8 @@ class NNRepair:
         weights,
         bias,
         max_weight_bound,
+        ub_mat,
+        lb_mat,
     ) -> Any:
 
         """_summary_
@@ -510,7 +516,18 @@ class NNRepair:
             )
 
         if output_bounds is None:
-            output_bounds = (-1e1, 1e1)
+            #######################
+            # TODO: (12_7_2022) the global upper and lower node bounds
+            # specified by lb and ub
+            ub = 0.0
+            for _, item in enumerate(ub_mat):
+                if np.max(item) > ub:
+                    ub = np.max(item)
+            lb = 0.0
+            for _, item in enumerate(lb_mat):
+                if np.min(item) < lb:
+                    lb = np.min(item)
+            output_bounds = (lb, ub)
 
         return param_bounds, output_bounds
         ##############################

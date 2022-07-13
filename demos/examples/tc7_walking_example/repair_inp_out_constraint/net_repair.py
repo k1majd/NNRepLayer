@@ -288,9 +288,9 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(4)
-    max_weight_bound = 1  # specifying the upper bound of weights error
+    max_weight_bound = 0.5  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
-    output_bounds = (-30.0, 50.0)
+    # output_bounds = (-30.0, 50.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
@@ -304,7 +304,7 @@ if __name__ == "__main__":
         param_precision=4,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
-        output_bounds=output_bounds,
+        # output_bounds=output_bounds,
     )
     setattr(
         repair_obj.opt_model,

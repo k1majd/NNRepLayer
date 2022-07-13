@@ -188,7 +188,7 @@ def main(
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        repair_node_list=[0, 2],
+        repair_node_list=[],
         w_error_norm=1,
         # output_bounds=(-100.0, 100.0),
     )

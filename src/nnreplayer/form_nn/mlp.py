@@ -42,7 +42,98 @@ class MLP:
             layer_values.append(input_data)
         return layer_values
 
-    def give_mlp_node_bounds(
+    def give_nodes_bounds(
+        self,
+        from_layer: int,
+        input_data: npt.NDArray,
+        weigh_purturb: Union[int, float],
+    ):
+        """Returns the active status of the nodes from the from_layer to the end.
+        Args:
+            from_layer: Target Layer
+            input_data: input Data. Shape = (n_samples, n_features)
+        """
+        layer_values = self.__call__(input_data)
+        weights = self.get_mlp_weights()
+        bias = self.get_mlp_biases()
+
+        ub_mat = []
+        lb_mat = []
+        # get the intervals for the from_layer layer outputs
+        ub = np.zeros((input_data.shape[0], self.architecture[from_layer]))
+        lb = np.zeros((input_data.shape[0], self.architecture[from_layer]))
+        for s in range(input_data.shape[0]):
+            for node_next in range(self.architecture[from_layer]):
+                lb[s, node_next] = (
+                    bias[from_layer - 1][node_next] - weigh_purturb
+                )
+                ub[s, node_next] = (
+                    bias[from_layer - 1][node_next] + weigh_purturb
+                )
+                for node_prev in range(self.architecture[from_layer - 1]):
+                    lb[s, node_next] += (
+                        weights[from_layer - 1][node_prev][node_next]
+                        - weigh_purturb
+                    ) * max(0.0, input_data[s][node_prev]) + (
+                        weights[from_layer - 1][node_prev][node_next]
+                        + weigh_purturb
+                    ) * min(
+                        0.0, input_data[s][node_prev]
+                    )
+                    # input_data[s][node_prev] * (
+                    #     weights[from_layer - 1][node_prev][node_next]
+                    #     - weigh_purturb
+                    # )
+                    ub[s, node_next] += (
+                        weights[from_layer - 1][node_prev][node_next]
+                        + weigh_purturb
+                    ) * max(0.0, input_data[s][node_prev]) + (
+                        weights[from_layer - 1][node_prev][node_next]
+                        - weigh_purturb
+                    ) * min(
+                        0.0, input_data[s][node_prev]
+                    )
+                    # input_data[s][node_prev] * (
+                    #     weights[from_layer - 1][node_prev][node_next]
+                    #     + weigh_purturb
+                    # )
+        ub_mat.append(ub)
+        lb_mat.append(lb)
+
+        # get the intervals for the subsequent layers
+        for layer in range(from_layer + 1, len(self.architecture)):
+            ub = np.zeros((input_data.shape[0], self.architecture[layer]))
+            lb = np.zeros((input_data.shape[0], self.architecture[layer]))
+            for s in range(input_data.shape[0]):
+                for node_next in range(self.architecture[layer]):
+                    lb[s, node_next] = (
+                        bias[layer - 1][node_next] - weigh_purturb
+                    )
+                    ub[s, node_next] = (
+                        bias[layer - 1][node_next] + weigh_purturb
+                    )
+                    for node_prev in range(self.architecture[layer - 1]):
+                        w_temp = weights[layer - 1][node_prev][node_next]
+                        lb[s, node_next] += lb_mat[layer - from_layer - 1][s][
+                            node_prev
+                        ] * max(w_temp, 0) + ub_mat[layer - from_layer - 1][s][
+                            node_prev
+                        ] * min(
+                            w_temp, 0
+                        )
+                        ub[s, node_next] += ub_mat[layer - from_layer - 1][s][
+                            node_prev
+                        ] * max(w_temp, 0) + lb_mat[layer - from_layer - 1][s][
+                            node_prev
+                        ] * min(
+                            w_temp, 0
+                        )
+            ub_mat.append(ub)
+            lb_mat.append(lb)
+
+        return ub_mat, lb_mat
+
+    def give_mlp_nodes_bounds(
         self,
         from_layer: int,
         input_data: npt.NDArray,
@@ -71,21 +162,25 @@ class MLP:
         weights = self.get_mlp_weights()
         bias = self.get_mlp_biases()
 
-        intervals = []
+        ub_mat = []
+        lb_mat = []
         # get the intervals of the inputs of from_layer layer
-        interval_temp = []
+        ub_temp = []
+        lb_temp = []
         for node in range(self.architecture[from_layer - 1]):
-            interval_temp.append(
-                [
-                    layer_values[from_layer - 1][:, node].min(),
-                    layer_values[from_layer - 1][:, node].max(),
-                ]
+            ub_temp.append(
+                layer_values[from_layer - 1][:, node].max(),
             )
-        intervals.append(interval_temp)
+            lb_temp.append(
+                layer_values[from_layer - 1][:, node].min(),
+            )
+        ub_mat.append(np.array(ub_temp))
+        lb_mat.append(np.array(lb_temp))
 
         # get the intervals of the outputs of from_layer layer
         for layer in range(from_layer, len(self.architecture)):
-            interval_temp = []
+            ub_temp = []
+            lb_temp = []
             for node_next in range(self.architecture[layer]):
                 lb = bias[layer - 1][node_next] - weigh_purturb
                 ub = bias[layer - 1][node_next] + weigh_purturb
@@ -104,18 +199,18 @@ class MLP:
                     else:
                         w_temp = weights[layer - 1][node_prev][node_next]
 
-                    lb += intervals[0][node_prev][0] * max(
+                    lb += lb_mat[layer - from_layer][node_prev] * max(
                         w_temp, 0
-                    ) + intervals[0][node_prev][1] * min(w_temp, 0)
-                    ub += intervals[0][node_prev][1] * max(
+                    ) + ub_mat[layer - from_layer][node_prev] * min(w_temp, 0)
+                    ub += ub_mat[layer - from_layer][node_prev] * max(
                         w_temp, 0
-                    ) + intervals[0][node_prev][0] * min(w_temp, 0)
-                interval_temp.append([lb, ub])
-            intervals.append(interval_temp)
+                    ) + lb_mat[layer - from_layer][node_prev] * min(w_temp, 0)
+                lb_temp.append(lb)
+                ub_temp.append(ub)
+            ub_mat.append(np.array(ub_temp))
+            lb_mat.append(np.array(lb_temp))
 
-        print("here")
-
-        pass
+        return ub_mat, lb_mat
 
     def set_mlp_params(self, mlp_weights: List[npt.NDArray]) -> None:
         """Manually set Weights And Bias Parameters for entire network
