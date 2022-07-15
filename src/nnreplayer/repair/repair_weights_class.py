@@ -378,26 +378,27 @@ class NNRepair:
         # TODO: (12_7_2022) layer values calculated here
         layer_values = self.extract_network_layers_values(x_repair)
         ##############################
-        ###########
-        # TODO: recive node bounds
-        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
-            self.layer_to_repair, x_repair, max_weight_bound
-        )
-        ##########
-        # specify the precision of weights, bias, layer values, upper and lower bounds
+        # specify the precision of weights, bias, layer values
         for l, w in enumerate(weights):
             weights[l] = np.round(w, self.param_precision)
         for l, b in enumerate(bias):
             bias[l] = np.round(b, self.param_precision)
         for l, value in enumerate(layer_values):
             layer_values[l] = np.round(value, self.data_precision)
+
+        self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
+
+        ###########
+        # TODO: recive node bounds
+        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
+            self.layer_to_repair, x_repair, max_weight_bound
+        )
+        # specify the precision of upper and lower bounds
         for l, ub in enumerate(ub_mat):
             ub_mat[l] = np.round(ub, self.data_precision)
         for l, lb in enumerate(lb_mat):
             lb_mat[l] = np.round(lb, self.data_precision)
-
-        self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
-
+        ##########
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
         param_bounds, output_bounds = self.__set_param_n_output_bounds(

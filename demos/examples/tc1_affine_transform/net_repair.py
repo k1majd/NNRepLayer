@@ -151,6 +151,8 @@ def main(
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
     )
+    # x_train = x_train[[0, 6, 14, 26], :]
+    # y_train = y_train[[0, 6, 14, 26], :]
     # repair_set = get_sensitive_nodes(
     #     model_orig, layer_to_repair, x_train, 2, A, b
     # )
@@ -160,7 +162,7 @@ def main(
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 5.0
+    max_weight_bound = 0.5
     cost_weights = np.array([1.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -184,7 +186,7 @@ def main(
     repair_obj.compile(
         x_train,
         y_train,
-        1,
+        2,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
@@ -192,7 +194,7 @@ def main(
         w_error_norm=1,
         # output_bounds=(-100.0, 100.0),
     )
-    # repair_obj.summary(direc=path_write + "/summery")
+    repair_obj.summary(direc=path_write + "/summery")
     out_model = repair_obj.repair(options)
 
     out_model.compile(

@@ -59,6 +59,9 @@ class MLP:
 
         ub_mat = []
         lb_mat = []
+        stably_active_nodes = 0
+        stably_inactive_nodes = 0
+        num_nodes = 0
         # get the intervals for the from_layer layer outputs
         ub = np.zeros((input_data.shape[0], self.architecture[from_layer]))
         lb = np.zeros((input_data.shape[0], self.architecture[from_layer]))
@@ -97,6 +100,12 @@ class MLP:
                     #     weights[from_layer - 1][node_prev][node_next]
                     #     + weigh_purturb
                     # )
+                if lb[s, node_next] >= 0:
+                    stably_active_nodes += 1
+                if ub[s, node_next] <= 0:
+                    stably_inactive_nodes += 1
+                if from_layer != len(self.architecture) - 1:
+                    num_nodes += 1
         ub_mat.append(ub)
         lb_mat.append(lb)
 
@@ -128,9 +137,21 @@ class MLP:
                         ] * min(
                             w_temp, 0
                         )
+                    if lb[s, node_next] >= 0:
+                        stably_active_nodes += 1
+                    if ub[s, node_next] <= 0:
+                        stably_inactive_nodes += 1
+                    if layer != len(self.architecture) - 1:
+                        num_nodes += 1
             ub_mat.append(ub)
             lb_mat.append(lb)
-
+        if num_nodes != 0:
+            print(
+                f"stably active integer variables: {stably_active_nodes}/{num_nodes}"
+            )
+            print(
+                f"stably inactive integer variables: {stably_inactive_nodes}/{num_nodes}"
+            )
         return ub_mat, lb_mat
 
     def give_mlp_nodes_bounds(

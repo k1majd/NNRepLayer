@@ -179,11 +179,13 @@ def main(given_comp):
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
     )
+    print(A)
+    print(b)
 
     # constraint cost
     def objective(params):
         y_pred = neural_net_predict(params, x_train, architecture)
-        const = -(npa.matmul(A[1], y_pred[:, 0 : A[0].shape[0]].T) - b[1])
+        const = -(npa.matmul(A[2], y_pred[:, 0 : A[0].shape[0]].T) - b[2])
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
             __soft_plus(const, 100)
@@ -199,10 +201,10 @@ def main(given_comp):
 
     def objective2(params):
         y_pred = neural_net_predict(params, x_train, architecture)
-        const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
+        const = npa.matmul(A[3], y_pred[:, 0 : A[0].shape[0]].T) - b[3]
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
-            __soft_plus(const, 150)
+            __soft_plus(const, 20)
         )
         # loss = 0.0
         # for i in range(const.shape[0]):
@@ -337,12 +339,12 @@ def main(given_comp):
         w1 = np.linspace(
             init_params[repair_indices[0]] - 1,
             init_params[repair_indices[0]] + 1,
-            100,
+            300,
         )
         w2 = np.linspace(
             init_params[repair_indices[1]] - 1,
             init_params[repair_indices[1]] + 1,
-            100,
+            300,
         )
         print(
             f"eigenvector: {[eig[repair_indices[0]], eig[repair_indices[1]]]}"
@@ -358,8 +360,8 @@ def main(given_comp):
                 init_params[repair_indices[1]] = W2[i, j]
                 obj[i, j] = objective2(init_params)
 
-        plt.contour(W1, W2, obj, 1000, levels=[0])
-        plt.contourf(W1, W2, obj, 1000, cmap="RdGy")
+        plt.contour(W1, W2, obj, 2000, levels=[0])
+        plt.contourf(W1, W2, obj, 2000, cmap="RdGy")
         plt.colorbar()
         plt.plot(
             [w1[0], w1[-1]],
@@ -436,4 +438,4 @@ def main(given_comp):
 if __name__ == "__main__":
     # for subset in itertools.combinations([0, 1, 2, 3, 4, 5, 6, 7, 8], 2):
     #     print()
-    main([2, 5])
+    main([])
