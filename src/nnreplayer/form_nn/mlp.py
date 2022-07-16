@@ -147,10 +147,10 @@ class MLP:
             lb_mat.append(lb)
         if num_nodes != 0:
             print(
-                f"stably active integer variables: {stably_active_nodes}/{num_nodes}"
+                f"stably active integer variables IA: {stably_active_nodes}/{num_nodes}"
             )
             print(
-                f"stably inactive integer variables: {stably_inactive_nodes}/{num_nodes}"
+                f"stably inactive integer variables IA: {stably_inactive_nodes}/{num_nodes}"
             )
         return ub_mat, lb_mat
 

@@ -19,11 +19,9 @@ class LPNNModel:
         ####################################
         # TODO: add these parameters
         repair_node_list: List[int] = None,
-        w_error_norm: int = 0,
-        # bias_activations: npt.NDArray,
-        # max_weight_bound: Union[int, float] = 10,
-        ####################################
-        param_bounds: tuple = (-1, 1),
+        max_weight_bound: float = 2.0,
+        param_precision: int = 6,
+        data_precision: int = 6,
     ):
         """_summary_
 
@@ -37,13 +35,13 @@ class LPNNModel:
             param_bounds (tuple, optional): _description_. Defaults to (-1, 1).
         """
 
-        self.model = pyo.ConcreteModel()
+        self.model = pyo.AbstractModel()
 
         self.model.nlayers = layer_to_repair
 
         self.uin, self.uout = (
             architecture[layer_to_repair - 1],
-            architecture[-1],
+            architecture[-2],
         )
         uhidden = architecture[layer_to_repair:-1]
 
@@ -54,11 +52,7 @@ class LPNNModel:
         if repair_node_list is None:
             repair_node_list = list(range(architecture[layer_to_repair]))
 
-        print(
-            f"Repair of {len(repair_node_list)} nodes out of {architecture[layer_to_repair]} nodes is being activated."
-        )
-        print(f"Activated nodes: {repair_node_list}")
-        num_layers_ahead = len(architecture) - self.model.nlayers - 1
+        num_layers_ahead = len(architecture) - self.model.nlayers - 2
         # print("UHidden = {}".format(uhidden))
         for iterate, u in enumerate(uhidden):
             self.layers.append(
@@ -72,10 +66,8 @@ class LPNNModel:
                     # TODO: add these parameters
                     num_layers_ahead,
                     repair_node_list,
-                    # bias_activations,
-                    # max_weight_bound,
-                    w_error_norm,
-                    param_bounds,
+                    max_weight_bound,
+                    param_precision,
                 )
             )
             num_layers_ahead = len(architecture) - self.model.nlayers - 1

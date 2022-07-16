@@ -10,6 +10,7 @@ from nnreplayer.utils import tf2_get_weights, tf2_get_architecture
 from nnreplayer.utils import pt_get_weights, pt_get_architecture
 from nnreplayer.form_nn import MLP
 from nnreplayer.mip import MIPNNModel
+from nnreplayer.lp_bound import LPNNModel
 from nnreplayer.utils import give_mse_error
 from nnreplayer.utils import Options
 from nnreplayer.utils import ConstraintsClass
@@ -149,6 +150,7 @@ class NNRepair:
             cost_weights,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
+            "lp",
             w_error_norm,
             param_bounds,
             output_bounds,
@@ -350,6 +352,7 @@ class NNRepair:
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
         # please check if I entered the data types correctly
+        bound_tightening_method: str = "lp",
         w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
@@ -390,14 +393,13 @@ class NNRepair:
 
         ###########
         # TODO: recive node bounds
-        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
-            self.layer_to_repair, x_repair, max_weight_bound
+        ub_mat, lb_mat = self.__get_node_bounds(
+            layer_values,
+            weights,
+            bias,
+            max_weight_bound,
+            bound_tightening_method,
         )
-        # specify the precision of upper and lower bounds
-        for l, ub in enumerate(ub_mat):
-            ub_mat[l] = np.round(ub, self.data_precision)
-        for l, lb in enumerate(lb_mat):
-            lb_mat[l] = np.round(lb, self.data_precision)
         ##########
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
@@ -462,6 +464,46 @@ class NNRepair:
         # else:
 
         self.opt_model.obj = pyo.Objective(expr=cost_expr)
+
+    def __get_node_bounds(
+        self,
+        layer_values,
+        weights,
+        bias,
+        max_weight_bound,
+        bound_tightening_method,
+    ):
+        print(f"Calculating tight bounds over the nodes")
+        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
+            self.layer_to_repair, layer_values[0], max_weight_bound
+        )
+        # specify the precision of upper and lower bounds
+        for l, ub in enumerate(ub_mat):
+            ub_mat[l] = np.round(ub, self.data_precision)
+        for l, lb in enumerate(lb_mat):
+            lb_mat[l] = np.round(lb, self.data_precision)
+        if bound_tightening_method == "lp":
+            ub_mat, lb_mat = self.__tight_bounds_lp(
+                layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
+            )
+        print(f"Found the tight bounds over the nodes")
+        print(f"-------------------------------------")
+
+        return ub_mat, lb_mat
+
+    def __tight_bounds_lp(
+        self, layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
+    ):
+        lp_model_layer = LPNNModel(
+            self.layer_to_repair,
+            self.architecture,
+            weights,
+            bias,
+            self.repair_node_list,
+            max_weight_bound,
+            self.param_precision,
+            self.data_precision,
+        )
 
     ##############################
     # TODO: param_bounds and output_bounds can be specified by the user
