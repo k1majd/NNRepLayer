@@ -483,9 +483,15 @@ class NNRepair:
         for l, lb in enumerate(lb_mat):
             lb_mat[l] = np.round(lb, self.data_precision)
         if bound_tightening_method == "lp":
-            ub_mat, lb_mat = self.__tight_bounds_lp(
-                layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
-            )
+            if self.layer_to_repair < len(self.architecture) - 2:
+                ub_mat, lb_mat = self.__tight_bounds_lp(
+                    layer_values,
+                    weights,
+                    bias,
+                    ub_mat,
+                    lb_mat,
+                    max_weight_bound,
+                )
         print(f"Found the tight bounds over the nodes")
         print(f"-------------------------------------")
 
@@ -494,16 +500,42 @@ class NNRepair:
     def __tight_bounds_lp(
         self, layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
     ):
-        lp_model_layer = LPNNModel(
-            self.layer_to_repair,
-            self.architecture,
-            weights,
-            bias,
-            self.repair_node_list,
-            max_weight_bound,
-            self.param_precision,
-            self.data_precision,
-        )
+        for l in range(self.layer_to_repair + 1, len(self.architecture) - 1):
+            for n in range(self.architecture[l]):
+                lp_model_layer = LPNNModel(
+                    self.layer_to_repair,
+                    self.architecture,
+                    weights,
+                    bias,
+                    self.repair_node_list,
+                    max_weight_bound,
+                    self.param_precision,
+                    self.data_precision,
+                )
+                lp_model = lp_model_layer(l, n)
+                for s in range(self.num_samples):
+                    par_dict = {}
+                    par_dict["inp"] = {
+                        i: layer_values[self.layer_to_repair - 1][s][i]
+                        for i in range(
+                            layer_values[self.layer_to_repair - 1][s].shape[0]
+                        )
+                    }
+                    bound_idx = 0
+                    for lay in range(
+                        self.layer_to_repair + 1, len(self.architecture)
+                    ):
+                        par_dict[f"lb{lay}"] = {
+                            i: lb_mat[bound_idx][s][i]
+                            for i in range(self.architecture[lay])
+                        }
+                        par_dict[f"ub{lay}"] = {
+                            i: ub_mat[bound_idx][s][i]
+                            for i in range(self.architecture[lay])
+                        }
+                        bound_idx += 1
+                    lp_instance = lp_model.create_instance({None: par_dict})
+                    print("here")
 
     ##############################
     # TODO: param_bounds and output_bounds can be specified by the user

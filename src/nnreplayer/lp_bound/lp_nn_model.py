@@ -38,6 +38,7 @@ class LPNNModel:
         self.model = pyo.AbstractModel()
 
         self.model.nlayers = layer_to_repair
+        self.layer_to_repair = layer_to_repair
 
         self.uin, self.uout = (
             architecture[layer_to_repair - 1],
@@ -75,18 +76,8 @@ class LPNNModel:
 
     def __call__(
         self,
-        x: npt.NDArray,
-        shape: Tuple,
-        output_constraint_list: List[npt.NDArray],
-        ##############################
-        # TODO: (12_7_2022) input the upper and lower bounds of nodes for
-        # each sample
-        nodes_upper: List[npt.NDArray] = None,
-        nodes_lower: List[npt.NDArray] = None,
-        ##############################
-        relu: bool = False,
-        max_weight_bound: Union[int, float] = 10,
-        output_bounds: tuple = (-1e1, 1e1),
+        final_layer,
+        final_node,
     ):
         """_summary_
 
@@ -101,59 +92,60 @@ class LPNNModel:
         Returns:
             _type_: _description_
         """
-        m, n = shape
-        assert n == self.uin
+        layer = self.layers[0]
+        x = layer(final_layer, final_node)
+        for layers in self.layers[1:]:
+            x = layers(final_layer, final_node, x)
 
-        bound_idx = 0
+        return self.model
+        # for layer in self.layers[:-1]:
+        #     ####################################
+        #     # TODO: (12_7_2022) detect if upper and lower bounds are given
+        #     if nodes_upper is not None:
+        #         ub = nodes_upper[bound_idx]
+        #         lb = nodes_lower[bound_idx]
+        #     else:
+        #         ub = np.ones((m, n)) * output_bounds[1]
+        #         lb = np.ones((m, n)) * output_bounds[0]
+        #     bound_idx += 1
+        #     ######################################
+        #     x = layer(
+        #         x,
+        #         (m, layer.uin),
+        #         output_constraint_list,
+        #         ##############################
+        #         # TODO: (12_7_2022) input the upper and lower bounds of nodes for
+        #         # each sample
+        #         ub,
+        #         lb,
+        #         ##############################
+        #         relu=True,
+        #         max_weight_bound=max_weight_bound,
+        #         output_bounds=output_bounds,
+        #     )
 
-        for layer in self.layers[:-1]:
-            ####################################
-            # TODO: (12_7_2022) detect if upper and lower bounds are given
-            if nodes_upper is not None:
-                ub = nodes_upper[bound_idx]
-                lb = nodes_lower[bound_idx]
-            else:
-                ub = np.ones((m, n)) * output_bounds[1]
-                lb = np.ones((m, n)) * output_bounds[0]
-            bound_idx += 1
-            ######################################
-            x = layer(
-                x,
-                (m, layer.uin),
-                output_constraint_list,
-                ##############################
-                # TODO: (12_7_2022) input the upper and lower bounds of nodes for
-                # each sample
-                ub,
-                lb,
-                ##############################
-                relu=True,
-                max_weight_bound=max_weight_bound,
-                output_bounds=output_bounds,
-            )
-
-        layer = self.layers[-1]
-        ####################################
-        # TODO: (12_7_2022) detect if upper and lower bounds are given
-        if nodes_upper is not None:
-            ub = nodes_upper[bound_idx]
-            lb = nodes_lower[bound_idx]
-        else:
-            ub = np.ones((m, n)) * output_bounds[1]
-            lb = np.ones((m, n)) * output_bounds[0]
-        ######################################
-        y = layer(
-            x,
-            (m, layer.uin),
-            output_constraint_list,
-            ##############################
-            # TODO: (12_7_2022) input the upper and lower bounds of nodes for
-            # each sample
-            ub,
-            lb,
-            ##############################
-            relu=relu,
-            max_weight_bound=max_weight_bound,
-            output_bounds=output_bounds,
-        )
-        return y
+        # layer = self.layers[-1]
+        # ####################################
+        # # TODO: (12_7_2022) detect if upper and lower bounds are given
+        # if nodes_upper is not None:
+        #     ub = nodes_upper[bound_idx]
+        #     lb = nodes_lower[bound_idx]
+        # else:
+        #     ub = np.ones((m, n)) * output_bounds[1]
+        #     lb = np.ones((m, n)) * output_bounds[0]
+        # ######################################
+        # y = layer(
+        #     x,
+        #     (m, layer.uin),
+        #     output_constraint_list,
+        #     ##############################
+        #     # TODO: (12_7_2022) input the upper and lower bounds of nodes for
+        #     # each sample
+        #     ub,
+        #     lb,
+        #     ##############################
+        #     relu=relu,
+        #     max_weight_bound=max_weight_bound,
+        #     output_bounds=output_bounds,
+        # )
+        # return y
