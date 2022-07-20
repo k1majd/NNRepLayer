@@ -77,11 +77,13 @@ class MLP:
                     lb[s, node_next] += (
                         weights[from_layer - 1][node_prev][node_next]
                         - weigh_purturb
-                    ) * max(0.0, input_data[s][node_prev]) + (
+                    ) * max(
+                        0.0, layer_values[from_layer - 1][s][node_prev]
+                    ) + (
                         weights[from_layer - 1][node_prev][node_next]
                         + weigh_purturb
                     ) * min(
-                        0.0, input_data[s][node_prev]
+                        0.0, layer_values[from_layer - 1][s][node_prev]
                     )
                     # input_data[s][node_prev] * (
                     #     weights[from_layer - 1][node_prev][node_next]
@@ -90,11 +92,13 @@ class MLP:
                     ub[s, node_next] += (
                         weights[from_layer - 1][node_prev][node_next]
                         + weigh_purturb
-                    ) * max(0.0, input_data[s][node_prev]) + (
+                    ) * max(
+                        0.0, layer_values[from_layer - 1][s][node_prev]
+                    ) + (
                         weights[from_layer - 1][node_prev][node_next]
                         - weigh_purturb
                     ) * min(
-                        0.0, input_data[s][node_prev]
+                        0.0, layer_values[from_layer - 1][s][node_prev]
                     )
                     # input_data[s][node_prev] * (
                     #     weights[from_layer - 1][node_prev][node_next]

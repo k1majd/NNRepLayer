@@ -83,7 +83,7 @@ class LPLayer:
             def b_initialize(model, j):
                 return bias[repair_node_list[j]]
 
-            w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
+            w_l, b_l = "w_r", "b_r"
             setattr(
                 model,
                 w_l,
@@ -224,9 +224,9 @@ class LPLayer:
         # Big-M method constraints
         # inequality x_l >= w^Tx+b
         def constraint_1(model, j):
-            product = self.b[j]
+            product = model.b_r[j]
             for k in range(self.uin):
-                product += model.inp[k] * self.w[k, j]
+                product += model.inp[k] * model.w_r[k, j]
             # return constraint based on the activation status of the node
             if getattr(model, lb_l)[self.repair_node_list[j]] >= 0:
                 return product == getattr(model, x_l)[j]
@@ -246,9 +246,9 @@ class LPLayer:
 
         # inequality x_l <= w^Tx+b - (1-theta)*LB
         def constraint_2(model, j):
-            product = self.b[j]
+            product = model.b_r[j]
             for k in range(self.uin):
-                product += model.inp[k] * self.w[k, j]
+                product += model.inp[k] * model.w_r[k, j]
             # return constraint based on the activation status of the node
             if getattr(model, lb_l)[self.repair_node_list[j]] >= 0:
                 return pyo.Constraint.Skip
@@ -273,9 +273,9 @@ class LPLayer:
 
         # inequality x_l <= theta*UB
         def constraint_3(model, j):
-            product = self.b[j]
+            product = model.b_r[j]
             for k in range(self.uin):
-                product += model.inp[k] * self.w[k, j]
+                product += model.inp[k] * model.w_r[k, j]
             # return constraint based on the activation status of the node
             if getattr(model, lb_l)[self.repair_node_list[j]] >= 0:
                 return pyo.Constraint.Skip
@@ -357,7 +357,10 @@ class LPLayer:
             num_next_repair_nodes = 1
 
             def x_next_bound(model, j):
-                return (0.0, getattr(model, ub_l)[final_node])
+                return (
+                    getattr(model, lb_l)[final_node],
+                    getattr(model, ub_l)[final_node],
+                )
 
             # define the variables of the next nodes
             x_l = "x" + str(self.layer_num_next)
@@ -376,7 +379,15 @@ class LPLayer:
             def constraint_1(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    product += x[k] * self.w[k, j]
+                    if x.name.split("x")[1] == "1":
+                        product += model.x1[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "2":
+                        product += model.x2[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "3":
+                        product += model.x3[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "4":
+                        product += model.x4[k] * self.w[k, j]
+                    # product += x[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, ub_l)[j] <= 0:
                     return getattr(model, x_l)[j] == 0
@@ -427,7 +438,14 @@ class LPLayer:
             def constraint_1(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    product += x[k] * self.w[k, j]
+                    if x.name.split("x")[1] == "1":
+                        product += model.x1[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "2":
+                        product += model.x2[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "3":
+                        product += model.x3[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "4":
+                        product += model.x4[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, lb_l)[j] >= 0:
                     return product == getattr(model, x_l)[j]
@@ -449,7 +467,14 @@ class LPLayer:
             def constraint_2(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    product += x[k] * self.w[k, j]
+                    if x.name.split("x")[1] == "1":
+                        product += model.x1[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "2":
+                        product += model.x2[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "3":
+                        product += model.x3[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "4":
+                        product += model.x4[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, lb_l)[j] >= 0:
                     return pyo.Constraint.Skip
@@ -476,7 +501,14 @@ class LPLayer:
             def constraint_3(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    product += x[k] * self.w[k, j]
+                    if x.name.split("x")[1] == "1":
+                        product += model.x1[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "2":
+                        product += model.x2[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "3":
+                        product += model.x3[k] * self.w[k, j]
+                    elif x.name.split("x")[1] == "4":
+                        product += model.x4[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, lb_l)[j] >= 0:
                     return pyo.Constraint.Skip

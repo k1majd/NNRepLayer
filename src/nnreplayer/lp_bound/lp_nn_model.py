@@ -97,7 +97,7 @@ class LPNNModel:
         for layers in self.layers[1:]:
             x = layers(final_layer, final_node, x)
 
-        return self.model
+        return x
         # for layer in self.layers[:-1]:
         #     ####################################
         #     # TODO: (12_7_2022) detect if upper and lower bounds are given

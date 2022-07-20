@@ -512,7 +512,7 @@ class NNRepair:
                     self.param_precision,
                     self.data_precision,
                 )
-                lp_model = lp_model_layer(l, n)
+                x = lp_model_layer(l, n)
                 for s in range(self.num_samples):
                     par_dict = {}
                     par_dict["inp"] = {
@@ -534,8 +534,36 @@ class NNRepair:
                             for i in range(self.architecture[lay])
                         }
                         bound_idx += 1
-                    lp_instance = lp_model.create_instance({None: par_dict})
-                    print("here")
+                    lp_instance = lp_model_layer.model.create_instance(
+                        {None: par_dict}
+                    )
+                    # minimum bound
+                    cost_expr = getattr(lp_instance, x.name)[0]
+
+                    lp_instance.obj = pyo.Objective(expr=cost_expr)
+                    opt = pyo.SolverFactory("gurobi", solver_io="python")
+                    opt.solve(lp_instance, tee=True)
+                    print(
+                        f"lb - s: {s}, n:{n} - diff: {np.abs(getattr(lp_instance, x.name)[0]._value- lb_mat[bound_idx][s][n])}"
+                    )
+                    lb_mat[bound_idx][s][n] = np.round(
+                        getattr(lp_instance, x.name)[0]._value,
+                        self.data_precision,
+                    )
+
+                    # maximum bound
+                    cost_expr = -getattr(lp_instance, x.name)[0]
+                    lp_instance.obj = pyo.Objective(expr=cost_expr)
+                    opt.solve(lp_instance, tee=True)
+                    print(
+                        f"ub - s: {s}, n:{n} - diff: {ub_mat[bound_idx][s][n] - np.abs(getattr(lp_instance, x.name)[0]._value)}"
+                    )
+                    ub_mat[bound_idx][s][n] = np.round(
+                        getattr(lp_instance, x.name)[0]._value,
+                        self.data_precision,
+                    )
+                    if lb_mat[bound_idx][s][n] < 0:
+                        print(1)
 
     ##############################
     # TODO: param_bounds and output_bounds can be specified by the user
