@@ -156,8 +156,6 @@ def main(
     # repair_set = get_sensitive_nodes(
     #     model_orig, layer_to_repair, x_train, 2, A, b
     # )
-    print("----------------------")
-    print("repair model")
     # input the constraint list
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]

@@ -473,7 +473,13 @@ class NNRepair:
         max_weight_bound,
         bound_tightening_method,
     ):
+        print(" ")
+        print(f"----------------------------------------")
         print(f"Calculating tight bounds over the nodes")
+        print(f"----------------------------------------")
+        print(" ")
+        print("-> IA method")
+        print(" ")
         ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
             self.layer_to_repair, layer_values[0], max_weight_bound
         )
@@ -484,6 +490,9 @@ class NNRepair:
             lb_mat[l] = np.round(lb, self.data_precision)
         if bound_tightening_method == "lp":
             if self.layer_to_repair < len(self.architecture) - 2:
+                print(" ")
+                print("-> LP method")
+                print(" ")
                 ub_mat, lb_mat = self.__tight_bounds_lp(
                     layer_values,
                     weights,
@@ -492,9 +501,7 @@ class NNRepair:
                     lb_mat,
                     max_weight_bound,
                 )
-        print(f"Found the tight bounds over the nodes")
-        print(f"-------------------------------------")
-
+            print(" ")
         return ub_mat, lb_mat
 
     def __tight_bounds_lp(
@@ -524,7 +531,6 @@ class NNRepair:
                 stably_active_nodes = 0
                 stably_inactive_nodes = 0
                 num_nodes = 0
-                print(f"__________________________________________")
                 print(f"LP: layer {l}, node {n} - stats")
                 for s in range(self.num_samples):
                     par_dict = {}
@@ -595,15 +601,22 @@ class NNRepair:
                 # print average stats
                 avg_ub /= self.num_samples
                 avg_lb /= self.num_samples
-                print(f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}")
-                print(f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}")
                 if num_nodes != 0:
+                    print(
+                        f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}"
+                    )
+                    print(
+                        f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}"
+                    )
                     print(
                         f"stably active integer variables LP: {stably_active_nodes}/{num_nodes}"
                     )
                     print(
                         f"stably inactive integer variables LP: {stably_inactive_nodes}/{num_nodes}"
                     )
+                    print(" ")
+            print(f"_______")
+
         return ub_mat, lb_mat
 
     ##############################
