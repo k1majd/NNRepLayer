@@ -44,13 +44,13 @@ class MLP:
 
     def give_nodes_bounds(
         self,
-        from_layer: int,
+        layer_to_repair: int,
         input_data: npt.NDArray,
-        weigh_purturb: Union[int, float],
+        max_weight_bound: Union[int, float],
     ):
-        """Returns the active status of the nodes from the from_layer to the end.
+        """Returns the active status of the nodes from the layer_to_repair to the end.
         Args:
-            from_layer: Target Layer
+            layer_to_repair: Target Layer
             input_data: input Data. Shape = (n_samples, n_features)
         """
         layer_values = self.__call__(input_data)
@@ -59,84 +59,103 @@ class MLP:
 
         ub_mat = []
         lb_mat = []
+        # stat variables
+        max_ub = 0.0
+        min_ub = np.inf
+        min_lb = 0.0
+        max_lb = -np.inf
+        avg_ub = 0.0
+        avg_lb = 0.0
         stably_active_nodes = 0
         stably_inactive_nodes = 0
         num_nodes = 0
-        # get the intervals for the from_layer layer outputs
-        ub = np.zeros((input_data.shape[0], self.architecture[from_layer]))
-        lb = np.zeros((input_data.shape[0], self.architecture[from_layer]))
+        # get the intervals for the layer_to_repair layer outputs
+        ub = np.zeros(
+            (input_data.shape[0], self.architecture[layer_to_repair])
+        )
+        lb = np.zeros(
+            (input_data.shape[0], self.architecture[layer_to_repair])
+        )
         for s in range(input_data.shape[0]):
-            for node_next in range(self.architecture[from_layer]):
+            for node_next in range(self.architecture[layer_to_repair]):
                 lb[s, node_next] = (
-                    bias[from_layer - 1][node_next] - weigh_purturb
+                    bias[layer_to_repair - 1][node_next] - max_weight_bound
                 )
                 ub[s, node_next] = (
-                    bias[from_layer - 1][node_next] + weigh_purturb
+                    bias[layer_to_repair - 1][node_next] + max_weight_bound
                 )
-                for node_prev in range(self.architecture[from_layer - 1]):
+                for node_prev in range(self.architecture[layer_to_repair - 1]):
                     lb[s, node_next] += (
-                        weights[from_layer - 1][node_prev][node_next]
-                        - weigh_purturb
+                        weights[layer_to_repair - 1][node_prev][node_next]
+                        - max_weight_bound
                     ) * max(
-                        0.0, layer_values[from_layer - 1][s][node_prev]
+                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
                     ) + (
-                        weights[from_layer - 1][node_prev][node_next]
-                        + weigh_purturb
+                        weights[layer_to_repair - 1][node_prev][node_next]
+                        + max_weight_bound
                     ) * min(
-                        0.0, layer_values[from_layer - 1][s][node_prev]
+                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
                     )
                     # input_data[s][node_prev] * (
-                    #     weights[from_layer - 1][node_prev][node_next]
-                    #     - weigh_purturb
+                    #     weights[layer_to_repair - 1][node_prev][node_next]
+                    #     - max_weight_bound
                     # )
                     ub[s, node_next] += (
-                        weights[from_layer - 1][node_prev][node_next]
-                        + weigh_purturb
+                        weights[layer_to_repair - 1][node_prev][node_next]
+                        + max_weight_bound
                     ) * max(
-                        0.0, layer_values[from_layer - 1][s][node_prev]
+                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
                     ) + (
-                        weights[from_layer - 1][node_prev][node_next]
-                        - weigh_purturb
+                        weights[layer_to_repair - 1][node_prev][node_next]
+                        - max_weight_bound
                     ) * min(
-                        0.0, layer_values[from_layer - 1][s][node_prev]
+                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
                     )
                     # input_data[s][node_prev] * (
-                    #     weights[from_layer - 1][node_prev][node_next]
-                    #     + weigh_purturb
+                    #     weights[layer_to_repair - 1][node_prev][node_next]
+                    #     + max_weight_bound
                     # )
                 if lb[s, node_next] >= 0:
                     stably_active_nodes += 1
                 if ub[s, node_next] <= 0:
                     stably_inactive_nodes += 1
-                if from_layer != len(self.architecture) - 1:
+                if layer_to_repair != len(self.architecture) - 1:
                     num_nodes += 1
         ub_mat.append(ub)
         lb_mat.append(lb)
 
         # get the intervals for the subsequent layers
-        for layer in range(from_layer + 1, len(self.architecture)):
+        for layer in range(layer_to_repair + 1, len(self.architecture)):
             ub = np.zeros((input_data.shape[0], self.architecture[layer]))
             lb = np.zeros((input_data.shape[0], self.architecture[layer]))
             for s in range(input_data.shape[0]):
                 for node_next in range(self.architecture[layer]):
                     lb[s, node_next] = (
-                        bias[layer - 1][node_next] - weigh_purturb
+                        bias[layer - 1][node_next] - max_weight_bound
                     )
                     ub[s, node_next] = (
-                        bias[layer - 1][node_next] + weigh_purturb
+                        bias[layer - 1][node_next] + max_weight_bound
                     )
                     for node_prev in range(self.architecture[layer - 1]):
                         w_temp = weights[layer - 1][node_prev][node_next]
-                        lb[s, node_next] += lb_mat[layer - from_layer - 1][s][
-                            node_prev
-                        ] * max(w_temp, 0) + ub_mat[layer - from_layer - 1][s][
+                        lb[s, node_next] += lb_mat[
+                            layer - layer_to_repair - 1
+                        ][s][node_prev] * max(w_temp, 0) + ub_mat[
+                            layer - layer_to_repair - 1
+                        ][
+                            s
+                        ][
                             node_prev
                         ] * min(
                             w_temp, 0
                         )
-                        ub[s, node_next] += ub_mat[layer - from_layer - 1][s][
-                            node_prev
-                        ] * max(w_temp, 0) + lb_mat[layer - from_layer - 1][s][
+                        ub[s, node_next] += ub_mat[
+                            layer - layer_to_repair - 1
+                        ][s][node_prev] * max(w_temp, 0) + lb_mat[
+                            layer - layer_to_repair - 1
+                        ][
+                            s
+                        ][
                             node_prev
                         ] * min(
                             w_temp, 0

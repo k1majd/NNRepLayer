@@ -163,7 +163,7 @@ def main(
     output_constraint_list = [constraint_inside]
 
     max_weight_bound = 0.2
-    cost_weights = np.array([1.0, 1.0])
+    cost_weights = np.array([100.0, 1.0])
     options = Options(
         "gdp.bigm",
         "gurobi",
@@ -173,6 +173,8 @@ def main(
             "timelimit": 3600,
             "mipgap": 0.001,
             "mipfocus": 2,
+            "cuts": 0,
+            "cliquecuts ": 0,
             "improvestarttime": 3300,
             "logfile": path_write
             + f"/logs/opt_log_layer{layer_to_repair}.log",

@@ -376,29 +376,29 @@ class LPLayer:
 
             # Big-M method constraints
             # inequality x_l >= w^Tx+b
-            def constraint_1(model, j):
-                product = self.b[j]
+            def constraint_1(model):
+                product = self.b[final_node]
                 for k in range(self.uin):
                     if x.name.split("x")[1] == "1":
-                        product += model.x1[k] * self.w[k, j]
+                        product += model.x1[k] * self.w[k, final_node]
                     elif x.name.split("x")[1] == "2":
-                        product += model.x2[k] * self.w[k, j]
+                        product += model.x2[k] * self.w[k, final_node]
                     elif x.name.split("x")[1] == "3":
-                        product += model.x3[k] * self.w[k, j]
+                        product += model.x3[k] * self.w[k, final_node]
                     elif x.name.split("x")[1] == "4":
-                        product += model.x4[k] * self.w[k, j]
+                        product += model.x4[k] * self.w[k, final_node]
                     # product += x[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
-                if getattr(model, ub_l)[j] <= 0:
-                    return getattr(model, x_l)[j] == 0
+                if getattr(model, ub_l)[final_node] <= 0:
+                    return getattr(model, x_l)[0] == 0
                 else:
-                    return product == getattr(model, x_l)[j]
+                    return product == getattr(model, x_l)[0]
 
             setattr(
                 self.model,
                 "constraint_inequality_1_lay" + str(self.layer_num_next),
                 pyo.Constraint(
-                    range(num_next_repair_nodes),
+                    # range(num_next_repair_nodes),
                     rule=constraint_1,
                 ),
             )
