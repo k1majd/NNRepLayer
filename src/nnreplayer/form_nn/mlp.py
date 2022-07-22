@@ -128,7 +128,7 @@ class MLP:
             # print stats
             avg_ub /= num_nodes
             avg_lb /= num_nodes
-            print(f"IA: layer 1, node {node_next} - stats")
+            print(f"IA: layer {layer_to_repair}, node {node_next} - stats")
             print(f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}")
             print(f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}")
             print(

@@ -489,7 +489,7 @@ class NNRepair:
         for l, lb in enumerate(lb_mat):
             lb_mat[l] = np.round(lb, self.data_precision)
         if bound_tightening_method == "lp":
-            if self.layer_to_repair < len(self.architecture) - 2:
+            if self.layer_to_repair < len(self.architecture) - 1:
                 print(" ")
                 print("-> LP method")
                 print(" ")
@@ -508,7 +508,7 @@ class NNRepair:
         self, layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
     ):
 
-        for l in range(self.layer_to_repair + 1, len(self.architecture) - 1):
+        for l in range(self.layer_to_repair + 1, len(self.architecture)):
             for n in range(self.architecture[l]):
                 lp_model_layer = LPNNModel(
                     self.layer_to_repair,
@@ -540,19 +540,17 @@ class NNRepair:
                             layer_values[self.layer_to_repair - 1][s].shape[0]
                         )
                     }
-                    bound_idx = 0
-                    for lay in range(
-                        self.layer_to_repair + 1, len(self.architecture)
-                    ):
-                        par_dict[f"lb{lay}"] = {
-                            i: lb_mat[bound_idx][s][i]
+                    # bound_idx = 0
+                    for lay in range(self.layer_to_repair, l + 1):
+                        par_dict[f"lb{lay+1}"] = {
+                            i: lb_mat[lay - self.layer_to_repair][s][i]
                             for i in range(self.architecture[lay])
                         }
-                        par_dict[f"ub{lay}"] = {
-                            i: ub_mat[bound_idx][s][i]
+                        par_dict[f"ub{lay+1}"] = {
+                            i: ub_mat[lay - self.layer_to_repair][s][i]
                             for i in range(self.architecture[lay])
                         }
-                        bound_idx += 1
+                        # bound_idx += 1
                     lp_instance = lp_model_layer.model.create_instance(
                         {None: par_dict}
                     )

@@ -18,7 +18,6 @@ class LPLayer:
         uout: int,
         weights: npt.NDArray,
         bias: npt.NDArray,
-        num_layers_ahead: int,
         repair_node_list: List[int],
         max_weight_bound: Union[int, float] = 1.0,
         param_precision: int = 6,
@@ -51,7 +50,7 @@ class LPLayer:
         # detect if this layer is a repair layer and if so,
         # which nodes are repaired. If this layer is not a repair layer,
         # then its weight and bias terms are fixed to the original values.
-        if model.nlayers == layer_to_repair and num_layers_ahead != 0:
+        if model.nlayers == layer_to_repair:
 
             def w_bound(model, i, j):
                 return (

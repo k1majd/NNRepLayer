@@ -42,7 +42,7 @@ class LPNNModel:
 
         self.uin, self.uout = (
             architecture[layer_to_repair - 1],
-            architecture[-2],
+            architecture[-1],
         )
         uhidden = architecture[layer_to_repair:-1]
 
@@ -53,7 +53,6 @@ class LPNNModel:
         if repair_node_list is None:
             repair_node_list = list(range(architecture[layer_to_repair]))
 
-        num_layers_ahead = len(architecture) - self.model.nlayers - 2
         # print("UHidden = {}".format(uhidden))
         for iterate, u in enumerate(uhidden):
             self.layers.append(
@@ -65,14 +64,25 @@ class LPNNModel:
                     weights[layer_to_repair - 1 + iterate],
                     bias[layer_to_repair - 1 + iterate],
                     # TODO: add these parameters
-                    num_layers_ahead,
                     repair_node_list,
                     max_weight_bound,
                     param_precision,
                 )
             )
-            num_layers_ahead = len(architecture) - self.model.nlayers - 1
             prev = u
+        self.layers.append(
+            LPLayer(
+                self.model,
+                layer_to_repair,
+                prev,
+                architecture[-1],
+                weights[-1],
+                bias[-1],
+                repair_node_list,
+                max_weight_bound,
+                param_precision,
+            )
+        )
 
     def __call__(
         self,
