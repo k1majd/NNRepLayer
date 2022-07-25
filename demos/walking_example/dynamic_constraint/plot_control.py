@@ -31,7 +31,7 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
-plt.rcParams.update({"text.usetex": True})
+# plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -262,7 +262,7 @@ def generate_model_n_data(str):
 
     ctrl_model_repair = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{str}{str}"
+        + f"/repair_net/models/model_layer{str}"
     )
 
     # load data
@@ -348,10 +348,10 @@ if __name__ == "__main__":
     bound1_5 = 1.5
     bound0_5 = 0.5
 
-    load_str3_bound2 = "_6_11_2022_10_56_16"
-    load_str3_bound1_5 = "_6_11_2022_11_26_30"
-    load_str3_bound0_5 = "_6_10_2022_12_27_27"
-    load_str4_bound2 = "_6_9_2022_23_59_1"
+    load_str3_bound2 = "_7_20_2022_15_27_10"
+    load_str3_bound1_5 = "_7_20_2022_15_27_10"
+    load_str3_bound0_5 = "_7_20_2022_15_27_10"
+    load_str4_bound2 = "_7_20_2022_15_27_10"
 
     # load test data and original model
     model_orig = keras.models.load_model(
@@ -369,22 +369,22 @@ if __name__ == "__main__":
     delta_u_laye3_bound2 = np.subtract(
         y_pred_lay3_bound2.flatten(), x_test[:, -1].flatten()
     )
-    for i in range(delta_u_laye3_bound2.shape[0]):
-        if delta_u_laye3_bound2[i] > bound2:
-            delta_u_laye3_bound2[i] = bound2
-        elif delta_u_laye3_bound2[i] < -bound2:
-            delta_u_laye3_bound2[i] = -bound2
+    # for i in range(delta_u_laye3_bound2.shape[0]):
+    #     if delta_u_laye3_bound2[i] > bound2:
+    #         delta_u_laye3_bound2[i] = bound2
+    #     elif delta_u_laye3_bound2[i] < -bound2:
+    #         delta_u_laye3_bound2[i] = -bound2
 
     model_lay3_bound1_5, _ = generate_model_n_data(load_str3_bound1_5)
     y_pred_lay3_bound1_5 = model_lay3_bound1_5.predict(x_test)
     delta_u_laye3_bound1_5 = np.subtract(
         y_pred_lay3_bound1_5.flatten(), x_test[:, -1].flatten()
     )
-    for i in range(delta_u_laye3_bound1_5.shape[0]):
-        if delta_u_laye3_bound1_5[i] > bound1_5:
-            delta_u_laye3_bound1_5[i] = bound1_5
-        elif delta_u_laye3_bound1_5[i] < -bound1_5:
-            delta_u_laye3_bound1_5[i] = -bound1_5
+    # for i in range(delta_u_laye3_bound1_5.shape[0]):
+    #     if delta_u_laye3_bound1_5[i] > bound1_5:
+    #         delta_u_laye3_bound1_5[i] = bound1_5
+    #     elif delta_u_laye3_bound1_5[i] < -bound1_5:
+    #         delta_u_laye3_bound1_5[i] = -bound1_5
 
     model_lay3_bound0_5, _ = generate_model_n_data(load_str3_bound0_5)
     y_pred_lay3_bound0_5 = model_lay3_bound0_5.predict(x_test)

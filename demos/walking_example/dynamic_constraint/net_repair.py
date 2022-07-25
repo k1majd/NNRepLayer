@@ -288,12 +288,12 @@ if __name__ == "__main__":
 
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
-    max_weight_bound = 10  # specifying the upper bound of weights error
+    layer_to_repair = 2  # first layer-(0) last layer-(4)
+    max_weight_bound = 0.3  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
-    output_bounds = (-30.0, 50.0)
+    # output_bounds = (-30.0, 50.0)
     repair_node_list = []
-    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
+    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 256
     repair_obj.compile(
         x_train,
         y_train,
@@ -305,8 +305,8 @@ if __name__ == "__main__":
         param_precision=6,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
-        w_error_norm=0,
-        output_bounds=output_bounds,
+        w_error_norm=1,
+        # output_bounds=output_bounds,
     )
     setattr(
         repair_obj.opt_model,
@@ -350,10 +350,13 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 18000,  # max time algorithm will take in seconds
+            "timelimit": 43200,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
-            "improvestarttime": 16000,
+            "cuts": 0,
+            "concurrentmip": 3,
+            "threads": 60,
+            "improvestarttime": 39000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
     )
@@ -411,17 +414,17 @@ if __name__ == "__main__":
             "repair layer",
             layer_to_repair,
             "Num of nodes in repair layer",
-            32,
+            repair_obj.architecture[layer_to_repair],
             "timelimit",
             options.optimizer_options["timelimit"],
             "mipfocus",
             options.optimizer_options["mipfocus"],
             "max weight bunds",
-            cost_weights,
+            max_weight_bound,
             "cost weights",
             cost_weights,
-            "output bounds",
-            output_bounds,
+            # "output bounds",
+            # output_bounds,
         ]
         # Add contents of list as last row in the csv file
         csv_writer.writerow(model_evaluation)

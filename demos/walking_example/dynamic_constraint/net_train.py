@@ -94,9 +94,9 @@ def generateDataWindow(window_size):
 
 
 def buildModelWindow(data_size):
-    layer_size1 = 32
-    layer_size2 = 32
-    layer_size3 = 32
+    layer_size1 = 256
+    layer_size2 = 256
+    # layer_size3 = 32
     # input_layer = tf.keras.Input(shape=(data_size[1]))
     # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
     # layer_2 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_1)
@@ -109,7 +109,7 @@ def buildModelWindow(data_size):
                 layer_size1, activation=tf.nn.relu, input_shape=[data_size[1]]
             ),
             layers.Dense(layer_size2, activation=tf.nn.relu),
-            layers.Dense(layer_size3, activation=tf.nn.relu),
+            # layers.Dense(layer_size3, activation=tf.nn.relu),
             layers.Dense(1),
         ]
     )
@@ -119,7 +119,8 @@ def buildModelWindow(data_size):
         metrics=["accuracy"],
     )
     model.summary()
-    architecture = [data_size[1], layer_size1, layer_size2, layer_size3, 1]
+    # architecture = [data_size[1], layer_size1, layer_size2, layer_size3, 1]
+    architecture = [data_size[1], layer_size1, layer_size2, 1]
     filepath = "models/model1"
     # tf_callback=[tf.keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, save_weight_only=False, mode='auto', save_freq='epoch', options=None), keras.callbacks.TensorBoard(log_dir='logs')]
     tf_callback = [
