@@ -28,3 +28,11 @@ layer4:
 bound 1.5
 layer3: _6_11_2022_11_26_30
 layer4: 
+
+
+
+bound 2:
+2 hidden layer
+32 nodes: network name: _6_9_2022_21_32_23
+64 nodes: network name: _7_20_2022_15_27_10
+128 nodes: network name: _7_21_2022_13_13_44

@@ -1,0 +1,26 @@
+
+Gurobi 9.5.1 (linux64) logging started Wed 13 Jul 2022 10:16:48 AM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_7_13_2022_10_15_59.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 32 threads
+Optimize a model with 50722 rows, 36942 columns and 823747 nonzeros
+Model fingerprint: 0xf29d2831
+Model has 270 quadratic objective terms
+Variable types: 19662 continuous, 17280 integer (17280 binary)
+Coefficient statistics:
+  Matrix range     [2e-04, 2e+02]
+  Objective range  [9e-03, 1e+00]
+  QObjective range [7e-02, 7e-02]
+  Bounds range     [1e-01, 4e+02]
+  RHS range        [2e-04, 2e+02]
+Presolve removed 4476 rows and 3387 columns
+Presolve time: 0.09s
+
+Explored 0 nodes (0 simplex iterations) in 0.19 seconds (0.19 work units)
+Thread count was 1 (of 96 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
