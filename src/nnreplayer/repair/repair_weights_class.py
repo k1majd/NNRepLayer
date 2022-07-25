@@ -10,6 +10,7 @@ from nnreplayer.utils import tf2_get_weights, tf2_get_architecture
 from nnreplayer.utils import pt_get_weights, pt_get_architecture
 from nnreplayer.form_nn import MLP
 from nnreplayer.mip import MIPNNModel
+from nnreplayer.lp_bound import LPNNModel
 from nnreplayer.utils import give_mse_error
 from nnreplayer.utils import Options
 from nnreplayer.utils import ConstraintsClass
@@ -149,6 +150,7 @@ class NNRepair:
             cost_weights,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
+            "lp",
             w_error_norm,
             param_bounds,
             output_bounds,
@@ -350,6 +352,7 @@ class NNRepair:
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
         # please check if I entered the data types correctly
+        bound_tightening_method: str = "lp",
         w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
@@ -378,26 +381,26 @@ class NNRepair:
         # TODO: (12_7_2022) layer values calculated here
         layer_values = self.extract_network_layers_values(x_repair)
         ##############################
-        ###########
-        # TODO: recive node bounds
-        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
-            self.layer_to_repair, x_repair, max_weight_bound
-        )
-        ##########
-        # specify the precision of weights, bias, layer values, upper and lower bounds
+        # specify the precision of weights, bias, layer values
         for l, w in enumerate(weights):
             weights[l] = np.round(w, self.param_precision)
         for l, b in enumerate(bias):
             bias[l] = np.round(b, self.param_precision)
         for l, value in enumerate(layer_values):
             layer_values[l] = np.round(value, self.data_precision)
-        for l, ub in enumerate(ub_mat):
-            ub_mat[l] = np.round(ub, self.data_precision)
-        for l, lb in enumerate(lb_mat):
-            lb_mat[l] = np.round(lb, self.data_precision)
 
         self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
 
+        ###########
+        # TODO: recive node bounds
+        ub_mat, lb_mat = self.__get_node_bounds(
+            layer_values,
+            weights,
+            bias,
+            max_weight_bound,
+            bound_tightening_method,
+        )
+        ##########
         ##############################
         # TODO: param_bounds and output_bounds can be specified by the user
         param_bounds, output_bounds = self.__set_param_n_output_bounds(
@@ -461,6 +464,158 @@ class NNRepair:
         # else:
 
         self.opt_model.obj = pyo.Objective(expr=cost_expr)
+
+    def __get_node_bounds(
+        self,
+        layer_values,
+        weights,
+        bias,
+        max_weight_bound,
+        bound_tightening_method,
+    ):
+        print(" ")
+        print(f"----------------------------------------")
+        print(f"Calculating tight bounds over the nodes")
+        print(f"----------------------------------------")
+        print(" ")
+        print("-> IA method")
+        print(" ")
+        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
+            self.layer_to_repair, layer_values[0], max_weight_bound
+        )
+        # specify the precision of upper and lower bounds
+        for l, ub in enumerate(ub_mat):
+            ub_mat[l] = np.round(ub, self.data_precision)
+        for l, lb in enumerate(lb_mat):
+            lb_mat[l] = np.round(lb, self.data_precision)
+        if bound_tightening_method == "lp":
+            if self.layer_to_repair < len(self.architecture) - 1:
+                print(" ")
+                print("-> LP method")
+                print(" ")
+                ub_mat, lb_mat = self.__tight_bounds_lp(
+                    layer_values,
+                    weights,
+                    bias,
+                    ub_mat,
+                    lb_mat,
+                    max_weight_bound,
+                )
+            print(" ")
+        return ub_mat, lb_mat
+
+    def __tight_bounds_lp(
+        self, layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
+    ):
+
+        for l in range(self.layer_to_repair + 1, len(self.architecture)):
+            for n in range(self.architecture[l]):
+                lp_model_layer = LPNNModel(
+                    self.layer_to_repair,
+                    self.architecture,
+                    weights,
+                    bias,
+                    self.repair_node_list,
+                    max_weight_bound,
+                    self.param_precision,
+                    self.data_precision,
+                )
+                x = lp_model_layer(l, n)
+                # capture statistics
+                max_ub = 0.0
+                min_ub = np.inf
+                min_lb = 0.0
+                max_lb = -np.inf
+                avg_ub = 0.0
+                avg_lb = 0.0
+                stably_active_nodes = 0
+                stably_inactive_nodes = 0
+                num_nodes = 0
+                print(f"LP: layer {l}, node {n} - stats")
+                for s in range(self.num_samples):
+                    par_dict = {}
+                    par_dict["inp"] = {
+                        i: layer_values[self.layer_to_repair - 1][s][i]
+                        for i in range(
+                            layer_values[self.layer_to_repair - 1][s].shape[0]
+                        )
+                    }
+                    # bound_idx = 0
+                    for lay in range(self.layer_to_repair, l + 1):
+                        par_dict[f"lb{lay+1}"] = {
+                            i: lb_mat[lay - self.layer_to_repair][s][i]
+                            for i in range(self.architecture[lay])
+                        }
+                        par_dict[f"ub{lay+1}"] = {
+                            i: ub_mat[lay - self.layer_to_repair][s][i]
+                            for i in range(self.architecture[lay])
+                        }
+                        # bound_idx += 1
+                    lp_instance = lp_model_layer.model.create_instance(
+                        {None: par_dict}
+                    )
+                    # minimum bound
+                    cost_expr = getattr(lp_instance, x.name)[0]
+                    lp_instance.obj = pyo.Objective(expr=cost_expr)
+                    opt = pyo.SolverFactory("gurobi", solver_io="python")
+                    opt.solve(lp_instance, tee=False)
+
+                    # print(
+                    #     f"lb - s: {s}, n:{n} - diff: {getattr(lp_instance, x.name)[0]._value- lb_mat[l - self.layer_to_repair][s][n]}"
+                    # )
+                    lb_mat[l - self.layer_to_repair][s][n] = np.round(
+                        getattr(lp_instance, x.name)[0]._value,
+                        self.data_precision,
+                    )
+                    lp_instance.del_component("obj")
+                    # maximum bound
+                    cost_expr = -getattr(lp_instance, x.name)[0]
+                    lp_instance.obj = pyo.Objective(expr=cost_expr)
+                    opt.solve(lp_instance, tee=False)
+                    # print(
+                    #     f"ub - s: {s}, n:{n} - diff: {ub_mat[l - self.layer_to_repair][s][n] - getattr(lp_instance, x.name)[0]._value}"
+                    # )
+                    ub_mat[l - self.layer_to_repair][s][n] = np.round(
+                        getattr(lp_instance, x.name)[0]._value,
+                        self.data_precision,
+                    )
+                    lp_instance.del_component("obj")
+                    # capture stats
+                    if ub_mat[l - self.layer_to_repair][s][n] > max_ub:
+                        max_ub = ub_mat[l - self.layer_to_repair][s][n]
+                    if ub_mat[l - self.layer_to_repair][s][n] < min_ub:
+                        min_ub = ub_mat[l - self.layer_to_repair][s][n]
+                    if lb_mat[l - self.layer_to_repair][s][n] < min_lb:
+                        min_lb = lb_mat[l - self.layer_to_repair][s][n]
+                    if lb_mat[l - self.layer_to_repair][s][n] > max_lb:
+                        max_lb = lb_mat[l - self.layer_to_repair][s][n]
+                    avg_ub += ub_mat[l - self.layer_to_repair][s][n]
+                    avg_lb += lb_mat[l - self.layer_to_repair][s][n]
+                    if lb_mat[l - self.layer_to_repair][s][n] >= 0:
+                        stably_active_nodes += 1
+                    if ub_mat[l - self.layer_to_repair][s][n] <= 0:
+                        stably_inactive_nodes += 1
+                    num_nodes += 1
+                # print average stats
+                avg_ub /= self.num_samples
+                avg_lb /= self.num_samples
+                if num_nodes != 0:
+                    print(
+                        f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}"
+                    )
+                    print(
+                        f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}"
+                    )
+                    print(
+                        f"stably active integer variables LP: {stably_active_nodes}/{num_nodes}"
+                    )
+                    print(
+                        f"stably inactive integer variables LP: {stably_inactive_nodes}/{num_nodes}"
+                    )
+                    print(" ")
+            print(f"_______")
+
+        return ub_mat, lb_mat
 
     ##############################
     # TODO: param_bounds and output_bounds can be specified by the user
