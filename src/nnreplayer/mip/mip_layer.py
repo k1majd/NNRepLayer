@@ -428,6 +428,9 @@ class MIPLayer:
 
         x_l = "x" + str(self.layer_num_next)
 
+        def x_next_bound(model, i, j):
+            return (lb[i, j], ub[i, j])
+
         # x_l = 'x'+str(self.layer_num_next)
         setattr(
             self.model,
@@ -436,7 +439,7 @@ class MIPLayer:
                 range(m),
                 range(self.uout),
                 domain=pyo.Reals,
-                bounds=output_bounds,
+                bounds=x_next_bound,
             ),
         )
 
