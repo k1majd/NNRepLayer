@@ -355,7 +355,7 @@ if __name__ == "__main__":
             "mipfocus": 2,  #
             "cuts": 0,
             "concurrentmip": 3,
-            "threads": 60,
+            "threads": 45,
             "improvestarttime": 39000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
