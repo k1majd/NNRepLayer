@@ -109,35 +109,36 @@ class MLP:
                         0.0, layer_values[layer_to_repair - 1][s][node_prev]
                     )
                 # update stats
-                if layer_to_repair != len(self.architecture) - 1:
-                    num_nodes += 1
-                    if lb[s, node_next] >= 0:
-                        stably_active_nodes += 1
-                    if ub[s, node_next] <= 0:
-                        stably_inactive_nodes += 1
-                    if ub[s, node_next] > max_ub:
-                        max_ub = ub[s, node_next]
-                    if ub[s, node_next] < min_ub:
-                        min_ub = ub[s, node_next]
-                    if lb[s, node_next] < min_lb:
-                        min_lb = lb[s, node_next]
-                    if lb[s, node_next] > max_lb:
-                        max_lb = lb[s, node_next]
-                    avg_ub += ub[s, node_next]
-                    avg_lb += lb[s, node_next]
+                # if layer_to_repair != len(self.architecture) - 1:
+                num_nodes += 1
+                if lb[s, node_next] >= 0:
+                    stably_active_nodes += 1
+                if ub[s, node_next] <= 0:
+                    stably_inactive_nodes += 1
+                if ub[s, node_next] > max_ub:
+                    max_ub = ub[s, node_next]
+                if ub[s, node_next] < min_ub:
+                    min_ub = ub[s, node_next]
+                if lb[s, node_next] < min_lb:
+                    min_lb = lb[s, node_next]
+                if lb[s, node_next] > max_lb:
+                    max_lb = lb[s, node_next]
+                avg_ub += ub[s, node_next]
+                avg_lb += lb[s, node_next]
             # print stats
             avg_ub /= num_nodes
             avg_lb /= num_nodes
             print(f"IA: layer {layer_to_repair}, node {node_next} - stats")
             print(f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}")
             print(f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}")
-            print(
-                f"stably active integer variables IA: {stably_active_nodes}/{num_nodes}"
-            )
-            print(
-                f"stably inactive integer variables IA: {stably_inactive_nodes}/{num_nodes}"
-            )
-            print(" ")
+            if layer_to_repair != len(self.architecture) - 1:
+                print(
+                    f"stably active integer variables IA: {stably_active_nodes}/{num_nodes}"
+                )
+                print(
+                    f"stably inactive integer variables IA: {stably_inactive_nodes}/{num_nodes}"
+                )
+                print(" ")
 
         ub_mat.append(ub)
         lb_mat.append(lb)
@@ -191,33 +192,30 @@ class MLP:
                             w_temp, 0
                         )
                     # Update stats
-                    if layer != len(self.architecture) - 1:
-                        num_nodes += 1
-                        if lb[s, node_next] >= 0:
-                            stably_active_nodes += 1
-                        if ub[s, node_next] <= 0:
-                            stably_inactive_nodes += 1
-                        if ub[s, node_next] > max_ub:
-                            max_ub = ub[s, node_next]
-                        if ub[s, node_next] < min_ub:
-                            min_ub = ub[s, node_next]
-                        if lb[s, node_next] < min_lb:
-                            min_lb = lb[s, node_next]
-                        if lb[s, node_next] > max_lb:
-                            max_lb = lb[s, node_next]
-                        avg_ub += ub[s, node_next]
-                        avg_lb += lb[s, node_next]
+                    # if layer != len(self.architecture) - 1:
+                    num_nodes += 1
+                    if lb[s, node_next] >= 0:
+                        stably_active_nodes += 1
+                    if ub[s, node_next] <= 0:
+                        stably_inactive_nodes += 1
+                    if ub[s, node_next] > max_ub:
+                        max_ub = ub[s, node_next]
+                    if ub[s, node_next] < min_ub:
+                        min_ub = ub[s, node_next]
+                    if lb[s, node_next] < min_lb:
+                        min_lb = lb[s, node_next]
+                    if lb[s, node_next] > max_lb:
+                        max_lb = lb[s, node_next]
+                    avg_ub += ub[s, node_next]
+                    avg_lb += lb[s, node_next]
                 # print stats
+                # if layer != len(self.architecture) - 1:
+                avg_ub /= num_nodes
+                avg_lb /= num_nodes
+                print(f"IA: layer {layer}, node {node_next} - stats")
+                print(f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}")
+                print(f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}")
                 if layer != len(self.architecture) - 1:
-                    avg_ub /= num_nodes
-                    avg_lb /= num_nodes
-                    print(f"IA: layer {layer}, node {node_next} - stats")
-                    print(
-                        f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}"
-                    )
-                    print(
-                        f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}"
-                    )
                     print(
                         f"stably active integer variables IA: {stably_active_nodes}/{num_nodes}"
                     )
@@ -225,7 +223,7 @@ class MLP:
                         f"stably inactive integer variables IA: {stably_inactive_nodes}/{num_nodes}"
                     )
 
-                    print(" ")
+                print(" ")
             print("_______")
             ub_mat.append(ub)
             lb_mat.append(lb)

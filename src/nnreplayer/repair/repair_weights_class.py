@@ -88,6 +88,7 @@ class NNRepair:
         # please check if I entered the data types correctly
         # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
         repair_node_list: List[int] = None,
+        bound_tightening_method: str = "ia",  # "ia" or "lp"
         w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
@@ -106,7 +107,11 @@ class NNRepair:
             max_weight_bound: Upper bound of weights errorDefaults to 1.0.
             data_precision: precision of rounding to decimal place for dataDefaults to 4.
             param_precision: precision of rounding to decimal place for parameters. Defaults to 4.
+            repair_node_list: List of indices of target repair nodes. Defaults to None.
+            bound_tightening_method: Method to use for bound tightening. Defaults to "ia", options are "ia" or "lp".
             w_error_norm (int, optional): weight error norm type 0 = L-inf, 1 = L-1. Defaults to 0.
+            param_bounds: bounds of parameters. Defaults to None.
+            output_bounds: bounds of output. Defaults to None.
         """
 
         # set repair parameters:
@@ -150,7 +155,7 @@ class NNRepair:
             cost_weights,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
-            "lp",
+            bound_tightening_method,
             w_error_norm,
             param_bounds,
             output_bounds,
@@ -606,12 +611,13 @@ class NNRepair:
                     print(
                         f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}"
                     )
-                    print(
-                        f"stably active integer variables LP: {stably_active_nodes}/{num_nodes}"
-                    )
-                    print(
-                        f"stably inactive integer variables LP: {stably_inactive_nodes}/{num_nodes}"
-                    )
+                    if l != len(self.architecture) - 1:
+                        print(
+                            f"stably active integer variables LP: {stably_active_nodes}/{num_nodes}"
+                        )
+                        print(
+                            f"stably inactive integer variables LP: {stably_inactive_nodes}/{num_nodes}"
+                        )
                     print(" ")
             print(f"_______")
 
@@ -717,3 +723,6 @@ class NNRepair:
         opt.solve(self.opt_model, tee=True)
         print("----------------------")
         print(self.opt_model.dw.display())
+        if hasattr(self.opt_model, "db"):
+            print("----------------------")
+            print(self.opt_model.db.display())
