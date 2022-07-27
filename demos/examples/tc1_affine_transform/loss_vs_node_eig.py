@@ -220,7 +220,23 @@ def main(given_comp):
         const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
-            __soft_plus(const, 1.1)
+            __soft_plus(const, 30)
+            / const.shape[0]
+        )
+        # loss = 0.0
+        # for i in range(const.shape[0]):
+        #     for j in range(const.shape[1]):
+        #         if const[i, j] > 0:
+        #             loss += const[i, j]
+
+        return loss
+
+    def objective4(params):
+        y_pred = neural_net_predict(params, x_train, architecture)
+        const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
+        loss = npa.sum(
+            # np.maximum(np.zeros(const.shape[0]), const)
+            __soft_plus(const, 50)
             / const.shape[0]
         )
         # loss = 0.0
@@ -282,23 +298,28 @@ def main(given_comp):
 
     # get sensitive nodes
     repair_indices, cost_vec, all_vec = get_sensitive_nodes(
-        objective3, init_params, architecture, 1
+        objective2, init_params, architecture, 1
     )
+    # repair_indices, cost_vec, all_vec = get_sensitive_nodes(
+    #     objective2, init_params, architecture, 1
+    # )
     # get the indices of the two maximum values of the cost vector
     max_indices = list(np.argsort(cost_vec))
     max_indices = max_indices[-2:]
+    max_indices = [0, 1]
+
     vec1 = all_vec[max_indices[0]]
     vec2 = all_vec[max_indices[1]]
 
     w1_pert = np.linspace(
-        -2,
-        2,
-        10,
+        -1,
+        1,
+        300,
     )
     w2_pert = np.linspace(
-        -2,
-        1,
+        0,
         10,
+        300,
     )
     W1, W2 = np.meshgrid(w1_pert, w2_pert)
     obj = np.zeros((W1.shape[0], W1.shape[1]))
@@ -308,17 +329,45 @@ def main(given_comp):
             w_traget = W1[i, j] * vec1 + W2[i, j] * vec2 + 2 * init_params
             # init_params[repair_indices[0]] = W1[i, j]
             # init_params[repair_indices[1]] = W2[i, j]
-            obj[i, j] = objective3(w_traget)
-
-    plt.contour(W1, W2, obj, 2000, colors="b", levels=[0])
-    plt.contourf(W1, W2, obj, 2000, cmap="RdGy")
-    plt.colorbar()
-    plt.xlabel(f"w{max_indices[0]}")
-    plt.ylabel(f"w{max_indices[1]}")
-    plt.title(
-        f"contour plot of constraint surface - highest sensitive weights"
+            obj[i, j] = objective4(w_traget)
+    # horizental subplots
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(2, 1, 1)
+    ax.contourf(W1, W2, obj, 2000, cmap="RdGy", vmin=obj.min(), vmax=obj.max())
+    # ax.contourf(W1, W2, obj, 2000, cmap="RdGy")
+    contours = ax.contour(
+        W1, W2, obj, 2000, colors="#FFD700", levels=[0.25e-5]
     )
-    plt.legend()
+    ax.clabel(contours, inline=True, fmt="%1.1f")
+    ax.set_title("Objective")
+    ax.set_xlabel(f"w{max_indices[0]}")
+    ax.set_ylabel(f"w{max_indices[1]}")
+    # add colorbar
+    cbar = fig.colorbar(ax.contourf(W1, W2, obj, cmap="RdGy"))
+    cbar.ax.set_ylabel("Objective")
+
+    # axs[1] to have 3d projection
+    ax = fig.add_subplot(2, 1, 2, projection="3d")
+    contours = ax.contour(
+        W1, W2, obj, 2000, colors="#FFD700", levels=[0.25e-5]
+    )
+    ax.clabel(contours, inline=True, fmt="%1.1f")
+    ax.contour3D(W1, W2, obj, 50, cmap="RdGy")
+    ax.set_xlabel(f"w{max_indices[0]}")
+    ax.set_ylabel(f"w{max_indices[1]}")
+    # plt.contour(W1, W2, obj, 2000, colors="#FFD700", levels=[0])
+    # plt.contourf(W1, W2, obj, 2000, cmap="RdGy")
+    # # plt.colorbar()
+    # ax = plt.axes(projection="3d")
+    # ax.contour3D(W1, W2, obj, 50, cmap="RdGy")
+    # ax.contour(W1, W2, obj, 2000, colors="#FFD700", levels=[0])
+    # ax.colorbar()
+    # plt.xlabel(f"w{max_indices[0]}")
+    # plt.ylabel(f"w{max_indices[1]}")
+    # plt.title(
+    #     f"contour plot of constraint surface - highest sensitive weights"
+    # )
+    # plt.legend()
     plt.show()
 
     print(f"repair indices: {repair_indices}")

@@ -349,6 +349,7 @@ if __name__ == "__main__":
     load_32 = "_6_11_2022_10_56_16"
     load_64 = "_7_20_2022_15_27_10"
     load_128 = "_7_21_2022_13_13_44"
+    load_256 = "_7_26_2022_12_2_40"
 
     # load test data and original model
     model_orig = keras.models.load_model(
@@ -384,6 +385,10 @@ if __name__ == "__main__":
     y_pred_128 = model_128.predict(x_test)
     delta_u_128 = np.subtract(y_pred_128.flatten(), x_test[:, -1].flatten())
 
+    model_256, _ = generate_model_n_data(load_256)
+    y_pred_256 = model_256.predict(x_test)
+    delta_u_256 = np.subtract(y_pred_256.flatten(), x_test[:, -1].flatten())
+
     # load layer 4 data
 
     # # find intersection points of y_test and bound
@@ -408,6 +413,7 @@ if __name__ == "__main__":
     color_32 = "#6495ED"
     color_64 = "#66CDAA"
     color_128 = "#DC143C"
+    color_256 = "#FFA500"
     color_test = "#808080"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
@@ -456,6 +462,12 @@ if __name__ == "__main__":
         color=color_128,
         linewidth=1.5,
     )
+    ax00.plot(
+        y_pred_256.flatten(),
+        label="Rep. predictions - 256 nodes",
+        color=color_256,
+        linewidth=1.5,
+    )
     ax00.fill_between(
         np.linspace(
             0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
@@ -498,6 +510,11 @@ if __name__ == "__main__":
         color=color_128,
         linewidth=1.5,
     )
+    ax10.plot(
+        delta_u_256,
+        color=color_256,
+        linewidth=1.5,
+    )
     ax10.fill_between(
         np.linspace(
             0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
@@ -535,7 +552,7 @@ if __name__ == "__main__":
         # bbox_to_anchor=(0.5, -0.5),
         bbox_to_anchor=(0.5, 0.03),
         bbox_transform=fig.transFigure,
-        ncol=6,
+        ncol=7,
         fontsize=14,
     )
     leg.get_frame().set_facecolor("white")

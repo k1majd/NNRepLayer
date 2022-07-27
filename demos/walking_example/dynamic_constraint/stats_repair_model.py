@@ -343,14 +343,14 @@ if __name__ == "__main__":
     # x_train = test_obs[rnd_pts]
     # y_train = test_ctrls[rnd_pts]
     # load the original model
-    num_nodes = 64
+    num_nodes = 256
     model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
         + f"/models/model_orig_{num_nodes}"
     )
 
     # load the repaired dat set
-    load_str = "_7_20_2022_15_27_10"
+    load_str = "_7_26_2022_12_2_40"
     repaired_layer = 2
     model_repaired = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
