@@ -293,7 +293,7 @@ if __name__ == "__main__":
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = []
-    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 256
+    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 512
     repair_obj.compile(
         x_train,
         y_train,

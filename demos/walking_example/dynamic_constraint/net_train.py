@@ -94,8 +94,8 @@ def generateDataWindow(window_size):
 
 
 def buildModelWindow(data_size):
-    layer_size1 = 256
-    layer_size2 = 256
+    layer_size1 = 512
+    layer_size2 = 512
     # layer_size3 = 32
     # input_layer = tf.keras.Input(shape=(data_size[1]))
     # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
