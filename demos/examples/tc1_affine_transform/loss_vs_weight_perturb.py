@@ -201,7 +201,7 @@ def main(given_comp):
 
     def objective2(params):
         y_pred = neural_net_predict(params, x_train, architecture)
-        const = npa.matmul(A[3], y_pred[:, 0 : A[0].shape[0]].T) - b[3]
+        const = npa.matmul(A, y_pred[:, 0 : A[0].shape[0]].T) - b
         loss = npa.sum(
             # np.maximum(np.zeros(const.shape[0]), const)
             __soft_plus(const, 20)
@@ -331,7 +331,7 @@ def main(given_comp):
 
     # get sensitive nodes
     repair_indices, eig, hessian = get_sensitive_nodes(
-        objective3, init_params, architecture, 2, A, b
+        objective3, init_params, architecture, 5, A, b
     )
     print(f"repair indices: {repair_indices}")
     if len(given_comp) == 0:
