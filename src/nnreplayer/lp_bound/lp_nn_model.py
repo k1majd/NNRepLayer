@@ -104,7 +104,7 @@ class LPNNModel:
         """
         layer = self.layers[0]
         x = layer(final_layer, final_node)
-        for layers in self.layers[1:]:
+        for layers in self.layers[1 : final_layer - self.layer_to_repair + 1]:
             x = layers(final_layer, final_node, x)
 
         return x

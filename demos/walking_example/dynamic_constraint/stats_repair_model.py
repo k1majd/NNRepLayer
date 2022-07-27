@@ -343,15 +343,18 @@ if __name__ == "__main__":
     # x_train = test_obs[rnd_pts]
     # y_train = test_ctrls[rnd_pts]
     # load the original model
+    num_nodes = 64
     model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/models/model_orig_{num_nodes}"
     )
 
     # load the repaired dat set
-    load_str = "_6_11_2022_10_56_16"
+    load_str = "_7_20_2022_15_27_10"
+    repaired_layer = 2
     model_repaired = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{load_str}{load_str}"
+        + f"/repair_net/models/model_layer{load_str}"
     )
     x_repair, y_repair = load_rep_data(load_str)
 
@@ -364,10 +367,41 @@ if __name__ == "__main__":
         model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound
     )
     sat_rate, _ = give_stats(
-        model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound + 0.1
+        model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound + 0.2
     )
+
+    weights_orig = np.concatenate(
+        (
+            model_orig.get_weights()[2 * (repaired_layer - 1)].flatten(),
+            model_orig.get_weights()[2 * (repaired_layer - 1) + 1].flatten(),
+        )
+    )
+    weights_repaired = np.concatenate(
+        (
+            model_repaired.get_weights()[2 * (repaired_layer - 1)].flatten(),
+            model_repaired.get_weights()[
+                2 * (repaired_layer - 1) + 1
+            ].flatten(),
+        )
+    )
+    err = weights_orig - weights_repaired
+    num_repaired_weights = 0
+    for i in range(err.shape[0]):
+        if err[i] > 0.001:
+            num_repaired_weights += 1
+
     print(f"mae is {mae}")
     print(f"sat_rate is {sat_rate}")
+    print(f"number of test samples is {test_obs.shape[0]}")
+    print(
+        f"weight l1 norm is {np.linalg.norm(weights_orig - weights_repaired, 1)}"
+    )
+    print(
+        f"weight l-inf norm is {np.linalg.norm(weights_orig - weights_repaired, np.inf)}"
+    )
+    print(
+        f"number of repaired weights is {num_repaired_weights}/{err.shape[0]}"
+    )
     # hand label the data set
 
     # store the modeled MIP and parameters

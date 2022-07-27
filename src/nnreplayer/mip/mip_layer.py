@@ -428,6 +428,9 @@ class MIPLayer:
 
         x_l = "x" + str(self.layer_num_next)
 
+        def x_next_bound(model, i, j):
+            return (lb[i, j], ub[i, j])
+
         # x_l = 'x'+str(self.layer_num_next)
         setattr(
             self.model,
@@ -436,7 +439,7 @@ class MIPLayer:
                 range(m),
                 range(self.uout),
                 domain=pyo.Reals,
-                bounds=output_bounds,
+                bounds=x_next_bound,
             ),
         )
 
@@ -556,6 +559,19 @@ class MIPLayer:
                 rule=constraint_lower_bound_inequiality_b,
             ),
         )
+
+        # def constraint_sum_dw_db_inequiality(model):
+        #     return (
+        #         sum(getattr(model, dw_l)[:, :]) + sum(getattr(model, db_l)[:])
+        #         <= max_weight_bound
+        #     )
+
+        # setattr(
+        #     self.model,
+        #     "sum_dw_db_inequiality_l1_constraint_lay"
+        #     + str(self.layer_num_next),
+        #     pyo.Constraint(rule=constraint_sum_dw_db_inequiality),
+        # )
 
     def _weight_bound_constraint_l1(self, max_weight_bound):
         w_l = "w" + str(self.layer_num)

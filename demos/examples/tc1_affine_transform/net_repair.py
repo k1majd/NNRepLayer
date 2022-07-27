@@ -151,8 +151,8 @@ def main(
     A, b = give_constraints(
         scale(poly_const, xfact=0.98, yfact=0.98, origin="center")
     )
-    # x_train = x_train[[0, 6, 14, 26], :]
-    # y_train = y_train[[0, 6, 14, 26], :]
+    x_train = x_train[0:1, :]
+    y_train = y_train[0:1, :]
     # repair_set = get_sensitive_nodes(
     #     model_orig, layer_to_repair, x_train, 2, A, b
     # )
@@ -160,7 +160,7 @@ def main(
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 0.2
+    max_weight_bound = 1.2
     cost_weights = np.array([100.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -170,7 +170,7 @@ def main(
         {
             "timelimit": 3600,
             "mipgap": 0.001,
-            "mipfocus": 2,
+            # "mipfocus": 2,
             "cuts": 0,
             "cliquecuts ": 0,
             "improvestarttime": 3300,
@@ -194,6 +194,7 @@ def main(
         param_precision=6,
         repair_node_list=[],
         w_error_norm=1,
+        bound_tightening_method="lp",
         # output_bounds=(-100.0, 100.0),
     )
     repair_obj.summary(direc=path_write + "/summery")
@@ -205,9 +206,9 @@ def main(
         metrics=["accuracy"],
     )
     print("weight error")
-    print(out_model.get_weights()[0] - model_orig.get_weights()[0])
+    print(out_model.get_weights()[2] - model_orig.get_weights()[2])
     print("bias error")
-    print(out_model.get_weights()[1] - model_orig.get_weights()[1])
+    print(out_model.get_weights()[3] - model_orig.get_weights()[3])
     if visual == 1:
         print("----------------------")
         print("Visualization")
