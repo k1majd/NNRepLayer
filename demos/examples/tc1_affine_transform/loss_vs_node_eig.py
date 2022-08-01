@@ -112,20 +112,22 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
             #                 H_reduced = nearestPD(H_reduced)
 
             ei, vi = np.linalg.eig(H_reduced)
-            vec_reduced = vi[:, 0]
-            vec = np.zeros(H_dist.shape[0])
-            idx = 0
-            for el in sparse_idx:
-                vec[el] = vec_reduced[idx]
-                idx += 1
-            cost = np.matmul(vec, np.matmul(H_dist, vec))
+            # vec_reduced = vi[:, 0]
+            vec = np.zeros((H_dist.shape[0], vi.shape[0]))
+
+            for c in range(vi.shape[1]):
+                idx = 0
+                for el in sparse_idx:
+                    vec[el, c] = vi[idx, c]
+                    idx += 1
+            cost = np.matmul(vec[:, 0], np.matmul(H_dist, vec[:, 0]))
             costs.append(cost)
             all_vec.append(vec)
             print(
                 f"iteration: {iteration}/{all_iters}, eval nodes: {column_idx}, cost: {cost}"
             )
             if cost >= max_cost:
-                selected_vec = vec
+                selected_vec = vec[:, 0]
                 max_cost = cost
                 selected_nodes = column_idx
             iteration += 1
@@ -298,7 +300,7 @@ def main(given_comp):
 
     # get sensitive nodes
     repair_indices, cost_vec, all_vec = get_sensitive_nodes(
-        objective2, init_params, architecture, 1
+        objective3, init_params, architecture, 2
     )
     # repair_indices, cost_vec, all_vec = get_sensitive_nodes(
     #     objective2, init_params, architecture, 1
@@ -308,8 +310,8 @@ def main(given_comp):
     max_indices = max_indices[-2:]
     max_indices = [0, 1]
 
-    vec1 = all_vec[max_indices[0]]
-    vec2 = all_vec[max_indices[1]]
+    vec1 = all_vec[2][:, 0]
+    vec2 = all_vec[2][:, 1]
 
     w1_pert = np.linspace(
         -1,
@@ -317,8 +319,8 @@ def main(given_comp):
         300,
     )
     w2_pert = np.linspace(
-        0,
-        10,
+        -1,
+        1,
         300,
     )
     W1, W2 = np.meshgrid(w1_pert, w2_pert)
@@ -326,10 +328,11 @@ def main(given_comp):
 
     for i in range(W1.shape[0]):
         for j in range(W1.shape[1]):
-            w_traget = W1[i, j] * vec1 + W2[i, j] * vec2 + 2 * init_params
+            w_traget = W1[i, j] * vec1 + W2[i, j] * vec2 + init_params
             # init_params[repair_indices[0]] = W1[i, j]
             # init_params[repair_indices[1]] = W2[i, j]
             obj[i, j] = objective4(w_traget)
+            # print(obj[i, j])
     # horizental subplots
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(2, 1, 1)
