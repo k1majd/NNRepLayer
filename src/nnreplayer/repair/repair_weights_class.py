@@ -486,7 +486,10 @@ class NNRepair:
         print("-> IA method")
         print(" ")
         ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
-            self.layer_to_repair, layer_values[0], max_weight_bound
+            self.layer_to_repair,
+            layer_values[0],
+            max_weight_bound,
+            self.repair_node_list,
         )
         # specify the precision of upper and lower bounds
         for l, ub in enumerate(ub_mat):

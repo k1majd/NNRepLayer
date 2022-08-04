@@ -2,6 +2,7 @@ from typing import List, Union
 import numpy.typing as npt
 import numpy as np
 from .dense import Dense
+from nnreplayer.utils import BoundStatTracker
 
 
 class MLP:
@@ -27,6 +28,9 @@ class MLP:
             prev = hidden
         self.layers.append(Dense(prev, n_out, relu=relu))
 
+        # TODO: bound stat tracker properties
+        self.bound_stat_tracker = BoundStatTracker(self.architecture)
+
     def __call__(self, input_data: npt.NDArray) -> npt.NDArray:
         """Perform Feed Forward pass using Input
 
@@ -42,11 +46,13 @@ class MLP:
             layer_values.append(input_data)
         return layer_values
 
+    # TODO: give bound nodes method
     def give_nodes_bounds(
         self,
         layer_to_repair: int,
         input_data: npt.NDArray,
         max_weight_bound: Union[int, float],
+        repair_node_list: List[int],
     ):
         """Returns the active status of the nodes from the layer_to_repair to the end.
         Args:
@@ -67,16 +73,6 @@ class MLP:
             (input_data.shape[0], self.architecture[layer_to_repair])
         )
         for node_next in range(self.architecture[layer_to_repair]):
-            # stat variables
-            max_ub = 0.0
-            min_ub = np.inf
-            min_lb = 0.0
-            max_lb = -np.inf
-            avg_ub = 0.0
-            avg_lb = 0.0
-            stably_active_nodes = 0
-            stably_inactive_nodes = 0
-            num_nodes = 0
             for s in range(input_data.shape[0]):
                 lb[s, node_next] = (
                     bias[layer_to_repair - 1][node_next] - max_weight_bound
@@ -109,57 +105,23 @@ class MLP:
                         0.0, layer_values[layer_to_repair - 1][s][node_prev]
                     )
                 # update stats
-                # if layer_to_repair != len(self.architecture) - 1:
-                num_nodes += 1
-                if lb[s, node_next] >= 0:
-                    stably_active_nodes += 1
-                if ub[s, node_next] <= 0:
-                    stably_inactive_nodes += 1
-                if ub[s, node_next] > max_ub:
-                    max_ub = ub[s, node_next]
-                if ub[s, node_next] < min_ub:
-                    min_ub = ub[s, node_next]
-                if lb[s, node_next] < min_lb:
-                    min_lb = lb[s, node_next]
-                if lb[s, node_next] > max_lb:
-                    max_lb = lb[s, node_next]
-                avg_ub += ub[s, node_next]
-                avg_lb += lb[s, node_next]
-            # print stats
-            avg_ub /= num_nodes
-            avg_lb /= num_nodes
-            print(f"IA: layer {layer_to_repair}, node {node_next} - stats")
-            print(f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}")
-            print(f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}")
-            if layer_to_repair != len(self.architecture) - 1:
-                print(
-                    f"stably active integer variables IA: {stably_active_nodes}/{num_nodes}"
+                self.bound_stat_tracker.update_stats(
+                    lb[s, node_next],
+                    ub[s, node_next],
+                    layer_to_repair,
+                    node_next,
                 )
-                print(
-                    f"stably inactive integer variables IA: {stably_inactive_nodes}/{num_nodes}"
-                )
-                print(" ")
+        # print stats
+        self.bound_stat_tracker.print_stats(layer_to_repair)
 
         ub_mat.append(ub)
         lb_mat.append(lb)
-        print(f"_______")
-        print(" ")
 
         # get the intervals for the subsequent layers
         for layer in range(layer_to_repair + 1, len(self.architecture)):
             ub = np.zeros((input_data.shape[0], self.architecture[layer]))
             lb = np.zeros((input_data.shape[0], self.architecture[layer]))
             for node_next in range(self.architecture[layer]):
-                # capture stats
-                max_ub = 0.0
-                min_ub = np.inf
-                min_lb = 0.0
-                max_lb = -np.inf
-                avg_ub = 0.0
-                avg_lb = 0.0
-                stably_active_nodes = 0
-                stably_inactive_nodes = 0
-                num_nodes = 0
                 for s in range(input_data.shape[0]):
                     lb[s, node_next] = (
                         bias[layer - 1][node_next] - max_weight_bound
@@ -191,121 +153,17 @@ class MLP:
                         ] * min(
                             w_temp, 0
                         )
-                    # Update stats
-                    # if layer != len(self.architecture) - 1:
-                    num_nodes += 1
-                    if lb[s, node_next] >= 0:
-                        stably_active_nodes += 1
-                    if ub[s, node_next] <= 0:
-                        stably_inactive_nodes += 1
-                    if ub[s, node_next] > max_ub:
-                        max_ub = ub[s, node_next]
-                    if ub[s, node_next] < min_ub:
-                        min_ub = ub[s, node_next]
-                    if lb[s, node_next] < min_lb:
-                        min_lb = lb[s, node_next]
-                    if lb[s, node_next] > max_lb:
-                        max_lb = lb[s, node_next]
-                    avg_ub += ub[s, node_next]
-                    avg_lb += lb[s, node_next]
-                # print stats
-                # if layer != len(self.architecture) - 1:
-                avg_ub /= num_nodes
-                avg_lb /= num_nodes
-                print(f"IA: layer {layer}, node {node_next} - stats")
-                print(f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}")
-                print(f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}")
-                if layer != len(self.architecture) - 1:
-                    print(
-                        f"stably active integer variables IA: {stably_active_nodes}/{num_nodes}"
+                    # update stats
+                    self.bound_stat_tracker.update_stats(
+                        lb[s, node_next],
+                        ub[s, node_next],
+                        layer,
+                        node_next,
                     )
-                    print(
-                        f"stably inactive integer variables IA: {stably_inactive_nodes}/{num_nodes}"
-                    )
-
-                print(" ")
-            print("_______")
+            # print stats
+            self.bound_stat_tracker.print_stats(layer)
             ub_mat.append(ub)
             lb_mat.append(lb)
-
-        return ub_mat, lb_mat
-
-    def give_mlp_nodes_bounds(
-        self,
-        from_layer: int,
-        input_data: npt.NDArray,
-        weigh_purturb: Union[int, float],
-    ):
-        """Returns the bounds of the nodes from the from_layer to the end.
-        Args:
-            from_layer: Target Layer
-            x_train: Training Data
-        """
-        self.give_nodes_active_status(from_layer, input_data, weigh_purturb)
-        pass
-
-    def give_nodes_active_status(
-        self,
-        from_layer: int,
-        input_data: npt.NDArray,
-        weigh_purturb: Union[int, float],
-    ):
-        """Returns the active status of the nodes from the from_layer to the end.
-        Args:
-            from_layer: Target Layer
-            input_data: input Data. Shape = (n_samples, n_features)
-        """
-        layer_values = self.__call__(input_data)
-        weights = self.get_mlp_weights()
-        bias = self.get_mlp_biases()
-
-        ub_mat = []
-        lb_mat = []
-        # get the intervals of the inputs of from_layer layer
-        ub_temp = []
-        lb_temp = []
-        for node in range(self.architecture[from_layer - 1]):
-            ub_temp.append(
-                layer_values[from_layer - 1][:, node].max(),
-            )
-            lb_temp.append(
-                layer_values[from_layer - 1][:, node].min(),
-            )
-        ub_mat.append(np.array(ub_temp))
-        lb_mat.append(np.array(lb_temp))
-
-        # get the intervals of the outputs of from_layer layer
-        for layer in range(from_layer, len(self.architecture)):
-            ub_temp = []
-            lb_temp = []
-            for node_next in range(self.architecture[layer]):
-                lb = bias[layer - 1][node_next] - weigh_purturb
-                ub = bias[layer - 1][node_next] + weigh_purturb
-                for node_prev in range(self.architecture[layer - 1]):
-                    if layer == from_layer:
-                        if weights[layer - 1][node_prev][node_next] >= 0:
-                            w_temp = (
-                                weights[layer - 1][node_prev][node_next]
-                                + weigh_purturb
-                            )
-                        else:
-                            w_temp = (
-                                weights[layer - 1][node_prev][node_next]
-                                - weigh_purturb
-                            )
-                    else:
-                        w_temp = weights[layer - 1][node_prev][node_next]
-
-                    lb += lb_mat[layer - from_layer][node_prev] * max(
-                        w_temp, 0
-                    ) + ub_mat[layer - from_layer][node_prev] * min(w_temp, 0)
-                    ub += ub_mat[layer - from_layer][node_prev] * max(
-                        w_temp, 0
-                    ) + lb_mat[layer - from_layer][node_prev] * min(w_temp, 0)
-                lb_temp.append(lb)
-                ub_temp.append(ub)
-            ub_mat.append(np.array(ub_temp))
-            lb_mat.append(np.array(lb_temp))
 
         return ub_mat, lb_mat
 

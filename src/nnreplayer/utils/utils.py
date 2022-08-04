@@ -268,6 +268,81 @@ def give_mse_error(data1: npt.NDArray, data2: npt.NDArray):
     return _squared_sum / row_1
 
 
+# TODO: Add the below bound stat tracker
+class BoundStatTracker:
+    def __init__(self, architechture: List[int]):
+        self.architechture = architechture
+        self.bound_stats = {}
+        for i in range(len(architechture)):
+            self.bound_stats[i] = {}
+            self.bound_stats[i]["max_ub"] = np.zeros(architechture[i])
+            self.bound_stats[i]["min_lb"] = np.zeros(architechture[i])
+            self.bound_stats[i]["max_lb"] = -np.inf * np.ones(architechture[i])
+            self.bound_stats[i]["min_ub"] = np.inf * np.ones(architechture[i])
+            self.bound_stats[i]["avg_ub"] = np.zeros(architechture[i])
+            self.bound_stats[i]["avg_lb"] = np.zeros(architechture[i])
+            self.bound_stats[i]["stably_active_nodes"] = np.zeros(
+                architechture[i]
+            )
+            self.bound_stats[i]["stably_inactive_nodes"] = np.zeros(
+                architechture[i]
+            )
+            self.bound_stats[i]["node_count"] = np.zeros(architechture[i])
+
+    def update_stats(self, lb, ub, layer_num, node_num):
+        self.bound_stats[layer_num]["max_ub"][node_num] = max(
+            self.bound_stats[layer_num]["max_ub"][node_num], ub
+        )
+        self.bound_stats[layer_num]["min_lb"][node_num] = min(
+            self.bound_stats[layer_num]["min_lb"][node_num], lb
+        )
+        self.bound_stats[layer_num]["max_lb"][node_num] = max(
+            self.bound_stats[layer_num]["max_lb"][node_num], lb
+        )
+        self.bound_stats[layer_num]["min_ub"][node_num] = min(
+            self.bound_stats[layer_num]["min_ub"][node_num], ub
+        )
+        if self.bound_stats[layer_num]["node_count"][node_num] != 0:
+            self.bound_stats[layer_num]["avg_ub"][node_num] = (
+                self.bound_stats[layer_num]["avg_ub"][node_num]
+                * self.bound_stats[layer_num]["node_count"][node_num]
+                + ub
+            ) / (self.bound_stats[layer_num]["node_count"][node_num] + 1)
+            self.bound_stats[layer_num]["avg_lb"][node_num] = (
+                self.bound_stats[layer_num]["avg_lb"][node_num]
+                * self.bound_stats[layer_num]["node_count"][node_num]
+                + lb
+            ) / (self.bound_stats[layer_num]["node_count"][node_num] + 1)
+        else:
+            self.bound_stats[layer_num]["avg_ub"][node_num] = ub
+            self.bound_stats[layer_num]["avg_lb"][node_num] = lb
+        self.bound_stats[layer_num]["node_count"][node_num] += 1
+        if lb >= 0:
+            self.bound_stats[layer_num]["stably_active_nodes"][node_num] += 1
+        if ub <= 0:
+            self.bound_stats[layer_num]["stably_inactive_nodes"][node_num] += 1
+
+    def print_stats(self, layer_num):
+        for node in range(self.architechture[layer_num]):
+            print(f"Layer {layer_num}, Node {node}")
+            # print stats for each node per line
+            print(f"    Max ub: {self.bound_stats[layer_num]['max_ub'][node]}")
+            print(f"    Min lb: {self.bound_stats[layer_num]['min_lb'][node]}")
+            print(f"    Max lb: {self.bound_stats[layer_num]['max_lb'][node]}")
+            print(f"    Min ub: {self.bound_stats[layer_num]['min_ub'][node]}")
+            print(f"    Avg ub: {self.bound_stats[layer_num]['avg_ub'][node]}")
+            print(f"    Avg lb: {self.bound_stats[layer_num]['avg_lb'][node]}")
+            if layer_num != len(self.architechture) - 1:
+                print(
+                    f"    Stably active nodes: {self.bound_stats[layer_num]['stably_active_nodes'][node]}/{self.bound_stats[layer_num]['node_count'][node]}"
+                )
+                print(
+                    f"    Stably inactive nodes: {self.bound_stats[layer_num]['stably_inactive_nodes'][node]}/{self.bound_stats[layer_num]['node_count'][node]}"
+                )
+            print(f"_______")
+            print(" ")
+
+
 ###############################################################################
 # TODO:
 def neural_return_weights_pert(params, architechture, layer):
