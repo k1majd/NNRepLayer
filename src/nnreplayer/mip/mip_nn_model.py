@@ -23,7 +23,9 @@ class MIPNNModel:
         # bias_activations: npt.NDArray,
         # max_weight_bound: Union[int, float] = 10,
         ####################################
-        param_bounds: tuple = (-1, 1),
+        # param_bounds: tuple = (-1, 1),
+        max_weight_bound: Union[int, float] = 1.0,
+        param_precision: int = 6,
     ):
         """_summary_
 
@@ -58,7 +60,7 @@ class MIPNNModel:
             f"Repair of {len(repair_node_list)} nodes out of {architecture[layer_to_repair]} nodes is being activated."
         )
         print(f"Activated nodes: {repair_node_list}")
-        num_layers_ahead = len(architecture) - self.model.nlayers - 1
+        # num_layers_ahead = len(architecture) - self.model.nlayers - 1
         # print("UHidden = {}".format(uhidden))
         for iterate, u in enumerate(uhidden):
             self.layers.append(
@@ -70,15 +72,16 @@ class MIPNNModel:
                     weights[layer_to_repair - 1 + iterate],
                     bias[layer_to_repair - 1 + iterate],
                     # TODO: add these parameters
-                    num_layers_ahead,
+                    # num_layers_ahead,
                     repair_node_list,
                     # bias_activations,
                     # max_weight_bound,
                     w_error_norm,
-                    param_bounds,
+                    max_weight_bound,
+                    param_precision,
                 )
             )
-            num_layers_ahead = len(architecture) - self.model.nlayers - 1
+            # num_layers_ahead = len(architecture) - self.model.nlayers - 1
             prev = u
         self.layers.append(
             MIPLayer(
@@ -89,12 +92,13 @@ class MIPNNModel:
                 weights[-1],
                 bias[-1],
                 # TODO: add these parameters
-                num_layers_ahead,
+                # num_layers_ahead,
                 repair_node_list,
                 # bias_activations,
                 # max_weight_bound,
                 w_error_norm,
-                param_bounds,
+                max_weight_bound,
+                param_precision,
             )
         )
         ####################################
@@ -155,7 +159,7 @@ class MIPNNModel:
                 ##############################
                 relu=True,
                 max_weight_bound=max_weight_bound,
-                output_bounds=output_bounds,
+                # output_bounds=output_bounds,
             )
 
         layer = self.layers[-1]
@@ -180,6 +184,6 @@ class MIPNNModel:
             ##############################
             relu=relu,
             max_weight_bound=max_weight_bound,
-            output_bounds=output_bounds,
+            # output_bounds=output_bounds,
         )
         return y

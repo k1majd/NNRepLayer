@@ -317,11 +317,11 @@ class NNRepair:
             if c in self.repair_node_list:
                 new_bias[c] = getattr(
                     self.opt_model, f"b{self.layer_to_repair}"
-                ).get_values()[self.repair_node_list.index(c)]
+                ).get_values()[c]
                 for r in range(self.architecture[self.layer_to_repair - 1]):
                     new_weight[r, c] = getattr(
                         self.opt_model, f"w{self.layer_to_repair}"
-                    ).get_values()[(r, self.repair_node_list.index(c))]
+                    ).get_values()[(r, c)]
             else:
                 new_bias[c] = self.__target_original_bias[c]
                 for r in range(self.architecture[self.layer_to_repair - 1]):
@@ -428,10 +428,11 @@ class NNRepair:
             ##############################
             # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
             self.repair_node_list,
-            w_error_norm=w_error_norm,
+            w_error_norm,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
-            param_bounds=param_bounds,
+            max_weight_bound,
+            self.param_precision,
             ##############################
         )
         y_ = mip_model_layer(
@@ -448,7 +449,7 @@ class NNRepair:
             max_weight_bound=max_weight_bound,
             ##############################
             # TODO: param_bounds and output_bounds can be specified by the user
-            output_bounds=output_bounds,
+            # output_bounds=output_bounds,
             ##############################
         )
         self.output_name = y_.name

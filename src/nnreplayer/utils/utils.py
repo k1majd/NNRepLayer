@@ -290,18 +290,31 @@ class BoundStatTracker:
             self.bound_stats[i]["node_count"] = np.zeros(architechture[i])
 
     def update_stats(self, lb, ub, layer_num, node_num):
-        self.bound_stats[layer_num]["max_ub"][node_num] = max(
-            self.bound_stats[layer_num]["max_ub"][node_num], ub
-        )
-        self.bound_stats[layer_num]["min_lb"][node_num] = min(
-            self.bound_stats[layer_num]["min_lb"][node_num], lb
-        )
-        self.bound_stats[layer_num]["max_lb"][node_num] = max(
-            self.bound_stats[layer_num]["max_lb"][node_num], lb
-        )
-        self.bound_stats[layer_num]["min_ub"][node_num] = min(
-            self.bound_stats[layer_num]["min_ub"][node_num], ub
-        )
+        if self.bound_stats[layer_num]["node_count"][node_num] != 0:
+            self.bound_stats[layer_num]["max_ub"][node_num] = max(
+                self.bound_stats[layer_num]["max_ub"][node_num], ub
+            )
+        else:
+            self.bound_stats[layer_num]["max_ub"][node_num] = ub
+        if self.bound_stats[layer_num]["node_count"][node_num] != 0:
+            self.bound_stats[layer_num]["min_lb"][node_num] = min(
+                self.bound_stats[layer_num]["min_lb"][node_num], lb
+            )
+        else:
+            self.bound_stats[layer_num]["min_lb"][node_num] = lb
+        if self.bound_stats[layer_num]["node_count"][node_num] != 0:
+            self.bound_stats[layer_num]["max_lb"][node_num] = max(
+                self.bound_stats[layer_num]["max_lb"][node_num], lb
+            )
+        else:
+            self.bound_stats[layer_num]["max_lb"][node_num] = lb
+        if self.bound_stats[layer_num]["node_count"][node_num] != 0:
+            self.bound_stats[layer_num]["min_ub"][node_num] = min(
+                self.bound_stats[layer_num]["min_ub"][node_num], ub
+            )
+        else:
+            self.bound_stats[layer_num]["min_ub"][node_num] = ub
+
         if self.bound_stats[layer_num]["node_count"][node_num] != 0:
             self.bound_stats[layer_num]["avg_ub"][node_num] = (
                 self.bound_stats[layer_num]["avg_ub"][node_num]
@@ -324,23 +337,36 @@ class BoundStatTracker:
 
     def print_stats(self, layer_num):
         for node in range(self.architechture[layer_num]):
-            print(f"Layer {layer_num}, Node {node}")
-            # print stats for each node per line
-            print(f"    Max ub: {self.bound_stats[layer_num]['max_ub'][node]}")
-            print(f"    Min lb: {self.bound_stats[layer_num]['min_lb'][node]}")
-            print(f"    Max lb: {self.bound_stats[layer_num]['max_lb'][node]}")
-            print(f"    Min ub: {self.bound_stats[layer_num]['min_ub'][node]}")
-            print(f"    Avg ub: {self.bound_stats[layer_num]['avg_ub'][node]}")
-            print(f"    Avg lb: {self.bound_stats[layer_num]['avg_lb'][node]}")
-            if layer_num != len(self.architechture) - 1:
+            if self.bound_stats[layer_num]["node_count"][node] != 0:
+                print(f"Layer {layer_num}, Node {node}")
+                # print stats for each node per line
                 print(
-                    f"    Stably active nodes: {self.bound_stats[layer_num]['stably_active_nodes'][node]}/{self.bound_stats[layer_num]['node_count'][node]}"
+                    f"    Max ub: {self.bound_stats[layer_num]['max_ub'][node]}"
                 )
                 print(
-                    f"    Stably inactive nodes: {self.bound_stats[layer_num]['stably_inactive_nodes'][node]}/{self.bound_stats[layer_num]['node_count'][node]}"
+                    f"    Min lb: {self.bound_stats[layer_num]['min_lb'][node]}"
                 )
-            print(f"_______")
-            print(" ")
+                print(
+                    f"    Max lb: {self.bound_stats[layer_num]['max_lb'][node]}"
+                )
+                print(
+                    f"    Min ub: {self.bound_stats[layer_num]['min_ub'][node]}"
+                )
+                print(
+                    f"    Avg ub: {self.bound_stats[layer_num]['avg_ub'][node]}"
+                )
+                print(
+                    f"    Avg lb: {self.bound_stats[layer_num]['avg_lb'][node]}"
+                )
+                if layer_num != len(self.architechture) - 1:
+                    print(
+                        f"    Stably active nodes: {self.bound_stats[layer_num]['stably_active_nodes'][node]}/{self.bound_stats[layer_num]['node_count'][node]}"
+                    )
+                    print(
+                        f"    Stably inactive nodes: {self.bound_stats[layer_num]['stably_inactive_nodes'][node]}/{self.bound_stats[layer_num]['node_count'][node]}"
+                    )
+                print(f"_______")
+                print(" ")
 
 
 ###############################################################################

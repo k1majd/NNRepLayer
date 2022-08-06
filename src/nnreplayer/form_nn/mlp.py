@@ -74,43 +74,57 @@ class MLP:
         )
         for node_next in range(self.architecture[layer_to_repair]):
             for s in range(input_data.shape[0]):
-                lb[s, node_next] = (
-                    bias[layer_to_repair - 1][node_next] - max_weight_bound
-                )
-                ub[s, node_next] = (
-                    bias[layer_to_repair - 1][node_next] + max_weight_bound
-                )
-                for node_prev in range(self.architecture[layer_to_repair - 1]):
-                    lb[s, node_next] += (
-                        weights[layer_to_repair - 1][node_prev][node_next]
-                        - max_weight_bound
-                    ) * max(
-                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
-                    ) + (
-                        weights[layer_to_repair - 1][node_prev][node_next]
-                        + max_weight_bound
-                    ) * min(
-                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
+                if node_next in repair_node_list:
+                    lb[s, node_next] = (
+                        bias[layer_to_repair - 1][node_next] - max_weight_bound
                     )
+                    ub[s, node_next] = (
+                        bias[layer_to_repair - 1][node_next] + max_weight_bound
+                    )
+                    for node_prev in range(
+                        self.architecture[layer_to_repair - 1]
+                    ):
+                        lb[s, node_next] += (
+                            weights[layer_to_repair - 1][node_prev][node_next]
+                            - max_weight_bound
+                        ) * max(
+                            0.0,
+                            layer_values[layer_to_repair - 1][s][node_prev],
+                        ) + (
+                            weights[layer_to_repair - 1][node_prev][node_next]
+                            + max_weight_bound
+                        ) * min(
+                            0.0,
+                            layer_values[layer_to_repair - 1][s][node_prev],
+                        )
 
-                    ub[s, node_next] += (
-                        weights[layer_to_repair - 1][node_prev][node_next]
-                        + max_weight_bound
-                    ) * max(
-                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
-                    ) + (
-                        weights[layer_to_repair - 1][node_prev][node_next]
-                        - max_weight_bound
-                    ) * min(
-                        0.0, layer_values[layer_to_repair - 1][s][node_prev]
+                        ub[s, node_next] += (
+                            weights[layer_to_repair - 1][node_prev][node_next]
+                            + max_weight_bound
+                        ) * max(
+                            0.0,
+                            layer_values[layer_to_repair - 1][s][node_prev],
+                        ) + (
+                            weights[layer_to_repair - 1][node_prev][node_next]
+                            - max_weight_bound
+                        ) * min(
+                            0.0,
+                            layer_values[layer_to_repair - 1][s][node_prev],
+                        )
+                    # update stats
+                    self.bound_stat_tracker.update_stats(
+                        lb[s, node_next],
+                        ub[s, node_next],
+                        layer_to_repair,
+                        node_next,
                     )
-                # update stats
-                self.bound_stat_tracker.update_stats(
-                    lb[s, node_next],
-                    ub[s, node_next],
-                    layer_to_repair,
-                    node_next,
-                )
+                else:
+                    lb[s, node_next] = layer_values[layer_to_repair][s][
+                        node_next
+                    ]
+                    ub[s, node_next] = layer_values[layer_to_repair][s][
+                        node_next
+                    ]
         # print stats
         self.bound_stat_tracker.print_stats(layer_to_repair)
 

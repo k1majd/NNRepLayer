@@ -21,14 +21,15 @@ class MIPLayer:
         bias: npt.NDArray,
         ####################################
         # TODO: add these parameters
-        num_layers_ahead: int,
+        # num_layers_ahead: int,
         repair_node_list: List[int],
         w_error_norm: int = 0,
         # weight_activations: npt.NDArray,
         # bias_activations: npt.NDArray,
         # max_weight_bound: Union[int, float],
         ####################################
-        param_bounds: tuple = (-1, 1),
+        max_weight_bound: Union[int, float] = 1.0,
+        param_precision: int = 6,
     ) -> None:
         """Initialize the MIPLayer class.
            Specify the weight and bias terms of the given layer.
@@ -58,54 +59,63 @@ class MIPLayer:
         # detect if this layer is a repair layer and if so,
         # which nodes are repaired. If this layer is not a repair layer,
         # then its weight and bias terms are fixed to the original values.
-        if model.nlayers == layer_to_repair and num_layers_ahead != 0:
+        if model.nlayers == layer_to_repair:
+
+            def w_bound(model, i, j):
+                return (
+                    np.round(
+                        weights[i, j] - max_weight_bound,
+                        param_precision,
+                    ),
+                    np.round(
+                        weights[i, j] + max_weight_bound,
+                        param_precision,
+                    ),
+                )
+
+            def w_initialize(model, i, j):
+                return weights[i, j]
+
+            def b_bound(model, j):
+                return (
+                    np.round(
+                        bias[j] - max_weight_bound,
+                        param_precision,
+                    ),
+                    np.round(
+                        bias[j] + max_weight_bound,
+                        param_precision,
+                    ),
+                )
+
+            def b_initialize(model, j):
+                return bias[j]
+
             w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
             setattr(
                 model,
                 w_l,
                 pyo.Var(
                     range(uin),
-                    range(len(repair_node_list)),
+                    repair_node_list,
                     domain=pyo.Reals,
-                    bounds=param_bounds,
+                    bounds=w_bound,
+                    initialize=w_initialize,
                 ),
             )
             setattr(
                 model,
                 b_l,
                 pyo.Var(
-                    range(len(repair_node_list)),
+                    repair_node_list,
                     domain=pyo.Reals,
-                    bounds=param_bounds,
+                    bounds=b_bound,
+                    initialize=b_initialize,
                 ),
             )
             self.w = getattr(model, w_l)
             self.b = getattr(model, b_l)
 
-            self.w_orig = weights
-            self.b_orig = bias
-        # ensure that all nodes of last layer are repaired
-        # even if this layer is the target repair layer
-        elif model.nlayers == layer_to_repair and num_layers_ahead == 0:
-            w_l, b_l = "w" + str(model.nlayers), "b" + str(model.nlayers)
-            setattr(
-                model,
-                w_l,
-                pyo.Var(
-                    range(uin),
-                    range(uout),
-                    domain=pyo.Reals,
-                    bounds=param_bounds,
-                ),
-            )
-            setattr(
-                model,
-                b_l,
-                pyo.Var(range(uout), domain=pyo.Reals, bounds=param_bounds),
-            )
-
-            self.w = getattr(model, w_l)
-            self.b = getattr(model, b_l)
             self.w_orig = weights
             self.b_orig = bias
         else:
@@ -130,7 +140,7 @@ class MIPLayer:
         ##############################
         relu: bool = False,
         max_weight_bound: Union[int, float] = 10,
-        output_bounds: tuple = (-1e1, 1e1),
+        # output_bounds: tuple = (-1e1, 1e1),
     ):
         """_summary_
 
@@ -156,9 +166,7 @@ class MIPLayer:
             ##############################
             # TODO: (12_7_2022) input the upper and lower bounds of nodes for
             # each sample
-            x_next = self._relu_constraints(
-                x, shape, ub, lb, max_weight_bound, output_bounds
-            )
+            x_next = self._relu_constraints(x, shape, ub, lb)
             ##############################
         else:
             # define linear layer constraints
@@ -172,8 +180,6 @@ class MIPLayer:
                 output_constraint_list,
                 ub,
                 lb,
-                max_weight_bound,
-                output_bounds,
             )
             ##############################
 
@@ -197,8 +203,8 @@ class MIPLayer:
         ub: npt.NDArray,
         lb: npt.NDArray,
         ##############################
-        max_weight_bound: Union[int, float] = 1,
-        output_bounds: tuple = (-1e1, 1e1),
+        # max_weight_bound: Union[int, float] = 1,
+        # output_bounds: tuple = (-1e1, 1e1),
     ):
         """_summary_
 
@@ -224,45 +230,30 @@ class MIPLayer:
         # TODO: Edit this part
         ## check if this layer is the repair layer
         if self.layer_num == self.layer_to_repair:
-            num_next_repair_nodes = len(self.repair_node_list)
+            next_node_list = self.repair_node_list
         else:
-            num_next_repair_nodes = self.uout
+            next_node_list = list(range(self.uout))
 
         # define the variables of the next nodes
+        def x_next_bound(model, i, j):
+            return (0.0, ub[i, j])
+
         setattr(
             self.model,
             x_l,
             pyo.Var(
                 range(m),
-                range(num_next_repair_nodes),
+                next_node_list,
                 domain=pyo.NonNegativeReals,
-                bounds=output_bounds,
+                bounds=x_next_bound,
             ),
         )
-        # setattr(
-        #     self.model,
-        #     s_l,
-        #     pyo.Var(
-        #         range(m),
-        #         range(num_next_repair_nodes),
-        #         domain=pyo.NonNegativeReals,
-        #         bounds=output_bounds,
-        #     ),
-        # )
+
         setattr(
             self.model,
             theta_l,
-            pyo.Var(range(m), range(num_next_repair_nodes), domain=pyo.Binary),
+            pyo.Var(range(m), next_node_list, domain=pyo.Binary),
         )
-
-        # def constraint_inequality_1(model, i, j):
-        #     product = self.b[j]
-        #     for k in range(self.uin):
-        #         product += x[i][k] * self.w[k, j]
-        #     return (
-        #         product
-        #         == getattr(model, x_l)[i, j] - getattr(model, s_l)[i, j]
-        #     )
 
         # Big-M method constraints
         # inequality x_l >= w^Tx+b
@@ -271,9 +262,9 @@ class MIPLayer:
             for k in range(self.uin):
                 product += x[i][k] * self.w[k, j]
             # return constraint based on the activation status of the node
-            if lb[i, self.repair_node_list[j]] >= 0:
+            if lb[i, j] >= 0:
                 return product == getattr(model, x_l)[i, j]
-            elif ub[i, self.repair_node_list[j]] <= 0:
+            elif ub[i, j] <= 0:
                 return getattr(model, x_l)[i, j] == 0
             else:
                 return product <= getattr(model, x_l)[i, j]
@@ -283,7 +274,7 @@ class MIPLayer:
             "constraint_inequality_1_lay" + str(self.layer_num_next),
             pyo.Constraint(
                 range(m),
-                range(num_next_repair_nodes),
+                next_node_list,
                 rule=constraint_1,
             ),
         )
@@ -294,15 +285,13 @@ class MIPLayer:
             for k in range(self.uin):
                 product += x[i][k] * self.w[k, j]
             # return constraint based on the activation status of the node
-            if lb[i, self.repair_node_list[j]] >= 0:
+            if lb[i, j] >= 0:
                 return pyo.Constraint.Skip
-            elif ub[i, self.repair_node_list[j]] <= 0:
+            elif ub[i, j] <= 0:
                 return pyo.Constraint.Skip
             else:
                 return (
-                    product
-                    - lb[i, self.repair_node_list[j]]
-                    * (1 - getattr(model, theta_l)[i, j])
+                    product - lb[i, j] * (1 - getattr(model, theta_l)[i, j])
                     >= getattr(model, x_l)[i, j]
                 )
 
@@ -311,7 +300,7 @@ class MIPLayer:
             "constraint_inequality_2_lay" + str(self.layer_num_next),
             pyo.Constraint(
                 range(m),
-                range(num_next_repair_nodes),
+                next_node_list,
                 rule=constraint_2,
             ),
         )
@@ -322,14 +311,13 @@ class MIPLayer:
             for k in range(self.uin):
                 product += x[i][k] * self.w[k, j]
             # return constraint based on the activation status of the node
-            if lb[i, self.repair_node_list[j]] >= 0:
+            if lb[i, j] >= 0:
                 return pyo.Constraint.Skip
-            elif ub[i, self.repair_node_list[j]] <= 0:
+            elif ub[i, j] <= 0:
                 return pyo.Constraint.Skip
             else:
                 return (
-                    ub[i, self.repair_node_list[j]]
-                    * getattr(model, theta_l)[i, j]
+                    ub[i, j] * getattr(model, theta_l)[i, j]
                     >= getattr(model, x_l)[i, j]
                 )
 
@@ -338,31 +326,10 @@ class MIPLayer:
             "constraint_inequality_3_lay" + str(self.layer_num_next),
             pyo.Constraint(
                 range(m),
-                range(num_next_repair_nodes),
+                next_node_list,
                 rule=constraint_3,
             ),
         )
-
-        # # add the integer constraints related to the target repair nodes
-        # def disjuncts(model, i, j):
-        #     return [
-        #         (
-        #             getattr(model, theta_l)[i, j] == 0,
-        #             getattr(model, x_l)[i, j] <= 0,
-        #         ),
-        #         (
-        #             getattr(model, theta_l)[i, j] == 1,
-        #             getattr(model, s_l)[i, j] <= 0,
-        #         ),
-        #     ]
-
-        # setattr(
-        #     self.model,
-        #     "disjunction" + str(self.layer_num_next),
-        #     pyg.Disjunction(
-        #         range(m), range(num_next_repair_nodes), rule=disjuncts
-        #     ),
-        # )
 
         # collect the values of next layer
         x_next = []  # values of next layer
@@ -371,11 +338,7 @@ class MIPLayer:
                 x_temp = []
                 for c in range(self.uout):
                     if c in self.repair_node_list:
-                        x_temp.append(
-                            getattr(self.model, x_l)[
-                                s, self.repair_node_list.index(c)
-                            ]
-                        )
+                        x_temp.append(getattr(self.model, x_l)[s, c])
                     else:
                         x_val_temp = self.b_orig[c]
                         for k in range(self.uin):
@@ -406,8 +369,8 @@ class MIPLayer:
         ub: npt.NDArray,
         lb: npt.NDArray,
         ##############################
-        max_weight_bound: Union[int, float] = 10,
-        output_bounds: tuple = (-1e1, 1e1),
+        # max_weight_bound: Union[int, float] = 10,
+        # output_bounds: tuple = (-1e1, 1e1),
     ):
         """_summary_
 
@@ -473,7 +436,7 @@ class MIPLayer:
             dw_l,
             pyo.Var(
                 range(self.uin),
-                range(len(self.repair_node_list)),
+                self.repair_node_list,
                 domain=pyo.NonNegativeReals,
                 bounds=(0, max_weight_bound),
             ),
@@ -481,9 +444,8 @@ class MIPLayer:
 
         def constraint_upper_bound_inequiality_w(model, i, j):
             return (
-                getattr(model, w_l)[i, self.repair_node_list.index(j)]
-                - self.w_orig[i, j]
-                <= getattr(model, dw_l)[i, self.repair_node_list.index(j)]
+                getattr(model, w_l)[i, j] - self.w_orig[i, j]
+                <= getattr(model, dw_l)[i, j]
             )
 
         setattr(
@@ -499,9 +461,8 @@ class MIPLayer:
 
         def constraint_lower_bound_inequiality_w(model, i, j):
             return (
-                getattr(model, w_l)[i, self.repair_node_list.index(j)]
-                - self.w_orig[i, j]
-                >= -getattr(model, dw_l)[i, self.repair_node_list.index(j)]
+                getattr(model, w_l)[i, j] - self.w_orig[i, j]
+                >= -getattr(model, dw_l)[i, j]
             )
 
         setattr(
@@ -520,7 +481,7 @@ class MIPLayer:
             self.model,
             db_l,
             pyo.Var(
-                range(len(self.repair_node_list)),
+                self.repair_node_list,
                 domain=pyo.NonNegativeReals,
                 bounds=(0, max_weight_bound),
             ),
@@ -528,9 +489,8 @@ class MIPLayer:
 
         def constraint_upper_bound_inequiality_b(model, j):
             return (
-                getattr(model, b_l)[self.repair_node_list.index(j)]
-                - self.b_orig[j]
-                <= getattr(model, db_l)[self.repair_node_list.index(j)]
+                getattr(model, b_l)[j] - self.b_orig[j]
+                <= getattr(model, db_l)[j]
             )
 
         setattr(
@@ -545,9 +505,8 @@ class MIPLayer:
 
         def constraint_lower_bound_inequiality_b(model, j):
             return (
-                getattr(model, b_l)[self.repair_node_list.index(j)]
-                - self.b_orig[j]
-                >= -getattr(model, db_l)[self.repair_node_list.index(j)]
+                getattr(model, b_l)[j] - self.b_orig[j]
+                >= -getattr(model, db_l)[j]
             )
 
         setattr(
@@ -559,19 +518,6 @@ class MIPLayer:
                 rule=constraint_lower_bound_inequiality_b,
             ),
         )
-
-        # def constraint_sum_dw_db_inequiality(model):
-        #     return (
-        #         sum(getattr(model, dw_l)[:, :]) + sum(getattr(model, db_l)[:])
-        #         <= max_weight_bound
-        #     )
-
-        # setattr(
-        #     self.model,
-        #     "sum_dw_db_inequiality_l1_constraint_lay"
-        #     + str(self.layer_num_next),
-        #     pyo.Constraint(rule=constraint_sum_dw_db_inequiality),
-        # )
 
     def _weight_bound_constraint_l1(self, max_weight_bound):
         w_l = "w" + str(self.layer_num)
@@ -793,24 +739,24 @@ class MIPLayer:
 
         # add the L-inf bounding constraints for the weights
         def constraint_bound_w_upper(model, i, j):
-            return getattr(model, w_l)[
-                i, self.repair_node_list.index(j)
-            ] - self.w_orig[i, j] <= getattr(model, dw_l)
+            return getattr(model, w_l)[i, j] - self.w_orig[i, j] <= getattr(
+                model, dw_l
+            )
 
         def constraint_bound_w_lower(model, i, j):
-            return getattr(model, w_l)[
-                i, self.repair_node_list.index(j)
-            ] - self.w_orig[i, j] >= -getattr(model, dw_l)
+            return getattr(model, w_l)[i, j] - self.w_orig[i, j] >= -getattr(
+                model, dw_l
+            )
 
         def constraint_bound_b_upper(model, j):
-            return getattr(model, b_l)[
-                self.repair_node_list.index(j)
-            ] - self.b_orig[j] <= getattr(model, dw_l)
+            return getattr(model, b_l)[j] - self.b_orig[j] <= getattr(
+                model, dw_l
+            )
 
         def constraint_bound_b_lower(model, j):
-            return getattr(model, b_l)[
-                self.repair_node_list.index(j)
-            ] - self.b_orig[j] >= -getattr(model, dw_l)
+            return getattr(model, b_l)[j] - self.b_orig[j] >= -getattr(
+                model, dw_l
+            )
 
         setattr(
             self.model,
