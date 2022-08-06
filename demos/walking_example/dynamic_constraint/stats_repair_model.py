@@ -343,18 +343,18 @@ if __name__ == "__main__":
     # x_train = test_obs[rnd_pts]
     # y_train = test_ctrls[rnd_pts]
     # load the original model
-    num_nodes = 256
+    num_nodes = 64
     model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
         + f"/models/model_orig_{num_nodes}"
     )
 
     # load the repaired dat set
-    load_str = "_7_26_2022_12_2_40"
+    load_str = "_8_4_2022_2_53_27"
     repaired_layer = 2
     model_repaired = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{load_str}"
+        + f"/repair_net_relaxed/models/model_layer{load_str}_relaxed"
     )
     x_repair, y_repair = load_rep_data(load_str)
 

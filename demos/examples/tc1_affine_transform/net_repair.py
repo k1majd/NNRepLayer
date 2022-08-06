@@ -160,7 +160,7 @@ def main(
     constraint_inside = ConstraintsClass("inside", A, b)
     output_constraint_list = [constraint_inside]
 
-    max_weight_bound = 0.25
+    max_weight_bound = 0.5
     cost_weights = np.array([100.0, 1.0])
     options = Options(
         "gdp.bigm",
@@ -186,15 +186,15 @@ def main(
     repair_obj.compile(
         x_train,
         y_train,
-        1,
+        2,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         data_precision=6,
         param_precision=6,
-        repair_node_list=[],
-        w_error_norm=1,
-        bound_tightening_method="lp",
+        repair_node_list=[0, 2],
+        w_error_norm=0,
+        bound_tightening_method="ia",
         # output_bounds=(-100.0, 100.0),
     )
     repair_obj.summary(direc=path_write + "/summery")
@@ -206,9 +206,9 @@ def main(
         metrics=["accuracy"],
     )
     print("weight error")
-    print(out_model.get_weights()[2] - model_orig.get_weights()[2])
+    print(out_model.get_weights()[0] - model_orig.get_weights()[0])
     print("bias error")
-    print(out_model.get_weights()[3] - model_orig.get_weights()[3])
+    print(out_model.get_weights()[1] - model_orig.get_weights()[1])
     if visual == 1:
         print("----------------------")
         print("Visualization")

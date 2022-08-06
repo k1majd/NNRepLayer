@@ -101,9 +101,11 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
     )
     costs = []
     all_vec = []
+    all_idx = []
     for L in range(num_non_sparse, num_non_sparse + 1):
         for subset in itertools.combinations(column_list, L):
             column_idx = list(subset)
+            all_idx.append(column_idx)
             sparse_idx = get_vec_idx_sparse(arch, layer, column_idx)
             # sparse_idx = [entry_list[i] for i in idx_list]
             H_reduced = H_dist[sparse_idx][:, sparse_idx]
@@ -112,25 +114,27 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
             #                 H_reduced = nearestPD(H_reduced)
 
             ei, vi = np.linalg.eig(H_reduced)
-            vec_reduced = vi[:, 0]
-            vec = np.zeros(H_dist.shape[0])
-            idx = 0
-            for el in sparse_idx:
-                vec[el] = vec_reduced[idx]
-                idx += 1
-            cost = np.matmul(vec, np.matmul(H_dist, vec))
+            # vec_reduced = vi[:, 0]
+            vec = np.zeros((H_dist.shape[0], vi.shape[0]))
+
+            for c in range(vi.shape[1]):
+                idx = 0
+                for el in sparse_idx:
+                    vec[el, c] = vi[idx, c]
+                    idx += 1
+            cost = np.matmul(vec[:, 0], np.matmul(H_dist, vec[:, 0]))
             costs.append(cost)
             all_vec.append(vec)
             print(
                 f"iteration: {iteration}/{all_iters}, eval nodes: {column_idx}, cost: {cost}"
             )
             if cost >= max_cost:
-                selected_vec = vec
+                selected_vec = vec[:, 0]
                 max_cost = cost
                 selected_nodes = column_idx
             iteration += 1
     print(f"max cost: {max_cost}, selected nodes: {selected_nodes}")
-    return selected_nodes, selected_vec, costs, all_vec
+    return selected_nodes, selected_vec, costs, all_vec, all_idx
 
 
 def neural_net_predict(params, inputs, architechture):
@@ -169,6 +173,7 @@ def get_sensitive_nodes(
         eigenvector,
         cost_vec,
         all_vec,
+        all_idx,
     ) = sparse_eigenvector_reduction(
         hessian_loss, architecture, layer_to_repair - 1, num_sparse_nodes
     )
@@ -180,7 +185,7 @@ def get_sensitive_nodes(
     #             all_vec[id], architecture, layer_to_repair - 1
     #         )
     #     )
-    return selected_nodes, cost_vec, all_vec
+    return selected_nodes, cost_vec, all_vec, all_idx
 
 
 def main(given_comp):
@@ -297,8 +302,8 @@ def main(given_comp):
     init_params = npa.array(ws)
 
     # get sensitive nodes
-    repair_indices, cost_vec, all_vec = get_sensitive_nodes(
-        objective2, init_params, architecture, 1
+    repair_indices, cost_vec, all_vec, all_idx = get_sensitive_nodes(
+        objective3, init_params, architecture, 2
     )
     # repair_indices, cost_vec, all_vec = get_sensitive_nodes(
     #     objective2, init_params, architecture, 1
@@ -306,10 +311,14 @@ def main(given_comp):
     # get the indices of the two maximum values of the cost vector
     max_indices = list(np.argsort(cost_vec))
     max_indices = max_indices[-2:]
+<<<<<<< HEAD
     max_indices = [4, 8]
+=======
+    max_indices = 2
+>>>>>>> f7602277a71caf321e6f9df11996b9861b3db403
 
-    vec1 = all_vec[max_indices[0]]
-    vec2 = all_vec[max_indices[1]]
+    vec1 = all_vec[max_indices][:, 0]
+    vec2 = all_vec[max_indices][:, 1]
 
     w1_pert = np.linspace(
         -0.5,
@@ -317,8 +326,13 @@ def main(given_comp):
         300,
     )
     w2_pert = np.linspace(
+<<<<<<< HEAD
         -0.5,
         0.5,
+=======
+        -1,
+        1,
+>>>>>>> f7602277a71caf321e6f9df11996b9861b3db403
         300,
     )
     W1, W2 = np.meshgrid(w1_pert, w2_pert)
@@ -330,6 +344,7 @@ def main(given_comp):
             # init_params[repair_indices[0]] = W1[i, j]
             # init_params[repair_indices[1]] = W2[i, j]
             obj[i, j] = objective4(w_traget)
+            # print(obj[i, j])
     # horizental subplots
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(2, 1, 1)
@@ -340,8 +355,8 @@ def main(given_comp):
     )
     ax.clabel(contours, inline=True, fmt="%1.1f")
     ax.set_title("Objective")
-    ax.set_xlabel(f"w{max_indices[0]}")
-    ax.set_ylabel(f"w{max_indices[1]}")
+    ax.set_xlabel(f"ev1_w{all_idx[max_indices][0]}_w{all_idx[max_indices][1]}")
+    ax.set_ylabel(f"ev2_w{all_idx[max_indices][0]}_w{all_idx[max_indices][1]}")
     # add colorbar
     cbar = fig.colorbar(ax.contourf(W1, W2, obj, cmap="RdGy"))
     cbar.ax.set_ylabel("Objective")
@@ -353,8 +368,8 @@ def main(given_comp):
     )
     ax.clabel(contours, inline=True, fmt="%1.1f")
     ax.contour3D(W1, W2, obj, 50, cmap="RdGy")
-    ax.set_xlabel(f"w{max_indices[0]}")
-    ax.set_ylabel(f"w{max_indices[1]}")
+    ax.set_xlabel(f"ev1_w{all_idx[max_indices][0]}_w{all_idx[max_indices][1]}")
+    ax.set_ylabel(f"ev2_w{all_idx[max_indices][0]}_w{all_idx[max_indices][1]}")
     # plt.contour(W1, W2, obj, 2000, colors="#FFD700", levels=[0])
     # plt.contourf(W1, W2, obj, 2000, cmap="RdGy")
     # # plt.colorbar()
