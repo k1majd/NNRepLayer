@@ -306,19 +306,19 @@ def main(given_comp):
     # get the indices of the two maximum values of the cost vector
     max_indices = list(np.argsort(cost_vec))
     max_indices = max_indices[-2:]
-    max_indices = [0, 1]
+    max_indices = [4, 8]
 
     vec1 = all_vec[max_indices[0]]
     vec2 = all_vec[max_indices[1]]
 
     w1_pert = np.linspace(
-        -1,
-        1,
+        -0.5,
+        0.5,
         300,
     )
     w2_pert = np.linspace(
-        0,
-        10,
+        -0.5,
+        0.5,
         300,
     )
     W1, W2 = np.meshgrid(w1_pert, w2_pert)
@@ -326,7 +326,7 @@ def main(given_comp):
 
     for i in range(W1.shape[0]):
         for j in range(W1.shape[1]):
-            w_traget = W1[i, j] * vec1 + W2[i, j] * vec2 + 2 * init_params
+            w_traget = W1[i, j] * vec1 + W2[i, j] * vec2 + init_params
             # init_params[repair_indices[0]] = W1[i, j]
             # init_params[repair_indices[1]] = W2[i, j]
             obj[i, j] = objective4(w_traget)
