@@ -262,10 +262,33 @@ if __name__ == "__main__":
     )
     # x_train = test_obs[0:1, :]
     # y_train = test_ctrls[0:1]
-
+    num_nodes = 128
     ctrl_model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
+        os.path.dirname(os.path.realpath(__file__)) + f"/models/model_orig_{num_nodes}"
     )
+    if num_nodes == 64:
+        load_str = "_7_20_2022_15_27_10"
+    if num_nodes == 128:
+        load_str = "_7_21_2022_13_13_44"
+    if num_nodes == 256:
+        load_str = "_7_26_2022_12_2_40"
+
+    # load data
+    if not os.path.exists(
+        os.path.dirname(os.path.realpath(__file__)) + "/data"
+    ):
+        os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/repair_dataset{load_str}.pickle",
+        "rb",
+    ) as data:
+        dataset = pickle.load(data)
+
+    x_train = dataset[0]
+    y_train = dataset[1]
+    x_test = dataset[2]
+    y_test = dataset[3]
     # plotTestData(
     #     ctrl_model_orig,
     #     train_obs,
@@ -289,11 +312,12 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(4)
-    max_weight_bound = 0.3  # specifying the upper bound of weights error
+    max_weight_bound = 0.4  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = []
-    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 512
+    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else num_nodes
+    w_error_norm = 0
     repair_obj.compile(
         x_train,
         y_train,
@@ -305,7 +329,7 @@ if __name__ == "__main__":
         param_precision=6,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
-        w_error_norm=1,
+        w_error_norm=w_error_norm,
         # output_bounds=output_bounds,
     )
     setattr(
@@ -350,13 +374,13 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 43200,  # max time algorithm will take in seconds
+            "timelimit": 86400,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "cuts": 0,
             "concurrentmip": 3,
-            "threads": 45,
-            "improvestarttime": 39000,
+            "threads": 40,
+            "improvestarttime": 80000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
     )
@@ -423,6 +447,8 @@ if __name__ == "__main__":
             max_weight_bound,
             "cost weights",
             cost_weights,
+            "w_error_norm",
+            w_error_norm,
             # "output bounds",
             # output_bounds,
         ]
