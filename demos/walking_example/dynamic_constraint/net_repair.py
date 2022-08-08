@@ -206,26 +206,50 @@ def plotTestData(
     fig.suptitle(f"Bounded Control, Layer: {layer_to_repair}")
     plt.show()
 
-    # plt.figure(1)
-    # plt.plot(test_ctrls, color="#173f5f")
-    # plt.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
-    # plt.grid(alpha=0.5, linestyle="dashed")
-    # # plt.xlim([800,1050])
-    # plt.ylabel("Ankle Angle Control (rad)")
-    # plt.xlabel("Time (s)")
 
-    # plt.figure(2)
+def plot_model_out(
+    model,
+    x_test,
+    y_test,
+    bound,
+    layer_to_repair,
+):
+    pred_ctrls_orig = model.predict(x_test)
+    delta_u_orig = np.subtract(
+        pred_ctrls_orig.flatten(), x_test[:, -1].flatten()
+    )
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3)
+    ax1.plot(y_test, color="#167fb8", label="Reference")
+    ax1.plot(pred_ctrls_orig, color="#1abd15", label="Original Predictions")
+    ax1.set_ylabel("Ankle Angle Control (rad)")
+    ax1.set_xlabel("Time (s)")
+    ax1.set_xlim([0, 1000])
+    ax1.legend()
 
-    # print(f"average abs error: {np.sum(err)/err.shape[0]}")
-    # direc = os.path.dirname(os.path.realpath(__file__))
-    # path_write = os.path.join(direc, "figs")
-    # plt.savefig(path_write + f"/repaired_model_32_nodes{now_str}.png")
+    err_orig = np.abs(y_test - pred_ctrls_orig)
+    ax2.plot(err_orig, color="#1abd15")
+    ax2.grid(alpha=0.5, linestyle="dashed")
+    ax2.set_ylabel("Ankle Angle Control Error (rad)")
+    ax2.set_xlabel("Time (s)")
+    ax2.set_xlim([0, 1000])
+
+    ax3.plot(delta_u_orig, color="#1abd15")
+    ax3.grid(alpha=0.5, linestyle="dashed")
+    ax3.axhline(y=bound, color="k", linestyle="dashed")  # upper bound
+    ax3.axhline(y=-bound, color="k", linestyle="dashed")  # lower bound
+    ax3.set_ylabel("Ankle Angle Control Change (rad)")
+    ax3.set_xlabel("Time (s)")
+    ax3.set_xlim([0, 1000])
+
+    fig.suptitle(f"Bounded Control, Layer: {layer_to_repair}")
+    plt.show()
 
 
-def generate_repair_dataset(obs, ctrl, num_samples, bound):
+def generate_repair_dataset(obs, ctrl, num_samples, bound, model):
+    ctrl_pred = model.predict(obs)
     max_window_size = 1000
     delta_u = np.subtract(
-        ctrl[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
+        ctrl_pred[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
     )
     # violation_idx = np.argsort(np.abs(delta_u))[::-1]
     violation_idx = np.where(np.abs(delta_u) > bound)[0]
@@ -249,55 +273,101 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound):
         return obs[idx], ctrl[idx]
 
 
+def give_sat_rate(model, x, y, y_pred_prev, bound):
+    delta_u_prev = np.subtract(
+        y_pred_prev.flatten(), x[:, -1].flatten()
+    ).flatten()
+    delta_u_pred = np.subtract(
+        model.predict(x).flatten(), x[:, -1].flatten()
+    ).flatten()
+    delta_u_prev = np.abs(delta_u_prev)
+    delta_u_pred = np.abs(delta_u_pred)
+    idx = np.where(delta_u_prev > bound)[0]
+    new_delta_u_pred = delta_u_pred[idx]
+    idx_new = np.where(new_delta_u_pred <= bound)[0]
+    return len(idx_new) / len(idx)
+
+
+def give_stats(model, x, y, y_pred_prev, bound):
+    satisfaction_rate = give_sat_rate(model, x, y, y_pred_prev, bound)
+    delta_u_prev = np.subtract(
+        y_pred_prev.flatten(), x[:, -1].flatten()
+    ).flatten()
+    y_pred_new = model.predict(x)
+
+    # find mae
+    x_temp = []
+    y_orig = []
+    y_new = []
+    for i in range(x.shape[0]):
+        if np.abs(delta_u_prev[i]) <= bound:
+            x_temp.append(x[i])
+            y_orig.append(y[i])
+            y_new.append(y_pred_new[i])
+    x_temp = np.array(x_temp)
+    y_orig = np.array(y_orig)
+    y_new = np.array(y_new)
+    mae = np.mean(np.abs(y_orig - y_new))
+
+    return satisfaction_rate, mae
+
+
 if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
+    num_nodes = 128
+    ctrl_model_orig = keras.models.load_model(
+        os.path.dirname(os.path.realpath(__file__)) + f"/models/model_orig_{num_nodes}"
+    )
     bound = 2.0
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
     num_samples = 200
     # rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
-        test_obs, test_ctrls, num_samples, bound
+        test_obs, test_ctrls, num_samples, bound, ctrl_model_orig,
     )
     # x_train = test_obs[0:1, :]
     # y_train = test_ctrls[0:1]
-    num_nodes = 128
-    ctrl_model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__)) + f"/models/model_orig_{num_nodes}"
-    )
-    if num_nodes == 64:
-        load_str = "_7_20_2022_15_27_10"
-    if num_nodes == 128:
-        load_str = "_7_21_2022_13_13_44"
-    if num_nodes == 256:
-        load_str = "_7_26_2022_12_2_40"
-
-    # load data
-    if not os.path.exists(
-        os.path.dirname(os.path.realpath(__file__)) + "/data"
-    ):
-        os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
-    with open(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset{load_str}.pickle",
-        "rb",
-    ) as data:
-        dataset = pickle.load(data)
-
-    x_train = dataset[0]
-    y_train = dataset[1]
-    x_test = dataset[2]
-    y_test = dataset[3]
-    # plotTestData(
+    # plot_model_out(
     #     ctrl_model_orig,
-    #     train_obs,
-    #     train_ctrls,
-    #     test_obs,
-    #     test_ctrls,
-    #     now_str,
+    #     x_test,
+    #     y_test,
+    #     bound,
+    #     2,
     # )
+    # plot_model_out(
+    #     ctrl_model_orig,
+    #     x_train,
+    #     y_train,
+    #     bound,
+    #     2,
+    # )
+    
+    # if num_nodes == 64:
+    #     load_str = "_7_20_2022_15_27_10"
+    # if num_nodes == 128:
+    #     load_str = "_7_21_2022_13_13_44"
+    # if num_nodes == 256:
+    #     load_str = "_7_26_2022_12_2_40"
 
+    # # load data
+    # if not os.path.exists(
+    #     os.path.dirname(os.path.realpath(__file__)) + "/data"
+    # ):
+    #     os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
+    # with open(
+    #     os.path.dirname(os.path.realpath(__file__))
+    #     + f"/data/repair_dataset{load_str}.pickle",
+    #     "rb",
+    # ) as data:
+    #     dataset = pickle.load(data)
+
+    # x_train = dataset[0]
+    # y_train = dataset[1]
+    # x_test = dataset[2]
+    # y_test = dataset[3]
+    
     def out_constraint1(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
@@ -379,7 +449,7 @@ if __name__ == "__main__":
             "mipfocus": 2,  #
             "cuts": 0,
             "concurrentmip": 3,
-            "threads": 40,
+            "threads": 48,
             "improvestarttime": 80000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
@@ -413,7 +483,7 @@ if __name__ == "__main__":
         "wb",
     ) as data:
         pickle.dump([x_train, y_train, x_test, y_test], data)
-
+    
     # save summary
     pred_ctrls = out_model(test_obs, training=False)
     err = np.abs(test_ctrls - pred_ctrls)
@@ -455,6 +525,46 @@ if __name__ == "__main__":
         # Add contents of list as last row in the csv file
         csv_writer.writerow(model_evaluation)
     print("saved: stats")
+
+    # print stat
+    # ctrl_test_pred_orig = ctrl_model_orig.predict(x_test)
+    # _, mae = give_stats(
+    #     out_model, x_test, y_test, ctrl_test_pred_orig, bound
+    # )
+    # sat_rate, _ = give_stats(
+    #     out_model, x_test, y_test, ctrl_test_pred_orig, bound + 0.2
+    # )
+    # weights_orig = np.concatenate(
+    #     (
+    #         ctrl_test_pred_orig.get_weights()[2 * (layer_to_repair - 1)].flatten(),
+    #         ctrl_test_pred_orig.get_weights()[2 * (layer_to_repair - 1) + 1].flatten(),
+    #     )
+    # )
+    # weights_repaired = np.concatenate(
+    #     (
+    #         out_model.get_weights()[2 * (layer_to_repair - 1)].flatten(),
+    #         out_model.get_weights()[
+    #             2 * (layer_to_repair - 1) + 1
+    #         ].flatten(),
+    #     )
+    # )
+    # err = weights_orig - weights_repaired
+    # num_repaired_weights = 0
+    # for i in range(err.shape[0]):
+    #     if err[i] > 0.001:
+    #         num_repaired_weights += 1
+    # print(f"mae is {mae}")
+    # print(f"sat_rate is {sat_rate}")
+    # print(f"number of test samples is {x_test.shape[0]}")
+    # print(
+    #     f"weight l1 norm is {np.linalg.norm(weights_orig - weights_repaired, 1)}"
+    # )
+    # print(
+    #     f"weight l-inf norm is {np.linalg.norm(weights_orig - weights_repaired, np.inf)}"
+    # )
+    # print(
+    #     f"number of repaired weights is {num_repaired_weights}/{err.shape[0]}"
+    # )
 
     # plotTestData(
     #     ctrl_model_orig,
