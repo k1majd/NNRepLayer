@@ -324,19 +324,20 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(3)
-    max_weight_bound = 0.7  # specifying the upper bound of weights error
+    max_weight_bound = 0.5  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = select_repair_nodes(
         ctrl_model_orig, model_repaired, layer_to_repair
     )
-    num_experiments = 30
+    num_experiments = 35
     for ex in range(num_experiments):
-        repair_node_list = list(
-            np.sort(
-                np.random.choice([i for i in range(128)], 11, replace=False)
+        if ex != 0:
+            repair_node_list = list(
+                np.sort(
+                    np.random.choice([i for i in range(128)], 11, replace=False)
+                )
             )
-        )
         num_nodes = (
             len(repair_node_list) if len(repair_node_list) != 0 else hid_size
         )
@@ -388,13 +389,13 @@ if __name__ == "__main__":
             "python",
             "keras",
             {
-                "timelimit": 18000,  # max time algorithm will take in seconds
+                "timelimit": 1800,  # max time algorithm will take in seconds
                 "mipgap": 0.01,  #
                 "mipfocus": 2,  #
                 "cuts": 0,
                 # "concurrentmip": 3,
                 # "threads": 45,
-                "improvestarttime": 15000,
+                "improvestarttime": 1500,
                 "logfile": path_write + f"/logs/opt{ex}_log{now_str}.log",
             },
         )
