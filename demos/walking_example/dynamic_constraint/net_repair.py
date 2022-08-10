@@ -387,7 +387,7 @@ if __name__ == "__main__":
     # output_bounds = (-30.0, 50.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else num_nodes
-    w_error_norm = 0
+    w_error_norm = 1
     repair_obj.compile(
         x_train,
         y_train,
@@ -424,6 +424,10 @@ if __name__ == "__main__":
     # setup directory to store optimizer log file
     if not os.path.exists(path_write + "/logs"):
         os.makedirs(path_write + "/logs")
+    
+    if not os.path.exists(path_write + "/sol"):
+        os.makedirs(path_write + "/sol")
+    os.makedirs(path_write + f"/sol/sol_{now_str}")
 
     # setup directory to store the modeled MIP and parameters
     if not os.path.exists(path_write + "/stats"):
@@ -452,6 +456,7 @@ if __name__ == "__main__":
             "threads": 48,
             "improvestarttime": 80000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
+            "solfiles": path_write + f"/sol/sol_{now_str}/solution",
         },
     )
 
