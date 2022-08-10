@@ -311,11 +311,7 @@ def main(given_comp):
     # get the indices of the two maximum values of the cost vector
     max_indices = list(np.argsort(cost_vec))
     max_indices = max_indices[-2:]
-<<<<<<< HEAD
     max_indices = [4, 8]
-=======
-    max_indices = 2
->>>>>>> f7602277a71caf321e6f9df11996b9861b3db403
 
     vec1 = all_vec[max_indices][:, 0]
     vec2 = all_vec[max_indices][:, 1]
@@ -326,13 +322,8 @@ def main(given_comp):
         300,
     )
     w2_pert = np.linspace(
-<<<<<<< HEAD
         -0.5,
         0.5,
-=======
-        -1,
-        1,
->>>>>>> f7602277a71caf321e6f9df11996b9861b3db403
         300,
     )
     W1, W2 = np.meshgrid(w1_pert, w2_pert)
