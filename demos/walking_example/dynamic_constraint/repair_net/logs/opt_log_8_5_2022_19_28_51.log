@@ -1,0 +1,49 @@
+
+Gurobi 9.5.1 (linux64) logging started Fri 05 Aug 2022 07:33:22 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_8_5_2022_19_28_51.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 40 threads
+Optimize a model with 137514 rows, 85903 columns and 2191914 nonzeros
+Model fingerprint: 0x4fef7cd2
+Model has 270 quadratic objective terms
+Variable types: 51343 continuous, 34560 integer (34560 binary)
+Coefficient statistics:
+  Matrix range     [3e-05, 2e+02]
+  Objective range  [9e-03, 1e+00]
+  QObjective range [7e-02, 7e-02]
+  Bounds range     [1e-04, 8e+02]
+  RHS range        [2e-05, 2e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (13 threads per instance)
+
+Presolve removed 1564 rows and 512 columns (presolve time = 5s) ...
+Presolve removed 1564 rows and 512 columns (presolve time = 10s) ...
+Presolve removed 1564 rows and 512 columns
+Presolve time: 10.18s
+Presolved: 135950 rows, 85391 columns, 2189350 nonzeros
+Presolved model has 270 quadratic objective terms
+Variable types: 50831 continuous, 34560 integer (34560 binary)
+Root relaxation presolve removed 34560 rows and 34560 columns (presolve time = 5s) ...
+Root relaxation presolve removed 34560 rows and 34560 columns (presolve time = 10s) ...
+Root relaxation presolve removed 34560 rows and 34560 columns
+Root relaxation presolved: 101390 rows, 50831 columns, 2085670 nonzeros
+Root relaxation presolved model has 270 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    3.1682218e+01   0.000000e+00   0.000000e+00     27s
+   43341    3.1682218e+01   0.000000e+00   0.000000e+00     30s
+   43341    3.1682218e+01   0.000000e+00   0.000000e+00     30s
+
+Root relaxation: objective 3.168222e+01, 43341 iterations, 17.54 seconds (36.01 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -              -   31.68222      -     -   34s
+     0     0      -    -    -              -   31.68222      -     -  139s
+     0     2      -    -    -              -   31.68222      -     -  278s
+     1     4      -    -    -              -   31.68222      -     -  368s

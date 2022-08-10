@@ -284,8 +284,8 @@ if __name__ == "__main__":
     )
     # x_train = test_obs[0:1, :]
     # y_train = test_ctrls[0:1]
-    hid_size = 64
-    load_str = "_7_20_2022_15_27_10"
+    hid_size = 128
+    load_str = "_8_9_2022_13_27_27"
     # load data
     if not os.path.exists(
         os.path.dirname(os.path.realpath(__file__)) + "/data"
@@ -305,10 +305,10 @@ if __name__ == "__main__":
         os.path.dirname(os.path.realpath(__file__))
         + f"/models/model_orig_{hid_size}"
     )
-    # model_repaired = keras.models.load_model(
-    #     os.path.dirname(os.path.realpath(__file__))
-    #     + f"/repair_net/models/model_layer{load_str}"
-    # )
+    model_repaired = keras.models.load_model(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/repair_net/models/model_layer{load_str}"
+    )
 
     def out_constraint1(model, i):
         return (
@@ -327,14 +327,14 @@ if __name__ == "__main__":
     max_weight_bound = 0.7  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
-    # repair_node_list = select_repair_nodes(
-    #     ctrl_model_orig, model_repaired, layer_to_repair
-    # )
+    repair_node_list = select_repair_nodes(
+        ctrl_model_orig, model_repaired, layer_to_repair
+    )
     num_experiments = 30
     for ex in range(num_experiments):
         repair_node_list = list(
             np.sort(
-                np.random.choice([i for i in range(64)], 16, replace=False)
+                np.random.choice([i for i in range(128)], 11, replace=False)
             )
         )
         num_nodes = (

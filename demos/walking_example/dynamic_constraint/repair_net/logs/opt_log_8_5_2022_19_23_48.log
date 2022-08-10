@@ -1,0 +1,31 @@
+
+Gurobi 9.5.1 (linux64) logging started Fri 05 Aug 2022 07:28:31 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_8_5_2022_19_23_48.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 40 threads
+Optimize a model with 137482 rows, 85903 columns and 2387110 nonzeros
+Model fingerprint: 0x07fecb82
+Model has 270 quadratic objective terms
+Variable types: 51343 continuous, 34560 integer (34560 binary)
+Coefficient statistics:
+  Matrix range     [3e-05, 2e+02]
+  Objective range  [5e-04, 1e+00]
+  QObjective range [7e-02, 7e-02]
+  Bounds range     [2e-04, 7e+02]
+  RHS range        [2e-05, 2e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (13 threads per instance)
+
+Presolve removed 0 rows and 16 columns
+Presolve time: 0.30s
+
+Instance 0 was solved
+
+Explored 0 nodes (0 simplex iterations) in 0.49 seconds (0.07 work units)
+Thread count was 1 (of 96 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
