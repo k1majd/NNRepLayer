@@ -1,0 +1,546 @@
+
+Gurobi 9.5.0 (win64) logging started Tue Aug  9 17:51:21 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\walking_example\dynamic_constraint\repair_net/logs/opt_log_8_9_2022_16_52_50.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 9 threads
+Optimize a model with 902584 rows, 644584 columns and 15582648 nonzeros
+Model fingerprint: 0xcb2d7f26
+Model has 1000 quadratic objective terms
+Variable types: 388584 continuous, 256000 integer (256000 binary)
+Coefficient statistics:
+  Matrix range     [2e-05, 3e+02]
+  Objective range  [9e-05, 1e+00]
+  QObjective range [2e-02, 2e-02]
+  Bounds range     [1e-03, 2e+03]
+  RHS range        [1e-06, 3e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (3 threads per instance)
+
+Presolve removed 2000 rows and 0 columns (presolve time = 6s) ...
+Presolve removed 2000 rows and 0 columns (presolve time = 11s) ...
+Presolve removed 2000 rows and 0 columns (presolve time = 17s) ...
+Presolve removed 2000 rows and 0 columns (presolve time = 22s) ...
+Presolve removed 6608 rows and 4608 columns (presolve time = 25s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 30s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 35s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 40s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 45s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 50s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 55s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 60s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 65s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 70s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 75s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 80s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 85s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 90s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 95s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 100s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 105s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 110s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 115s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 120s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 125s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 130s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 135s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 140s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 145s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 150s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 155s) ...
+Presolve removed 6608 rows and 9216 columns (presolve time = 160s) ...
+Presolve removed 11216 rows and 9216 columns (presolve time = 166s) ...
+Presolve removed 11216 rows and 9216 columns (presolve time = 171s) ...
+Presolve removed 11216 rows and 9216 columns (presolve time = 175s) ...
+Presolve removed 11216 rows and 9216 columns (presolve time = 183s) ...
+Presolve removed 11216 rows and 9216 columns (presolve time = 185s) ...
+Presolve removed 11216 rows and 9216 columns
+Presolve time: 188.93s
+Presolved: 891368 rows, 635368 columns, 15562216 nonzeros
+Presolved model has 1000 quadratic objective terms
+Variable types: 379368 continuous, 256000 integer (256000 binary)
+Root relaxation presolve removed 10000 rows and 10000 columns (presolve time = 5s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 10s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 15s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 20s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 25s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 30s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 35s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 40s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 45s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 50s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 55s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 60s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 65s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 70s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 75s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 80s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 85s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 90s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 95s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 100s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 105s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 110s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 115s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 120s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 125s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 130s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 135s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 140s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 145s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 150s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 155s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 160s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 165s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 170s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 175s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 180s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 185s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 190s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 195s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 200s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 205s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 210s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 215s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 220s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 225s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 230s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 235s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 241s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 245s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 250s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 255s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 260s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 265s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 270s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 275s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 280s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 285s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 290s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 295s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 300s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 305s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 310s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 315s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 320s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 325s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 330s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 335s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 340s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 345s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 350s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 355s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 360s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 365s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 370s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 375s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 380s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 385s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 390s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 395s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 400s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 405s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 410s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 415s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 420s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 425s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 430s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 435s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 440s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 445s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 450s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 455s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 460s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 465s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns (presolve time = 470s) ...
+Root relaxation presolve removed 256000 rows and 256000 columns
+Root relaxation presolved: 635368 rows, 379368 columns, 14794216 nonzeros
+Root relaxation presolved model has 1000 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    3.1513898e+01   0.000000e+00   0.000000e+00    682s
+   10952    3.1513898e+01   5.751212e+04   0.000000e+00    686s
+   31249    3.1513898e+01   2.868054e+04   0.000000e+00    691s
+   63322    3.1513898e+01   2.168984e+04   0.000000e+00    696s
+   95422    3.1513898e+01   1.487735e+04   0.000000e+00    702s
+  127500    3.1513898e+01   8.302202e+03   0.000000e+00    709s
+  143519    3.1513898e+01   5.092891e+03   0.000000e+00    713s
+  154240    3.1513898e+01   3.335911e+03   0.000000e+00    718s
+  168461    3.1513898e+01   1.282684e+03   0.000000e+00    726s
+  179101    3.1513898e+01   6.487707e+02   0.000000e+00    735s
+  188713    3.1513898e+01   0.000000e+00   0.000000e+00    739s
+  188713    3.1513898e+01   0.000000e+00   0.000000e+00    743s
+
+Root relaxation: objective 3.151390e+01, 188713 iterations, 534.16 seconds (665.29 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -              -   31.51390      -     -  744s
+     0     0      -    -    -              -   31.51390      -     -  792s
+     0     2      -    -    -              -   31.51390      -     - 2789s
+     1     4      -    -    -              -   31.51390      -     - 2796s
+     3     7      -    -    -              -   31.51390      -     - 2801s
+     9    13      -    -    -              -   31.51390      -     - 2806s
+    15    19      -    -    -              -   31.51390      -     - 2812s
+    21    25      -    -    -              -   31.51390      -     - 2817s
+    24    28      -    -    -              -   31.51390      -     - 2820s
+    33    37      -    -    -              -   31.51390      -     - 2826s
+    39    43      -    -    -              -   31.51390      -     - 2830s
+    45    49      -    -    -              -   31.51390      -     - 2835s
+    51    57      -    -    -              -   31.51390      -     - 2874s
+    56    61      -    -    -              -   31.51390      -     - 2878s
+    60    65      -    -    -              -   31.51390      -     - 2882s
+    64    76      -    -    -              -   31.51390      -     - 2889s
+    75    84      -    -    -              -   31.51390      -     - 2896s
+    83    93      -    -    -              -   31.51390      -     - 2902s
+    92   106      -    -    -              -   31.51390      -     - 2911s
+   105   117      -    -    -              -   31.51390      -     - 3119s
+   116   133      -    -    -              -   31.51390      -     - 3141s
+   132   157      -    -    -              -   31.51390      -     - 3200s
+   156   173      -    -    -              -   31.51390      -     - 3231s
+   172   199      -    -    -              -   31.51390      -     - 3266s
+   198   226      -    -    -              -   31.51390      -     - 3535s
+Created node file directory './grbnodes0'
+   225   257      -    -    -              -   31.51390      -     - 3565s
+   256   282      -    -    -              -   31.51390      -     - 3635s
+   281   320      -    -    -              -   31.51390      -     - 3669s
+   319   349      -    -    -              -   31.51390      -     - 3717s
+   348   390      -    -    -              -   31.51390      -     - 3960s
+   389   428      -    -    -              -   31.51390      -     - 4001s
+   427   472      -    -    -              -   31.51390      -     - 4308s
+   471   523      -    -    -              -   31.51390      -     - 4362s
+   522   570      -    -    -              -   31.51390      -     - 4598s
+   569   632      -    -    -              -   31.51390      -     - 4684s
+   631   684      -    -    -              -   31.51390      -     - 4957s
+   683   744      -    -    -              -   31.51390      -     - 5016s
+   743   807      -    -    -              -   31.51390      -     - 5065s
+   806   870      -    -    -              -   31.51390      -     - 5125s
+   869   928      -    -    -              -   31.51390      -     - 5185s
+   927   973      -    -    -              -   31.51390      -     - 5421s
+   972  1017      -    -    -              -   31.51390      -     - 5489s
+  1016  1067      -    -    -              -   31.51390      -     - 5707s
+  1066  1124      -    -    -              -   31.51390      -     - 5782s
+  1123  1166      -    -    -              -   31.51390      -     - 6059s
+  1165  1224      -    -    -              -   31.51390      -     - 6130s
+  1223  1269      -    -    -              -   31.51390      -     - 6215s
+  1268  1307      -    -    -              -   31.51390      -     - 6474s
+  1306  1346      -    -    -              -   31.51390      -     - 6711s
+  1345  1373      -    -    -              -   31.51390      -     - 6937s
+  1372  1424      -    -    -              -   31.51390      -     - 7195s
+  1423  1478      -    -    -              -   31.51390      -     - 7280s
+  1477  1526      -    -    -              -   31.51390      -     - 7511s
+  1525  1580      -    -    -              -   31.51390      -     - 7777s
+  1579  1639      -    -    -              -   31.51390      -     - 7857s
+  1638  1702      -    -    -              -   31.51390      -     - 7922s
+  1701  1763      -    -    -              -   31.51390      -     - 7998s
+  1762  1823      -    -    -              -   31.51390      -     - 8073s
+  1822  1886      -    -    -              -   31.51390      -     - 8138s
+  1885  1944      -    -    -              -   31.51390      -     - 8210s
+  1943  2007      -    -    -              -   31.51390      -     - 8279s
+  1985  2007      -    -    -              -   31.51390      -     - 8280s
+  2006  2070      -    -    -              -   31.51390      -     - 8340s
+  2069  2133      -    -    -              -   31.51390      -     - 8402s
+  2132  2185      -    -    -              -   31.51390      -     - 8497s
+  2184  2246      -    -    -              -   31.51390      -     - 8565s
+  2245  2303      -    -    -              -   31.51390      -     - 8635s
+  2302  2365      -    -    -              -   31.51390      -     - 8709s
+  2364  2428      -    -    -              -   31.51390      -     - 8753s
+  2427  2469      -    -    -              -   31.51390      -     - 9175s
+  2468  2513      -    -    -              -   31.51390      -     - 9408s
+  2512  2560      -    -    -              -   31.51390      -     - 9476s
+  2559  2608      -    -    -              -   31.51390      -     - 9743s
+  2607  2665      -    -    -              -   31.51390      -     - 10026s
+  2664  2697      -    -    -              -   31.51390      -     - 10325s
+  2696  2728      -    -    -              -   31.51390      -     - 10648s
+  2727  2791      -    -    -              -   31.51390      -     - 10713s
+  2790  2854      -    -    -              -   31.51390      -     - 10762s
+  2853  2917      -    -    -              -   31.51390      -     - 10816s
+  2916  2974      -    -    -              -   31.51390      -     - 10887s
+  2973  3037      -    -    -              -   31.51390      -     - 10941s
+  3036  3095      -    -    -              -   31.51390      -     - 11012s
+  3094  3145      -    -    -              -   31.51390      -     - 11100s
+  3144  3208      -    -    -              -   31.51390      -     - 11150s
+  3207  3251      -    -    -              -   31.51390      -     - 11219s
+  3250  3298      -    -    -              -   31.51390      -     - 11380s
+  3297  3355      -    -    -              -   31.51390      -     - 11449s
+  3354  3418      -    -    -              -   31.51390      -     - 11523s
+  3417  3481      -    -    -              -   31.51390      -     - 11592s
+  3480  3537      -    -    -              -   31.51390      -     - 11674s
+  3536  3594      -    -    -              -   31.51390      -     - 11743s
+  3593  3650      -    -    -              -   31.51390      -     - 11824s
+  3649  3713      -    -    -              -   31.51390      -     - 11878s
+  3712  3768      -    -    -              -   31.51390      -     - 12018s
+  3767  3813      -    -    -              -   31.51390      -     - 12094s
+  3812  3847      -    -    -              -   31.51390      -     - 12393s
+  3846  3900      -    -    -              -   31.51390      -     - 12514s
+  3899  3959      -    -    -              -   31.51390      -     - 12637s
+  3958  4011      -    -    -              -   31.51390      -     - 12917s
+  4010  4055      -    -    -              -   31.51390      -     - 13139s
+  4054  4113      -    -    -              -   31.51390      -     - 13210s
+  4112  4176      -    -    -              -   31.51390      -     - 13259s
+  4175  4214      -    -    -              -   31.51390      -     - 13350s
+  4213  4275      -    -    -              -   31.51390      -     - 13483s
+  4274  4332      -    -    -              -   31.51390      -     - 13564s
+  4331  4395      -    -    -              -   31.51390      -     - 13612s
+  4394  4458      -    -    -              -   31.51390      -     - 13680s
+  4458  4459      -    -    -              -   31.51390      -     - 14085s
+  4459  4460      -    -    -              -   31.51390      -     - 14096s
+  4460  4460      -    -    -              -   31.51390      -     - 14632s
+  4462  4462      -    -    -              -   31.51390      -     - 21170s
+  4463  4241      -    -    -     30690.1643   31.51390   100%     - 25825s
+  4465  4032      -    -    -     3134.87215   31.51390  99.0%     - 28165s
+  4471  3835      -    -    -     2455.96418   31.51390  98.7%     - 28172s
+  4474  3837      -    -    -     2455.96418   31.51390  98.7%     - 28175s
+  4477  3842      -    -    -     2455.96418   31.51390  98.7%     - 28181s
+  4483  3845      -    -    -     2455.96418   31.51390  98.7%     - 28458s
+  4488  3849      -    -    -     2455.96418   31.51390  98.7%     - 28465s
+  4494  3855      -    -    -     2455.96418   31.51390  98.7%     - 28474s
+  4502  3859      -    -    -     2455.96418   31.51390  98.7%     - 28482s
+  4509  3863      -    -    -     2455.96418   31.51390  98.7%     - 28489s
+  4515  3867      -    -    -     2455.96418   31.51390  98.7%     - 28496s
+  4521  3872      -    -    -     2455.96418   31.51390  98.7%     - 28504s
+  4528  3877      -    -    -     2455.96418   31.51390  98.7%     - 28512s
+  4535  3881      -    -    -     2455.96418   31.51390  98.7%     - 28520s
+  4542  3885      -    -    -     2455.96418   31.51390  98.7%     - 28527s
+  4548  3889      -    -    -     2455.96418   31.51390  98.7%     - 28534s
+  4554  3896      -    -    -     2455.96418   31.51390  98.7%     - 28589s
+  4563  3705      -    -    -     2107.12615   31.51390  98.5%     - 29101s
+  4566  3713      -    -    -     2107.12615   31.51390  98.5%     - 29112s
+  4575  3719      -    -    -     2107.12615   31.51390  98.5%     - 29123s
+  4584  3725      -    -    -     2107.12615   31.51390  98.5%     - 29134s
+  4593  3732      -    -    -     2107.12615   31.51390  98.5%     - 29148s
+  4603  3741      -    -    -     2107.12615   31.51390  98.5%     - 29161s
+  4615  3749      -    -    -     2107.12615   31.51390  98.5%     - 29182s
+  4627  3757      -    -    -     2107.12615   31.51390  98.5%     - 29196s
+  4639  3765      -    -    -     2107.12615   31.51390  98.5%     - 29210s
+  4651  3775      -    -    -     2107.12615   31.51390  98.5%     - 29227s
+  4665  3784      -    -    -     2107.12615   31.51390  98.5%     - 29246s
+  4679  3793      -    -    -     2107.12615   31.51390  98.5%     - 29263s
+  4693  3803      -    -    -     2107.12615   31.51390  98.5%     - 29279s
+  4702  3800      -    -    -     2107.12615   31.51390  98.5%     - 29280s
+  4707  3812      -    -    -     2107.12615   31.51390  98.5%     - 29297s
+  4721  3824      -    -    -     2107.12615   31.51390  98.5%     - 29330s
+  4738  3836      -    -    -     2107.12615   31.51390  98.5%     - 29350s
+  4755  3849      -    -    -     2107.12615   31.51390  98.5%     - 29373s
+  4774  3860      -    -    -     2107.12615   31.51390  98.5%     - 29393s
+  4791  3866      -    -    -     2107.12615   31.51390  98.5%     - 29420s
+  4803  3879      -    -    -     2107.12615   31.51390  98.5%     - 29455s
+  4820  3891      -    -    -     2107.12615   31.51390  98.5%     - 29496s
+  4838  3908      -    -    -     2107.12615   31.51390  98.5%     - 29523s
+  4861  3920      -    -    -     2107.12615   31.51390  98.5%     - 29571s
+  4880  3936      -    -    -     2107.12615   31.51390  98.5%     - 30058s
+  4903  3954      -    -    -     2107.12615   31.51390  98.5%     - 30107s
+  4928  3972      -    -    -     2107.12615   31.51390  98.5%     - 30139s
+  4955  3999      -    -    -     2107.12615   31.51390  98.5%     - 30174s
+  4991  4022      -    -    -     2107.12615   31.51390  98.5%     - 30208s
+  5026  4024      -    -    -     2107.12615   31.51390  98.5%     - 30288s
+  5039  4035      -    -    -     2107.12615   31.51390  98.5%     - 31006s
+  5055  4068      -    -    -     2107.12615   31.51390  98.5%     - 31099s
+  5093  4101      -    -    -     2107.12615   31.51390  98.5%     - 33829s
+  5139  3914      -    -    -     1802.24363   31.51390  98.3%     - 34205s
+  5149  3939      -    -    -     1802.24363   31.51390  98.3%     - 34617s
+  5177  3975      -    -    -     1802.24363   31.51390  98.3%     - 34723s
+  5223  4001      -    -    -     1802.24363   31.51390  98.3%     - 34848s
+  5264  4006      -    -    -     1802.24363   31.51390  98.3%     - 34946s
+  5283  4050      -    -    -     1802.24363   31.51390  98.3%     - 35035s
+  5333  4078      -    -    -     1802.24363   31.51390  98.3%     - 35149s
+  5361  4069      -    -    -     1802.24363   31.51390  98.3%     - 35150s
+  5378  4098      -    -    -     1802.24363   31.51390  98.3%     - 35340s
+  5413  4134      -    -    -     1802.24363   31.51390  98.3%     - 35443s
+  5460  4144      -    -    -     1802.24363   31.51390  98.3%     - 35783s
+  5486  4179      -    -    -     1802.24363   31.51390  98.3%     - 35986s
+  5530  4194      -    -    -     1802.24363   31.51390  98.3%     - 36095s
+  5559  4247      -    -    -     1802.24363   31.51390  98.3%     - 36219s
+  5622  4259      -    -    -     1802.24363   31.51390  98.3%     - 36421s
+  5655  4281      -    -    -     1802.24363   31.51390  98.3%     - 36677s
+  5688  4312      -    -    -     1802.24363   31.51390  98.3%     - 36799s
+  5730  4345      -    -    -     1802.24363   31.51390  98.3%     - 36895s
+  5777  4376      -    -    -     1802.24363   31.51390  98.3%     - 36998s
+  5824  4419      -    -    -     1802.24363   31.51390  98.3%     - 37158s
+  5882  4431      -    -    -     1802.24363   31.51390  98.3%     - 37302s
+  5914  4477      -    -    -     1802.24363   31.51390  98.3%     - 37432s
+  5970  4507      -    -    -     1802.24363   31.51390  98.3%     - 37538s
+  6019  4529      -    -    -     1802.24363   31.51390  98.3%     - 37685s
+  6057  4564      -    -    -     1802.24363   31.51390  98.3%     - 37792s
+  6105  4611      -    -    -     1802.24363   31.51390  98.3%     - 37859s
+  6168  4426      -    -    -     1643.97788   31.51390  98.1%     - 39070s
+  6177  4146      -    -    -      255.14949   31.51390  87.6%     - 39350s
+  6220  4153      -    -    -      255.14949   31.51390  87.6%     - 39553s
+  6241  4201      -    -    -      255.14949   31.51390  87.6%     - 39663s
+  6296  4241      -    -    -      255.14949   31.51390  87.6%     - 39774s
+  6355  4276      -    -    -      255.14949   31.51390  87.6%     - 39930s
+  6409  4305      -    -    -      255.14949   31.51390  87.6%     - 40086s
+  6456  4338      -    -    -      255.14949   31.51390  87.6%     - 40232s
+  6505  4369      -    -    -      255.14949   31.51390  87.6%     - 40448s
+  6552  4415      -    -    -      255.14949   31.51390  87.6%     - 40557s
+  6614  4438      -    -    -      255.14949   31.51390  87.6%     - 40746s
+  6658  4460      -    -    -      255.14949   31.51390  87.6%     - 40913s
+  6694  4495      -    -    -      255.14949   31.51390  87.6%     - 41086s
+  6741  4539      -    -    -      255.14949   31.51390  87.6%     - 41205s
+  6801  4563      -    -    -      255.14949   31.51390  87.6%     - 41368s
+  6845  4593      -    -    -      255.14949   31.51390  87.6%     - 41534s
+  6890  4635      -    -    -      255.14949   31.51390  87.6%     - 41663s
+  6947  4679      -    -    -      255.14949   31.51390  87.6%     - 41776s
+  7010  4721      -    -    -      255.14949   31.51390  87.6%     - 41877s
+  7073  4760      -    -    -      255.14949   31.51390  87.6%     - 42012s
+  7133  4803      -    -    -      255.14949   31.51390  87.6%     - 42070s
+  7196  4845      -    -    -      255.14949   31.51390  87.6%     - 42171s
+  7259  4879      -    -    -      255.14949   31.51390  87.6%     - 42296s
+  7314  4924      -    -    -      255.14949   31.51390  87.6%     - 42387s
+  7377  4966      -    -    -      255.14949   31.51390  87.6%     - 42491s
+  7440  5003      -    -    -      255.14949   31.51390  87.6%     - 42624s
+  7498  5047      -    -    -      255.14949   31.51390  87.6%     - 42694s
+  7561  5089      -    -    -      255.14949   31.51390  87.6%     - 42818s
+  7624  5124      -    -    -      255.14949   31.51390  87.6%     - 42959s
+  7680  5160      -    -    -      255.14949   31.51390  87.6%     - 43082s
+  7735  5185      -    -    -      255.14949   31.51390  87.6%     - 43183s
+  7778  5222      -    -    -      255.14949   31.51390  87.6%     - 43423s
+  7830  5268      -    -    -      255.14949   31.51390  87.6%     - 43525s
+  7893  5306      -    -    -      255.14949   31.51390  87.6%     - 43655s
+  7952  5340      -    -    -      255.14949   31.51390  87.6%     - 43766s
+  8006  5381      -    -    -      255.14949   31.51390  87.6%     - 43875s
+  8065  5420      -    -    -      255.14949   31.51390  87.6%     - 44003s
+  8123  5443      -    -    -      255.14949   31.51390  87.6%     - 44106s
+  8166  5482      -    -    -      255.14949   31.51390  87.6%     - 44197s
+  8219  5527      -    -    -      255.14949   31.51390  87.6%     - 44259s
+  8261  5513      -    -    -      255.14949   31.51390  87.6%     - 44260s
+  8282  5568      -    -    -      255.14949   31.51390  87.6%     - 44367s
+  8344  5591      -    -    -      255.14949   31.51390  87.6%     - 44495s
+  8387  5629      -    -    -      255.14949   31.51390  87.6%     - 44600s
+  8440  5675      -    -    -      255.14949   31.51390  87.6%     - 44698s
+  8503  5715      -    -    -      255.14949   31.51390  87.6%     - 44812s
+  8564  5749      -    -    -      255.14949   31.51390  87.6%     - 44946s
+  8619  5754      -    -    -      255.14949   31.51390  87.6%     - 45063s
+  8642  5808      -    -    -      255.14949   31.51390  87.6%     - 45179s
+  8704  5829      -    -    -      255.14949   31.51390  87.6%     - 45331s
+  8745  5858      -    -    -      255.14949   31.51390  87.6%     - 45472s
+  8788  5883      -    -    -      255.14949   31.51390  87.6%     - 45647s
+  8827  5919      -    -    -      255.14949   31.51390  87.6%     - 45801s
+  8876  5953      -    -    -      255.14949   31.51390  87.6%     - 45933s
+  8927  5969      -    -    -      255.14949   31.51390  87.6%     - 46527s
+  8960  5833      -    -    -      254.53314   31.51390  87.6%     - 47282s
+  8983  5555      -    -    -      251.08643   31.51390  87.4%     - 49838s
+  8986  5617      -    -    -      251.08643   31.51390  87.4%     - 50085s
+  9049  5632      -    -    -      251.08643   31.51390  87.4%     - 50810s
+  9085  5683      -    -    -      251.08643   31.51390  87.4%     - 50912s
+  9148  5725      -    -    -      251.08643   31.51390  87.4%     - 51092s
+  9211  5767      -    -    -      251.08643   31.51390  87.4%     - 51161s
+  9274  5809      -    -    -      251.08643   31.51390  87.4%     - 51288s
+  9337  5825      -    -    -      251.08643   31.51390  87.4%     - 51477s
+  9374  5864      -    -    -      251.08643   31.51390  87.4%     - 51651s
+  9426  5888      -    -    -      251.08643   31.51390  87.4%     - 51862s
+  9467  5937      -    -    -      251.08643   31.51390  87.4%     - 51923s
+  9530  5968      -    -    -      251.08643   31.51390  87.4%     - 52055s
+  9582  5985      -    -    -      251.08643   31.51390  87.4%     - 52462s
+  9616  6020      -    -    -      251.08643   31.51390  87.4%     - 52581s
+  9662  6056      -    -    -      251.08643   31.51390  87.4%     - 52743s
+  9714  6081      -    -    -      251.08643   31.51390  87.4%     - 52923s
+  9756  6101      -    -    -      251.08643   31.51390  87.4%     - 53118s
+  9790  6126      -    -    -      251.08643   31.51390  87.4%     - 53265s
+  9826  6158      -    -    -      251.08643   31.51390  87.4%     - 53456s
+  9870  6184      -    -    -      251.08643   31.51390  87.4%     - 53687s
+  9911  6220      -    -    -      251.08643   31.51390  87.4%     - 53852s
+  9961  6247      -    -    -      251.08643   31.51390  87.4%     - 54092s
+ 10004  6267      -    -    -      251.08643   31.51390  87.4%     - 54683s
+ 10039  6290      -    -    -      251.08643   31.51390  87.4%     - 54889s
+ 10073  6312      -    -    -      251.08643   31.51390  87.4%     - 55132s
+ 10107  6353      -    -    -      251.08643   31.51390  87.4%     - 55279s
+ 10159  6385      -    -    -      251.08643   31.51390  87.4%     - 55536s
+ 10208  6415      -    -    -      251.08643   31.51390  87.4%     - 55733s
+ 10255  6438      -    -    -      251.08643   31.51390  87.4%     - 55941s
+ 10293  6466      -    -    -      251.08643   31.51390  87.4%     - 56109s
+ 10334  6499      -    -    -      251.08643   31.51390  87.4%     - 56353s
+ 10381  6541      -    -    -      251.08643   31.51390  87.4%     - 56560s
+ 10438  6398      -    -    -      250.97818   31.51390  87.4%     - 58234s
+ 10441  6329      -    -    -      247.23661   31.51390  87.3%     - 58543s
+ 10493  6349      -    -    -      247.23661   31.51390  87.3%     - 58737s
+ 10531  6400      -    -    -      247.23661   31.51390  87.3%     - 58858s
+ 10594  6407      -    -    -      247.23661   31.51390  87.3%     - 59105s
+ 10622  6446      -    -    -      247.23661   31.51390  87.3%     - 59295s
+ 10671  6474      -    -    -      247.23661   31.51390  87.3%     - 59441s
+ 10715  6522      -    -    -      247.23661   31.51390  87.3%     - 59560s
+ 10778  6562      -    -    -      247.23661   31.51390  87.3%     - 59865s
+ 10839  6596      -    -    -      247.23661   31.51390  87.3%     - 60107s
+ 10893  6623      -    -    -      247.23661   31.51390  87.3%     - 60393s
+ 10938  6643      -    -    -      247.23661   31.51390  87.3%     - 60621s
+ 10973  6667      -    -    -      247.23661   31.51390  87.3%     - 61041s
+ 11009  6693      -    -    -      247.23661   31.51390  87.3%     - 61266s
+ 11047  6731      -    -    -      247.23661   31.51390  87.3%     - 61514s
+ 11097  6743      -    -    -      247.23661   31.51390  87.3%     - 61757s
+ 11126  6766      -    -    -      247.23661   31.51390  87.3%     - 62090s
+ 11159  6805      -    -    -      247.23661   31.51390  87.3%     - 62358s
+ 11209  6834      -    -    -      247.23661   31.51390  87.3%     - 62603s
+ 11254  6869      -    -    -      247.23661   31.51390  87.3%     - 62837s
+ 11304  6901      -    -    -      247.23661   31.51390  87.3%     - 63141s
+ 11353  6946      -    -    -      247.23661   31.51390  87.3%     - 63491s
+ 11407  6975      -    -    -      247.23661   31.51390  87.3%     - 63766s
+ 11436  7019      -    -    -      247.23661   31.51390  87.3%     - 63926s
+ 11480  7060      -    -    -      247.23661   31.51390  87.3%     - 64120s
+ 11521  7109      -    -    -      247.23661   31.51390  87.3%     - 64817s
+ 11570  7146      -    -    -      247.23661   31.51390  87.3%     - 65017s
+ 11607  7183      -    -    -      247.23661   31.51390  87.3%     - 65233s
+ 11644  7228      -    -    -      247.23661   31.51390  87.3%     - 65489s
+ 11689  7274      -    -    -      247.23661   31.51390  87.3%     - 65682s
+ 11735  7320      -    -    -      247.23661   31.51390  87.3%     - 65910s
+ 11781  7365      -    -    -      247.23661   31.51390  87.3%     - 66083s
+ 11826  7424      -    -    -      247.23661   31.51390  87.3%     - 66287s
+ 11885  7482      -    -    -      247.23661   31.51390  87.3%     - 66480s
+ 11943  7526      -    -    -      247.23661   31.51390  87.3%     - 66711s
+ 11987  7581      -    -    -      247.23661   31.51390  87.3%     - 67064s
+ 12026  7581      -    -    -      247.23661   31.51390  87.3%     - 67065s
+ 12042  7641      -    -    -      247.23661   31.51390  87.3%     - 67249s
+ 12102  7704      -    -    -      247.23661   31.51390  87.3%     - 67417s
+ 12165  7748      -    -    -      247.23661   31.51390  87.3%     - 67719s
+ 12209  7792      -    -    -      247.23661   31.51390  87.3%     - 67981s
+ 12253  7834      -    -    -      247.23661   31.51390  87.3%     - 68178s
+ 12295  7883      -    -    -      247.23661   31.51390  87.3%     - 68648s
+ 12344  7946      -    -    -      247.23661   31.51390  87.3%     - 68911s
+ 12407  8005      -    -    -      247.23661   31.51390  87.3%     - 69151s
+ 12466  8048      -    -    -      247.23661   31.51390  87.3%     - 69425s
+ 12509  8100      -    -    -      247.23661   31.51390  87.3%     - 69667s
+ 12561  8146      -    -    -      247.23661   31.51390  87.3%     - 69833s
+ 12607  8180      -    -    -      247.23661   31.51390  87.3%     - 70043s
+ 12641  8240      -    -    -      247.23661   31.51390  87.3%     - 70249s
+ 12701  8293      -    -    -      247.23661   31.51390  87.3%     - 70522s
+ 12754  8341      -    -    -      247.23661   31.51390  87.3%     - 70690s
+ 12804  8404      -    -    -      247.23661   31.51390  87.3%     - 70877s
+ 12867  8460      -    -    -      247.23661   31.51390  87.3%     - 71057s
+ 12923  8523      -    -    -      247.23661   31.51390  87.3%     - 71263s
+ 12986  8586      -    -    -      247.23661   31.51390  87.3%     - 71458s
+ 13049  8639      -    -    -      247.23661   31.51390  87.3%     - 71682s
+ 13102  8699      -    -    -      247.23661   31.51390  87.3%     - 71882s
+ 13162  8754      -    -    -      247.23661   31.51390  87.3%     - 72046s
+ 13217  8793      -    -    -      247.23661   31.51390  87.3%     - 72330s
+ 13256  8839      -    -    -      247.23661   31.51390  87.3%     - 72571s
+ 13302  8883      -    -    -      247.23661   31.51390  87.3%     - 72750s
+ 13346  8920      -    -    -      247.23661   31.51390  87.3%     - 73008s
+ 13383  8956      -    -    -      247.23661   31.51390  87.3%     - 73441s
+ 13419  8981      -    -    -      247.23661   31.51390  87.3%     - 73984s
+ 13444  9040      -    -    -      247.23661   31.51390  87.3%     - 74208s
+ 13503  9102      -    -    -      247.23661   31.51390  87.3%     - 74436s
+ 13565  9151      -    -    -      247.23661   31.51390  87.3%     - 74646s
+ 13614  9154      -    -    -      209.23382   31.51390  84.9%     - 78484s
+ 13617  9215      -    -    -      209.23382   31.51390  84.9%     - 78703s
+ 13678  9262      -    -    -      209.23382   31.51390  84.9%     - 78918s
+ 13725  9305      -    -    -      209.23382   31.51390  84.9%     - 79351s
+ 13768  9346      -    -    -      209.23382   31.51390  84.9%     - 79614s
+ 13809  9381      -    -    -      209.23382   31.51390  84.9%     - 79867s
+ 13844  9429      -    -    -      209.23382   31.51390  84.9%     - 80106s
+
+Resetting heuristic parameters to focus on improving solution
+(using Heuristics=0.5 and RINS=10)...
+
+ 13892  9432      -    -    -      199.11233   31.51390  84.2%     - 81682s
+ 13895  9446      -    -    -      197.23970   31.51390  84.0%     - 86400s
+
+Explored 0 nodes (0 simplex iterations) in 86402.83 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Solve interrupted (error code 10001)
+Best objective -, best bound -, gap -
