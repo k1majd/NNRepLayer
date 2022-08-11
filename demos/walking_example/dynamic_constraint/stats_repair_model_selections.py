@@ -517,7 +517,7 @@ if __name__ == "__main__":
     #     np.array(mae_list)
     #     == np.min(np.array(mae_list)[np.nonzero(np.array(mae_list))])
     # )[0][0]
-    sort_metric = "mae"
+    sort_metric = "mip_gap"
     if sort_metric == "mae":
         idx = np.hstack(
             (
@@ -593,7 +593,7 @@ if __name__ == "__main__":
     bold_idx = 0
 
     # print(mae_prev)
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=(15, 10))
     color_orig = "#D4D4D4"
     color_ref = "r"
     color_bold = "#8A8A8A"
@@ -612,7 +612,7 @@ if __name__ == "__main__":
     ax20.set_xlabel("Number of iterations")
     ax21.set_xlabel("Number of iterations")
     ax00.set_ylabel("MAE")
-    ax10.set_ylabel("Satisfaction Rate")
+    ax10.set_ylabel("Repair Efficacy")
     ax20.set_ylabel("L1 norm")
     # ax01.set_ylabel("L-inf norm")
     ax01.set_ylabel("Number of \n repaired weights")
@@ -816,13 +816,14 @@ if __name__ == "__main__":
         transform=ax20.get_yaxis_transform(),
     )
 
-    def forward(x):
-        return x ** (1 / 10)
+    # def forward(x):
+    #     return x ** (1 / 2)
 
-    def inverse(x):
-        return x**10
+    # def inverse(x):
+    #     return x**2
 
-    ax20.set_yscale("function", functions=(forward, inverse))
+    # ax20.set_yscale("function", functions=(forward, inverse))
+    ax20.set_yscale("log")
     ax20.set_ylim(np.min(l1_norm_list) - 0.5, np.max(l1_norm_list) + 10)
     # ax20.xaxis.set_ticklabels([])
     # ax01.bar(
@@ -885,15 +886,16 @@ if __name__ == "__main__":
         bbox=dict(facecolor="w", alpha=0.7),
         transform=ax01.get_yaxis_transform(),
     )
-    ax01.set_ylim(np.min(num_rep_weights) - 2, np.max(num_rep_weights) + 10)
+    ax01.set_ylim(1, np.max(num_rep_weights) + 10)
 
-    def forward(x):
-        return x ** (1 / 100)
+    ax01.set_yscale("log")
+    # def forward(x):
+    #     return x ** (1 / 2)
 
-    def inverse(x):
-        return x**100
+    # def inverse(x):
+    #     return x**2
 
-    ax01.set_yscale("function", functions=(forward, inverse))
+    # ax01.set_yscale("function", functions=(forward, inverse))
     ax01.xaxis.set_ticklabels([])
     ax11.bar(
         range(num_exp),
@@ -1023,7 +1025,7 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.5, 0.01),
+        bbox_to_anchor=(0.5, 0.04),
         bbox_transform=fig.transFigure,
         ncol=3,
         # fontsize=14,

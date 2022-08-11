@@ -231,7 +231,7 @@ def nearestPD(A):
     k = 1
     while not isPD(A3):
         mineig = np.min(np.real(np.linalg.eigvals(A3)))
-        A3 += I * (-mineig * k ** 2 + spacing)
+        A3 += I * (-mineig * k**2 + spacing)
         k += 1
 
     return A3
@@ -420,7 +420,7 @@ def main(given_comp):
     ax.clabel(contours, inline=True, fmt="%1.1f")
     ax.set_title("Objective")
     ax.set_xlabel(f"ev1")
-    ax.set_ylabel(f"evw")
+    ax.set_ylabel(f"ev2")
     # add colorbar
     cbar = fig.colorbar(ax.contourf(W1, W2, obj, cmap="RdGy"))
     cbar.ax.set_ylabel("Objective")
