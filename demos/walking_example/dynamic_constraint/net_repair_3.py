@@ -1,3 +1,5 @@
+# Repair sets of randomly selected nodes in the target layer of the network
+
 import numpy as np
 import os
 import csv
@@ -276,38 +278,29 @@ if __name__ == "__main__":
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
     bound = 2.0
-    x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
-    num_samples = 500
-    # rnd_pts = np.random.choice(1000, num_samples)
-    x_train, y_train = generate_repair_dataset(
-        test_obs, test_ctrls, num_samples, bound
-    )
-    # x_train = test_obs[0:1, :]
-    # y_train = test_ctrls[0:1]
-    hid_size = 64
-    load_str = "_7_20_2022_15_27_10"
+    # x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
+    hid_size = 128
+    load_str = "_8_9_2022_13_27_27"
     # load data
-    # if not os.path.exists(
-    #     os.path.dirname(os.path.realpath(__file__)) + "/data"
-    # ):
-    #     os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
-    # with open(
-    #     os.path.dirname(os.path.realpath(__file__))
-    #     + f"/data/repair_dataset{load_str}.pickle",
-    #     "rb",
-    # ) as data:
-    #     dataset = pickle.load(data)
+    if not os.path.exists(
+        os.path.dirname(os.path.realpath(__file__)) + "/data"
+    ):
+        os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
+    with open(
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/data/repair_dataset{load_str}.pickle",
+        "rb",
+    ) as data:
+        dataset = pickle.load(data)
 
-    # x_train = dataset[0]
-    # y_train = dataset[1]
+    x_train = dataset[0]
+    y_train = dataset[1]
+    x_test = dataset[2]
+    y_test = dataset[3]
 
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
         + f"/models/model_orig_{hid_size}"
-    )
-    model_repaired = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{load_str}"
     )
 
     def out_constraint1(model, i):
@@ -324,12 +317,10 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(3)
-    max_weight_bound = 1  # specifying the upper bound of weights error
+    max_weight_bound = 0.5  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
-    repair_node_list = select_repair_nodes(
-        ctrl_model_orig, model_repaired, layer_to_repair
-    )
+    repair_node_list = [10, 57, 70, 93, 105, 120, 127]
     num_nodes = (
         len(repair_node_list) if len(repair_node_list) != 0 else hid_size
     )
@@ -370,18 +361,6 @@ if __name__ == "__main__":
     if not os.path.exists(path_write + "/logs"):
         os.makedirs(path_write + "/logs")
 
-    # setup directory to store the modeled MIP and parameters
-    if not os.path.exists(path_write + "/stats"):
-        os.makedirs(path_write + "/stats")
-
-    # # setup directory to store the repaired model
-    # if not os.path.exists(path_write):
-    #     os.makedirs(
-    #         path_write
-    #         + f"/models/model_layer_32_nodes_{layer_to_repair}_{num_samples}_{num_nodes}"
-    #         + now_str
-    #     )
-
     # specify options
     options = Options(
         "gdp.bigm",
@@ -389,14 +368,14 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 18000,  # max time algorithm will take in seconds
+            "timelimit": 43200,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "cuts": 0,
             # "concurrentmip": 3,
             # "threads": 45,
-            "improvestarttime": 15000,
-            "logfile": path_write + f"/logs/opt_log{now_str}.log",
+            "improvestarttime": 40000,
+            "logfile": path_write + f"/logs/opt{4}_log{now_str}.log",
         },
     )
 
@@ -409,7 +388,7 @@ if __name__ == "__main__":
     # store the repaired model
     keras.models.save_model(
         out_model,
-        path_write + f"/models/model_layer{now_str}_relaxed",
+        path_write + f"/models/model{4}_layer{now_str}",
         overwrite=True,
         include_optimizer=False,
         save_format=None,
@@ -430,8 +409,8 @@ if __name__ == "__main__":
         pickle.dump([x_train, y_train, x_test, y_test], data)
 
     # save summary
-    pred_ctrls = out_model(test_obs, training=False)
-    err = np.abs(test_ctrls - pred_ctrls)
+    pred_ctrls = out_model(x_test, training=False)
+    err = np.abs(y_test - pred_ctrls)
     with open(
         path_write + f"/stats/repair_layer{now_str}.csv",
         "a+",
@@ -444,8 +423,8 @@ if __name__ == "__main__":
             layer_to_repair,
             "mae",
             np.sum(err) / err.shape[0],
-            "num_samples",
-            num_samples,
+            # "num_samples",
+            # num_samples,
             "num of repaired nodes",
             num_nodes,
             "repair node list",

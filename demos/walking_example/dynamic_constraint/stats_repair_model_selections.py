@@ -480,6 +480,8 @@ if __name__ == "__main__":
         )
         err = weights_orig - weights_repaired
         num_repaired_weights = 0
+        if idx == 4:
+            print(err)
         for i in range(err.shape[0]):
             if err[i] > 0.0001:
                 num_repaired_weights += 1
