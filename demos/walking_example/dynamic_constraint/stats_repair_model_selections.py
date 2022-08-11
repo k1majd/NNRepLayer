@@ -387,7 +387,7 @@ if __name__ == "__main__":
         31.4,
         42.0,
         34.0,
-        0.,
+        0.0,
         34.2,
         31.3,
         0,
@@ -424,7 +424,7 @@ if __name__ == "__main__":
         46.64,
         98.94,
         46.14,
-        0.,
+        0.0,
         45.22,
         53.88,
         0,
@@ -817,10 +817,10 @@ if __name__ == "__main__":
     )
 
     def forward(x):
-        return x ** (1 / 500)
+        return x ** (1 / 10)
 
     def inverse(x):
-        return x ** 500
+        return x**10
 
     ax20.set_yscale("function", functions=(forward, inverse))
     ax20.set_ylim(np.min(l1_norm_list) - 0.5, np.max(l1_norm_list) + 10)
@@ -888,10 +888,10 @@ if __name__ == "__main__":
     ax01.set_ylim(np.min(num_rep_weights) - 2, np.max(num_rep_weights) + 10)
 
     def forward(x):
-        return x ** (1 / 500)
+        return x ** (1 / 100)
 
     def inverse(x):
-        return x ** 500
+        return x**100
 
     ax01.set_yscale("function", functions=(forward, inverse))
     ax01.xaxis.set_ticklabels([])
@@ -1011,7 +1011,7 @@ if __name__ == "__main__":
         return x ** (1 / 500)
 
     def inverse(x):
-        return x ** 500
+        return x**500
 
     ax21.set_yscale("function", functions=(forward, inverse))
     ax21.set_ylim(np.min(cost_list) - 10, np.max(cost_list) + 10)
