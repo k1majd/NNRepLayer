@@ -1,5 +1,5 @@
-# Repair sets of randomly selected nodes in the target layer of the network
-
+# extract the subnodes that are extracted by applying sparsification
+# and then repair the extracted subnodes only
 import numpy as np
 import os
 import csv
@@ -286,22 +286,22 @@ if __name__ == "__main__":
     )
     # x_train = test_obs[0:1, :]
     # y_train = test_ctrls[0:1]
-    hid_size = 128
-    load_str = "_8_9_2022_13_27_27"
+    hid_size = 64
+    load_str = "_7_20_2022_15_27_10"
     # load data
-    if not os.path.exists(
-        os.path.dirname(os.path.realpath(__file__)) + "/data"
-    ):
-        os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
-    with open(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/data/repair_dataset{load_str}.pickle",
-        "rb",
-    ) as data:
-        dataset = pickle.load(data)
+    # if not os.path.exists(
+    #     os.path.dirname(os.path.realpath(__file__)) + "/data"
+    # ):
+    #     os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
+    # with open(
+    #     os.path.dirname(os.path.realpath(__file__))
+    #     + f"/data/repair_dataset{load_str}.pickle",
+    #     "rb",
+    # ) as data:
+    #     dataset = pickle.load(data)
 
-    x_train = dataset[0]
-    y_train = dataset[1]
+    # x_train = dataset[0]
+    # y_train = dataset[1]
 
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
@@ -326,102 +326,99 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(3)
-    max_weight_bound = 0.5  # specifying the upper bound of weights error
+    max_weight_bound = 1  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = select_repair_nodes(
         ctrl_model_orig, model_repaired, layer_to_repair
     )
-    num_experiments = 35
-    for ex in range(num_experiments):
-        if ex != 0:
-            repair_node_list = list(
-                np.sort(
-                    np.random.choice(
-                        [i for i in range(128)], 11, replace=False
-                    )
-                )
-            )
-        num_nodes = (
-            len(repair_node_list) if len(repair_node_list) != 0 else hid_size
-        )
-        repair_obj.compile(
-            x_train,
-            y_train,
-            layer_to_repair,
-            # output_constraint_list=output_constraint_list,
-            cost_weights=cost_weights,
-            max_weight_bound=max_weight_bound,
-            data_precision=6,
-            param_precision=6,
-            # repair_node_list=repair_set,
-            repair_node_list=repair_node_list,
-            w_error_norm=1,
-            # output_bounds=output_bounds,
-        )
-        setattr(
-            repair_obj.opt_model,
-            "output_constraint1" + str(layer_to_repair),
-            pyo.Constraint(
-                range(repair_obj.num_samples), rule=out_constraint1
-            ),
-        )
-        setattr(
-            repair_obj.opt_model,
-            "output_constraint2" + str(layer_to_repair),
-            pyo.Constraint(
-                range(repair_obj.num_samples), rule=out_constraint2
-            ),
-        )
+    num_nodes = (
+        len(repair_node_list) if len(repair_node_list) != 0 else hid_size
+    )
+    repair_obj.compile(
+        x_train,
+        y_train,
+        layer_to_repair,
+        # output_constraint_list=output_constraint_list,
+        cost_weights=cost_weights,
+        max_weight_bound=max_weight_bound,
+        data_precision=6,
+        param_precision=6,
+        # repair_node_list=repair_set,
+        repair_node_list=repair_node_list,
+        w_error_norm=1,
+        # output_bounds=output_bounds,
+    )
+    setattr(
+        repair_obj.opt_model,
+        "output_constraint1" + str(layer_to_repair),
+        pyo.Constraint(range(repair_obj.num_samples), rule=out_constraint1),
+    )
+    setattr(
+        repair_obj.opt_model,
+        "output_constraint2" + str(layer_to_repair),
+        pyo.Constraint(range(repair_obj.num_samples), rule=out_constraint2),
+    )
 
-        direc = os.path.dirname(os.path.realpath(__file__))
-        path_write = os.path.join(direc, "repair_net_relaxed")
+    direc = os.path.dirname(os.path.realpath(__file__))
+    path_write = os.path.join(direc, "repair_net_relaxed")
 
-        # check directories existence
-        if not os.path.exists(path_write):
-            os.makedirs(path_write)
-            print(f"Directory: {path_write} is created!")
+    # check directories existence
+    if not os.path.exists(path_write):
+        os.makedirs(path_write)
+        print(f"Directory: {path_write} is created!")
 
-        # setup directory to store optimizer log file
-        if not os.path.exists(path_write + "/logs"):
-            os.makedirs(path_write + "/logs")
+    # setup directory to store optimizer log file
+    if not os.path.exists(path_write + "/logs"):
+        os.makedirs(path_write + "/logs")
 
-        # specify options
-        options = Options(
-            "gdp.bigm",
-            "gurobi",
-            "python",
-            "keras",
-            {
-                "timelimit": 1800,  # max time algorithm will take in seconds
-                "mipgap": 0.01,  #
-                "mipfocus": 2,  #
-                "cuts": 0,
-                # "concurrentmip": 3,
-                # "threads": 45,
-                "improvestarttime": 1500,
-                "logfile": path_write + f"/logs/opt{ex}_log{now_str}.log",
-            },
-        )
+    # setup directory to store the modeled MIP and parameters
+    if not os.path.exists(path_write + "/stats"):
+        os.makedirs(path_write + "/stats")
 
-        # repair the network
-        out_model = repair_obj.repair(options)
+    # # setup directory to store the repaired model
+    # if not os.path.exists(path_write):
+    #     os.makedirs(
+    #         path_write
+    #         + f"/models/model_layer_32_nodes_{layer_to_repair}_{num_samples}_{num_nodes}"
+    #         + now_str
+    #     )
 
-        # store the modeled MIP and parameters
-        # repair_obj.summary(direc=path_write + "/summary")
+    # specify options
+    options = Options(
+        "gdp.bigm",
+        "gurobi",
+        "python",
+        "keras",
+        {
+            "timelimit": 18000,  # max time algorithm will take in seconds
+            "mipgap": 0.01,  #
+            "mipfocus": 2,  #
+            "cuts": 0,
+            # "concurrentmip": 3,
+            # "threads": 45,
+            "improvestarttime": 15000,
+            "logfile": path_write + f"/logs/opt_log{now_str}.log",
+        },
+    )
 
-        # store the repaired model
-        keras.models.save_model(
-            out_model,
-            path_write + f"/models/model{ex}_layer{now_str}",
-            overwrite=True,
-            include_optimizer=False,
-            save_format=None,
-            signatures=None,
-            options=None,
-            save_traces=True,
-        )
-        repair_obj.reset()
+    # repair the network
+    out_model = repair_obj.repair(options)
+
+    # store the modeled MIP and parameters
+    # repair_obj.summary(direc=path_write + "/summary")
+
+    # store the repaired model
+    keras.models.save_model(
+        out_model,
+        path_write + f"/models/model_layer{now_str}_relaxed",
+        overwrite=True,
+        include_optimizer=False,
+        save_format=None,
+        signatures=None,
+        options=None,
+        save_traces=True,
+    )
 
     if not os.path.exists(
         os.path.dirname(os.path.realpath(__file__)) + "/data"

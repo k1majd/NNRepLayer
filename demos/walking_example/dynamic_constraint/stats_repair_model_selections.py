@@ -480,6 +480,8 @@ if __name__ == "__main__":
         )
         err = weights_orig - weights_repaired
         num_repaired_weights = 0
+        if idx == 4:
+            print(err)
         for i in range(err.shape[0]):
             if err[i] > 0.0001:
                 num_repaired_weights += 1
@@ -820,7 +822,7 @@ if __name__ == "__main__":
         return x ** (1 / 10)
 
     def inverse(x):
-        return x**10
+        return x ** 10
 
     ax20.set_yscale("function", functions=(forward, inverse))
     ax20.set_ylim(np.min(l1_norm_list) - 0.5, np.max(l1_norm_list) + 10)
@@ -891,7 +893,7 @@ if __name__ == "__main__":
         return x ** (1 / 100)
 
     def inverse(x):
-        return x**100
+        return x ** 100
 
     ax01.set_yscale("function", functions=(forward, inverse))
     ax01.xaxis.set_ticklabels([])
@@ -1011,7 +1013,7 @@ if __name__ == "__main__":
         return x ** (1 / 500)
 
     def inverse(x):
-        return x**500
+        return x ** 500
 
     ax21.set_yscale("function", functions=(forward, inverse))
     ax21.set_ylim(np.min(cost_list) - 10, np.max(cost_list) + 10)
