@@ -393,12 +393,8 @@ if __name__ == "__main__":
     print(f"mae is {mae}")
     print(f"sat_rate is {sat_rate}")
     print(f"number of test samples is {test_obs.shape[0]}")
-    print(
-        f"weight l1 norm is {np.linalg.norm(weights_orig - weights_repaired, 1)}"
-    )
-    print(
-        f"weight l-inf norm is {np.linalg.norm(weights_orig - weights_repaired, np.inf)}"
-    )
+    print(f"weight l1 norm is {np.linalg.norm(err[err > 0.0001], 1)}")
+    print(f"weight l-inf norm is {np.linalg.norm(err[err > 0.0001], np.inf)}")
     print(
         f"number of repaired weights is {num_repaired_weights}/{err.shape[0]}"
     )

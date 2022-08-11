@@ -1,4 +1,5 @@
 from threading import BoundedSemaphore
+from turtle import color
 import numpy as np
 import os
 import csv
@@ -316,17 +317,20 @@ def give_stats(model, x, y, y_pred_prev, bound):
     x_temp = []
     y_orig = []
     y_new = []
+    y_prev = []
     for i in range(x.shape[0]):
         if np.abs(delta_u_prev[i]) <= bound:
             x_temp.append(x[i])
             y_orig.append(y[i])
             y_new.append(y_pred_new[i])
+            y_prev.append(y_pred_prev[i])
     x_temp = np.array(x_temp)
     y_orig = np.array(y_orig)
     y_new = np.array(y_new)
     mae = np.mean(np.abs(y_orig - y_new))
+    mae_prev = np.mean(np.abs(y_orig - y_prev))
 
-    return satisfaction_rate, mae
+    return satisfaction_rate, mae, mae_prev
 
 
 if __name__ == "__main__":
@@ -351,7 +355,45 @@ if __name__ == "__main__":
 
     # load the repaired dat set
     # load_data = "_8_9_2022_13_27_27"
-    for idx in range(3):
+    mae_list = []
+    sat_rate_list = []
+    l1_norm_list = []
+    linf_norm_list = []
+    num_rep_weights = []
+    mip_gap_list = [
+        39.5,
+        37.3,
+        33.6,
+        38.2,
+        33.1,
+        38.2,
+        34.0,
+        0,
+        37.1,
+        33.9,
+        32.9,
+        37.1,
+        33.6,
+        2.29,
+    ]
+    cost_list = [
+        42.99,
+        48.15,
+        47.33,
+        60.18,
+        94.56,
+        62.62,
+        48.32,
+        0.0,
+        52.13,
+        53.63,
+        48.21,
+        50.24,
+        47.98,
+        256.01,
+    ]
+    num_exp = 14
+    for idx in range(num_exp):
         load_str = "_8_10_2022_14_29_12"
         repaired_layer = 2
         model_repaired = keras.models.load_model(
@@ -365,22 +407,30 @@ if __name__ == "__main__":
         # original predictions
         ctrl_test_pred_orig = model_orig.predict(test_obs)
 
-        _, mae = give_stats(
+        _, mae, mae_prev = give_stats(
             model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound
         )
-        sat_rate, _ = give_stats(
-            model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound + 0.2
+        sat_rate, _, _ = give_stats(
+            model_repaired,
+            test_obs,
+            test_ctrls,
+            ctrl_test_pred_orig,
+            bound + 0.2,
         )
 
         weights_orig = np.concatenate(
             (
                 model_orig.get_weights()[2 * (repaired_layer - 1)].flatten(),
-                model_orig.get_weights()[2 * (repaired_layer - 1) + 1].flatten(),
+                model_orig.get_weights()[
+                    2 * (repaired_layer - 1) + 1
+                ].flatten(),
             )
         )
         weights_repaired = np.concatenate(
             (
-                model_repaired.get_weights()[2 * (repaired_layer - 1)].flatten(),
+                model_repaired.get_weights()[
+                    2 * (repaired_layer - 1)
+                ].flatten(),
                 model_repaired.get_weights()[
                     2 * (repaired_layer - 1) + 1
                 ].flatten(),
@@ -389,21 +439,557 @@ if __name__ == "__main__":
         err = weights_orig - weights_repaired
         num_repaired_weights = 0
         for i in range(err.shape[0]):
-            if err[i] > 0.001:
+            if err[i] > 0.0001:
                 num_repaired_weights += 1
 
-        print(f"mae is {mae}")
-        print(f"sat_rate is {sat_rate}")
-        print(f"number of test samples is {test_obs.shape[0]}")
-        print(
-            f"weight l1 norm is {np.linalg.norm(weights_orig - weights_repaired, 1)}"
+        # print(f"mae is {mae}")
+        # print(f"sat_rate is {sat_rate}")
+        # print(f"number of test samples is {test_obs.shape[0]}")
+        # print(f"weight l1 norm is {np.linalg.norm(err[err>0.0001], 1)}")
+        # print(f"weight l-inf norm is {np.linalg.norm(err[err>0.001], np.inf)}")
+        # print(
+        #     f"number of repaired weights is {num_repaired_weights}/{err.shape[0]}"
+        # )
+        if num_repaired_weights == 0:
+            mae_list.append(0)
+            sat_rate_list.append(0)
+            l1_norm_list.append(0)
+            linf_norm_list.append(0)
+            num_rep_weights.append(0)
+        else:
+            mae_list.append(mae)
+            sat_rate_list.append(sat_rate)
+            l1_norm_list.append(np.linalg.norm(err[err > 0.0001], 1))
+            linf_norm_list.append(np.linalg.norm(err[err > 0.0001], np.inf))
+            num_rep_weights.append(num_repaired_weights)
+    # list to np array
+    mae_list = np.array(mae_list)
+    sat_rate_list = np.array(sat_rate_list)
+    l1_norm_list = np.array(l1_norm_list)
+    linf_norm_list = np.array(linf_norm_list)
+    num_rep_weights = np.array(num_rep_weights)
+    mip_gap_list = np.array(mip_gap_list)
+    cost_list = np.array(cost_list)
+
+    # bold_idx = np.where(
+    #     np.array(mae_list)
+    #     == np.min(np.array(mae_list)[np.nonzero(np.array(mae_list))])
+    # )[0][0]
+    sort_metric = "mae"
+    if sort_metric == "mae":
+        idx = np.hstack(
+            (
+                np.delete(
+                    np.argsort(mae_list), np.where(np.sort(mae_list) == 0)[0]
+                ),
+                np.where(mae_list == 0)[0],
+            )
         )
-        print(
-            f"weight l-inf norm is {np.linalg.norm(weights_orig - weights_repaired, np.inf)}"
+    elif sort_metric == "sat_rate":
+        idx = np.argsort(sat_rate_list)
+        idx = idx[::-1]
+    elif sort_metric == "l1_norm":
+        idx = np.hstack(
+            (
+                np.delete(
+                    np.argsort(l1_norm_list),
+                    np.where(np.sort(l1_norm_list) == 0)[0],
+                ),
+                np.where(l1_norm_list == 0)[0],
+            )
         )
-        print(
-            f"number of repaired weights is {num_repaired_weights}/{err.shape[0]}"
+    elif sort_metric == "linf_norm":
+        idx = np.hstack(
+            (
+                np.delete(
+                    np.argsort(linf_norm_list),
+                    np.where(np.sort(linf_norm_list) == 0)[0],
+                ),
+                np.where(linf_norm_list == 0)[0],
+            )
         )
+    elif sort_metric == "num_rep_weights":
+        idx = np.hstack(
+            (
+                np.delete(
+                    np.argsort(num_rep_weights),
+                    np.where(np.sort(num_rep_weights) == 0)[0],
+                ),
+                np.where(num_rep_weights == 0)[0],
+            )
+        )
+    elif sort_metric == "mip_gap":
+        idx = np.hstack(
+            (
+                np.delete(
+                    np.argsort(mip_gap_list),
+                    np.where(np.sort(mip_gap_list) == 0)[0],
+                ),
+                np.where(mip_gap_list == 0)[0],
+            )
+        )
+        # idx = np.argsort(mip_gap_list)
+    elif sort_metric == "cost":
+        idx = np.hstack(
+            (
+                np.delete(
+                    np.argsort(cost_list), np.where(np.sort(cost_list) == 0)[0]
+                ),
+                np.where(cost_list == 0)[0],
+            )
+        )
+        # idx = np.argsort(cost_list)
+    # idx = idx[::-1]
+    mae_list = mae_list[idx]
+    sat_rate_list = sat_rate_list[idx]
+    l1_norm_list = l1_norm_list[idx]
+    linf_norm_list = linf_norm_list[idx]
+    num_rep_weights = num_rep_weights[idx]
+    mip_gap_list = mip_gap_list[idx]
+    cost_list = cost_list[idx]
+
+    bold_idx = 0
+
+    # print(mae_prev)
+    fig = plt.figure(figsize=(10, 10))
+    color_orig = "#D4D4D4"
+    color_ref = "r"
+    color_bold = "#8A8A8A"
+    line_width = 2
+    width = 0.9
+
+    gs = fig.add_gridspec(3, 2)
+    ax00 = fig.add_subplot(gs[0, 0])
+    ax10 = fig.add_subplot(gs[1, 0])
+    ax20 = fig.add_subplot(gs[2, 0])
+    ax01 = fig.add_subplot(gs[0, 1])
+    ax11 = fig.add_subplot(gs[1, 1])
+    ax21 = fig.add_subplot(gs[2, 1])
+    # ax11 = fig.add_subplot(gs[4, 0])
+    # ax01.set_title("Number of repaired weights")
+    ax20.set_xlabel("Number of iterations")
+    ax21.set_xlabel("Number of iterations")
+    ax00.set_ylabel("MAE")
+    ax10.set_ylabel("Satisfaction Rate")
+    ax20.set_ylabel("L1 norm")
+    # ax01.set_ylabel("L-inf norm")
+    ax01.set_ylabel("Number of \n repaired weights")
+    ax11.set_ylabel("MIP gap")
+    ax21.set_ylabel("Opt Cost")
+    id = np.where(np.array(mae_list) > 0.001)[0]
+    # bold_idx = np.where(
+    #     np.array(mae_list)
+    #     == np.max(np.array(mae_list)[np.nonzero(np.array(mae_list))])
+    # )[0][0]
+    # bold_idx = 0
+    ax00.bar(
+        range(num_exp),
+        mae_list,
+        color=color_orig,
+        # linewidth=line_width,
+        width=width,
+    )
+    ax00.bar(
+        bold_idx,
+        mae_list[bold_idx],
+        color=color_bold,
+        width=width,
+    )
+    # plot max and min line with label
+    mae_list = np.array(mae_list)[id]
+    ax00.axhline(
+        y=np.max(mae_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax00.axhline(
+        y=np.min(mae_list),
+        color="k",
+        linewidth=1.5,
+        linestyle="dashed",
+        label="min/max - partial repair",
+    )  # lower bound
+    ax00.axhline(
+        y=0.5,
+        color=color_ref,
+        linewidth=1.5,
+        linestyle="dashed",
+        label="full repair",
+    )  # ref
+    ax00.axhline(
+        y=mae_prev,
+        color="b",
+        linewidth=1.5,
+        linestyle="dashed",
+        label="original net",
+    )  # ref
+    ax00.text(
+        1.02,
+        np.max(mae_list),
+        f"{np.round(np.max(mae_list),2):.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax00.get_yaxis_transform(),
+    )
+    ax00.text(
+        1.02,
+        np.min(mae_list),
+        f"{np.round(np.min(mae_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax00.get_yaxis_transform(),
+    )
+    ax00.text(
+        0.80,
+        0.5,
+        f"{np.round(0.5,2) :.2f}",
+        va="center",
+        ha="left",
+        color=color_ref,
+        bbox=dict(facecolor="w", alpha=1),
+        transform=ax00.get_yaxis_transform(),
+    )
+    ax00.text(
+        0.60,
+        mae_prev,
+        f"{np.round(mae_prev,2) :.2f}",
+        va="center",
+        ha="left",
+        color="b",
+        bbox=dict(facecolor="w", alpha=0.7),
+        transform=ax00.get_yaxis_transform(),
+    )
+    ax00.set_ylim(np.min(mae_list) - 0.05, np.max(mae_list) + 0.05)
+    ax00.xaxis.set_ticklabels([])
+    ax10.bar(
+        range(num_exp),
+        sat_rate_list,
+        color=color_orig,
+        # linewidth=line_width,
+        width=width,
+    )
+    ax10.bar(
+        bold_idx,
+        sat_rate_list[bold_idx],
+        color=color_bold,
+        width=width,
+    )
+    # plot max and min line with label
+    sat_rate_list = np.array(sat_rate_list)[id]
+    ax10.axhline(
+        y=np.max(sat_rate_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax10.axhline(
+        y=np.min(sat_rate_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # lower bound
+    ax10.axhline(
+        y=0.93, color=color_ref, linewidth=1.5, linestyle="dashed"
+    )  # ref
+    ax10.text(
+        1.02,
+        np.max(sat_rate_list),
+        f"{np.max(sat_rate_list):.3f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax10.get_yaxis_transform(),
+    )
+    ax10.text(
+        1.02,
+        np.min(sat_rate_list),
+        f"{np.min(sat_rate_list) :.3f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax10.get_yaxis_transform(),
+    )
+    ax10.text(
+        0.80,
+        0.93,
+        f"{np.round(0.93,2) :.2f}",
+        va="center",
+        ha="left",
+        color=color_ref,
+        bbox=dict(facecolor="w", alpha=0.7),
+        transform=ax10.get_yaxis_transform(),
+    )
+    ax10.set_ylim(np.min(sat_rate_list) - 0.03, 1)
+    ax10.xaxis.set_ticklabels([])
+    ax20.bar(
+        range(num_exp),
+        l1_norm_list,
+        color=color_orig,
+        # linewidth=line_width,
+        width=width,
+    )
+    ax20.bar(
+        bold_idx,
+        l1_norm_list[bold_idx],
+        color=color_bold,
+        width=width,
+    )
+    l1_norm_list = np.array(l1_norm_list)[id]
+    # plot max and min line with its value label in line
+    ax20.axhline(
+        y=np.max(l1_norm_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax20.axhline(
+        y=np.min(l1_norm_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # lower bound
+    ax20.axhline(
+        y=2.42, color=color_ref, linewidth=1.5, linestyle="dashed"
+    )  # ref
+    ax20.text(
+        1.02,
+        np.max(l1_norm_list),
+        f"{np.round(np.max(l1_norm_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax20.get_yaxis_transform(),
+    )
+    ax20.text(
+        1.02,
+        np.min(l1_norm_list),
+        f"{np.round(np.min(l1_norm_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax20.get_yaxis_transform(),
+    )
+    ax20.text(
+        0.80,
+        2.42,
+        f"{np.round(2.42,2) :.2f}",
+        va="center",
+        ha="left",
+        color=color_ref,
+        bbox=dict(facecolor="w", alpha=0.7),
+        transform=ax20.get_yaxis_transform(),
+    )
+
+    def forward(x):
+        return x ** (1 / 500)
+
+    def inverse(x):
+        return x ** 500
+
+    ax20.set_yscale("function", functions=(forward, inverse))
+    ax20.set_ylim(np.min(l1_norm_list) - 0.5, np.max(l1_norm_list) + 10)
+    # ax20.xaxis.set_ticklabels([])
+    # ax01.bar(
+    #     range(num_exp),
+    #     linf_norm_list,
+    #     color=color_orig,
+    #     linewidth=line_width,
+    # )
+    ax01.bar(
+        range(num_exp),
+        num_rep_weights,
+        color=color_orig,
+        # linewidth=line_width,
+        width=width,
+    )
+    ax01.bar(
+        bold_idx,
+        num_rep_weights[bold_idx],
+        color=color_bold,
+        width=width,
+    )
+    num_rep_weights = np.array(num_rep_weights)[id]
+    # plot max and min line with label
+    ax01.axhline(
+        y=np.max(num_rep_weights), color="k", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax01.axhline(
+        y=np.min(num_rep_weights), color="k", linewidth=1.5, linestyle="dashed"
+    )  # lower bound
+    ax01.axhline(
+        y=14, color=color_ref, linewidth=1.5, linestyle="dashed"
+    )  # ref
+    ax01.text(
+        1.02,
+        np.max(num_rep_weights),
+        f"{np.round(np.max(num_rep_weights),2)}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax01.get_yaxis_transform(),
+    )
+    ax01.text(
+        1.02,
+        np.min(num_rep_weights),
+        f"{np.round(np.min(num_rep_weights),2)}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax01.get_yaxis_transform(),
+    )
+    ax01.text(
+        0.80,
+        14,
+        f"{np.round(14,2)}",
+        va="center",
+        ha="left",
+        color=color_ref,
+        bbox=dict(facecolor="w", alpha=0.7),
+        transform=ax01.get_yaxis_transform(),
+    )
+    ax01.set_ylim(np.min(num_rep_weights) - 2, np.max(num_rep_weights) + 10)
+
+    def forward(x):
+        return x ** (1 / 500)
+
+    def inverse(x):
+        return x ** 500
+
+    ax01.set_yscale("function", functions=(forward, inverse))
+    ax01.xaxis.set_ticklabels([])
+    ax11.bar(
+        range(num_exp),
+        mip_gap_list,
+        color=color_orig,
+        # linewidth=line_width,
+        width=width,
+    )
+    ax11.bar(
+        bold_idx,
+        mip_gap_list[bold_idx],
+        color=color_bold,
+        width=width,
+    )
+    mip_gap_list = np.array(mip_gap_list)[id]
+    # plot max and min line with label
+    ax11.axhline(
+        y=np.max(mip_gap_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax11.axhline(
+        y=np.min(mip_gap_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # lower bound
+    ax11.axhline(
+        y=38.8, color=color_ref, linewidth=1.5, linestyle="dashed"
+    )  # ref
+    ax11.text(
+        1.02,
+        np.max(mip_gap_list),
+        f"{np.round(np.max(mip_gap_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax11.get_yaxis_transform(),
+    )
+    ax11.text(
+        1.02,
+        np.min(mip_gap_list),
+        f"{np.round(np.min(mip_gap_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax11.get_yaxis_transform(),
+    )
+    ax11.text(
+        0.80,
+        38.8,
+        f"{np.round(38.8,2) :.2f}",
+        va="center",
+        ha="left",
+        color=color_ref,
+        bbox=dict(facecolor="w", alpha=0.7),
+        transform=ax11.get_yaxis_transform(),
+    )
+    ax11.set_ylim(np.min(mip_gap_list) - 2, np.max(mip_gap_list) + 2)
+
+    ax11.xaxis.set_ticklabels([])
+    ax21.bar(
+        range(num_exp),
+        cost_list,
+        color=color_orig,
+        # linewidth=line_width,
+        width=width,
+    )
+    ax21.bar(
+        bold_idx,
+        cost_list[bold_idx],
+        color=color_bold,
+        width=width,
+    )
+    cost_list = np.array(cost_list)[id]
+    # plot max and min line with label
+    ax21.axhline(
+        y=np.max(cost_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # upper bound
+    ax21.axhline(
+        y=np.min(cost_list), color="k", linewidth=1.5, linestyle="dashed"
+    )  # lower bound
+    ax21.axhline(
+        y=40.29, color=color_ref, linewidth=1.5, linestyle="dashed"
+    )  # ref
+    ax21.text(
+        1.02,
+        np.max(cost_list),
+        f"{np.round(np.max(cost_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax21.get_yaxis_transform(),
+    )
+    ax21.text(
+        1.02,
+        np.min(cost_list),
+        f"{np.round(np.min(cost_list),2) :.2f}",
+        va="center",
+        ha="left",
+        color="k",
+        bbox=dict(facecolor="w", alpha=0.5),
+        transform=ax21.get_yaxis_transform(),
+    )
+    ax21.text(
+        0.80,
+        40.29,
+        f"{np.round(40.29,2) :.2f}",
+        va="center",
+        ha="left",
+        color=color_ref,
+        bbox=dict(facecolor="w", alpha=0.7),
+        transform=ax21.get_yaxis_transform(),
+    )
+
+    def forward(x):
+        return x ** (1 / 500)
+
+    def inverse(x):
+        return x ** 500
+
+    ax21.set_yscale("function", functions=(forward, inverse))
+    ax21.set_ylim(np.min(cost_list) - 10, np.max(cost_list) + 10)
+    # ax21.xaxis.set_ticklabels([])
+
+    lines, labels = ax00.get_legend_handles_labels()
+    leg = fig.legend(
+        lines,
+        labels,
+        loc="center",
+        # bbox_to_anchor=(0.5, -0.5),
+        bbox_to_anchor=(0.5, 0.01),
+        bbox_transform=fig.transFigure,
+        ncol=3,
+        # fontsize=14,
+    )
+    leg.get_frame().set_facecolor("white")
+    # plt.tight_layout()
+    plt.show()
+
     # hand label the data set
 
     # store the modeled MIP and parameters
