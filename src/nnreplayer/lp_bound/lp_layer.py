@@ -44,9 +44,9 @@ class LPLayer:
         self.layer_num = model.nlayers
         self.uin, self.uout = uin, uout
         self.repair_node_list = repair_node_list  # list of repair nodes
-        self.not_repair_node_list = [
-            i for i in range(self.uout) if i not in self.repair_node_list
-        ]
+        # self.not_repair_node_list = [
+        #     i for i in range(self.uout) if i not in self.repair_node_list
+        # ]
         # detect if this layer is a repair layer and if so,
         # which nodes are repaired. If this layer is not a repair layer,
         # then its weight and bias terms are fixed to the original values.
@@ -55,32 +55,32 @@ class LPLayer:
             def w_bound(model, i, j):
                 return (
                     np.round(
-                        weights[i, repair_node_list[j]] - max_weight_bound,
+                        weights[i, j] - max_weight_bound,
                         param_precision,
                     ),
                     np.round(
-                        weights[i, repair_node_list[j]] + max_weight_bound,
+                        weights[i, j] + max_weight_bound,
                         param_precision,
                     ),
                 )
 
             def w_initialize(model, i, j):
-                return weights[i, repair_node_list[j]]
+                return weights[i, j]
 
             def b_bound(model, j):
                 return (
                     np.round(
-                        bias[repair_node_list[j]] - max_weight_bound,
+                        bias[j] - max_weight_bound,
                         param_precision,
                     ),
                     np.round(
-                        bias[repair_node_list[j]] + max_weight_bound,
+                        bias[j] + max_weight_bound,
                         param_precision,
                     ),
                 )
 
             def b_initialize(model, j):
-                return bias[repair_node_list[j]]
+                return bias[j]
 
             w_l, b_l = "w_r", "b_r"
             setattr(
@@ -88,7 +88,7 @@ class LPLayer:
                 w_l,
                 pyo.Var(
                     range(uin),
-                    range(len(repair_node_list)),
+                    repair_node_list,
                     domain=pyo.Reals,
                     bounds=w_bound,
                     initialize=w_initialize,
@@ -98,7 +98,7 @@ class LPLayer:
                 model,
                 b_l,
                 pyo.Var(
-                    range(len(repair_node_list)),
+                    repair_node_list,
                     domain=pyo.Reals,
                     bounds=b_bound,
                     initialize=b_initialize,
@@ -198,14 +198,14 @@ class LPLayer:
 
         # define the variables of the next nodes
         def x_next_bound(model, j):
-            return (0.0, getattr(model, ub_l)[self.repair_node_list[j]])
+            return (getattr(model, lb_l)[j], getattr(model, ub_l)[j])
 
         setattr(
             self.model,
             x_l,
             pyo.Var(
-                range(num_next_repair_nodes),
-                domain=pyo.NonNegativeReals,
+                self.repair_node_list,
+                domain=pyo.Reals,
                 bounds=x_next_bound,
             ),
         )
@@ -214,9 +214,22 @@ class LPLayer:
             self.model,
             theta_l,
             pyo.Var(
-                range(num_next_repair_nodes),
+                self.repair_node_list,
                 domain=pyo.NonNegativeReals,
                 bounds=(0.0, 1.0),
+            ),
+        )
+
+        # create parametric nodes for nodes not in repair list
+        not_repair_list_nodes = [
+            i for i in range(self.uout) if i not in self.repair_node_list
+        ]
+        setattr(
+            self.model,
+            "x" + str(self.layer_num_next) + "_param",
+            pyo.Param(
+                not_repair_list_nodes,
+                domain=pyo.NonNegativeReals,
             ),
         )
 
@@ -227,9 +240,9 @@ class LPLayer:
             for k in range(self.uin):
                 product += model.inp[k] * model.w_r[k, j]
             # return constraint based on the activation status of the node
-            if getattr(model, lb_l)[self.repair_node_list[j]] >= 0:
+            if getattr(model, lb_l)[j] >= 0:
                 return product == getattr(model, x_l)[j]
-            elif getattr(model, ub_l)[self.repair_node_list[j]] <= 0:
+            elif getattr(model, ub_l)[j] <= 0:
                 return getattr(model, x_l)[j] == 0
             else:
                 return product <= getattr(model, x_l)[j]
@@ -238,7 +251,7 @@ class LPLayer:
             self.model,
             "constraint_inequality_1_lay" + str(self.layer_num_next),
             pyo.Constraint(
-                range(num_next_repair_nodes),
+                self.repair_node_list,
                 rule=constraint_1,
             ),
         )
@@ -249,14 +262,14 @@ class LPLayer:
             for k in range(self.uin):
                 product += model.inp[k] * model.w_r[k, j]
             # return constraint based on the activation status of the node
-            if getattr(model, lb_l)[self.repair_node_list[j]] >= 0:
+            if getattr(model, lb_l)[j] >= 0:
                 return pyo.Constraint.Skip
-            elif getattr(model, ub_l)[self.repair_node_list[j]] <= 0:
+            elif getattr(model, ub_l)[j] <= 0:
                 return pyo.Constraint.Skip
             else:
                 return (
                     product
-                    - getattr(model, lb_l)[self.repair_node_list[j]]
+                    - getattr(model, lb_l)[j]
                     * (1 - getattr(model, theta_l)[j])
                     >= getattr(model, x_l)[j]
                 )
@@ -265,7 +278,7 @@ class LPLayer:
             self.model,
             "constraint_inequality_2_lay" + str(self.layer_num_next),
             pyo.Constraint(
-                range(num_next_repair_nodes),
+                self.repair_node_list,
                 rule=constraint_2,
             ),
         )
@@ -276,14 +289,13 @@ class LPLayer:
             for k in range(self.uin):
                 product += model.inp[k] * model.w_r[k, j]
             # return constraint based on the activation status of the node
-            if getattr(model, lb_l)[self.repair_node_list[j]] >= 0:
+            if getattr(model, lb_l)[j] >= 0:
                 return pyo.Constraint.Skip
-            elif getattr(model, ub_l)[self.repair_node_list[j]] <= 0:
+            elif getattr(model, ub_l)[j] <= 0:
                 return pyo.Constraint.Skip
             else:
                 return (
-                    getattr(model, ub_l)[self.repair_node_list[j]]
-                    * getattr(model, theta_l)[j]
+                    getattr(model, ub_l)[j] * getattr(model, theta_l)[j]
                     >= getattr(model, x_l)[j]
                 )
 
@@ -291,36 +303,12 @@ class LPLayer:
             self.model,
             "constraint_inequality_3_lay" + str(self.layer_num_next),
             pyo.Constraint(
-                range(num_next_repair_nodes),
+                self.repair_node_list,
                 rule=constraint_3,
             ),
         )
 
         return getattr(self.model, x_l)
-        # collect the values of next layer
-        # x_next = []  # values of next layer
-        # for c in range(self.uout):
-        #     if c in self.repair_node_list:
-        #         x_next.append(
-        #             getattr(self.model, x_l)[self.repair_node_list.index(c)]
-        #         )
-        #     else:
-        #         # ||||||||||
-        #         # ----> you may need to define this part with pyo.Param
-        #         # x_val_temp = self.b_orig[c]
-        #         # for k in range(self.uin):
-        #         #     x_val_temp += self.model.inp[k] * self.w_orig[k, c]
-        #         # # x_val_temp = pyo.maximize(0.,x_val_temp)
-        #         # x_next.append(
-        #         #     x_val_temp
-        #         # ) if x_val_temp >= 0.0 else x_next.append(0.0)
-        #         x_next.append(
-        #             self.model.x_inactive_next[
-        #                 self.not_repair_node_list.index(c)
-        #             ]
-        #         )
-
-        # return x_next
 
     def _relu_constraints(
         self,
@@ -352,6 +340,15 @@ class LPLayer:
         )
         setattr(self.model, ub_l, pyo.Param(range(self.uout)))
         setattr(self.model, lb_l, pyo.Param(range(self.uout)))
+
+        # detect if these nodes are exactly after the repair nodes
+        # if self.layer_num == self.layer_to_repair+1:
+        #     if self.uin != len(self.repair_node_list):
+        #         lb_l = (
+        #     "ub" + str(self.layer_num_next),
+        #     "lb" + str(self.layer_num_next),
+        #     )
+
         if self.layer_num == final_layer:
             num_next_repair_nodes = 1
 
@@ -378,14 +375,25 @@ class LPLayer:
             def constraint_1(model):
                 product = self.b[final_node]
                 for k in range(self.uin):
-                    if x.name.split("x")[1] == "1":
-                        product += model.x1[k] * self.w[k, final_node]
-                    elif x.name.split("x")[1] == "2":
-                        product += model.x2[k] * self.w[k, final_node]
-                    elif x.name.split("x")[1] == "3":
-                        product += model.x3[k] * self.w[k, final_node]
-                    elif x.name.split("x")[1] == "4":
-                        product += model.x4[k] * self.w[k, final_node]
+                    if k in getattr(model, x.name).keys():
+                        product += (
+                            getattr(model, x.name)[k] * self.w[k, final_node]
+                        )
+                    else:
+                        product += (
+                            getattr(
+                                model, "x" + str(self.layer_num) + "_param"
+                            )[k]
+                            * self.w[k, final_node]
+                        )
+                    # if x.name.split("x")[1] == "1":
+                    #     product += model.x1[k] * self.w[k, final_node]
+                    # elif x.name.split("x")[1] == "2":
+                    #     product += model.x2[k] * self.w[k, final_node]
+                    # elif x.name.split("x")[1] == "3":
+                    #     product += model.x3[k] * self.w[k, final_node]
+                    # elif x.name.split("x")[1] == "4":
+                    #     product += model.x4[k] * self.w[k, final_node]
                     # product += x[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, ub_l)[final_node] <= 0:
@@ -406,7 +414,7 @@ class LPLayer:
             num_next_repair_nodes = self.uout
 
             def x_next_bound(model, j):
-                return (0.0, getattr(model, ub_l)[j])
+                return (getattr(model, lb_l)[j], getattr(model, ub_l)[j])
 
             # define the variables of the next nodes
             x_l, theta_l = (
@@ -418,7 +426,7 @@ class LPLayer:
                 x_l,
                 pyo.Var(
                     range(num_next_repair_nodes),
-                    domain=pyo.NonNegativeReals,
+                    domain=pyo.Reals,
                     bounds=x_next_bound,
                 ),
             )
@@ -437,14 +445,25 @@ class LPLayer:
             def constraint_1(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    if x.name.split("x")[1] == "1":
-                        product += model.x1[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "2":
-                        product += model.x2[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "3":
-                        product += model.x3[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "4":
-                        product += model.x4[k] * self.w[k, j]
+                    if k in getattr(model, x.name).keys():
+                        product += (
+                            getattr(model, x.name)[k] * self.w[k, final_node]
+                        )
+                    else:
+                        product += (
+                            getattr(
+                                model, "x" + str(self.layer_num) + "_param"
+                            )[k]
+                            * self.w[k, final_node]
+                        )
+                    # if x.name.split("x")[1] == "1":
+                    #     product += model.x1[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "2":
+                    #     product += model.x2[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "3":
+                    #     product += model.x3[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "4":
+                    #     product += model.x4[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, lb_l)[j] >= 0:
                     return product == getattr(model, x_l)[j]
@@ -466,14 +485,25 @@ class LPLayer:
             def constraint_2(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    if x.name.split("x")[1] == "1":
-                        product += model.x1[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "2":
-                        product += model.x2[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "3":
-                        product += model.x3[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "4":
-                        product += model.x4[k] * self.w[k, j]
+                    if k in getattr(model, x.name).keys():
+                        product += (
+                            getattr(model, x.name)[k] * self.w[k, final_node]
+                        )
+                    else:
+                        product += (
+                            getattr(
+                                model, "x" + str(self.layer_num) + "_param"
+                            )[k]
+                            * self.w[k, final_node]
+                        )
+                    # if x.name.split("x")[1] == "1":
+                    #     product += model.x1[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "2":
+                    #     product += model.x2[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "3":
+                    #     product += model.x3[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "4":
+                    #     product += model.x4[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, lb_l)[j] >= 0:
                     return pyo.Constraint.Skip
@@ -500,14 +530,25 @@ class LPLayer:
             def constraint_3(model, j):
                 product = self.b[j]
                 for k in range(self.uin):
-                    if x.name.split("x")[1] == "1":
-                        product += model.x1[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "2":
-                        product += model.x2[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "3":
-                        product += model.x3[k] * self.w[k, j]
-                    elif x.name.split("x")[1] == "4":
-                        product += model.x4[k] * self.w[k, j]
+                    if k in getattr(model, x.name).keys():
+                        product += (
+                            getattr(model, x.name)[k] * self.w[k, final_node]
+                        )
+                    else:
+                        product += (
+                            getattr(
+                                model, "x" + str(self.layer_num) + "_param"
+                            )[k]
+                            * self.w[k, final_node]
+                        )
+                    # if x.name.split("x")[1] == "1":
+                    #     product += model.x1[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "2":
+                    #     product += model.x2[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "3":
+                    #     product += model.x3[k] * self.w[k, j]
+                    # elif x.name.split("x")[1] == "4":
+                    #     product += model.x4[k] * self.w[k, j]
                 # return constraint based on the activation status of the node
                 if getattr(model, lb_l)[j] >= 0:
                     return pyo.Constraint.Skip

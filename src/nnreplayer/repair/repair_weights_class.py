@@ -13,7 +13,7 @@ from nnreplayer.mip import MIPNNModel
 from nnreplayer.lp_bound import LPNNModel
 from nnreplayer.utils import give_mse_error
 from nnreplayer.utils import Options
-from nnreplayer.utils import ConstraintsClass
+from nnreplayer.utils import ConstraintsClass, BoundStatTracker
 
 
 class NNRepair:
@@ -516,9 +516,19 @@ class NNRepair:
     def __tight_bounds_lp(
         self, layer_values, weights, bias, ub_mat, lb_mat, max_weight_bound
     ):
-
+        # initialize stat recorder
+        bound_stat_tracker = BoundStatTracker(self.architecture)
+        not_repair_list = [
+            i
+            for i in range(self.architecture[self.layer_to_repair])
+            if i not in self.repair_node_list
+        ]
         for l in range(self.layer_to_repair + 1, len(self.architecture)):
-            for n in range(self.architecture[l]):
+            if l == self.layer_to_repair + 1:
+                next_node_list = self.repair_node_list
+            else:
+                next_node_list = range(self.architecture[l])
+            for n in next_node_list:
                 lp_model_layer = LPNNModel(
                     self.layer_to_repair,
                     self.architecture,
@@ -530,26 +540,24 @@ class NNRepair:
                     self.data_precision,
                 )
                 x = lp_model_layer(l, n)
-                # capture statistics
-                max_ub = 0.0
-                min_ub = np.inf
-                min_lb = 0.0
-                max_lb = -np.inf
-                avg_ub = 0.0
-                avg_lb = 0.0
-                stably_active_nodes = 0
-                stably_inactive_nodes = 0
-                num_nodes = 0
-                print(f"LP: layer {l}, node {n} - stats")
                 for s in range(self.num_samples):
                     par_dict = {}
                     par_dict["inp"] = {
                         i: layer_values[self.layer_to_repair - 1][s][i]
+                        if layer_values[self.layer_to_repair - 1][s][i] > 0
+                        else 0.0
                         for i in range(
                             layer_values[self.layer_to_repair - 1][s].shape[0]
                         )
                     }
                     # bound_idx = 0
+                    if len(not_repair_list) != 0:
+                        par_dict[
+                            "x" + str(self.layer_to_repair + 1) + "_param"
+                        ] = {
+                            i: layer_values[self.layer_to_repair][s][i]
+                            for i in not_repair_list
+                        }
                     for lay in range(self.layer_to_repair, l + 1):
                         par_dict[f"lb{lay+1}"] = {
                             i: lb_mat[lay - self.layer_to_repair][s][i]
@@ -563,67 +571,36 @@ class NNRepair:
                     lp_instance = lp_model_layer.model.create_instance(
                         {None: par_dict}
                     )
+
                     # minimum bound
                     cost_expr = getattr(lp_instance, x.name)[0]
                     lp_instance.obj = pyo.Objective(expr=cost_expr)
                     opt = pyo.SolverFactory("gurobi", solver_io="python")
                     opt.solve(lp_instance, tee=False)
-
-                    # print(
-                    #     f"lb - s: {s}, n:{n} - diff: {getattr(lp_instance, x.name)[0]._value- lb_mat[l - self.layer_to_repair][s][n]}"
-                    # )
                     lb_mat[l - self.layer_to_repair][s][n] = np.round(
                         getattr(lp_instance, x.name)[0]._value,
                         self.data_precision,
                     )
                     lp_instance.del_component("obj")
+
                     # maximum bound
                     cost_expr = -getattr(lp_instance, x.name)[0]
                     lp_instance.obj = pyo.Objective(expr=cost_expr)
                     opt.solve(lp_instance, tee=False)
-                    # print(
-                    #     f"ub - s: {s}, n:{n} - diff: {ub_mat[l - self.layer_to_repair][s][n] - getattr(lp_instance, x.name)[0]._value}"
-                    # )
                     ub_mat[l - self.layer_to_repair][s][n] = np.round(
                         getattr(lp_instance, x.name)[0]._value,
                         self.data_precision,
                     )
                     lp_instance.del_component("obj")
-                    # capture stats
-                    if ub_mat[l - self.layer_to_repair][s][n] > max_ub:
-                        max_ub = ub_mat[l - self.layer_to_repair][s][n]
-                    if ub_mat[l - self.layer_to_repair][s][n] < min_ub:
-                        min_ub = ub_mat[l - self.layer_to_repair][s][n]
-                    if lb_mat[l - self.layer_to_repair][s][n] < min_lb:
-                        min_lb = lb_mat[l - self.layer_to_repair][s][n]
-                    if lb_mat[l - self.layer_to_repair][s][n] > max_lb:
-                        max_lb = lb_mat[l - self.layer_to_repair][s][n]
-                    avg_ub += ub_mat[l - self.layer_to_repair][s][n]
-                    avg_lb += lb_mat[l - self.layer_to_repair][s][n]
-                    if lb_mat[l - self.layer_to_repair][s][n] >= 0:
-                        stably_active_nodes += 1
-                    if ub_mat[l - self.layer_to_repair][s][n] <= 0:
-                        stably_inactive_nodes += 1
-                    num_nodes += 1
-                # print average stats
-                avg_ub /= self.num_samples
-                avg_lb /= self.num_samples
-                if num_nodes != 0:
-                    print(
-                        f"max_ub: {max_ub}, min_ub: {min_ub}, avg_ub: {avg_ub}"
+                    # update stats
+                    bound_stat_tracker.update_stats(
+                        lb_mat[l - self.layer_to_repair][s][n],
+                        ub_mat[l - self.layer_to_repair][s][n],
+                        l,
+                        n,
                     )
-                    print(
-                        f"max_lb: {max_lb}, min_lb: {min_lb}, avg_lb: {avg_lb}"
-                    )
-                    if l != len(self.architecture) - 1:
-                        print(
-                            f"stably active integer variables LP: {stably_active_nodes}/{num_nodes}"
-                        )
-                        print(
-                            f"stably inactive integer variables LP: {stably_inactive_nodes}/{num_nodes}"
-                        )
-                    print(" ")
-            print(f"_______")
+                # print stats
+            bound_stat_tracker.print_stats(l)
 
         return ub_mat, lb_mat
 

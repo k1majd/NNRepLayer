@@ -184,9 +184,9 @@ def main(
     # x_train = x_train[0:1, :]
     # y_train = y_train[0:1, :]
     repair_obj.compile(
-        x_train,
-        y_train,
-        2,
+        x_train[0:1, :],
+        y_train[0:1, :],
+        1,
         output_constraint_list=output_constraint_list,
         cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
@@ -194,7 +194,7 @@ def main(
         param_precision=6,
         repair_node_list=[0, 2],
         w_error_norm=0,
-        bound_tightening_method="ia",
+        bound_tightening_method="lp",
         # output_bounds=(-100.0, 100.0),
     )
     repair_obj.summary(direc=path_write + "/summery")
