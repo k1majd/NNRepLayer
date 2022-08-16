@@ -1,0 +1,168 @@
+
+Gurobi 9.5.0 (win64) logging started Sun Aug 14 14:14:17 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\walking_example\dynamic_constraint\repair_net/logs/opt_log_8_14_2022_14_8_27.log"
+Set parameter SolFiles to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\walking_example\dynamic_constraint\repair_net/sol/sol__8_14_2022_14_8_27/solution"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 221226 rows, 151566 columns and 12779022 nonzeros
+Model fingerprint: 0x6a019d83
+Model has 270 quadratic objective terms
+Variable types: 82446 continuous, 69120 integer (69120 binary)
+Coefficient statistics:
+  Matrix range     [2e-05, 3e+03]
+  Objective range  [3e-03, 1e+00]
+  QObjective range [7e-02, 7e-02]
+  Bounds range     [3e-04, 1e+04]
+  RHS range        [3e-05, 3e+03]
+Presolve removed 540 rows and 0 columns (presolve time = 6s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 10s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 15s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 20s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 25s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 30s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 35s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 40s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 45s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 50s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 56s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 60s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 65s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 70s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 75s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 80s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 85s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 92s) ...
+Presolve added 7560 rows and 8100 columns
+Presolve time: 94.83s
+Presolved: 228786 rows, 159666 columns, 12280332 nonzeros
+Presolved model has 270 quadratic objective terms
+Variable types: 90546 continuous, 69120 integer (69120 binary)
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 5s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 10s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 15s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 20s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 25s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 30s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 35s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 40s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 45s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 50s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 55s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 60s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 65s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 70s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 75s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 80s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 85s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 90s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns
+Root relaxation presolved: 159666 rows, 90546 columns, 12077022 nonzeros
+Root relaxation presolved model has 270 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    2.1826304e+01   0.000000e+00   0.000000e+00    194s
+   13995    2.1826304e+01   1.057209e+04   0.000000e+00    195s
+   36191    2.1826304e+01   4.395613e+03   0.000000e+00    200s
+   52075    2.1826304e+01   2.975794e+03   0.000000e+00    206s
+   62826    2.1826304e+01   2.532535e+03   0.000000e+00    210s
+   76846    2.1826304e+01   2.378605e+03   0.000000e+00    216s
+   87347    2.1826304e+01   1.968234e+03   0.000000e+00    220s
+   98648    2.1826304e+01   1.541703e+03   0.000000e+00    226s
+  106928    2.1826304e+01   7.416610e+02   0.000000e+00    230s
+  116588    2.1826304e+01   2.600437e+02   0.000000e+00    236s
+  126598    2.1826304e+01   1.409486e+01   0.000000e+00    241s
+  129537    2.1826304e+01   0.000000e+00   0.000000e+00    243s
+  129537    2.1826304e+01   0.000000e+00   0.000000e+00    244s
+
+Root relaxation: objective 2.182630e+01, 129537 iterations, 143.94 seconds (639.69 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   21.82630    0 9295          -   21.82630      -     -  282s
+     0     0   21.82630    0 9295          -   21.82630      -     -  304s
+     0     2   21.82630    0 9295          -   21.82630      -     -  810s
+     1     4   21.82630    1 9288          -   21.82630      -   859  817s
+     3     8   21.82630    2 9273          -   21.82630      -  2138  822s
+     7    16   22.04867    3 9205          -   21.82630      -  1189  833s
+    15    24   22.05470    4 9215          -   21.82630      -   993  838s
+    23    32   22.04867    4 9316          -   21.82630      -   916  900s
+    31    40   22.04867    5 9310          -   21.82630      -  7809  913s
+    39    48   22.10683    6 9378          -   21.82630      -  6447  918s
+    47    56   22.04867    6 9298          -   21.82630      -  5364  924s
+    55    67   22.20889    7 9341          -   21.82630      -  4713  937s
+    66    77   22.04867    7 9292          -   21.82630      -  4141  945s
+    76    89   22.04867    8 9289          -   21.82630      -  3641  953s
+    88   103   22.04867    9 9292          -   21.82630      -  3165  961s
+   102   117   22.04867   11 9277          -   21.82630      -  2760 1033s
+   116   132   22.04867   13 9283          -   21.82630      -  4257 1043s
+   131   151   22.04867   15 9279          -   21.82630      -  3802 1055s
+   150   168   22.04867   18 9237          -   21.82630      -  3355 1067s
+   167   186   22.09955   20 9212          -   21.82630      -  3044 1081s
+   185   203   22.04867   21 9222          -   21.82630      -  2788 1094s
+   202   216   22.44354   23 9223          -   21.82630      -  3594 1162s
+   215   241   22.04867   23 9210          -   21.82630      -  3472 1178s
+   240   257   22.04867   24 9202          -   21.82630      -  3127 1198s
+   256   282   22.04867   26 9194          -   21.82630      -  3017 1224s
+   281   306   22.53007   29 9175          -   21.82630      -  2847 1359s
+   305   346   22.04867   31 9182          -   21.82630      -  6074 1393s
+   345   386   22.04867   37 9173          -   21.82630      -  5433 1436s
+   385   422   23.73274   41 9348          -   21.82630      -  4991 1471s
+   421   438   22.04867   43 9172          -   21.82630      -  4652 1643s
+   437   506   22.04867   45 9166          -   21.82630      -  7818 1696s
+   505   571   22.04867   48 9163          -   21.82630      -  6857 1763s
+Created node file directory './grbnodes0'
+   570   646   22.04867   52 9159          -   21.82630      -  6223 1824s
+   578   646   22.07912   46 9389          -   21.82630      -  6151 1825s
+   645   730   24.17225   57 9315          -   21.82630      -  5594 1896s
+   729   800   24.05091   62 9262          -   21.82630      -  5048 1960s
+   799   819   22.04867   66 9148          -   21.82630      -  4706 2155s
+   818   901   22.04867   68 9147          -   21.82630      -  6613 2235s
+   900   987   22.04867   74 9141          -   21.82630      -  6121 2309s
+   986  1070   22.04867   80 9133          -   21.82630      -  5695 2383s
+  1069  1153   22.04867   87 9125          -   21.82630      -  5355 2469s
+  1152  1258   23.68890   92 9050          -   21.82630      -  5083 2567s
+  1257  1329   22.04867  100 9112          -   21.82630      -  4765 2753s
+  1328  1437   22.04867  106 9106          -   21.82630      -  5780 2907s
+  1436  1652   22.04867  117 9095          -   21.82630      -  5869 3058s
+  1651  1833   22.04867  133 9086          -   21.82630      -  5201 3208s
+  1832  1989   22.04867  152 9066          -   21.82630      -  4777 3350s
+  1988  2202   22.04867  169 9062          -   21.82630      -  4504 3568s
+  2201  2439   22.04867  178 9057          -   21.82630      -  4265 3758s
+  2438  2723   23.38649  199 9046          -   21.82630      -  3942 3968s
+  2722  2970   23.39925  222 9022          -   21.82630      -  3620 4172s
+  2969  3150   22.04867  241 9010          -   21.82630      -  3403 4532s
+  3149  3394   24.70619  256 9129          -   21.82630      -  3279 4778s
+  3393  3665   22.04867  277 8974          -   21.82630      -  3201 5019s
+  3664  3789   22.04867  300 8952          -   21.82630      -  3068 5241s
+  3788  3989   22.04867  324 8947          -   21.82630      -  3363 5526s
+  3988  4174   22.81441  363 9004          -   21.82630      -  3622 5808s
+  4173  4401   22.81441  375 8992          -   21.82630      -  3868 6118s
+  4400  4637   22.81441  419 8946          -   21.82630      -  4010 6395s
+  4636  4779   22.81441  435 8929          -   21.82630      -  4177 6671s
+  4778  5011   22.81441  453 8919          -   21.82630      -  4486 7050s
+  5010  5250   23.57504  499 8923          -   21.82630      -  4798 7435s
+  5249  5419   22.81441  506 8873          -   21.82630      -  5062 7808s
+  5418  5802   22.81441  515 8863          -   21.82630      -  5478 8224s
+  5801  5990   26.24671  580 8841          -   21.82630      -  5489 8614s
+  5989  6198   22.81441  602 8780          -   21.82630      -  5841 8995s
+  6197  6429   23.88177  648 8886          -   21.82630      -  6121 9392s
+  6428  6570   23.33977  690 8601          -   21.82630      -  6360 9803s
+  6569  6798   22.84795  700 8703          -   21.82630      -  6725 10260s
+  6797  7150   22.84795  734 8667          -   21.82630      -  6971 10735s
+  7149  7682   24.19371  776 8680          -   21.82630      -  7054 11238s
+  7682  7683   22.55468  614 9295          -   21.82630      -  6845 11332s
+  7683  7684   22.16654  391 9295          -   21.82630      -  6844 11335s
+  7684  7684   22.41148  496 9295          -   21.82630      -  6843 11547s
+
+Explored 7685 nodes (52713319 simplex iterations) in 12563.05 seconds (32651.08 work units)
+Thread count was 16 (of 16 available processors)
+
+Solution count 0
+
+Solve interrupted (error code 10001)
+Best objective -, best bound 2.182630439284e+01, gap -
