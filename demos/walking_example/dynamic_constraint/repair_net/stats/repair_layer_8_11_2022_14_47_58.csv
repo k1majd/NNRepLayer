@@ -1,0 +1,1 @@
+repair layer,2,mae,0.5611930028593822,num_samples,1000,num of repaired nodes,256,repair node list,[],repair layer,2,Num of nodes in repair layer,256,timelimit,86400,mipfocus,2,max weight bunds,0.3,cost weights,[10.  1.],w_error_norm,1

@@ -386,9 +386,10 @@ if __name__ == "__main__":
             "nodefilestart": 0.5,
             "presparify": 1,
             "concurrentmip": 3,
-            "threads": 9,
+            "threads": 12,
             "improvestarttime": 80000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
+            "solfiles": path_write + f"/sol/sol_{now_str}/solution",
         },
     )
 

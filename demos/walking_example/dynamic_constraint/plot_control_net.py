@@ -346,7 +346,7 @@ if __name__ == "__main__":
     # parameter
     bound2 = 2.0
 
-    load = "_8_7_2022_13_15_45"
+    load = "_8_15_2022_12_10_19"
 
     # load test data and original model
     model_orig = keras.models.load_model(
