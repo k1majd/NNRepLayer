@@ -350,7 +350,7 @@ if __name__ == "__main__":
     )
 
     # load the repaired dat set
-    load_str = "_8_15_2022_12_10_19"
+    load_str = "_8_15_2022_18_28_41"
     repaired_layer = 2
     model_repaired = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))

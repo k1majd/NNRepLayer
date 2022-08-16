@@ -1,0 +1,202 @@
+
+Gurobi 9.5.1 (linux64) logging started Mon 15 Aug 2022 06:49:16 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_8_15_2022_18_28_41.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 48 threads
+Optimize a model with 391411 rows, 238674 columns and 5889011 nonzeros
+Model fingerprint: 0x7f3f90fa
+Model has 337 quadratic objective terms
+Variable types: 152402 continuous, 86272 integer (86272 binary)
+Coefficient statistics:
+  Matrix range     [3e-05, 2e+02]
+  Objective range  [2e-03, 1e+00]
+  QObjective range [6e-02, 6e-02]
+  Bounds range     [3e-04, 1e+03]
+  RHS range        [1e-06, 2e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (16 threads per instance)
+
+Presolve removed 674 rows and 0 columns (presolve time = 5s) ...
+Presolve removed 7074 rows and 6400 columns (presolve time = 10s) ...
+Presolve removed 7074 rows and 6400 columns (presolve time = 15s) ...
+Presolve removed 13474 rows and 6400 columns (presolve time = 20s) ...
+Presolve removed 13474 rows and 6400 columns (presolve time = 25s) ...
+Presolve removed 13474 rows and 6400 columns (presolve time = 30s) ...
+Presolve removed 13474 rows and 6400 columns (presolve time = 35s) ...
+Presolve removed 13474 rows and 6400 columns
+Presolve time: 36.95s
+Presolved: 377937 rows, 232274 columns, 5862744 nonzeros
+Presolved model has 337 quadratic objective terms
+Variable types: 146002 continuous, 86272 integer (86272 binary)
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 5s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 10s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 15s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 20s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 25s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 30s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 35s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 40s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 45s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns (presolve time = 50s) ...
+Root relaxation presolve removed 86272 rows and 86272 columns
+Root relaxation presolved: 291665 rows, 146002 columns, 5603928 nonzeros
+Root relaxation presolved model has 337 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.8620404e+01   0.000000e+00   0.000000e+00     96s
+   29231    1.8620404e+01   2.029947e+04   0.000000e+00    100s
+   82630    1.8620404e+01   1.035023e+04   0.000000e+00    105s
+  135988    1.8620404e+01   3.553947e+02   0.000000e+00    110s
+  139043    1.8620404e+01   0.000000e+00   0.000000e+00    111s
+  139043    1.8620404e+01   0.000000e+00   0.000000e+00    112s
+
+Root relaxation: objective 1.862040e+01, 139043 iterations, 67.71 seconds (106.67 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -              -   18.62040      -     -  122s
+     0     0      -    -    -              -   18.62040      -     -  465s
+     0     2      -    -    -              -   18.62040      -     - 1062s
+     1     4      -    -    -              -   18.62040      -     - 1394s
+     3     8      -    -    -              -   18.62040      -     - 1442s
+     7    16      -    -    -              -   18.62040      -     - 1528s
+    15    32      -    -    -              -   18.62040      -     - 1725s
+    31    48      -    -    -              -   18.62040      -     - 1736s
+    47    64      -    -    -              -   18.62040      -     - 1740s
+    79    96      -    -    -              -   18.62040      -     - 1746s
+   111   128      -    -    -              -   18.62040      -     - 1750s
+   159   183      -    -    -              -   18.62040      -     - 1757s
+   198   225      -    -    -              -   18.62040      -     - 1762s
+   253   284      -    -    -              -   18.62040      -     - 1766s
+   309   341      -    -    -              -   18.62040      -     - 1770s
+   340   371      -    -    -              -   18.62040      -     - 1776s
+   397   426      -    -    -              -   18.62040      -     - 1782s
+   425   458      -    -    -              -   18.62040      -     - 1785s
+   457   488      -    -    -              -   18.62040      -     - 1790s
+   516   551      -    -    -              -   18.62040      -     - 1852s
+   550   587      -    -    -              -   18.62040      -     - 1878s
+   586   629      -    -    -              -   18.62040      -     - 1886s
+   628   674      -    -    -              -   18.62040      -     - 1894s
+   673   721      -    -    -              -   18.62040      -     - 1957s
+   720   775      -    -    -              -   18.62040      -     - 1964s
+   774   830      -    -    -              -   18.62040      -     - 1970s
+   829   890      -    -    -              -   18.62040      -     - 1994s
+   889   948      -    -    -              -   18.62040      -     - 2019s
+   947  1020      -    -    -              -   18.62040      -     - 2024s
+  1019  1097      -    -    -              -   18.62040      -     - 2029s
+  1096  1166      -    -    -              -   18.62040      -     - 2035s
+  1165  1245      -    -    -              -   18.62040      -     - 2040s
+  1244  1333      -    -    -              -   18.62040      -     - 2047s
+  1332  1422      -    -    -              -   18.62040      -     - 2053s
+  1421  1509      -    -    -              -   18.62040      -     - 2061s
+  1508  1595      -    -    -              -   18.62040      -     - 2067s
+  1594  1687      -    -    -              -   18.62040      -     - 2074s
+  1686  1776      -    -    -              -   18.62040      -     - 2091s
+  1775  1879      -    -    -              -   18.62040      -     - 2103s
+  1878  1976      -    -    -              -   18.62040      -     - 2113s
+  1975  2071      -    -    -              -   18.62040      -     - 2125s
+  2070  2176      -    -    -              -   18.62040      -     - 2139s
+  2175  2292      -    -    -              -   18.62040      -     - 2151s
+  2291  2418      -    -    -              -   18.62040      -     - 2162s
+  2417  2552      -    -    -              -   18.62040      -     - 2176s
+  2551  2688      -    -    -              -   18.62040      -     - 2188s
+  2687  2828      -    -    -              -   18.62040      -     - 2198s
+  2827  2971      -    -    -              -   18.62040      -     - 2210s
+  2970  3130      -    -    -              -   18.62040      -     - 2227s
+  3129  3289      -    -    -              -   18.62040      -     - 2241s
+  3288  3452      -    -    -              -   18.62040      -     - 2259s
+  3451  3630      -    -    -              -   18.62040      -     - 2271s
+  3629  3817      -    -    -              -   18.62040      -     - 2284s
+  3816  4001      -    -    -              -   18.62040      -     - 2312s
+  4000  4205      -    -    -              -   18.62040      -     - 2327s
+  4204  4399      -    -    -              -   18.62040      -     - 2345s
+  4398  4612      -    -    -              -   18.62040      -     - 2362s
+  4611  4838      -    -    -              -   18.62040      -     - 2383s
+  4837  5064      -    -    -              -   18.62040      -     - 2404s
+  5063  5304      -    -    -              -   18.62040      -     - 2436s
+  5303  5551      -    -    -              -   18.62040      -     - 2474s
+  5550  5825      -    -    -              -   18.62040      -     - 2496s
+  5824  6112      -    -    -              -   18.62040      -     - 2521s
+  6111  6400      -    -    -              -   18.62040      -     - 2545s
+  6399  6696      -    -    -              -   18.62040      -     - 2570s
+  6695  6990      -    -    -              -   18.62040      -     - 2597s
+  6989  7318      -    -    -              -   18.62040      -     - 2623s
+  7317  7663      -    -    -              -   18.62040      -     - 2651s
+  7662  8002      -    -    -              -   18.62040      -     - 2676s
+  8001  8364      -    -    -              -   18.62040      -     - 2700s
+  8363  8735      -    -    -              -   18.62040      -     - 2723s
+  8734  9124      -    -    -              -   18.62040      -     - 2750s
+  9123  9537      -    -    -              -   18.62040      -     - 2777s
+  9536  9974      -    -    -              -   18.62040      -     - 2804s
+  9973 10427      -    -    -              -   18.62040      -     - 2835s
+ 10427 10428      -    -    -              -   18.62040      -     - 2883s
+ 10428 10429      -    -    -              -   18.62040      -     - 2891s
+ 10429 10429      -    -    -              -   18.62040      -     - 3267s
+ 10431 10431      -    -    -              -   18.62040      -     - 4388s
+ 10432  9912      -    -    -       68.86740   18.62040  73.0%     - 4721s
+ 10434  8950      -    -    -       47.14391   18.62040  60.5%     - 7727s
+ 10438  8508      -    -    -       47.14391   18.62040  60.5%     - 7749s
+ 10446  8522      -    -    -       47.14391   18.62040  60.5%     - 7753s
+ 10462  8532      -    -    -       47.14391   18.62040  60.5%     - 7885s
+ 10478  8543      -    -    -       47.14391   18.62040  60.5%     - 7985s
+ 10494  8554      -    -    -       47.14391   18.62040  60.5%     - 8066s
+ 10510  8564      -    -    -       47.14391   18.62040  60.5%     - 8098s
+ 10526  8151      -    -    -       47.14391   18.62040  60.5%     - 11741s
+ 10542  6351      -    -    -       47.14391   18.62040  60.5%     - 11791s
+ 10573  6366      -    -    -       47.14391   18.62040  60.5%     - 11897s
+ 10599  6403      -    -    -       47.14391   18.62040  60.5%     - 11915s
+ 10644  6433      -    -    -       47.14391   18.62040  60.5%     - 11998s
+ 10689  6472      -    -    -       47.14391   18.62040  60.5%     - 12015s
+ 10743  6507      -    -    -       47.14391   18.62040  60.5%     - 12045s
+ 10796  6557      -    -    -       47.14391   18.62040  60.5%     - 12123s
+ 10864  6591      -    -    -       45.45683   18.62040  59.0%     - 13123s
+ 10921  6666      -    -    -       45.45683   18.62040  59.0%     - 13157s
+ 11015  6726      -    -    -       45.45683   18.62040  59.0%     - 13193s
+ 11106  6804      -    -    -       45.45683   18.62040  59.0%     - 13393s
+ 11214  6882      -    -    -       45.45683   18.62040  59.0%     - 13425s
+ 11328  6940      -    -    -       45.45683   18.62040  59.0%     - 13465s
+ 11424  7020      -    -    -       45.45683   18.62040  59.0%     - 13486s
+ 11536  7125      -    -    -       45.45683   18.62040  59.0%     - 13507s
+ 11679  7120      -    -    -       45.45683   18.62040  59.0%     - 14632s
+ 11721  6644      -    -    -       45.45683   18.62040  59.0%     - 14725s
+ 11868  6804      -    -    -       45.45683   18.62040  59.0%     - 14756s
+ 12077  6962      -    -    -       45.45683   18.62040  59.0%     - 14859s
+ 12305  7122      -    -    -       45.45683   18.62040  59.0%     - 14961s
+ 12541  7287      -    -    -       45.45683   18.62040  59.0%     - 15033s
+ 12785  7451      -    -    -       45.45683   18.62040  59.0%     - 15093s
+ 13030  7616      -    -    -       45.45683   18.62040  59.0%     - 15226s
+ 13277  7779      -    -    -       45.45683   18.62040  59.0%     - 15432s
+ 13522  7935      -    -    -       45.45683   18.62040  59.0%     - 15672s
+ 13760  8136      -    -    -       45.45683   18.62040  59.0%     - 15759s
+ 14040  8304      -    -    -       45.45683   18.62040  59.0%     - 16061s
+ 14301  8506      -    -    -       45.45683   18.62040  59.0%     - 16175s
+ 14590  8699      -    -    -       45.45683   18.62040  59.0%     - 16238s
+ 14880  8897      -    -    -       45.45683   18.62040  59.0%     - 16313s
+ 15174  9099      -    -    -       45.45683   18.62040  59.0%     - 16399s
+ 15474  9396      -    -    -       45.45683   18.62040  59.0%     - 16452s
+ 15871  9685      -    -    -       45.45683   18.62040  59.0%     - 16495s
+ 16293  9956      -    -    -       45.45683   18.62040  59.0%     - 16549s
+ 16704 10181      -    -    -       45.45683   18.62040  59.0%     - 16617s
+ 17066 10457      -    -    -       45.45683   18.62040  59.0%     - 16692s
+ 17463 10698      -    -    -       45.45683   18.62040  59.0%     - 16799s
+ 17836 10954      -    -    -       44.49777   18.62040  58.2%     - 18451s
+
+Resetting heuristic parameters to focus on improving solution
+(using Heuristics=0.5 and RINS=10)...
+
+ 18217 10861      -    -    -       44.49777   18.62040  58.2%     - 20002s
+
+Instance 2 was solved
+
+Explored 26848 nodes (21217266 simplex iterations) in 20003.41 seconds (38745.88 work units)
+Thread count was 16 (of 96 available processors)
+
+Solution count 10: 41.4723 43.4262 44.4978 ... 46.626 
+
+Time limit reached
+Best objective 4.147227764862e+01, best bound 1.862040444840e+01, gap 55.1016%
