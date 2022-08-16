@@ -225,7 +225,7 @@ def plotTestData(
 
 
 def generate_repair_dataset(obs, ctrl, num_samples, bound):
-    max_window_size = 1000
+    max_window_size = ctrl.shape[0]
     delta_u = np.subtract(
         ctrl[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
     )
@@ -240,12 +240,15 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound):
         )
         return obs[nonviolation_idx], ctrl[nonviolation_idx]
     else:
-        rnd_pts = np.random.choice(
-            int(violation_idx.shape[0] / 2), int(num_samples * 0.75)
+        # rnd_pts = np.random.choice(
+        #     int(violation_idx.shape[0] / 2), int(num_samples * 0.75)
+        # )
+        # violation_idx = violation_idx[rnd_pts]
+        violation_idx = np.random.choice(
+            violation_idx, int(num_samples * 0.75), replace=False
         )
-        violation_idx = violation_idx[rnd_pts]
         nonviolation_idx = np.random.choice(
-            nonviolation_idx, size=int(num_samples * 0.60), replace=False
+            nonviolation_idx, size=int(num_samples * 0.50), replace=False
         )
         idx = np.concatenate((violation_idx, nonviolation_idx))
         return obs[idx], ctrl[idx]
@@ -279,15 +282,15 @@ if __name__ == "__main__":
     # Train window model
     bound = 2.0
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
-    num_samples = 500
+    num_samples = 1000
     # rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
-        test_obs, test_ctrls, num_samples, bound
+        x_test[200:], y_test[200:], num_samples, bound
     )
     # x_train = test_obs[0:1, :]
     # y_train = test_ctrls[0:1]
-    hid_size = 64
-    load_str = "_7_20_2022_15_27_10"
+    hid_size = 256
+    load_str = "_7_26_2022_12_2_40"
     # load data
     # if not os.path.exists(
     #     os.path.dirname(os.path.realpath(__file__)) + "/data"
@@ -315,19 +318,19 @@ if __name__ == "__main__":
     def out_constraint1(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
-            <= bound - 0.1
+            <= bound * 0.7 - 0.2
         )
 
     def out_constraint2(model, i):
         return getattr(model, repair_obj.output_name)[i, 0] - x_train[
             i, -1
-        ] >= -(bound - 0.1)
+        ] >= -(bound * 0.7 - 0.2)
 
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(3)
-    max_weight_bound = 1  # specifying the upper bound of weights error
-    cost_weights = np.array([10.0, 1.0])  # cost weights
+    max_weight_bound = 0.5  # specifying the upper bound of weights error
+    cost_weights = np.array([100.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = select_repair_nodes(
         ctrl_model_orig, model_repaired, layer_to_repair
@@ -391,13 +394,13 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 18000,  # max time algorithm will take in seconds
+            "timelimit": 86400,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "cuts": 0,
             # "concurrentmip": 3,
             # "threads": 45,
-            "improvestarttime": 15000,
+            "improvestarttime": 80000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },
     )

@@ -372,9 +372,9 @@ if __name__ == "__main__":
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "cuts": 0,
-            # "concurrentmip": 3,
+            "concurrentmip": 3,
             # "threads": 45,
-            "improvestarttime": 40000,
+            "improvestarttime": 39000,
             "logfile": path_write + f"/logs/opt{4}_log{now_str}.log",
         },
     )

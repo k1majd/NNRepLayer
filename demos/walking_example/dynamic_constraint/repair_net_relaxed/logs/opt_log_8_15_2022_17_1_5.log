@@ -1,0 +1,74 @@
+
+Gurobi 9.5.0 (win64) logging started Mon Aug 15 17:08:22 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\walking_example\dynamic_constraint\repair_net_relaxed/logs/opt_log_8_15_2022_17_1_5.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 101822 rows, 70572 columns and 1788642 nonzeros
+Model fingerprint: 0xa3bbad39
+Model has 1250 quadratic objective terms
+Variable types: 41822 continuous, 28750 integer (28750 binary)
+Coefficient statistics:
+  Matrix range     [4e-05, 3e+02]
+  Objective range  [1e-04, 4e+00]
+  QObjective range [2e-01, 2e-01]
+  Bounds range     [1e-03, 7e+02]
+  RHS range        [1e-05, 3e+02]
+Presolve removed 3282 rows and 782 columns
+Presolve time: 4.64s
+Presolved: 98540 rows, 69790 columns, 1784579 nonzeros
+Presolved model has 1250 quadratic objective terms
+Variable types: 41040 continuous, 28750 integer (28750 binary)
+Root relaxation presolve removed 28750 rows and 28750 columns
+Root relaxation presolved: 69790 rows, 41040 columns, 1698329 nonzeros
+Root relaxation presolved model has 1250 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    3.0653957e+02   0.000000e+00   0.000000e+00     11s
+   45694    3.0653957e+02   3.884628e+02   0.000000e+00     15s
+   52305    3.0653957e+02   0.000000e+00   0.000000e+00     16s
+   52305    3.0653957e+02   0.000000e+00   0.000000e+00     16s
+
+Root relaxation: objective 3.065396e+02, 52305 iterations, 9.56 seconds (26.60 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  306.53957    0 9845          -  306.53957      -     -   19s
+     0     0  306.53957    0 9845          -  306.53957      -     -   26s
+     0     2  306.53957    0 9845          -  306.53957      -     -   76s
+     1     4  306.53957    1 9845          -  306.53957      -   5.0   81s
+    15    24  307.45555    4 9951          -  306.53957      -  3538  170s
+    47    59  306.53957    7 9846          -  306.53957      -  5386  176s
+    68    79  306.53957    8 9846          -  306.53957      -  4213  181s
+    92   106  306.67418   11 9889          -  306.53957      -  3862  192s
+   105   123  306.53957   11 9846          -  306.53957      -  4798  196s
+   137   158  306.53957   13 9960          -  306.53957      -  4207  200s
+   203   225  306.53957   18 9957          -  306.53957      -  3085  205s
+   242   261  306.53957   19 9953          -  306.53957      -  2930  221s
+   285   316  306.53957   24 9949          -  306.53957      -  3694  226s
+   315   346  306.53957   26 9949          -  306.53957      -  3394  236s
+   385   417  306.53957   30 9945          -  306.53957      -  3075  245s
+   416   460  306.53957   32 9943          -  306.53957      -  2989  254s
+   459   512  306.53957   33 9942          -  306.53957      -  3019  262s
+   511   573  306.53957   37 9935          -  306.53957      -  2963  271s
+   572   644  306.53957   43 9935          -  306.53957      -  2845  281s
+   643   715  306.53957   50 9934          -  306.53957      -  2763  297s
+   714   802  306.53957   61 9938          -  306.53957      -  3192  309s
+   801   895  306.53957   67 9935          -  306.53957      -  3199  323s
+   894  1012  306.61540   73 9933          -  306.53957      -  3476  342s
+  1011  1106  306.77561   91 10317          -  306.53957      -  3756  360s
+  1105  1196  306.77561  100 10232          -  306.53957      -  4109  380s
+  1195  1283  306.77561  105 10234          -  306.53957      -  4308  397s
+  1282  1404  306.77561  107 10234          -  306.53957      -  4574  407s
+
+Explored 1403 nodes (5977651 simplex iterations) in 407.57 seconds (973.92 work units)
+Thread count was 16 (of 16 available processors)
+
+Solution count 0
+
+Solve interrupted
+Best objective -, best bound 3.065395713267e+02, gap -

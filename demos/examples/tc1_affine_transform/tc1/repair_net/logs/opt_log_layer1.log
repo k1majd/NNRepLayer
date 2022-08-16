@@ -6621,3 +6621,197 @@ Solution count 1: 5.5515
 
 Optimal solution found (tolerance 1.00e-03)
 Best objective 5.551495747382e+00, best bound 5.551495747382e+00, gap 0.0000%
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 18:45:00 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 34 rows, 22 columns and 93 nonzeros
+Model fingerprint: 0x6df08770
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 6e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 7e+00]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 2 rows and 2 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 18:45:36 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 38 rows, 22 columns and 105 nonzeros
+Model fingerprint: 0x2d09fcda
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 9e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 1e+01]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 10 rows and 5 columns
+Presolve time: 0.00s
+Presolved: 28 rows, 17 columns, 75 nonzeros
+Presolved model has 3 quadratic objective terms
+Variable types: 15 continuous, 2 integer (2 binary)
+Found heuristic solution: objective 35.1977178
+
+Root relaxation: objective 6.661028e+00, 33 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    6.66103    0    2   35.19772    6.66103  81.1%     -    0s
+H    0     0                       6.6610277    6.66103  0.00%     -    0s
+
+Explored 1 nodes (33 simplex iterations) in 0.02 seconds (0.00 work units)
+Thread count was 16 (of 16 available processors)
+
+Solution count 2: 6.66103 35.1977 
+
+Optimal solution found (tolerance 1.00e-03)
+Best objective 6.661027715229e+00, best bound 6.661027715229e+00, gap 0.0000%
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 18:46:07 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 34 rows, 22 columns and 93 nonzeros
+Model fingerprint: 0x6df08770
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 6e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 7e+00]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 2 rows and 2 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 18:52:32 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 34 rows, 22 columns and 93 nonzeros
+Model fingerprint: 0xf27bc330
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 6e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 7e+00]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 4 rows and 3 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 18:53:26 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 34 rows, 22 columns and 93 nonzeros
+Model fingerprint: 0xf27bc330
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 6e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 7e+00]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 4 rows and 3 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 19:17:59 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 36 rows, 22 columns and 99 nonzeros
+Model fingerprint: 0xbd43bf15
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 8e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 8e+00]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 11 rows and 7 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.0 (win64) logging started Fri Aug 12 19:28:41 2022
+
+Set parameter LogFile to value "C:\Users\kmajd1\Documents\NNRepLayer_v2\demos\examples\tc1_affine_transform/tc1/repair_net/logs/opt_log_layer1.log"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+Optimize a model with 36 rows, 22 columns and 99 nonzeros
+Model fingerprint: 0xbd43bf15
+Model has 3 quadratic objective terms
+Variable types: 17 continuous, 5 integer (5 binary)
+Coefficient statistics:
+  Matrix range     [8e-02, 8e+00]
+  Objective range  [1e+00, 7e+02]
+  QObjective range [2e+02, 2e+02]
+  Bounds range     [4e-02, 8e+00]
+  RHS range        [2e-02, 5e+00]
+Presolve removed 11 rows and 7 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 1 (of 16 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
