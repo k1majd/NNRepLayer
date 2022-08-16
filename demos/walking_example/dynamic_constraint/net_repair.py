@@ -247,7 +247,7 @@ def plot_model_out(
 
 def generate_repair_dataset(obs, ctrl, num_samples, bound, model):
     ctrl_pred = model.predict(obs)
-    max_window_size = 1000
+    max_window_size = 5000
     delta_u = np.subtract(
         ctrl_pred[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
     )
@@ -262,10 +262,13 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound, model):
         )
         return obs[nonviolation_idx], ctrl[nonviolation_idx]
     else:
-        rnd_pts = np.random.choice(
-            int(violation_idx.shape[0] / 2), int(num_samples * 0.75)
-        )
-        violation_idx = violation_idx[rnd_pts]
+        # rnd_pts = np.random.choice(
+        #     int(violation_idx.shape[0]), int(num_samples * 0.75), replace=False
+        # )
+        # violation_idx = violation_idx[rnd_pts]
+        violation_idx = np.random.choice(
+            violation_idx, int(num_samples * 0.75), replace=False
+            )
         nonviolation_idx = np.random.choice(
             nonviolation_idx, size=int(num_samples * 0.60), replace=False
         )
@@ -316,57 +319,17 @@ if __name__ == "__main__":
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # Train window model
-    num_nodes = 128
+    num_nodes = 256
     ctrl_model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + f"/models/model_orig_{num_nodes}"
     )
     bound = 2.0
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
-    num_samples = 200
+    num_samples = 250
     # rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
         test_obs, test_ctrls, num_samples, bound, ctrl_model_orig,
     )
-    # x_train = test_obs[0:1, :]
-    # y_train = test_ctrls[0:1]
-    # plot_model_out(
-    #     ctrl_model_orig,
-    #     x_test,
-    #     y_test,
-    #     bound,
-    #     2,
-    # )
-    # plot_model_out(
-    #     ctrl_model_orig,
-    #     x_train,
-    #     y_train,
-    #     bound,
-    #     2,
-    # )
-    
-    # if num_nodes == 64:
-    #     load_str = "_7_20_2022_15_27_10"
-    # if num_nodes == 128:
-    #     load_str = "_7_21_2022_13_13_44"
-    # if num_nodes == 256:
-    #     load_str = "_7_26_2022_12_2_40"
-
-    # # load data
-    # if not os.path.exists(
-    #     os.path.dirname(os.path.realpath(__file__)) + "/data"
-    # ):
-    #     os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "/data")
-    # with open(
-    #     os.path.dirname(os.path.realpath(__file__))
-    #     + f"/data/repair_dataset{load_str}.pickle",
-    #     "rb",
-    # ) as data:
-    #     dataset = pickle.load(data)
-
-    # x_train = dataset[0]
-    # y_train = dataset[1]
-    # x_test = dataset[2]
-    # y_test = dataset[3]
     
     def out_constraint1(model, i):
         return (
@@ -382,12 +345,12 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(4)
-    max_weight_bound = 0.4  # specifying the upper bound of weights error
+    max_weight_bound = 0.2  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else num_nodes
-    w_error_norm = 1
+    w_error_norm = 0
     repair_obj.compile(
         x_train,
         y_train,
@@ -448,15 +411,15 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 86400,  # max time algorithm will take in seconds
+            "timelimit": 20000,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "cuts": 0,
             "concurrentmip": 3,
             "threads": 48,
-            "improvestarttime": 80000,
+            "improvestarttime": 18000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
-            "solfiles": path_write + f"/sol/sol_{now_str}/solution",
+            # "solfiles": path_write + f"/sol/sol_{now_str}/solution",
         },
     )
 

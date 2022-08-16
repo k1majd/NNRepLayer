@@ -1,0 +1,176 @@
+
+Gurobi 9.5.1 (linux64) logging started Fri 12 Aug 2022 07:31:26 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/logs/opt_log_8_12_2022_19_25_59.log"
+Set parameter SolFiles to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net/sol/sol__8_12_2022_19_25_59/solution"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 48 threads
+Optimize a model with 221226 rows, 151566 columns and 12779022 nonzeros
+Model fingerprint: 0xfd59e836
+Model has 270 quadratic objective terms
+Variable types: 82446 continuous, 69120 integer (69120 binary)
+Coefficient statistics:
+  Matrix range     [2e-05, 2e+03]
+  Objective range  [5e-04, 1e+00]
+  QObjective range [7e-02, 7e-02]
+  Bounds range     [7e-06, 9e+03]
+  RHS range        [3e-05, 2e+03]
+
+Concurrent MIP optimizer: 3 concurrent instances (16 threads per instance)
+
+Presolve removed 540 rows and 0 columns (presolve time = 5s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 10s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 15s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 20s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 25s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 30s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 35s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 40s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 45s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 50s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 56s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 60s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 65s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 70s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 75s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 80s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 85s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 90s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 97s) ...
+Presolve removed 540 rows and 0 columns (presolve time = 100s) ...
+Presolve added 7560 rows and 8100 columns
+Presolve time: 100.20s
+Presolved: 228786 rows, 159666 columns, 12280332 nonzeros
+Presolved model has 270 quadratic objective terms
+Variable types: 90546 continuous, 69120 integer (69120 binary)
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 5s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 10s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 15s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 20s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 25s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 30s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 35s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 40s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 45s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 50s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 55s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 60s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 65s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 70s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 75s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 80s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 85s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 90s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns (presolve time = 95s) ...
+Root relaxation presolve removed 69120 rows and 69120 columns
+Root relaxation presolved: 159666 rows, 90546 columns, 12077022 nonzeros
+Root relaxation presolved model has 270 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    2.1230403e+01   0.000000e+00   0.000000e+00    204s
+   14639    2.1230403e+01   7.076319e+03   0.000000e+00    206s
+   36733    2.1230403e+01   2.907559e+03   0.000000e+00    212s
+   45797    2.1230403e+01   2.416305e+03   0.000000e+00    215s
+   57249    2.1230403e+01   2.153962e+03   0.000000e+00    221s
+   65487    2.1230403e+01   1.978295e+03   0.000000e+00    225s
+   74286    2.1230403e+01   1.517047e+03   0.000000e+00    230s
+   84197    2.1230403e+01   1.232878e+03   0.000000e+00    236s
+   92508    2.1230403e+01   9.812797e+02   0.000000e+00    241s
+   98818    2.1230403e+01   5.538715e+02   0.000000e+00    246s
+  104188    2.1230403e+01   2.778439e+02   0.000000e+00    250s
+  113408    2.1230403e+01   3.041300e+01   0.000000e+00    256s
+  117727    2.1230403e+01   0.000000e+00   0.000000e+00    259s
+  117727    2.1230403e+01   0.000000e+00   0.000000e+00    260s
+
+Root relaxation: objective 2.123040e+01, 117727 iterations, 153.92 seconds (568.87 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -              -   21.23040      -     -  296s
+     0     0      -    -    -              -   21.23040      -     -  322s
+     0     2      -    -    -              -   21.23040      -     -  870s
+     1     4      -    -    -              -   21.23040      -     -  875s
+     3     8      -    -    -              -   21.23040      -     -  881s
+     7    16      -    -    -              -   21.23040      -     -  887s
+    15    32      -    -    -              -   21.23040      -     -  897s
+    31    48      -    -    -              -   21.23040      -     -  905s
+    47    64      -    -    -              -   21.23040      -     -  912s
+    63    80      -    -    -              -   21.23040      -     -  918s
+    79    96      -    -    -              -   21.23040      -     -  926s
+    95   112      -    -    -              -   21.23040      -     -  934s
+   111   128      -    -    -              -   21.23040      -     -  942s
+   127   144      -    -    -              -   21.23040      -     -  949s
+   143   160      -    -    -              -   21.23040      -     -  956s
+   159   176      -    -    -              -   21.23040      -     -  966s
+   175   192      -    -    -              -   21.23040      -     -  979s
+   191   208      -    -    -              -   21.23040      -     - 1063s
+   207   224      -    -    -              -   21.23040      -     - 1071s
+   223   240      -    -    -              -   21.23040      -     - 1086s
+   239   256      -    -    -              -   21.23040      -     - 1161s
+   255   276      -    -    -              -   21.23040      -     - 1180s
+   275   300      -    -    -              -   21.23040      -     - 1194s
+   299   324      -    -    -              -   21.23040      -     - 1212s
+   323   344      -    -    -              -   21.23040      -     - 1241s
+   343   368      -    -    -              -   21.23040      -     - 1257s
+   367   391      -    -    -              -   21.23040      -     - 1337s
+   390   438      -    -    -              -   21.23040      -     - 1359s
+   437   474      -    -    -              -   21.23040      -     - 1381s
+   473   509      -    -    -              -   21.23040      -     - 1406s
+   508   537      -    -    -              -   21.23040      -     - 1432s
+   536   587      -    -    -              -   21.23040      -     - 1461s
+   586   635      -    -    -              -   21.23040      -     - 1486s
+   634   679      -    -    -              -   21.23040      -     - 1511s
+   678   719      -    -    -              -   21.23040      -     - 1534s
+   718   769      -    -    -              -   21.23040      -     - 1563s
+   768   815      -    -    -              -   21.23040      -     - 1594s
+   814   862      -    -    -              -   21.23040      -     - 1620s
+   861   923      -    -    -              -   21.23040      -     - 1653s
+   922   984      -    -    -              -   21.23040      -     - 1689s
+   983  1033      -    -    -              -   21.23040      -     - 1732s
+  1032  1098      -    -    -              -   21.23040      -     - 1778s
+  1097  1162      -    -    -              -   21.23040      -     - 1830s
+  1161  1227      -    -    -              -   21.23040      -     - 1870s
+  1226  1290      -    -    -              -   21.23040      -     - 1916s
+  1289  1353      -    -    -              -   21.23040      -     - 1969s
+  1352  1426      -    -    -              -   21.23040      -     - 2021s
+  1425  1487      -    -    -              -   21.23040      -     - 2160s
+  1486  1587      -    -    -              -   21.23040      -     - 2225s
+  1586  1711      -    -    -              -   21.23040      -     - 2303s
+  1710  1826      -    -    -              -   21.23040      -     - 2374s
+  1825  1946      -    -    -              -   21.23040      -     - 2448s
+  1945  2067      -    -    -              -   21.23040      -     - 2528s
+  2066  2174      -    -    -              -   21.23040      -     - 2601s
+  2173  2286      -    -    -              -   21.23040      -     - 2654s
+  2285  2429      -    -    -              -   21.23040      -     - 2708s
+  2428  2556      -    -    -              -   21.23040      -     - 2763s
+  2555  2680      -    -    -              -   21.23040      -     - 2821s
+  2679  2859      -    -    -              -   21.23040      -     - 2878s
+  2858  3005      -    -    -              -   21.23040      -     - 2937s
+  3004  3048      -    -    -              -   21.23040      -     - 3096s
+  3047  3226      -    -    -              -   21.23040      -     - 3165s
+  3225  3401      -    -    -              -   21.23040      -     - 3241s
+  3400  3673      -    -    -              -   21.23040      -     - 3325s
+  3672  3898      -    -    -              -   21.23040      -     - 3412s
+  3897  4231      -    -    -              -   21.23040      -     - 3499s
+  4230  4553      -    -    -              -   21.23040      -     - 3596s
+  4552  4827      -    -    -              -   21.23040      -     - 3704s
+  4826  5149      -    -    -              -   21.23040      -     - 3805s
+  5148  5474      -    -    -              -   21.23040      -     - 3914s
+  5473  5846      -    -    -              -   21.23040      -     - 4024s
+  5845  6192      -    -    -              -   21.23040      -     - 4126s
+  6191  6516      -    -    -              -   21.23040      -     - 4236s
+  6543  6726      -    -    -              -   21.23040      -     - 4360s
+  6831  7132      -    -    -              -   21.23040      -     - 4478s
+  7237  7542      -    -    -              -   21.23040      -     - 4610s
+  7647  8117      -    -    -              -   21.23040      -     - 4760s
+  8222  8540      -    -    -              -   21.23040      -     - 4886s
+  8645  9146      -    -    -              -   21.23040      -     - 5026s
+  9251  9618      -    -    -              -   21.23040      -     - 5166s
+  9723 10388      -    -    -              -   21.23040      -     - 5308s
+ 10494 10389      -    -    -              -   21.23040      -     - 5433s
+ 10495 10390      -    -    -              -   21.23040      -     - 5436s
+ 10496 10390      -    -    -              -   21.23040      -     - 5668s
