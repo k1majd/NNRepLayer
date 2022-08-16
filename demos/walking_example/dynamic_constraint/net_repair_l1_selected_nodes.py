@@ -290,7 +290,7 @@ if __name__ == "__main__":
     # x_train = test_obs[0:1, :]
     # y_train = test_ctrls[0:1]
     hid_size = 256
-    load_str = "_7_26_2022_12_2_40"
+    load_str = "_8_15_2022_12_10_19"
     # load data
     # if not os.path.exists(
     #     os.path.dirname(os.path.realpath(__file__)) + "/data"
@@ -318,19 +318,19 @@ if __name__ == "__main__":
     def out_constraint1(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
-            <= bound * 0.7 - 0.2
+            <= bound - 0.1
         )
 
     def out_constraint2(model, i):
         return getattr(model, repair_obj.output_name)[i, 0] - x_train[
             i, -1
-        ] >= -(bound * 0.7 - 0.2)
+        ] >= -(bound - 0.1)
 
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(3)
     max_weight_bound = 0.5  # specifying the upper bound of weights error
-    cost_weights = np.array([100.0, 1.0])  # cost weights
+    cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = select_repair_nodes(
         ctrl_model_orig, model_repaired, layer_to_repair
@@ -349,7 +349,7 @@ if __name__ == "__main__":
         param_precision=6,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
-        w_error_norm=1,
+        w_error_norm=0,
         # output_bounds=output_bounds,
     )
     setattr(
@@ -398,8 +398,8 @@ if __name__ == "__main__":
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
             "cuts": 0,
-            # "concurrentmip": 3,
-            # "threads": 45,
+            "concurrentmip": 3,
+            "threads": 45,
             "improvestarttime": 80000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
         },

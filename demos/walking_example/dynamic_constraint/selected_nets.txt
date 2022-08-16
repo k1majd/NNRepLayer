@@ -36,4 +36,4 @@ bound 2:
 32 nodes: network name: _6_9_2022_21_32_23
 64 nodes: network name: _7_20_2022_15_27_10
 128 nodes: network name: _7_21_2022_13_13_44
-256 nodes: network name: _7_26_2022_12_2_40
+256 nodes: network name: _7_26_2022_12_2_40, _8_15_2022_12_10_19 (250 samples), _8_15_2022_18_28_41 (250 samples l_inf)
