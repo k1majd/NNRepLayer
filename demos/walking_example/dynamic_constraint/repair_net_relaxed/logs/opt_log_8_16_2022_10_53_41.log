@@ -1,0 +1,100 @@
+
+Gurobi 9.5.1 (linux64) logging started Tue 16 Aug 2022 11:01:19 AM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/dynamic_constraint/repair_net_relaxed/logs/opt_log_8_16_2022_10_53_41.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 45 threads
+Optimize a model with 101822 rows, 64662 columns and 1775992 nonzeros
+Model fingerprint: 0x95b1a827
+Model has 1250 quadratic objective terms
+Variable types: 35912 continuous, 28750 integer (28750 binary)
+Coefficient statistics:
+  Matrix range     [2e-05, 5e+02]
+  Objective range  [7e-05, 1e+00]
+  QObjective range [2e-02, 2e-02]
+  Bounds range     [5e-02, 1e+03]
+  RHS range        [1e-05, 5e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (15 threads per instance)
+
+Presolve removed 3236 rows and 368 columns (presolve time = 5s) ...
+Presolve removed 3236 rows and 368 columns
+Presolve time: 6.64s
+Presolved: 98586 rows, 64294 columns, 1772020 nonzeros
+Presolved model has 1250 quadratic objective terms
+Variable types: 35544 continuous, 28750 integer (28750 binary)
+Root relaxation presolve removed 28750 rows and 28750 columns
+Root relaxation presolved: 69836 rows, 35544 columns, 1685770 nonzeros
+Root relaxation presolved model has 1250 quadratic objective terms
+
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.4453579e+01   0.000000e+00   0.000000e+00     14s
+   17807    1.4453579e+01   1.332851e+03   0.000000e+00     15s
+   46891    1.4453579e+01   0.000000e+00   0.000000e+00     18s
+   46891    1.4453579e+01   0.000000e+00   0.000000e+00     19s
+
+Root relaxation: objective 1.445358e+01, 46891 iterations, 9.78 seconds (25.50 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -              -   14.45358      -     -   21s
+     0     0      -    -    -              -   14.45358      -     -   28s
+     0     2      -    -    -              -   14.45358      -     -   91s
+     3     8      -    -    -              -   14.45358      -     -   95s
+    30    46      -    -    -              -   14.45358      -     -  105s
+    45    61      -    -    -              -   14.45358      -     -  110s
+   248   270      -    -    -              -   14.45358      -     -  450s
+   319   349      -    -    -              -   14.45358      -     -  458s
+   348   384      -    -    -              -   14.45358      -     -  460s
+   565   614      -    -    -              -   14.45358      -     -  465s
+   714   775      -    -    -              -   14.45358      -     -  470s
+   883   935      -    -    -              -   14.45358      -     -  475s
+   997  1068      -    -    -              -   14.45358      -     -  481s
+  1311  1397      -    -    -              -   14.45358      -     -  486s
+  1548  1625      -    -    -              -   14.45358      -     -  490s
+  1682  1751      -    -    -              -   14.45358      -     -  496s
+  1820  1901      -    -    -              -   14.45358      -     -  501s
+  1900  1986      -    -    -              -   14.45358      -     -  594s
+  1985  2065      -    -    -              -   14.45358      -     -  606s
+  2064  2124      -    -    -              -   14.45358      -     -  692s
+  2123  2219      -    -    -              -   14.45358      -     -  789s
+  2218  2313      -    -    -              -   14.45358      -     -  797s
+  2312  2421      -    -    -              -   14.45358      -     -  864s
+  2420  2494      -    -    -              -   14.45358      -     -  953s
+  2493  2578      -    -    -              -   14.45358      -     -  969s
+  2577  2703      -    -    -              -   14.45358      -     - 1046s
+  2702  2807      -    -    -              -   14.45358      -     - 1056s
+  2806  2876      -    -    -              -   14.45358      -     - 1154s
+  2875  2974      -    -    -              -   14.45358      -     - 1249s
+  2973  3090      -    -    -              -   14.45358      -     - 1258s
+  3089  3214      -    -    -              -   14.45358      -     - 1351s
+  3213  3318      -    -    -              -   14.45358      -     - 1446s
+  3317  3438      -    -    -              -   14.45358      -     - 1536s
+  3437  3528      -    -    -              -   14.45358      -     - 1619s
+  3527  3655      -    -    -              -   14.45358      -     - 1713s
+  3654  3743      -    -    -              -   14.45358      -     - 1824s
+  3742  3845      -    -    -              -   14.45358      -     - 1916s
+  3844  3958      -    -    -              -   14.45358      -     - 2014s
+  3957  4081      -    -    -              -   14.45358      -     - 2111s
+  4080  4198      -    -    -              -   14.45358      -     - 2212s
+  4197  4350      -    -    -              -   14.45358      -     - 2307s
+  4349  4429      -    -    -              -   14.45358      -     - 2403s
+  4428  4541      -    -    -              -   14.45358      -     - 2507s
+  4540  4617      -    -    -              -   14.45358      -     - 2598s
+  4616  4692      -    -    -              -   14.45358      -     - 2701s
+  4691  4854      -    -    -              -   14.45358      -     - 2799s
+  4853  4939      -    -    -              -   14.45358      -     - 2907s
+  4938  5064      -    -    -              -   14.45358      -     - 3026s
+  5063  5118      -    -    -              -   14.45358      -     - 3135s
+  5117  5207      -    -    -              -   14.45358      -     - 3248s
+  5206  5415      -    -    -              -   14.45358      -     - 3356s
+  5414  5538      -    -    -              -   14.45358      -     - 3455s
+  5537  5641      -    -    -              -   14.45358      -     - 3551s
+  5640  5759      -    -    -              -   14.45358      -     - 3652s
+  5758  5854      -    -    -              -   14.45358      -     - 3755s
+  5853  6013      -    -    -              -   14.45358      -     - 3860s
+  6012  6116      -    -    -              -   14.45358      -     - 3958s

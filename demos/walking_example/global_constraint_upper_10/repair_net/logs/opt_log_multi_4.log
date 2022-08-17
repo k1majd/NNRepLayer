@@ -1,0 +1,72 @@
+
+Gurobi 9.5.1 (linux64) logging started Tue 16 Aug 2022 02:51:35 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/global_constraint_upper_10/repair_net/logs/opt_log_multi_4.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 45 threads
+Optimize a model with 16863 rows, 10742 columns and 136831 nonzeros
+Model fingerprint: 0x414279c0
+Model has 149 quadratic objective terms
+Variable types: 5974 continuous, 4768 integer (4768 binary)
+Coefficient statistics:
+  Matrix range     [2e-03, 2e+02]
+  Objective range  [2e-03, 1e+00]
+  QObjective range [1e-02, 1e-02]
+  Bounds range     [1e+00, 2e+03]
+  RHS range        [3e-05, 2e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (15 threads per instance)
+
+Presolve removed 490 rows and 96 columns
+Presolve time: 0.24s
+Presolved: 16373 rows, 10646 columns, 136149 nonzeros
+Presolved model has 149 quadratic objective terms
+Variable types: 5878 continuous, 4768 integer (4768 binary)
+Root relaxation presolve removed 4768 rows and 4768 columns
+Root relaxation presolved: 11605 rows, 5878 columns, 121845 nonzeros
+Root relaxation presolved model has 149 quadratic objective terms
+
+
+Root relaxation: objective 2.972361e+01, 7447 iterations, 0.20 seconds (0.25 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -      186.72602   29.72361  84.1%     -    1s
+     0     0      -    -    -      182.61135   29.72361  83.7%     -    5s
+     0     2      -    -    -       35.49227   29.72361  16.3%     -    8s
+   175   203      -    -    -       35.49227   29.72361  16.3%     -   10s
+   886   902      -    -    -       35.23333   29.72361  15.6%     -   22s
+  1003  1019      -    -    -       35.01294   29.72361  15.1%     -   33s
+  2106  2122      -    -    -       34.99713   29.72361  15.1%     -   45s
+  3935  4036      -    -    -       34.94900   29.72361  15.0%     -   66s
+  6711  7016      -    -    -       34.94900   29.72361  15.0%     -   73s
+  8887  9301      -    -    -       34.94900   29.72361  15.0%     -   75s
+ 10091 10092      -    -    -       34.94900   29.72361  15.0%     -   95s
+ 10093  9108      -    -    -       34.92399   29.72361  14.9%     -  101s
+ 10095  8655      -    -    -       34.92399   29.72361  14.9%     -  125s
+ 10125  8258      -    -    -       34.89679   29.72361  14.8%     -  133s
+ 10170  7877      -    -    -       34.89165   29.72361  14.8%     -  171s
+ 10185  7125      -    -    -       34.87775   29.72361  14.8%     -  202s
+ 11246  7480      -    -    -       34.87508   29.72361  14.8%     -  233s
+ 11396  6709      -    -    -       34.83792   29.72361  14.7%     -  235s
+ 13022  7768      -    -    -       34.83792   29.72361  14.7%     -  242s
+ 13807  8470      -    -    -       34.83792   29.72361  14.7%     -  245s
+ 16360 10250      -    -    -       34.83792   29.72361  14.7%     -  250s
+ 17057 10637      -    -    -       34.83792   29.72361  14.7%     -  255s
+ 19903 12779      -    -    -       34.83792   29.72361  14.7%     -  261s
+ 20402 14523      -    -    -       34.83792   29.72361  14.7%     -  271s
+ 23304 15184      -    -    -       34.83792   29.72361  14.7%     -  289s
+ 23940 16086      -    -    -       34.83792   29.72361  14.7%     -  291s
+ 25054 15442      -    -    -       34.83742   29.72361  14.7%     -  328s
+ 25069 15623      -    -    -       34.58223   29.72361  14.0%     -  335s
+
+Instance 0 was solved
+
+Explored 25717 nodes (2063359 simplex iterations) in 335.53 seconds (839.92 work units)
+Thread count was 15 (of 96 available processors)
+
+Solution count 10: 33.2572 33.5616 34.018 ... 34.8677 
+
+Optimal solution found (tolerance 1.10e-01)
+Best objective 3.325718499083e+01, best bound 2.972361429751e+01, gap 10.6250%

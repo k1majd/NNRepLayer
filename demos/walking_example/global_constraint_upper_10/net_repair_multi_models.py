@@ -297,7 +297,7 @@ if __name__ == "__main__":
 
     layer_to_repair = 3  # first layer-(0) last layer-(4)
     max_weight_bound = 5.0  # specifying the upper bound of weights error
-    cost_weights = np.array([100.0, 1.0])  # cost weights
+    cost_weights = np.array([1.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 40.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
@@ -347,18 +347,22 @@ if __name__ == "__main__":
         "python",
         "keras",
         {
-            "timelimit": 700,  # max time algorithm will take in seconds
+            "timelimit": 500,  # max time algorithm will take in seconds
             "mipgap": 0.11,  #
             "mipfocus": 2,  #
-            "improvestarttime": 600,
+            "cuts": 0,
+            "concurrentmip": 3,
+            "threads": 45,
+            "improvestarttime": 400,
+            "improvestartgap": 0.12,
             "logfile": path_write + f"/logs/opt_log_multi_{model_id}.log",
         },
     )
 
     # repair the network
     out_model = repair_obj.repair(options)
-    plt.plot(out_model.predict(x_train))
-    plt.show()
+    # plt.plot(out_model.predict(x_train))
+    # plt.show()
 
     # store the modeled MIP and parameters
     # repair_obj.summary(direc=path_write + "/summary")
@@ -397,13 +401,15 @@ if __name__ == "__main__":
         out_model, test_obs, test_ctrls, ctrl_test_pred_orig, bound_upper + 0.2
     )
     with open(
-        path_write + f"/stats/repair_layer_multi_{model_id}.csv",
+        path_write + f"/stats/repair_layer_multi.csv",
         "a+",
         newline="",
     ) as write_obj:
         # Create a writer object from csv module
         csv_writer = writer(write_obj)
         model_evaluation = [
+            "model_idx",
+            model_id,
             "repair layer",
             layer_to_repair,
             "mae",
