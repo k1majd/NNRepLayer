@@ -3,11 +3,18 @@
 # echo "remove the existing stats in:"
 # echo $SCRIPT_DIR/tc1/finetuned_net/stats
 # rm -rf $SCRIPT_DIR/tc1/finetuned_net/stats
-echo "Finetuning"
-for i in {1..10}
+# echo "Finetuning"
+# for i in {1..10}
+# do
+#    echo "Fine-tuning - test: $i"
+#    python3 retrain.py -it $i
+# done
+
+echo "repair multi models"
+for i in {3..49}
 do
-   echo "Fine-tuning - test: $i"
-   python3 retrain.py -it $i
+   echo "repair - test: $i"
+   python3 net_repair_multi_models.py -id $i
 done
 
 # echo "remove the existing stats in:"

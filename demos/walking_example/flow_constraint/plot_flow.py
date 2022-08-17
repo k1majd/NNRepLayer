@@ -34,7 +34,7 @@ from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
 
-plt.rcParams.update({"text.usetex": True})
+# plt.rcParams.update({"text.usetex": True})
 
 
 def loadData(name_csv):
@@ -523,7 +523,7 @@ def cuboid_data(center, size):
 
 
 if __name__ == "__main__":
-    str = "_6_11_2022_20_48_45"
+    str = "_8_16_2022_18_28_54"
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
     # load model

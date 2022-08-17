@@ -373,7 +373,7 @@ if __name__ == "__main__":
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 3  # first layer-(0) last layer-(4)
-    max_weight_bound = 0.5  # specifying the upper bound of weights error
+    max_weight_bound = 0.4  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = []
@@ -442,11 +442,11 @@ if __name__ == "__main__":
         "keras",
         {
             "timelimit": 600,  # max time algorithm will take in seconds
-            "mipgap": 0.10,  #
+            "mipgap": 0.35,  #
             "mipfocus": 2,  #
             "cuts": 0,
             "concurrentmip": 3,
-            # "threads": 48,
+            "threads": 48,
             "improvestarttime": 500,
             "logfile": path_write + f"/logs/opt_log_multi_{model_id}.log",
             # "solfiles": path_write + f"/sol/sol_{now_str}/solution",
@@ -493,7 +493,7 @@ if __name__ == "__main__":
         out_model, test_obs, test_ctrls, ctrl_test_pred_orig, bound + 0.3
     )
     with open(
-        path_write + f"/stats/repair_layer_multi_{model_id}.csv",
+        path_write + f"/stats/repair_layer_multi.csv",
         "a+",
         newline="",
     ) as write_obj:

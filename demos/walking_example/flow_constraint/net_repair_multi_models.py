@@ -298,10 +298,10 @@ def generate_repair_dataset2(obs, ctrl, model, num_samples, box, dt=1.0):
             else:
                 idx_no_adv.append(i)
     id_train_adv = np.random.choice(
-        idx_adv, int(0.75 * num_samples), replace=False
+        idx_adv, int(0.50 * num_samples), replace=False
     )
     id_train_no_adv = np.random.choice(
-        idx_no_adv, int(0.25 * num_samples), replace=False
+        idx_no_adv, int(0.50 * num_samples), replace=False
     )
     id_train = np.concatenate((id_train_adv, id_train_no_adv))
     x_train = obs[id_train]
@@ -465,6 +465,9 @@ if __name__ == "__main__":
             "timelimit": 18000,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
             "mipfocus": 2,  #
+            "cuts": 0,
+            "concurrentmip": 3,
+            "threads": 48,
             "improvestarttime": 16000,
             "cuts": 0,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
