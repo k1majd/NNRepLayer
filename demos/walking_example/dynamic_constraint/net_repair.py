@@ -247,9 +247,10 @@ def plot_model_out(
 
 def generate_repair_dataset(obs, ctrl, num_samples, bound, model):
     ctrl_pred = model.predict(obs)
-    max_window_size = 5000
+    max_window_size = 11000
     delta_u = np.subtract(
-        ctrl_pred[0:max_window_size].flatten(), obs[0:max_window_size, -1].flatten()
+        ctrl_pred[0:max_window_size].flatten(),
+        obs[0:max_window_size, -1].flatten(),
     )
     # violation_idx = np.argsort(np.abs(delta_u))[::-1]
     violation_idx = np.where(np.abs(delta_u) > bound)[0]
@@ -268,9 +269,9 @@ def generate_repair_dataset(obs, ctrl, num_samples, bound, model):
         # violation_idx = violation_idx[rnd_pts]
         violation_idx = np.random.choice(
             violation_idx, int(num_samples * 0.75), replace=False
-            )
+        )
         nonviolation_idx = np.random.choice(
-            nonviolation_idx, size=int(num_samples * 0.60), replace=False
+            nonviolation_idx, size=int(num_samples * 0.25), replace=False
         )
         idx = np.concatenate((violation_idx, nonviolation_idx))
         return obs[idx], ctrl[idx]
@@ -321,35 +322,42 @@ if __name__ == "__main__":
     # Train window model
     num_nodes = 256
     ctrl_model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__)) + f"/models/model_orig_{num_nodes}"
+        os.path.dirname(os.path.realpath(__file__))
+        + f"/models/model_orig_{num_nodes}"
     )
     bound = 2.0
     x_test, y_test, test_obs, test_ctrls = generateDataWindow(10)
-    num_samples = 250
+    num_samples = 1000
     # rnd_pts = np.random.choice(1000, num_samples)
     x_train, y_train = generate_repair_dataset(
-        test_obs, test_ctrls, num_samples, bound, ctrl_model_orig,
+        x_test,
+        y_test,
+        num_samples,
+        bound,
+        ctrl_model_orig,
     )
-    
+
     def out_constraint1(model, i):
         return (
             getattr(model, repair_obj.output_name)[i, 0] - x_train[i, -1]
-            <= bound - 0.1
+            <= bound - 0.3
         )
 
     def out_constraint2(model, i):
         return getattr(model, repair_obj.output_name)[i, 0] - x_train[
             i, -1
-        ] >= -(bound - 0.1)
+        ] >= -(bound - 0.3)
 
     repair_obj = NNRepair(ctrl_model_orig)
 
     layer_to_repair = 2  # first layer-(0) last layer-(4)
-    max_weight_bound = 0.4  # specifying the upper bound of weights error
+    max_weight_bound = 2  # specifying the upper bound of weights error
     cost_weights = np.array([10.0, 1.0])  # cost weights
     # output_bounds = (-30.0, 50.0)
     repair_node_list = []
-    num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else num_nodes
+    num_nodes = (
+        len(repair_node_list) if len(repair_node_list) != 0 else num_nodes
+    )
     w_error_norm = 0
     repair_obj.compile(
         x_train,
@@ -387,7 +395,7 @@ if __name__ == "__main__":
     # setup directory to store optimizer log file
     if not os.path.exists(path_write + "/logs"):
         os.makedirs(path_write + "/logs")
-    
+
     if not os.path.exists(path_write + "/sol"):
         os.makedirs(path_write + "/sol")
     os.makedirs(path_write + f"/sol/sol_{now_str}")
@@ -413,10 +421,14 @@ if __name__ == "__main__":
         {
             "timelimit": 40000,  # max time algorithm will take in seconds
             "mipgap": 0.01,  #
-            "mipfocus": 2,  #
+            # "mipfocus": 2,  #
+            "presolve": 2,
+            "method": 2,
             "cuts": 0,
             "concurrentmip": 3,
-            "threads": 48,
+            # "threads": 48,
+            "nodefilestart": 0.2,
+            "presparsify": 1,
             "improvestarttime": 36000,
             "logfile": path_write + f"/logs/opt_log{now_str}.log",
             # "solfiles": path_write + f"/sol/sol_{now_str}/solution",
@@ -451,7 +463,7 @@ if __name__ == "__main__":
         "wb",
     ) as data:
         pickle.dump([x_train, y_train, x_test, y_test], data)
-    
+
     # save summary
     pred_ctrls = out_model(test_obs, training=False)
     err = np.abs(test_ctrls - pred_ctrls)
