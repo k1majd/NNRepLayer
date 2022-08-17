@@ -327,37 +327,37 @@ if __name__ == "__main__":
 
     # Define Constraint
 
-    # def constraint_outside(model, i):
-    #     return [
-    #         [
-    #             (x_train[i, -1] + getattr(model, repair_obj.output_name)[i, 0])
-    #             - box[0]
-    #             <= 0
-    #         ],
-    #         [
-    #             box[1]
-    #             - (
-    #                 x_train[i, -1]
-    #                 + getattr(model, repair_obj.output_name)[i, 0]
-    #             )
-    #             <= 0
-    #         ],
-    #         [
-    #             getattr(model, repair_obj.output_name)[i, 0] - box[0] <= 0,
-    #             box[0] - getattr(model, repair_obj.output_name)[i, 0] <= 0,
-    #             box[3] - getattr(model, repair_obj.output_name)[i, 1] <= 0,
-    #         ],
-    #         [
-    #             getattr(model, repair_obj.output_name)[i, 0] - box[1] <= 0,
-    #             box[0] - getattr(model, repair_obj.output_name)[i, 0] <= 0,
-    #             getattr(model, repair_obj.output_name)[i, 1] - box[2] <= 0,
-    #         ],
-    #     ]
     def constraint_outside(model, i):
-        return (
-            x_train[i, -1] + getattr(model, repair_obj.output_name)[i, 0]
-            <= 0.9
-        )
+        return [
+            [
+                (x_train[i, -1] + getattr(model, repair_obj.output_name)[i, 0])
+                - box[0]
+                <= 0
+            ],
+            [
+                box[1]
+                - (
+                    x_train[i, -1]
+                    + getattr(model, repair_obj.output_name)[i, 0]
+                )
+                <= 0
+            ],
+            [
+                getattr(model, repair_obj.output_name)[i, 0] - box[0] <= 0,
+                box[0] - getattr(model, repair_obj.output_name)[i, 0] <= 0,
+                box[3] - getattr(model, repair_obj.output_name)[i, 1] <= 0,
+            ],
+            [
+                getattr(model, repair_obj.output_name)[i, 0] - box[1] <= 0,
+                box[0] - getattr(model, repair_obj.output_name)[i, 0] <= 0,
+                getattr(model, repair_obj.output_name)[i, 1] - box[2] <= 0,
+            ],
+        ]
+    # def constraint_outside(model, i):
+    #     return (
+    #         x_train[i, -1] + getattr(model, repair_obj.output_name)[i, 0]
+    #         <= 0.9
+    #     )
 
     ######
 
