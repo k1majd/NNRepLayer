@@ -1,0 +1,57 @@
+
+Gurobi 9.5.1 (linux64) logging started Tue 16 Aug 2022 05:21:00 PM MST
+
+Set parameter LogFile to value "/home/local/ASUAD/kmajd1/NNRepLayer_v2/demos/walking_example/global_constraint_upper_10/repair_net/logs/opt_log_multi_37.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 48 physical cores, 96 logical processors, using up to 45 threads
+Optimize a model with 16863 rows, 10742 columns and 165567 nonzeros
+Model fingerprint: 0x93cd4c0f
+Model has 149 quadratic objective terms
+Variable types: 5974 continuous, 4768 integer (4768 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 3e+02]
+  Objective range  [2e-03, 1e+00]
+  QObjective range [1e-02, 1e-02]
+  Bounds range     [1e+00, 2e+03]
+  RHS range        [2e-04, 3e+02]
+
+Concurrent MIP optimizer: 3 concurrent instances (15 threads per instance)
+
+Presolve removed 426 rows and 64 columns
+Presolve time: 0.26s
+Presolved: 16437 rows, 10678 columns, 165013 nonzeros
+Presolved model has 149 quadratic objective terms
+Variable types: 5910 continuous, 4768 integer (4768 binary)
+Root relaxation presolve removed 4768 rows and 4768 columns
+Root relaxation presolved: 11669 rows, 5910 columns, 150709 nonzeros
+Root relaxation presolved model has 149 quadratic objective terms
+
+
+Root relaxation: objective 3.152111e+01, 6503 iterations, 0.24 seconds (0.38 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0      -    -    -      188.62604   31.52111  83.3%     -    1s
+     0     0      -    -    -      187.68328   31.52111  83.2%     -    3s
+     0     2      -    -    -      185.09789   31.52111  83.0%     -    8s
+    45    61      -    -    -      183.89749   31.52111  82.9%     -   12s
+   581   626      -    -    -      183.89749   31.52111  82.9%     -   15s
+  1238  1254      -    -    -       52.50313   31.52111  40.0%     -   26s
+  1253  1269      -    -    -       42.24369   31.52111  25.4%     -   41s
+
+Resetting heuristic parameters to focus on improving solution
+(using Heuristics=0.5 and RINS=10)...
+
+  1268  1284      -    -    -       35.45725   31.52111  11.1%     -   54s
+  1283  1299      -    -    -       35.22323   31.52111  10.5%     -   58s
+
+Instance 2 was solved
+
+Explored 3058 nodes (311062 simplex iterations) in 59.00 seconds (121.09 work units)
+Thread count was 15 (of 96 available processors)
+
+Solution count 10: 35.2232 35.2411 35.3075 ... 35.6454 
+
+Optimal solution found (tolerance 1.10e-01)
+Best objective 3.522323279355e+01, best bound 3.152111074564e+01, gap 10.5105%

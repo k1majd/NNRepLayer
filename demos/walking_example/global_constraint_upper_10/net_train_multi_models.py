@@ -158,7 +158,7 @@ if __name__ == "__main__":
             use_multiprocessing=True,
             verbose=1,
             shuffle=False,
-            callbacks=callback,
+            # callbacks=callback,
         )
         keras.models.save_model(
             ctrl_model_orig,
@@ -172,9 +172,9 @@ if __name__ == "__main__":
             save_traces=True,
         )
         print("saved: model")
-        plotTestData(
-            ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls
-        )
+        # plotTestData(
+        #     ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls
+        # )
 
         # bound_upper = 10
         # bound_lower = 30
