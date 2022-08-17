@@ -94,9 +94,9 @@ def generateDataWindow(window_size):
 
 
 def buildModelWindow(data_size):
-    layer_size1 = 512
-    layer_size2 = 512
-    # layer_size3 = 32
+    layer_size1 = 32
+    layer_size2 = 32
+    layer_size3 = 32
     # input_layer = tf.keras.Input(shape=(data_size[1]))
     # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
     # layer_2 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_1)
@@ -109,7 +109,7 @@ def buildModelWindow(data_size):
                 layer_size1, activation=tf.nn.relu, input_shape=[data_size[1]]
             ),
             layers.Dense(layer_size2, activation=tf.nn.relu),
-            # layers.Dense(layer_size3, activation=tf.nn.relu),
+            layers.Dense(layer_size3, activation=tf.nn.relu),
             layers.Dense(1),
         ]
     )
@@ -168,12 +168,12 @@ if __name__ == "__main__":
         train_obs,
         train_ctrls,
         validation_data=(test_obs, test_ctrls),
-        batch_size=10,
-        epochs=20,
+        batch_size=15,
+        epochs=10,
         use_multiprocessing=True,
         verbose=1,
         shuffle=False,
-        callbacks=callback,
+        # callbacks=callback,
     )
     keras.models.save_model(
         ctrl_model_orig,
@@ -185,8 +185,8 @@ if __name__ == "__main__":
         options=None,
         save_traces=True,
     )
-    print("saved: model")
-    plotTestData(ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls)
+    # print("saved: model")
+    # plotTestData(ctrl_model_orig, train_obs, train_ctrls, test_obs, test_ctrls)
 
     bound_upper = 10
     bound_lower = 30
