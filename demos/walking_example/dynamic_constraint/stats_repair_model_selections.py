@@ -1015,7 +1015,7 @@ if __name__ == "__main__":
         return x ** (1 / 500)
 
     def inverse(x):
-        return x**500
+        return x ** 500
 
     ax21.set_yscale("function", functions=(forward, inverse))
     ax21.set_ylim(np.min(cost_list) - 10, np.max(cost_list) + 10)
