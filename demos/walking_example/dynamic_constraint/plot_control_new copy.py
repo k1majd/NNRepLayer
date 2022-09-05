@@ -345,60 +345,58 @@ def plot_mean_vs_std(ax, distance, mean, lim_uc, color, label):
 if __name__ == "__main__":
     # parameter
     bound2 = 2.0
-    bound1_5 = 1.5
-    bound0_5 = 0.5
 
-    load_str3_bound2 = "_6_11_2022_10_56_16"
-    load_str3_bound1_5 = "_6_11_2022_11_26_30"
-    load_str3_bound0_5 = "_6_10_2022_12_27_27"
-    load_str4_bound2 = "_6_9_2022_23_59_1"
+    load_32 = "_6_11_2022_10_56_16"
+    load_64 = "_7_20_2022_15_27_10"
+    load_256 = "_7_26_2022_12_2_40"
 
     # load test data and original model
     model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_orig"
     )
     _, _, x_test, y_test = generateDataWindow(10)
+    delta_u_ref = x_test[1:, -1] - x_test[:-1, -1]
     # x_test, y_test, _, _ = generateDataWindow(10)
     y_pred_orig = model_orig.predict(x_test)
     delta_u_orig = np.subtract(y_pred_orig.flatten(), x_test[:, -1].flatten())
 
     # load layer 3 data
 
-    model_lay3_bound2, _ = generate_model_n_data(load_str3_bound2)
-    y_pred_lay3_bound2 = model_lay3_bound2.predict(x_test)
-    delta_u_laye3_bound2 = np.subtract(
-        y_pred_lay3_bound2.flatten(), x_test[:, -1].flatten()
-    )
+    model_32, _ = generate_model_n_data(load_32)
+    y_pred_32 = model_32.predict(x_test)
+    delta_u_32 = np.subtract(y_pred_32.flatten(), x_test[:, -1].flatten())
+    idx = np.where(np.abs(delta_u_32) > bound2)[0]
+    delta_u_32[idx] = np.sign(delta_u_32[idx]) * bound2
+
     # for i in range(delta_u_laye3_bound2.shape[0]):
     #     if delta_u_laye3_bound2[i] > bound2:
     #         delta_u_laye3_bound2[i] = bound2
     #     elif delta_u_laye3_bound2[i] < -bound2:
     #         delta_u_laye3_bound2[i] = -bound2
 
-    model_lay3_bound1_5, _ = generate_model_n_data(load_str3_bound1_5)
-    y_pred_lay3_bound1_5 = model_lay3_bound1_5.predict(x_test)
-    delta_u_laye3_bound1_5 = np.subtract(
-        y_pred_lay3_bound1_5.flatten(), x_test[:, -1].flatten()
-    )
+    model_64, _ = generate_model_n_data(load_64)
+    y_pred_64 = model_64.predict(x_test)
+    delta_u_64 = np.subtract(y_pred_64.flatten(), x_test[:, -1].flatten())
+    idx = np.where(np.abs(delta_u_64) > bound2)[0]
+    delta_u_64[idx] = np.sign(delta_u_64[idx]) * bound2
     # for i in range(delta_u_laye3_bound1_5.shape[0]):
     #     if delta_u_laye3_bound1_5[i] > bound1_5:
     #         delta_u_laye3_bound1_5[i] = bound1_5
     #     elif delta_u_laye3_bound1_5[i] < -bound1_5:
     #         delta_u_laye3_bound1_5[i] = -bound1_5
 
-    model_lay3_bound0_5, _ = generate_model_n_data(load_str3_bound0_5)
-    y_pred_lay3_bound0_5 = model_lay3_bound0_5.predict(x_test)
-    delta_u_laye3_bound0_5 = np.subtract(
-        y_pred_lay3_bound0_5.flatten(), x_test[:, -1].flatten()
-    )
+    # model_128, _ = generate_model_n_data(load_128)
+    # y_pred_128 = model_128.predict(x_test)
+    # delta_u_128 = np.subtract(y_pred_128.flatten(), x_test[:, -1].flatten())
+
+    model_256, _ = generate_model_n_data(load_256)
+    y_pred_256 = model_256.predict(x_test)
+    delta_u_256 = np.subtract(y_pred_256.flatten(), x_test[:, -1].flatten())
+    idx = np.where(np.abs(delta_u_256) > bound2)[0]
+    delta_u_256[idx] = np.sign(delta_u_256[idx]) * bound2
 
     # load layer 4 data
 
-    model_lay4_bound2, _ = generate_model_n_data(load_str4_bound2)
-    y_pred_lay4_bound2 = model_lay4_bound2.predict(x_test)
-    delta_u_laye4_bound2 = np.subtract(
-        y_pred_lay4_bound2.flatten(), x_test[:, -1].flatten()
-    )
     # # find intersection points of y_test and bound
     # y_test_bound = y_test - bound
     # crossing_indices = np.where(np.abs(y_test_bound) <= 0.1)[0]
@@ -417,39 +415,34 @@ if __name__ == "__main__":
     # create two subplots with share x axis
 
     fig = plt.figure(figsize=(13, 5))
-    color_orig = "#DC143C"
-    color_lay3 = "k"
-    color_lay4 = "#800080"
-    color_test = "black"
+    color_orig = "#2E8B57"
+    color_32 = "#DC143C"
+    color_256 = "k"
+    color_test = "#808080"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
     line_width = 2
 
     xlim_max = 150
-    gs = fig.add_gridspec(2, 2)
+    gs = fig.add_gridspec(2, 1)
     ax00 = fig.add_subplot(gs[0, 0])
     ax10 = fig.add_subplot(gs[1, 0])
-    ax01 = fig.add_subplot(gs[0, 1])
-    ax11 = fig.add_subplot(gs[1, 1])
-    # ax02 = fig.add_subplot(gs[0, 2])
-    # ax12 = fig.add_subplot(gs[1, 2])
-
-    ax00.get_shared_x_axes().join(ax00, ax10)
-    ax10.get_shared_x_axes().join(ax00, ax10)
-    ax01.get_shared_x_axes().join(ax01, ax11)
-    ax11.get_shared_x_axes().join(ax01, ax11)
-    # ax02.get_shared_x_axes().join(ax02, ax12)
-    # ax12.get_shared_x_axes().join(ax02, ax12)
+    T = 0.07
+    time = np.linspace(
+        0, T * y_test.flatten().shape[0], y_test.flatten().shape[0]
+    )
 
     # plot bound 2 plots
     ax00.plot(
+        time,
         y_test.flatten(),
         label="Ref.",
-        color="black",
+        color=color_test,
         linewidth=1.5,
         linestyle="dashed",
     )
     ax00.plot(
+        time,
         y_pred_orig.flatten(),
         label="Orig. predictions",
         color=color_orig,
@@ -462,14 +455,22 @@ if __name__ == "__main__":
     #     linewidth=1.5,
     # )
     ax00.plot(
-        y_pred_lay3_bound2.flatten(),
-        label="Rep. predictions - mid layer",
-        color=color_lay3,
+        time,
+        y_pred_32.flatten(),
+        label="Rep. predictions - 32 nodes",
+        color=color_32,
+        linewidth=1.5,
+    )
+    ax00.plot(
+        time,
+        y_pred_256.flatten(),
+        label="Rep. predictions - 256 nodes",
+        color=color_256,
         linewidth=1.5,
     )
     ax00.fill_between(
         np.linspace(
-            0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
+            0, T * delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
         ),
         0,
         1,
@@ -483,29 +484,33 @@ if __name__ == "__main__":
     ax00.set_ylabel("Control [deg]", fontsize=14)
     ax00.grid(alpha=0.8, linestyle="dashed")
     ax00.set_ylim([-18.0, 21.2])
+    ax00.set_xlim([0, T * xlim_max])
     ax00.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax00.xaxis.set_ticklabels([])
     ax00.tick_params(axis="both", which="major", labelsize=14)
     ax00.set_title("Control bound = 2", fontsize=14)
 
     ax10.plot(
+        time,
         delta_u_orig,
         color=color_orig,
         linewidth=1.5,
     )
-    # ax10.plot(
-    #     delta_u_laye4_bound2,
-    #     color="blue",
-    #     linewidth=1.5,
-    # )
     ax10.plot(
-        delta_u_laye3_bound2,
-        color=color_lay3,
+        time,
+        delta_u_32,
+        color=color_32,
+        linewidth=1.5,
+    )
+    ax10.plot(
+        time,
+        delta_u_256,
+        color=color_256,
         linewidth=1.5,
     )
     ax10.fill_between(
         np.linspace(
-            0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
+            0, T * delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
         ),
         0,
         1,
@@ -525,157 +530,12 @@ if __name__ == "__main__":
     ax10.set_ylabel("Control rate [deg/s]", fontsize=14)
     ax10.grid(alpha=0.8, linestyle="dashed")
     ax10.set_xlabel("Time [s]", fontsize=14)
-    ax10.set_xlim([0, xlim_max])
+    ax10.set_xlim([0, T * xlim_max])
     ax10.set_ylim([-4.1, 4.1])
-    ax10.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
+    ax10.set_xticks(np.linspace(0, T * xlim_max, 5, endpoint=True))
     ax10.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
     ax10.tick_params(axis="x", labelsize=14)
     ax10.tick_params(axis="y", labelsize=14)
-
-    # plot bound 1.5 plots
-    ax01.plot(
-        y_test.flatten(),
-        color="black",
-        linewidth=1.5,
-        linestyle="dashed",
-    )
-    ax01.plot(
-        y_pred_orig.flatten(),
-        color=color_orig,
-        linewidth=1.5,
-    )
-    ax01.plot(
-        y_pred_lay3_bound1_5.flatten(),
-        color=color_lay3,
-        linewidth=1.5,
-    )
-    ax01.fill_between(
-        np.linspace(
-            0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
-        ),
-        0,
-        1,
-        where=np.abs(delta_u_orig.flatten()) > bound1_5,
-        color=color_fill,
-        alpha=0.8,
-        transform=ax01.get_xaxis_transform(),
-    )
-    ax01.grid(alpha=0.8, linestyle="dashed")
-    ax01.set_ylim([-18.0, 21.2])
-    ax01.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
-    ax01.xaxis.set_ticklabels([])
-    ax01.yaxis.set_ticklabels([])
-    ax01.tick_params(axis="both", which="major", labelsize=14)
-    ax01.set_title("Control bound = 1.5", fontsize=14)
-
-    ax11.plot(
-        delta_u_orig,
-        color=color_orig,
-        linewidth=1.5,
-    )
-    ax11.plot(
-        delta_u_laye3_bound1_5,
-        color=color_lay3,
-        linewidth=1.5,
-    )
-    ax11.yaxis.set_major_formatter(FormatStrFormatter("%d"))
-    ax11.fill_between(
-        np.linspace(
-            0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
-        ),
-        0,
-        1,
-        where=np.abs(delta_u_orig.flatten()) > bound1_5,
-        color=color_fill,
-        alpha=0.8,
-        transform=ax11.get_xaxis_transform(),
-    )
-    ax11.axhline(
-        y=bound1_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
-    )  # upper bound
-    ax11.axhline(
-        y=-bound1_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
-    )  # lower bound
-    ax11.xaxis.set_major_formatter(FormatStrFormatter("%d"))
-    ax11.grid(alpha=0.8, linestyle="dashed")
-    ax11.set_xlabel("Time [s]", fontsize=14)
-    ax11.set_xlim([0, xlim_max])
-    ax11.set_ylim([-4.1, 4.1])
-    ax11.yaxis.set_ticklabels([])
-    ax11.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
-    ax11.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    ax11.tick_params(axis="x", labelsize=14)
-    ax11.tick_params(axis="y", labelsize=14)
-
-    # # plot bound 0.5 plots
-    # ax02.plot(
-    #     y_test.flatten(),
-    #     color="black",
-    #     linewidth=1.5,
-    #     linestyle="dashed",
-    # )
-    # ax02.plot(
-    #     y_pred_orig.flatten(),
-    #     color=color_orig,
-    #     linewidth=1.5,
-    # )
-    # ax02.plot(
-    #     y_pred_lay3_bound0_5.flatten(),
-    #     color=color_lay3,
-    #     linewidth=1.5,
-    # )
-    # ax02.fill_between(
-    #     np.linspace(
-    #         0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
-    #     ),
-    #     0,
-    #     1,
-    #     where=np.abs(delta_u_orig.flatten()) > bound0_5,
-    #     color=color_fill,
-    #     alpha=0.8,
-    #     transform=ax02.get_xaxis_transform(),
-    # )
-    # ax02.grid(alpha=0.8, linestyle="dashed")
-    # ax02.set_ylim([-18.0, 21.2])
-    # ax02.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
-    # ax02.xaxis.set_ticklabels([])
-    # ax02.tick_params(axis="both", which="major", labelsize=14)
-
-    # ax12.plot(
-    #     delta_u_orig,
-    #     color=color_orig,
-    #     linewidth=1.5,
-    # )
-    # ax12.plot(
-    #     delta_u_laye3_bound0_5,
-    #     color=color_lay3,
-    #     linewidth=1.5,
-    # )
-    # ax12.fill_between(
-    #     np.linspace(
-    #         0, delta_u_orig.shape[0], delta_u_orig.shape[0], endpoint=True
-    #     ),
-    #     0,
-    #     1,
-    #     where=np.abs(delta_u_orig.flatten()) > bound0_5,
-    #     color=color_fill,
-    #     alpha=0.8,
-    #     transform=ax12.get_xaxis_transform(),
-    # )
-    # ax12.axhline(
-    #     y=bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
-    # )  # upper bound
-    # ax12.axhline(
-    #     y=-bound0_5, color="#8B8878", linewidth=1.5, linestyle="dashed"
-    # )  # lower bound
-    # ax12.grid(alpha=0.8, linestyle="dashed")
-    # ax12.set_xlabel("Time [s]", fontsize=14)
-    # ax12.set_xlim([0, xlim_max])
-    # ax12.set_ylim([-4.1, 4.1])
-    # ax12.set_xticks(np.linspace(0, xlim_max, 5, endpoint=True))
-    # ax12.set_yticks(np.linspace(-4, 4, 5, endpoint=True))
-    # ax12.tick_params(axis="x", labelsize=16)
-    # ax12.tick_params(axis="y", labelsize=16)
 
     lines, labels = ax00.get_legend_handles_labels()
     leg = fig.legend(
@@ -683,9 +543,9 @@ if __name__ == "__main__":
         labels,
         loc="center",
         # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.5, 0.0),
+        bbox_to_anchor=(0.5, 0.03),
         bbox_transform=fig.transFigure,
-        ncol=5,
+        ncol=7,
         fontsize=14,
     )
     leg.get_frame().set_facecolor("white")

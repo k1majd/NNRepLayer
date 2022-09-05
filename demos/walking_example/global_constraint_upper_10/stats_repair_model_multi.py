@@ -326,14 +326,16 @@ def give_stats(model, x, y, y_pred_orig, bound):
     mae = np.mean(np.abs(y_orig - y_new))
 
     idx_violation = np.where(y_pred_new > bound)[0]
-    print("Number of violations: ", num_violations)
+    print("Number of violations: ", idx_violation)
     idx_orig_no_violate = np.where(y_pred_orig[idx_violation] < bound)[0]
     print(
         "Number of violations introduced: ",
-        len(idx_violation[idx_orig_no_violate]),
+        len(idx_orig_no_violate),
     )
 
-    return satisfaction_rate, mae
+    intro_bug = len(idx_orig_no_violate) / x.shape[0]
+
+    return satisfaction_rate, mae, intro_bug
 
 
 if __name__ == "__main__":
@@ -350,35 +352,47 @@ if __name__ == "__main__":
     # x_train = test_obs[rnd_pts]
     # y_train = test_ctrls[rnd_pts]
     # load the original model
-    model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig/original_model"
-    )
+    for id in range(50):
+        model_orig = keras.models.load_model(
+            os.path.dirname(os.path.realpath(__file__))
+            + f"/models/model_orig_{id}"
+        )
 
-    # load the repaired dat set
-    load_str = "_5_31_2022_16_35_50"
-    model_repaired = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{load_str}"
-    )
-    x_repair, y_repair = load_rep_data(load_str)
+        # load the repaired dat set
+        model_repaired = keras.models.load_model(
+            os.path.dirname(os.path.realpath(__file__))
+            + f"/repair_net/models/model_layer_multi_{id}"
+        )
+        # x_repair, y_repair = load_rep_data(load_str)
 
-    bound = 10.0
+        bound = 10.0
 
-    # original predictions
-    ctrl_test_pred_orig = model_orig.predict(test_obs)
+        # original predictions
+        ctrl_test_pred_orig = model_orig.predict(test_obs)
+        sat_rate, mae, intro_bug = give_stats(
+            model_repaired,
+            test_obs,
+            test_ctrls,
+            ctrl_test_pred_orig,
+            bound + 0.1,
+        )
+        with open(
+            os.path.dirname(os.path.realpath(__file__))
+            + f"/repair_net/stats/bound_stat.csv",
+            "a+",
+            newline="",
+        ) as write_obj:
+            # Create a writer object from csv module
+            csv_writer = writer(write_obj)
+            model_evaluation = [
+                "model",
+                id,
+                "intro_bug",
+                intro_bug,
+            ]
+            # Add contents of list as last row in the csv file
+            csv_writer.writerow(model_evaluation)
 
-    sat_rate, mae = give_stats(
-        model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound
-    )
-    print(f"mae is {mae}")
-    print(f"sat_rate is {sat_rate}")
-
-    sat_rate, mae = give_stats(
-        model_repaired, test_obs, test_ctrls, ctrl_test_pred_orig, bound + 0.1
-    )
-    print(f"mae is {mae}")
-    print(f"sat_rate is {sat_rate}")
     # hand label the data set
 
     # store the modeled MIP and parameters

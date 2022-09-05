@@ -408,6 +408,11 @@ if __name__ == "__main__":
     #         )
     # create two subplots with share x axis
 
+    T = 0.07
+    time = np.linspace(
+        0, T * y_test.flatten().shape[0], y_test.flatten().shape[0]
+    )
+
     fig = plt.figure(figsize=(13, 5))
     color_orig = "k"
     color_32 = "#6495ED"
