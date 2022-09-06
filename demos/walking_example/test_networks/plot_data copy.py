@@ -130,7 +130,8 @@ distance = distance / distance.max()
 #     alpha=1,
 # )  # upper bound
 # plt.show()
-x = np.linspace(0, data_size - window_size, data_size - window_size)
+T = 0.07
+x = np.linspace(0, T * (data_size - window_size), data_size - window_size)
 y = np.linspace(-20, 30, 100)
 
 z = [distance for j in y]
@@ -167,9 +168,11 @@ ax00.get_shared_x_axes().join(ax00, ax10)
 ax10.get_shared_x_axes().join(ax00, ax10)
 # ax02.get_shared_x_axes().join(ax02, ax12)
 # ax12.get_shared_x_axes().join(ax02, ax12)
-
+len = angle_global.flatten().shape[0] - x_min
+time = np.linspace(0, len * T, len, endpoint=False)
 # plot bound 2 plots
 ax00.plot(
+    time,
     angle_global.flatten()[x_min:],
     label="Rep. global constraint",
     color=color_orig,
@@ -177,6 +180,7 @@ ax00.plot(
     # linestyle="dashed",
 )
 ax00.plot(
+    time,
     angle_dynamic.flatten()[x_min:],
     label="Rep. input-output constraint",
     color=color_lay3,
@@ -209,13 +213,15 @@ ax00.set_ylabel("Control [deg]", fontsize=font_size)
 ax00.grid(alpha=0.8, linestyle="dashed")
 ax00.set_ylim([-17.0, 27.0])
 ax00.set_yticks(np.linspace(-15.0, 25.0, 3, endpoint=True))
-ax00.xaxis.set_ticklabels([])
+ax00.set_xticks(np.linspace(0, T * (x_max - x_min), 5, endpoint=True))
 ax00.tick_params(axis="y", which="major", labelsize=font_size)
+ax00.xaxis.set_ticklabels([])
 ax00.xaxis.set_major_formatter(FormatStrFormatter("%d"))
 ax00.yaxis.set_major_formatter(FormatStrFormatter("%d"))
 # ax00.set_title("Control bound = 2", fontsize=font_size)
 
 ax10.plot(
+    time[:-1],
     error_global[x_min:],
     color=color_orig,
     linewidth=1.5,
@@ -226,6 +232,7 @@ ax10.plot(
 #     linewidth=1.5,
 # )
 ax10.plot(
+    time[:-1],
     error_dynamic[x_min:],
     color=color_lay3,
     linewidth=1.5,
@@ -251,9 +258,9 @@ ax10.axhline(
 ax10.set_ylabel("Control rate [deg/s]", fontsize=font_size)
 ax10.grid(alpha=0.8, linestyle="dashed")
 ax10.set_xlabel("Time (s)", fontsize=font_size)
-ax10.set_xlim([0, x_max - x_min])
+ax10.set_xlim([0, T * (x_max - x_min)])
 ax10.set_ylim([-3, 3])
-ax10.set_xticks(np.linspace(0, x_max - x_min, 5, endpoint=True))
+ax10.set_xticks(np.linspace(0, T * (x_max - x_min), 5, endpoint=True))
 ax10.set_yticks(np.linspace(-2, 2, 3, endpoint=True))
 ax10.tick_params(axis="x", labelsize=font_size)
 ax10.tick_params(axis="y", labelsize=font_size)

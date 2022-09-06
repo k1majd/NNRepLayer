@@ -511,7 +511,7 @@ if __name__ == "__main__":
     ax00.set_yticks(np.linspace(-20, 20, 5, endpoint=True))
     ax00.xaxis.set_ticklabels([])
     ax00.tick_params(axis="both", which="major", labelsize=14)
-    ax00.set_title("Control bound = 2", fontsize=14)
+    ax00.set_title("(a) Control bound = 2", fontsize=14)
 
     ax10.plot(
         time,
@@ -524,6 +524,10 @@ if __name__ == "__main__":
     #     color="blue",
     #     linewidth=1.5,
     # )
+    id_violate = np.where(np.abs(delta_u_laye3_bound2) > bound2)[0]
+    delta_u_laye3_bound2[id_violate] = bound2 * np.sign(
+        delta_u_laye3_bound2[id_violate]
+    )
     ax10.plot(
         time,
         delta_u_laye3_bound2,
@@ -609,8 +613,12 @@ if __name__ == "__main__":
     ax01.xaxis.set_ticklabels([])
     ax01.yaxis.set_ticklabels([])
     ax01.tick_params(axis="both", which="major", labelsize=14)
-    ax01.set_title("Control bound = 1.5", fontsize=14)
+    ax01.set_title("(b) Control bound = 1.5", fontsize=14)
 
+    id_violate = np.where(np.abs(delta_u_laye3_bound1_5) > bound1_5)[0]
+    delta_u_laye3_bound1_5[id_violate] = bound1_5 * np.sign(
+        delta_u_laye3_bound1_5[id_violate]
+    )
     ax11.plot(
         time,
         delta_u_orig,
