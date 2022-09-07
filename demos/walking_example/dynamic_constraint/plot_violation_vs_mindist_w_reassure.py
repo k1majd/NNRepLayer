@@ -29,6 +29,7 @@ from matplotlib.ticker import FormatStrFormatter
 from nnreplayer.utils.options import Options
 from nnreplayer.utils.utils import ConstraintsClass, get_sensitive_nodes
 from nnreplayer.repair.repair_weights_class import NNRepair
+import matplotlib.transforms as mtransforms
 
 plt.rcParams.update({"text.usetex": True})
 
@@ -414,53 +415,78 @@ if __name__ == "__main__":
     mean_rep_dyn = mean_lay3(dist_lay3)
     dist_rep_dyn = dist_lay3
 
-    fig = plt.figure(figsize=(4, 6))
-    gs = fig.add_gridspec(2, 1)
-    ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[1, 0])
+    # load reassure data
+    reassure_data = pickle.load(
+        open(
+            os.path.dirname(os.path.realpath(__file__))
+            + "/reassure/violation_degree_reassure_dyn_2.pkl",
+            "rb",
+        )
+    )
+    dist_reassure_dyn = reassure_data[0]
+    mean_reassure_dyn = reassure_data[1]
 
+    fig = plt.figure(figsize=(6, 4))
+    gs = fig.add_gridspec(1, 2)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    trans = mtransforms.ScaledTranslation(
+        10 / 72, -5 / 72, fig.dpi_scale_trans
+    )
+    ax1.text(0.75, 0.9, "(a)", transform=ax1.transAxes + trans, fontsize=20)
+    ax2.text(0.75, 0.9, "(b)", transform=ax2.transAxes + trans, fontsize=20)
     color_orig = "#2E8B57"
     color_lay3 = "k"
     color_retrain = "#8E388E"
     color_fine = "#7EC0EE"
+    color_reassure = "#DC143C"
     color_test = "black"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
     fontsize = 14
-    ax1_xlim = [0, 15.0]
-    ax1_ylim = [-0.1, 1.1]
+    ax1_xlim = [0, 2.0]
+    ax1_ylim = [-0.1, 1.3]
     ax2_xlim = [0, 2.0]
     ax2_ylim = [-0.1, 1.0]
 
     # dynamic constraint
+    T = 0.5
+
     ax1.grid(alpha=0.8, linestyle="dashed")
     ax1 = plot_mean_vs_std(
         ax1,
-        dist_orig_dyn,
+        0.3 * dist_orig_dyn,
         mean_orig_dyn,
         color=color_orig,
         label="Original",
     )
     ax1 = plot_mean_vs_std(
         ax1,
-        dist_rep_dyn,
+        T * dist_rep_dyn,
         mean_rep_dyn,
         color=color_lay3,
-        label="Repaired",
+        label="Our method",
     )
     ax1 = plot_mean_vs_std(
         ax1,
-        dist_fine_dyn,
+        T * dist_fine_dyn,
         mean_fine_dyn,
         color=color_fine,
         label="Fine-tuned",
     )
     ax1 = plot_mean_vs_std(
         ax1,
-        dist_retrain_dyn,
+        T * dist_retrain_dyn,
         mean_retrain_dyn,
         color=color_retrain,
         label="Retrained",
+    )
+    ax1 = plot_mean_vs_std(
+        ax1,
+        T * dist_reassure_dyn,
+        mean_reassure_dyn,
+        color=color_reassure,
+        label="REASSURE",
     )
     ax1.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
     ax1.set_ylabel("Violation degree", fontsize=fontsize)
@@ -476,7 +502,7 @@ if __name__ == "__main__":
     # ax1.yaxis.set_label_position("left")
     ax1.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax1.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    ax1.xaxis.set_ticklabels([])
+    # ax1.xaxis.set_ticklabels([])
     # ax1.yaxis.tick_right()
     # ax1.set_title("Input-output constraint", fontsize=fontsize)
     ax1.set_xlim(ax1_xlim)
@@ -521,6 +547,7 @@ if __name__ == "__main__":
     y_maxlim = 2
     ax2.set_xticks(np.linspace(0, ax2_xlim[1], 4))
     ax2.set_yticks(np.linspace(0, ax2_ylim[1], 4))
+
     ax2.tick_params(axis="y", labelrotation=90)
     ax2.tick_params(axis="x", labelsize=fontsize)
     ax2.tick_params(axis="y", labelsize=fontsize)
@@ -528,6 +555,7 @@ if __name__ == "__main__":
     ax2.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax2.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     # ax2.yaxis.tick_right()
+    ax2.yaxis.set_ticklabels([])
     ax2.set_xlim(ax2_xlim)
     ax2.set_ylim(ax2_ylim)
 
@@ -536,10 +564,10 @@ if __name__ == "__main__":
         lines,
         labels,
         loc="center",
-        # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.6, 0.5),
+        bbox_to_anchor=(0.5, 0.0),
+        # bbox_to_anchor=(0.6, 0.5),
         bbox_transform=fig.transFigure,
-        ncol=1,
+        ncol=5,
         fontsize=fontsize,
     )
     leg.get_frame().set_facecolor("white")

@@ -477,18 +477,19 @@ if __name__ == "__main__":
     #     color="blue",
     #     linewidth=1.5,
     # )
-    ax00.plot(
-        time,
-        y_pred_lay3_bound2.flatten(),
-        label="Rep. predictions - mid layer",
-        color=color_lay3,
-        linewidth=1.5,
-    )
+
     ax00.plot(
         time,
         y_pred_2.flatten(),
         label="Rep. predictions - REASSURE",
         color=color_lay4,
+        linewidth=1.5,
+    )
+    ax00.plot(
+        time,
+        y_pred_lay3_bound2.flatten(),
+        label="Rep. predictions - mid layer",
+        color=color_lay3,
         linewidth=1.5,
     )
     ax00.fill_between(
@@ -528,16 +529,17 @@ if __name__ == "__main__":
     delta_u_laye3_bound2[id_violate] = bound2 * np.sign(
         delta_u_laye3_bound2[id_violate]
     )
-    ax10.plot(
-        time,
-        delta_u_laye3_bound2,
-        color=color_lay3,
-        linewidth=1.5,
-    )
+
     ax10.plot(
         time,
         delta_u_torch_2,
         color=color_lay4,
+        linewidth=1.5,
+    )
+    ax10.plot(
+        time,
+        delta_u_laye3_bound2,
+        color=color_lay3,
         linewidth=1.5,
     )
     ax10.fill_between(
@@ -583,16 +585,17 @@ if __name__ == "__main__":
         color=color_orig,
         linewidth=1.5,
     )
-    ax01.plot(
-        time,
-        y_pred_lay3_bound1_5.flatten(),
-        color=color_lay3,
-        linewidth=1.5,
-    )
+
     ax01.plot(
         time,
         y_pred_2.flatten(),
         color=color_lay4,
+        linewidth=1.5,
+    )
+    ax01.plot(
+        time,
+        y_pred_lay3_bound1_5.flatten(),
+        color=color_lay3,
         linewidth=1.5,
     )
     ax01.fill_between(
@@ -625,16 +628,17 @@ if __name__ == "__main__":
         color=color_orig,
         linewidth=1.5,
     )
-    ax11.plot(
-        time,
-        delta_u_laye3_bound1_5,
-        color=color_lay3,
-        linewidth=1.5,
-    )
+
     ax11.plot(
         time,
         delta_u_torch_1_5,
         color=color_lay4,
+        linewidth=1.5,
+    )
+    ax11.plot(
+        time,
+        delta_u_laye3_bound1_5,
+        color=color_lay3,
         linewidth=1.5,
     )
     ax11.yaxis.set_major_formatter(FormatStrFormatter("%d"))
