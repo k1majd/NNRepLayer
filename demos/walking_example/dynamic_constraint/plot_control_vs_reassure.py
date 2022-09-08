@@ -749,7 +749,7 @@ if __name__ == "__main__":
         bbox_to_anchor=(0.5, 0.0),
         bbox_transform=fig.transFigure,
         ncol=5,
-        fontsize=14,
+        fontsize=13,
     )
     leg.get_frame().set_facecolor("white")
     plt.tight_layout()

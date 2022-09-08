@@ -568,7 +568,7 @@ if __name__ == "__main__":
         box,
         bin_size=15,
     )
-    color_orig = "#DC143C"
+    color_orig = "#2E8B57"
     color_lay3 = "k"
     color_box = "#838B8B"
     color_xline = "#696969"

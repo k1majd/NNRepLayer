@@ -261,7 +261,7 @@ def generate_model_n_data(str):
 
     ctrl_model_repair = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__))
-        + f"/repair_net/models/model_layer{str}{str}"
+        + f"/repair_net/models/model_layer{str}"
     )
 
     # load data

@@ -426,15 +426,15 @@ if __name__ == "__main__":
     dist_reassure_dyn = reassure_data[0]
     mean_reassure_dyn = reassure_data[1]
 
-    fig = plt.figure(figsize=(6, 4))
-    gs = fig.add_gridspec(1, 2)
+    fig = plt.figure(figsize=(6, 5))
+    gs = fig.add_gridspec(2, 1)
     ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
+    ax2 = fig.add_subplot(gs[1, 0])
     trans = mtransforms.ScaledTranslation(
         10 / 72, -5 / 72, fig.dpi_scale_trans
     )
-    ax1.text(0.75, 0.9, "(a)", transform=ax1.transAxes + trans, fontsize=20)
-    ax2.text(0.75, 0.9, "(b)", transform=ax2.transAxes + trans, fontsize=20)
+    ax1.text(0.85, 0.9, "(a)", transform=ax1.transAxes + trans, fontsize=18)
+    ax2.text(0.85, 0.9, "(b)", transform=ax2.transAxes + trans, fontsize=18)
     color_orig = "#2E8B57"
     color_lay3 = "k"
     color_retrain = "#8E388E"
@@ -488,7 +488,7 @@ if __name__ == "__main__":
         color=color_reassure,
         label="REASSURE",
     )
-    ax1.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
+    # ax1.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=fontsize)
     ax1.set_ylabel("Violation degree", fontsize=fontsize)
     # ax1.set_title(
     #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=16
@@ -502,10 +502,11 @@ if __name__ == "__main__":
     # ax1.yaxis.set_label_position("left")
     ax1.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax1.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    # ax1.xaxis.set_ticklabels([])
+    ax1.set_xlim(ax1_xlim)
+    ax1.xaxis.set_ticklabels([])
     # ax1.yaxis.tick_right()
     # ax1.set_title("Input-output constraint", fontsize=fontsize)
-    ax1.set_xlim(ax1_xlim)
+
     ax1.set_ylim(ax1_ylim)
 
     # flow constraint
@@ -555,7 +556,7 @@ if __name__ == "__main__":
     ax2.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax2.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     # ax2.yaxis.tick_right()
-    ax2.yaxis.set_ticklabels([])
+    # ax2.yaxis.set_ticklabels([])
     ax2.set_xlim(ax2_xlim)
     ax2.set_ylim(ax2_ylim)
 
@@ -564,11 +565,11 @@ if __name__ == "__main__":
         lines,
         labels,
         loc="center",
-        bbox_to_anchor=(0.5, 0.0),
+        bbox_to_anchor=(0.35, 0.35),
         # bbox_to_anchor=(0.6, 0.5),
         bbox_transform=fig.transFigure,
-        ncol=5,
-        fontsize=fontsize,
+        ncol=1,
+        fontsize=12,
     )
     leg.get_frame().set_facecolor("white")
     plt.tight_layout()

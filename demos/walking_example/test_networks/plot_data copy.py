@@ -142,7 +142,7 @@ z = [distance for j in y]
 # plt.colorbar(CS)
 
 
-fig = plt.figure(figsize=(13, 5))
+fig = plt.figure(figsize=(8, 5))
 # color_bar = "Greens"
 color_bar = mpl.cm.Greys(np.linspace(0, 0.6, 100))
 color_bar = mpl.colors.ListedColormap(color_bar[10:, :-1])
@@ -215,8 +215,9 @@ ax00.set_ylim([-17.0, 27.0])
 ax00.set_yticks(np.linspace(-15.0, 25.0, 3, endpoint=True))
 ax00.set_xticks(np.linspace(0, T * (x_max - x_min), 5, endpoint=True))
 ax00.tick_params(axis="y", which="major", labelsize=font_size)
-ax00.xaxis.set_ticklabels([])
+
 ax00.xaxis.set_major_formatter(FormatStrFormatter("%d"))
+ax00.xaxis.set_ticklabels([])
 ax00.yaxis.set_major_formatter(FormatStrFormatter("%d"))
 # ax00.set_title("Control bound = 2", fontsize=font_size)
 
