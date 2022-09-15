@@ -14,6 +14,10 @@ from scipy.interpolate import interp1d
 import scipy.io
 
 # import tensorflow_probability as tfp
+from onnxruntime import InferenceSession
+import subprocess
+import timeit
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Model
@@ -360,13 +364,13 @@ if __name__ == "__main__":
     # save model weights, x_train, and y_train in .mat file in current directory
     # get tf model wieght and bias and store in .mat file
     # model_weights = np.array(model_lay3.get_weights())
-    scipy.io.savemat(
-        "repair_data.mat",
-        {
-            "x_train": adv_x_train.astype(np.float32),
-            "y_train": adv_y_train.astype(np.float32),
-        },
-    )
+    # scipy.io.savemat(
+    #     "repair_data.mat",
+    #     {
+    #         "x_train": x_train,
+    #         "y_train": y_train,
+    #     },
+    # )
     # model_lay3.save_weights("model_repaired.h5")
     regularizer_rate = 0.003
     model_lay3.add(
@@ -383,3 +387,26 @@ if __name__ == "__main__":
     )
     print(model_lay3.predict(adv_x_train))
     model_lay3.summary()
+
+    expected = model_lay3.predict(x_train[:3, :])
+    print(expected)
+
+    # Saves the model.
+    if not os.path.exists("simple_rnn"):
+        os.mkdir("simple_rnn")
+    tf.keras.models.save_model(model_lay3, "simple_rnn")
+
+    # Run the command line.
+    proc = subprocess.run(
+        "python -m tf2onnx.convert --saved-model simple_rnn "
+        "--output simple_rnn.onnx --opset 12".split(),
+        capture_output=True,
+    )
+    print(proc.returncode)
+    print(proc.stdout.decode("ascii"))
+    print(proc.stderr.decode("ascii"))
+
+    # Runs onnxruntime.
+    session = InferenceSession("simple_rnn.onnx")
+    got = session.run(None, {"dense_input": x_train[:3, :].astype(np.float32)})
+    print(got[0])
