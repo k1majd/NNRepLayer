@@ -426,15 +426,20 @@ if __name__ == "__main__":
     dist_reassure_dyn = reassure_data[0]
     mean_reassure_dyn = reassure_data[1]
 
-    fig = plt.figure(figsize=(6, 5))
+    fig = plt.figure(figsize=(4, 6))
     gs = fig.add_gridspec(2, 1)
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[1, 0])
     trans = mtransforms.ScaledTranslation(
         10 / 72, -5 / 72, fig.dpi_scale_trans
     )
-    ax1.text(0.85, 0.9, "(a)", transform=ax1.transAxes + trans, fontsize=18)
-    ax2.text(0.85, 0.9, "(b)", transform=ax2.transAxes + trans, fontsize=18)
+    fontsize = 14
+    ax1.text(
+        0.85, 0.9, "(a)", transform=ax1.transAxes + trans, fontsize=fontsize
+    )
+    ax2.text(
+        0.85, 0.9, "(b)", transform=ax2.transAxes + trans, fontsize=fontsize
+    )
     color_orig = "#2E8B57"
     color_lay3 = "k"
     color_retrain = "#8E388E"
@@ -443,7 +448,6 @@ if __name__ == "__main__":
     color_test = "black"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
-    fontsize = 14
     ax1_xlim = [0, 2.0]
     ax1_ylim = [-0.1, 1.3]
     ax2_xlim = [0, 2.0]
@@ -569,7 +573,7 @@ if __name__ == "__main__":
         # bbox_to_anchor=(0.6, 0.5),
         bbox_transform=fig.transFigure,
         ncol=1,
-        fontsize=12,
+        fontsize=fontsize,
     )
     leg.get_frame().set_facecolor("white")
     plt.tight_layout()

@@ -438,7 +438,7 @@ if __name__ == "__main__":
         0, T * y_test.flatten().shape[0], y_test.flatten().shape[0]
     )
 
-    xlim_max = 150 * T
+    xlim_max = 135 * T
     gs = fig.add_gridspec(2, 2)
     ax00 = fig.add_subplot(gs[0, 0])
     ax10 = fig.add_subplot(gs[1, 0])

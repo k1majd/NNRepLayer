@@ -434,18 +434,20 @@ if __name__ == "__main__":
     fig = plt.figure(figsize=(13, 4))
     color_orig = "#2E8B57"
     color_lay3 = "k"
-    color_lay4 = "#FFA500"
+    color_lay4 = "#DC143C"
     color_retrain = "#8E388E"
     color_fine = "#7EC0EE"
-    color_reassure = "#DC143C"
+    # color_reassure = "#DC143C"
     color_test = "black"
     color_xline = "#696969"
     color_fill = "#D4D4D4"
     line_width = 2
-    gs = fig.add_gridspec(2, 2, width_ratios=[1.5, 1])
+    # add gird space with width ratio 2:1
+    gs = fig.add_gridspec(2, 1)
+    # gs = fig.add_gridspec(2, 2)
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[1, 0])
-    ax3 = fig.add_subplot(gs[:, 1])
+    # ax3 = fig.add_subplot(gs[:, 1])
     # ax3 = fig.add_subplot(gs[:, 1])
 
     # share x axis of ax1 and ax2
@@ -456,7 +458,7 @@ if __name__ == "__main__":
     )
     ax1.text(0.0, 0.9, "(a)", transform=ax1.transAxes + trans, fontsize=18)
     ax2.text(0.0, 0.9, "(b)", transform=ax2.transAxes + trans, fontsize=18)
-    ax3.text(0.85, 0.9, "(c)", transform=ax3.transAxes + trans, fontsize=18)
+    # ax3.text(0.85, 0.9, "(c)", transform=ax3.transAxes + trans, fontsize=18)
 
     # load original model data
     # fig, (ax1, ax2) = plt.subplots(figsize=(15, 8), nrows=2)
@@ -500,13 +502,13 @@ if __name__ == "__main__":
         linewidth=line_width,
         label="Original",
     )
-    ax1.plot(
-        time,
-        torch_y,
-        color=color_reassure,
-        linewidth=line_width,
-        label="Repaired - REASSURE",
-    )
+    # ax1.plot(
+    #     time,
+    #     torch_y,
+    #     color=color_reassure,
+    #     linewidth=line_width,
+    #     label="Repaired - REASSURE",
+    # )
     ax1.plot(
         time,
         y_pred_lay4,
@@ -557,7 +559,7 @@ if __name__ == "__main__":
     # ax2.axvspan(211.3, 239.7, color=color_fill, alpha=0.5)
     # ax2.axvspan(330.7, 355, color=color_fill, alpha=0.5)
     ax2.plot(time, err_orig, linewidth=line_width, color=color_orig)
-    ax2.plot(time, torch_err, linewidth=line_width, color=color_reassure)
+    # ax2.plot(time, torch_err, linewidth=line_width, color=color_reassure)
     ax2.plot(time, err_lay4, linewidth=line_width, color=color_lay4)
     ax2.plot(time, err_lay3, linewidth=line_width, color=color_lay3)
 
@@ -577,74 +579,74 @@ if __name__ == "__main__":
     ax2.tick_params(axis="x", labelsize=14)
     ax2.tick_params(axis="y", labelsize=14)
 
-    ax3.set_facecolor("white")
-    ax3.yaxis.set_label_position("right")
-    ax3.yaxis.tick_right()
-    ax3.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
-    ax3 = plot_mean_vs_std(
-        ax3,
-        dist_orig,
-        mean_orig(dist_orig),
-        # lim_uc_orig,
-        color=color_orig,
-        label="Original",
-    )
-    ax3 = plot_mean_vs_std(
-        ax3,
-        dist_fine,
-        mean_fine,
-        # lim_uc_fine,
-        color=color_fine,
-        label="Fine-tuned",
-    )
-    ax3 = plot_mean_vs_std(
-        ax3,
-        dist_retrain,
-        mean_retrain,
-        # lim_uc_retrain,
-        color=color_retrain,
-        label="Retrained",
-    )
-    ax3 = plot_mean_vs_std(
-        ax3,
-        dist_lay4,
-        mean_lay4(dist_lay4),
-        # lim_uc_lay4,
-        color=color_lay4,
-        label="Our method - last layer",
-    )
-    ax3 = plot_mean_vs_std(
-        ax3,
-        dist_lay3,
-        mean_lay3(dist_lay3),
-        # lim_uc_lay3,
-        color=color_lay3,
-        label="Our method - mid layer",
-    )
-    ax3 = plot_mean_vs_std(
-        ax3,
-        dist_reassure,
-        mean_reassure,
-        # lim_uc_reassure,
-        color=color_reassure,
-        label="Repaired - REASSURE",
-    )
-
-    ax3.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=14)
-    ax3.set_ylabel("Violation degree", fontsize=14)
-    # ax3.set_title(
-    #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=14
+    # ax3.set_facecolor("white")
+    # ax3.yaxis.set_label_position("right")
+    # ax3.yaxis.tick_right()
+    # ax3.grid(alpha=0.2, linestyle="dashed", color="#7F7F7F")
+    # ax3 = plot_mean_vs_std(
+    #     ax3,
+    #     dist_orig,
+    #     mean_orig(dist_orig),
+    #     # lim_uc_orig,
+    #     color=color_orig,
+    #     label="Original",
     # )
-    xlim = 2.0
-    ylim = 8.8
-    ax3.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    ax3.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    ax3.set_xlim(0, xlim)
-    ax3.set_ylim(0 - 0.1, ylim)
-    ax3.set_xticks(np.linspace(0, xlim, 5))
-    ax3.set_yticks(np.linspace(0, ylim, 3))
-    ax3.tick_params(axis="x", labelsize=14)
-    ax3.tick_params(axis="y", labelsize=14)
+    # ax3 = plot_mean_vs_std(
+    #     ax3,
+    #     dist_fine,
+    #     mean_fine,
+    #     # lim_uc_fine,
+    #     color=color_fine,
+    #     label="Fine-tuned",
+    # )
+    # ax3 = plot_mean_vs_std(
+    #     ax3,
+    #     dist_retrain,
+    #     mean_retrain,
+    #     # lim_uc_retrain,
+    #     color=color_retrain,
+    #     label="Retrained",
+    # )
+    # ax3 = plot_mean_vs_std(
+    #     ax3,
+    #     dist_lay4,
+    #     mean_lay4(dist_lay4),
+    #     # lim_uc_lay4,
+    #     color=color_lay4,
+    #     label="Our method - last layer",
+    # )
+    # ax3 = plot_mean_vs_std(
+    #     ax3,
+    #     dist_lay3,
+    #     mean_lay3(dist_lay3),
+    #     # lim_uc_lay3,
+    #     color=color_lay3,
+    #     label="Our method - mid layer",
+    # )
+    # # ax3 = plot_mean_vs_std(
+    # #     ax3,
+    # #     dist_reassure,
+    # #     mean_reassure,
+    # #     # lim_uc_reassure,
+    # #     color=color_reassure,
+    # #     label="Repaired - REASSURE",
+    # # )
+
+    # ax3.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=14)
+    # ax3.set_ylabel("Violation degree", fontsize=14)
+    # # ax3.set_title(
+    # #     "Degree of Violation vs. Distance to Nearest Neighbor", fontsize=14
+    # # )
+    # xlim = 2.0
+    # ylim = 8.8
+    # ax3.xaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    # ax3.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    # ax3.set_xlim(0, xlim)
+    # ax3.set_ylim(0 - 0.1, ylim)
+    # ax3.set_xticks(np.linspace(0, xlim, 5))
+    # ax3.set_yticks(np.linspace(0, ylim, 3))
+    # ax3.tick_params(axis="x", labelsize=14)
+    # ax3.tick_params(axis="y", labelsize=14)
 
     # ax.set_xlabel("$L_2$-distance to the nearest neighbor", fontsize=14)
     # ax.set_ylabel("Degree of violation", fontsize=14)
@@ -658,17 +660,17 @@ if __name__ == "__main__":
     # ax.tick_params(axis="x", labelsize=16)
     # ax.tick_params(axis="y", labelsize=16)
     lines, labels = ax1.get_legend_handles_labels()
-    lines2, labels2 = ax3.get_legend_handles_labels()
-    lines = [lines[0]] + lines2 + [lines[-1]]
-    labels = [labels[0]] + labels2 + [labels[-1]]
+    # lines2, labels2 = ax3.get_legend_handles_labels()
+    # lines = [lines[0]] + lines2 + [lines[-1]]
+    # labels = [labels[0]] + labels2 + [labels[-1]]
     leg = fig.legend(
         lines,
         labels,
         loc="center",
-        # bbox_to_anchor=(0.5, -0.5),
-        bbox_to_anchor=(0.75, 0.65),
+        bbox_to_anchor=(0.5, 0),
+        # bbox_to_anchor=(0.75, 0.65),
         bbox_transform=fig.transFigure,
-        ncol=1,
+        ncol=5,
         fontsize=14,
     )
     leg.get_frame().set_facecolor("white")
@@ -677,19 +679,19 @@ if __name__ == "__main__":
     plt.show()
     # save data
     print("save data")
-    with open(
-        os.path.dirname(os.path.realpath(__file__))
-        + f"/data/OM_min_dist_dynamic.pickle",
-        "wb",
-    ) as data:
-        pickle.dump(
-            [
-                mean_orig(dist_orig),
-                dist_orig,
-                mean_lay3(dist_lay3),
-                dist_lay3,
-                mean_lay4(dist_lay4),
-                dist_lay4,
-            ],
-            data,
-        )
+    # with open(
+    #     os.path.dirname(os.path.realpath(__file__))
+    #     + f"/data/OM_min_dist_dynamic.pickle",
+    #     "wb",
+    # ) as data:
+    #     pickle.dump(
+    #         [
+    #             mean_orig(dist_orig),
+    #             dist_orig,
+    #             mean_lay3(dist_lay3),
+    #             dist_lay3,
+    #             mean_lay4(dist_lay4),
+    #             dist_lay4,
+    #         ],
+    #         data,
+    #     )
