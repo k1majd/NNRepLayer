@@ -174,6 +174,12 @@ def buildModelWindow(data_size, train_out):
             options=None,
         ),
         keras.callbacks.TensorBoard(log_dir="tf_logs"),
+        keras.callbacks.ReduceLROnPlateau(
+            monitor="val_loss", factor=0.2, patience=5, min_lr=0.00001
+        ),
+        keras.callbacks.EarlyStopping(
+            monitor="val_loss", patience=10, restore_best_weights=True
+        )
     ]
 
     return model, tf_callback, architecture
@@ -296,6 +302,13 @@ def plotTestData(model, train_obs, train_ctrls, test_obs, test_ctrls):
 
 
 if __name__ == "__main__":
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            tf.config.experimental.set_virtual_device_configuration(
+                gpus[0],[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=5120)])
+        except RuntimeError as e:
+            print(e)
     # Train window model
     (
         train_obs,
@@ -311,24 +324,24 @@ if __name__ == "__main__":
         train_obs,
         [train_out[:, 1:], train_out[:, 0]],
         validation_data=(test_obs, [test_out[:, 1:], test_out[:, 0]]),
-        batch_size=15,
-        epochs=10,
+        batch_size=20,
+        epochs=100,
         use_multiprocessing=True,
         verbose=1,
         shuffle=False,
         callbacks=callback,
     )
-    # keras.models.save_model(
-    #     ctrl_model_orig,
-    #     os.path.dirname(os.path.realpath(__file__))
-    #     + "/models/model_ctrl_pred",
-    #     overwrite=True,
-    #     include_optimizer=False,
-    #     save_format=None,
-    #     signatures=None,
-    #     options=None,
-    #     save_traces=True,
-    # )
+    keras.models.save_model(
+        ctrl_model_orig,
+        os.path.dirname(os.path.realpath(__file__))
+        + "/models/model_ctrl_pred",
+        overwrite=True,
+        include_optimizer=False,
+        save_format=None,
+        signatures=None,
+        options=None,
+        save_traces=True,
+    )
     print("saved: model")
     plotTestData(ctrl_model_orig, train_obs, train_out, test_obs, test_out)
 
