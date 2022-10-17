@@ -126,14 +126,14 @@ def buildModelWindow(data_size, train_out):
         name="ctrl_layer_3",
     )(ctrl_layer_2)
     # batch normalization
-    ctrl_layer_4 = layers.BatchNormalization()(ctrl_layer_3)
+    # ctrl_layer_4 = layers.BatchNormalization()(ctrl_layer_3)
     pred_layer_1 = layers.Dense(
         pred_layer_size1,
         activation=tf.nn.relu,
         kernel_regularizer=keras.regularizers.l2(regularizer_rate),
         bias_regularizer=keras.regularizers.l2(regularizer_rate),
         name="pred_layer_1",
-    )(layers.Concatenate()([input_layer, ctrl_layer_4]))
+    )(layers.Concatenate()([input_layer, ctrl_layer_3]))
     pred_layer_2 = layers.Dense(
         pred_layer_size2,
         activation=tf.nn.relu,
