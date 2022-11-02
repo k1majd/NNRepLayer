@@ -6,7 +6,7 @@ from csv import writer
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
-import tensorboard
+# import tensorboard
 import tensorflow as tf
 
 # import tensorflow_probability as tfp
@@ -75,6 +75,7 @@ def generateDataWindow(window_size):
     train_controls = controls[window_size : n_train + window_size].reshape(
         -1, 1
     )
+    train_output = observations[window_size : n_train + window_size, :]
     for i in range(n_train, n - window_size):
         temp_obs = np.array([]).reshape(1, 0)
         for j in range(window_size):
@@ -83,148 +84,40 @@ def generateDataWindow(window_size):
             )
         test_observation = np.concatenate((test_observation, temp_obs), axis=0)
     test_controls = controls[n_train + window_size :].reshape(-1, 1)
-    return train_observation, train_controls, test_observation, test_controls
-
-
-def buildModelWindow(data_size):
-    layer_size1 = 32
-    layer_size2 = 32
-    layer_size3 = 32
-    # input_layer = tf.keras.Input(shape=(data_size[1]))
-    # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
-    # layer_2 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_1)
-    # layer_3 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_2)
-    # output_layer = layers.Dense(1)(layer_3)
-    # model = Model(inputs=[input_layer], outputs=[output_layer])
-    model = keras.Sequential(
-        [
-            layers.Dense(
-                layer_size1, activation=tf.nn.relu, input_shape=[data_size[1]]
-            ),
-            layers.Dense(layer_size2, activation=tf.nn.relu),
-            layers.Dense(layer_size3, activation=tf.nn.relu),
-            layers.Dense(1),
-        ]
+    test_output = observations[n_train + window_size :, :]
+    return (
+        train_observation,
+        np.concatenate((train_controls, train_output), axis=1),
+        test_observation,
+        np.concatenate((test_controls, test_output), axis=1),
     )
-    model.compile(
-        optimizer="adam",
-        loss=[tf.keras.losses.MeanAbsoluteError()],
-        metrics=["accuracy"],
-    )
-    model.summary()
-    architecture = [data_size[1], layer_size1, layer_size2, layer_size3, 1]
-    filepath = "models/model1"
-    # tf_callback=[tf.keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, save_weight_only=False, mode='auto', save_freq='epoch', options=None), keras.callbacks.TensorBoard(log_dir='logs')]
-    tf_callback = [
-        tf.keras.callbacks.ModelCheckpoint(
-            filepath,
-            monitor="val_loss",
-            verbose=0,
-            save_best_only=True,
-            save_weight_only=False,
-            mode="auto",
-            save_freq="epoch",
-            options=None,
-        ),
-        keras.callbacks.TensorBoard(log_dir="tf_logs"),
-    ]
-    # keras.models.save_model(
-    #     model,
-    #     os.path.dirname(os.path.realpath(__file__)) + "/original_model",
-    #     overwrite=True,
-    #     include_optimizer=False,
-    #     save_format=None,
-    #     signatures=None,
-    #     options=None,
-    #     save_traces=True,
-    # )
-    # print("saved: model")
-    return model, tf_callback, architecture
-
-
-def plotTestData(
-    original_model,
-    repaired_model,
-    train_obs,
-    train_ctrls,
-    test_obs,
-    test_ctrls,
-    now_str,
-    bound_upper,
-    bound_lower,
-    layer_to_repair,
-):
-    pred_ctrls_orig = original_model(test_obs, training=False)
-    pred_ctrls_repair = repaired_model(test_obs, training=False)
-
-    fig, (ax1, ax2) = plt.subplots(nrows=2)
-    ax1.plot(test_ctrls, color="#167fb8", label="Reference")
-    ax1.plot(pred_ctrls_orig, color="#1abd15", label="Original Predictions")
-    ax1.plot(
-        pred_ctrls_repair,
-        color="#b81662",
-        label="Repaired Predictions",
-    )
-    bound_lower = -1 * bound_lower
-    ax1.axhline(y=bound_upper, color="k", linestyle="dashed")  # upper bound
-    ax1.axhline(y=bound_lower, color="k", linestyle="dashed")  # lower bound
-    ax1.set_ylabel("Ankle Angle Control (rad)")
-    ax1.set_xlabel("Time (s)")
-    ax1.set_xlim([0, 1000])
-    ax1.legend()
-
-    err_orig = np.abs(test_ctrls - pred_ctrls_orig)
-    err_repair = np.abs(test_ctrls - pred_ctrls_repair)
-    ax2.plot(err_orig, color="#1abd15")
-    ax2.plot(err_repair, color="#b81662")
-    ax2.grid(alpha=0.5, linestyle="dashed")
-    ax2.set_ylabel("Ankle Angle Control Error (rad)")
-    ax2.set_xlabel("Time (s)")
-    ax2.set_xlim([0, 1000])
-
-    # calculate mae
-
-    idx = np.where((test_ctrls > bound_lower) & (bound_upper > test_ctrls))[0]
-    fig.suptitle(
-        f"Upper-Lower Bound, Layer: {layer_to_repair}, MAE original: {np.mean(err_orig[idx]):.3f}, MAE repaired: {np.mean(err_repair[idx]):.3f}"
-    )
-    # plt.figure(1)
-    # plt.plot(test_ctrls, color="#173f5f")
-    # plt.plot(pred_ctrls, color=[0.4705, 0.7921, 0.6470])
-    # plt.grid(alpha=0.5, linestyle="dashed")
-    # # plt.xlim([800,1050])
-    # plt.ylabel("Ankle Angle Control (rad)")
-    # plt.xlabel("Time (s)")
-
-    # plt.figure(2)
-
-    print(f"average abs error: {np.sum(err)/err.shape[0]}")
-    plt.show()
-    # direc = os.path.dirname(os.path.realpath(__file__))
-    # path_write = os.path.join(direc, "figs")
-    # plt.savefig(path_write + f"/repaired_model_32_nodes{now_str}.png")
 
 
 if __name__ == "__main__":
+    # record current date n time
     now = datetime.now()
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
-    # Train window model
+
+    # load data and model
     num_samples = 2
-    train_obs, train_ctrls, test_obs, test_ctrls = generateDataWindow(10)
+    train_obs, train_out, test_obs, test_out = generateDataWindow(10)
     rnd_pts = np.random.choice(test_obs.shape[0], num_samples)
     x_train = test_obs[rnd_pts]
-    y_train = test_ctrls[rnd_pts]
+    y_train = test_out[rnd_pts]
 
     ctrl_model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_orig/original_model"
+        os.path.dirname(os.path.realpath(__file__)) + "/models/model_ctrl_pred"
     )
 
     bound_upper = 10
     bound_lower = 30
+    # specify control+predictor architecture
+    ctrl_layer_arch = [40, 128, 128, 1]
+    pred_layer_arch = [41, 128, 4]
+    pred_model_input_order = ["state", "control"]
 
-    A = np.array([[1], [-1]])
-    b = np.array([[bound_upper], [bound_lower]])
+    A = np.array([[0.0, 1.0, 0.0, 0.0], [0.0, -1.0, 0.0, 0.0]])
+    b = np.array([[1.0], [1.5]])
 
     # input the constraint list
     constraint_inside = ConstraintsClass(
@@ -233,18 +126,18 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model_orig)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    layer_to_repair = 4  # first layer-(0) last layer-(4)
     max_weight_bound = 10.0  # specifying the upper bound of weights error
     cost_weights = np.array([1.0, 1.0])  # cost weights
     output_bounds = (-30.0, 40.0)
-    repair_node_list = [5, 6, 8, 10, 24, 26, 30]
+    repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
         x_train,
-        # y_train,
+        y_train,
         layer_to_repair,
-        output_constraint_list=[],
-        # cost_weights=cost_weights,
+        output_constraint_list=output_constraint_list,
+        cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
@@ -291,7 +184,7 @@ if __name__ == "__main__":
     )
 
     # repair the network
-    out_model = repair_obj.repair(options, y_train, cost_weights)
+    out_model = repair_obj.repair(options)
 
     # store the modeled MIP and parameters
     # repair_obj.summary(direc=path_write + "/summary")
@@ -363,17 +256,17 @@ if __name__ == "__main__":
         os.path.dirname(os.path.realpath(__file__))
         + "/repair_net/models/model_layer_3_5_31_2022_16_35_50"
     )
-    plotTestData(
-        ctrl_model_orig,
-        out_model,
-        train_obs,
-        train_ctrls,
-        test_obs,
-        test_ctrls,
-        now_str,
-        bound_upper,
-        bound_lower,
-        3,
-    )
+    # plotTestData(
+    #     ctrl_model_orig,
+    #     out_model,
+    #     train_obs,
+    #     train_ctrls,
+    #     test_obs,
+    #     test_ctrls,
+    #     now_str,
+    #     bound_upper,
+    #     bound_lower,
+    #     3,
+    # )
 
     pass

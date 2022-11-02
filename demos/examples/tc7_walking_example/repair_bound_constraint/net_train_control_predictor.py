@@ -6,7 +6,8 @@ from mpl_toolkits import mplot3d
 
 import tensorboard
 import tensorflow as tf
-import tensorflow_probability as tfp
+
+# import tensorflow_probability as tfp
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Model
@@ -88,67 +89,42 @@ def generateDataWindow(window_size):
     )
 
 
+def build_network_block(regularizer_rate, layer_size, input, name):
+    layer_list = [input]
+    for i in range(len(layer_size)):
+        activation = tf.nn.relu if i < len(layer_size) - 1 else None
+        layer_list.append(
+            layers.Dense(
+                layer_size[i],
+                activation=activation,
+                kernel_regularizer=keras.regularizers.l2(regularizer_rate),
+                bias_regularizer=keras.regularizers.l2(regularizer_rate),
+                name=f"{name}_layer_{i+1}",
+            )(layer_list[i])
+        )
+    return layer_list[-1]
+
+
 def buildModelWindow(data_size, train_out):
-    ctrl_layer_size1 = 128
-    ctrl_layer_size2 = 128
-    ctrl_layer_size3 = 1
-    pred_layer_size1 = 128
-    pred_layer_size2 = 128
-    pred_layer_size3 = 4
+    ctrl_layer_size = [128, 128, 1]
+    pred_layer_size = [128, 4]
     regularizer_rate = 0.001
-    # input_layer = tf.keras.Input(shape=(data_size[1]))
-    # layer_1 = layers.Dense(layer_size, activation=tf.nn.relu)(input_layer)
-    # layer_2 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_1)
-    # layer_3 = layers.Dense(layer_size, activation=tf.nn.relu)(layer_2)
-    # output_layer = layers.Dense(1)(layer_3)
-    # model = Model(inputs=[input_layer], outputs=[output_layer])
-    model = keras.Sequential(name="seq_control_predictor_NN")
+
     input_layer = tf.keras.Input(shape=(data_size[1]))
-    ctrl_layer_1 = layers.Dense(
-        ctrl_layer_size1,
-        activation=tf.nn.relu,
-        kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-        bias_regularizer=keras.regularizers.l2(regularizer_rate),
-        name="ctrl_layer_1",
-    )(input_layer)
-    ctrl_layer_2 = layers.Dense(
-        ctrl_layer_size2,
-        activation=tf.nn.relu,
-        kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-        bias_regularizer=keras.regularizers.l2(regularizer_rate),
-        name="ctrl_layer_2",
-    )(ctrl_layer_1)
-    ctrl_layer_3 = layers.Dense(
-        ctrl_layer_size3,
-        # activation=tf.nn.relu,
-        kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-        bias_regularizer=keras.regularizers.l2(regularizer_rate),
-        name="ctrl_layer_3",
-    )(ctrl_layer_2)
-    # batch normalization
-    # ctrl_layer_4 = layers.BatchNormalization()(ctrl_layer_3)
-    pred_layer_1 = layers.Dense(
-        pred_layer_size1,
-        activation=tf.nn.relu,
-        kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-        bias_regularizer=keras.regularizers.l2(regularizer_rate),
-        name="pred_layer_1",
-    )(layers.Concatenate()([input_layer, ctrl_layer_3]))
-    pred_layer_2 = layers.Dense(
-        pred_layer_size2,
-        activation=tf.nn.relu,
-        kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-        bias_regularizer=keras.regularizers.l2(regularizer_rate),
-        name="pred_layer_2",
-    )(pred_layer_1)
-    pred_layer_3 = layers.Dense(
-        pred_layer_size3,
-        # activation=tf.nn.relu,
-        kernel_regularizer=keras.regularizers.l2(regularizer_rate),
-        bias_regularizer=keras.regularizers.l2(regularizer_rate),
-        name="pred_layer_3",
-    )(pred_layer_2)
-    model = Model(inputs=[input_layer], outputs=[pred_layer_3, ctrl_layer_3])
+    last_ctrl_layer = build_network_block(
+        regularizer_rate, ctrl_layer_size, input_layer, "ctrl"
+    )
+    last_pred_layer = build_network_block(
+        regularizer_rate,
+        pred_layer_size,
+        layers.Concatenate()([input_layer, last_ctrl_layer]),
+        "pred",
+    )
+    model = Model(
+        inputs=[input_layer],
+        outputs=[last_pred_layer, last_ctrl_layer],
+        name="seq_control_predictor_NN",
+    )
 
     def loss2(y_true, y_pred):
         loss = tf.keras.losses.MSE(y_true, y_pred)
@@ -179,7 +155,7 @@ def buildModelWindow(data_size, train_out):
         ),
         keras.callbacks.EarlyStopping(
             monitor="val_loss", patience=10, restore_best_weights=True
-        )
+        ),
     ]
 
     return model, tf_callback, architecture
@@ -286,27 +262,20 @@ def plotTestData(model, train_obs, train_ctrls, test_obs, test_ctrls):
     # leg.get_frame().set_facecolor("white")
     # plt.tight_layout()
     plt.show()
-    # plt.figure(1)
-    # plt.plot(test_ctrls[:, 0].flatten(), label="test control", color="#173f5f")
-    # plt.plot(
-    #     pred_ctrls[1].flatten(),
-    #     label="prediction control",
-    #     color=[0.4705, 0.7921, 0.6470],
-    # )
-    # plt.grid(alpha=0.5, linestyle="dashed")
-    # # plt.xlim([800,1050])
-    # plt.ylabel("Ankle Angle Control (rad)")
-    # plt.xlabel("Time (s)")
-    # plt.show()
-    # plt.savefig("../figures/layer4_60_n60.pdf")
 
 
 if __name__ == "__main__":
-    gpus = tf.config.experimental.list_physical_devices('GPU')
+    gpus = tf.config.experimental.list_physical_devices("GPU")
     if gpus:
         try:
             tf.config.experimental.set_virtual_device_configuration(
-                gpus[0],[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=5120)])
+                gpus[0],
+                [
+                    tf.config.experimental.VirtualDeviceConfiguration(
+                        memory_limit=5120
+                    )
+                ],
+            )
         except RuntimeError as e:
             print(e)
     # Train window model

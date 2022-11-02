@@ -63,36 +63,29 @@ class NNRepair:
         self.opt_model = None
         self.layer_to_repair = None
         self.output_name = None
+        self.output_variable = None
         self.num_samples = None
         self.output_constraint_list = []
-        ######################################
-        # TODO: add this part
         self.repair_node_list = []
         self.__target_original_weights = []
         self.__target_original_bias = []
-        ######################################
 
     def compile(
         self,
         x_repair: npt.NDArray,
-        y_repair: npt.NDArray,
+        # y_repair: npt.NDArray,
         layer_2_repair: int,
         output_constraint_list: Optional[List[Type[ConstraintsClass]]] = None,
         cost: Callable = give_mse_error,
-        cost_weights: npt.NDArray = np.array([1.0, 1.0]),
+        # cost_weights: npt.NDArray = np.array([1.0, 1.0]),
         max_weight_bound: Union[int, float] = 1.0,
         data_precision: int = 4,
         param_precision: int = 4,
-        ##############################
-        # TODO: param_bounds and output_bounds can be specified by the user
-        # please check if I entered the data types correctly
-        # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
         repair_node_list: List[int] = None,
-        bound_tightening_method: str = "ia",  # "ia" or "lp"
+        bound_tightening_method: str = "ia",
         w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
-        ##############################
     ) -> None:
 
         """Compile the optimization model and setup the repair optimizer
@@ -103,7 +96,6 @@ class NNRepair:
             layer_2_repair : Target repair layer
             output_constraint_list: List of output constraints Defaults to None.
             cost: Minimization loss function. Defaults to give_mse_error.
-            cost_weights: cost_weights[0] corresponds to weight of min loss, cost_weights[1] corresponds to weight of weight bounding slack variable. Defaults to np.array([1.0, 1.0]).
             max_weight_bound: Upper bound of weights errorDefaults to 1.0.
             data_precision: precision of rounding to decimal place for dataDefaults to 4.
             param_precision: precision of rounding to decimal place for parameters. Defaults to 4.
@@ -119,10 +111,10 @@ class NNRepair:
             raise TypeError(
                 f"Input Set Mismatch. Expected (X, {self.architecture[0]}). Received (X, {x_repair.shape[-1]} instead."
             )
-        if y_repair.shape[-1] != self.architecture[-1]:
-            raise TypeError(
-                f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
-            )
+        # if y_repair.shape[-1] != self.architecture[-1]:
+        #     raise TypeError(
+        #         f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
+        #     )
         if not (
             layer_2_repair <= len(self.architecture) - 1
             and layer_2_repair >= 1
@@ -136,8 +128,6 @@ class NNRepair:
         self.output_constraint_list = output_constraint_list
         self.data_precision = data_precision
         self.param_precision = param_precision
-        ###########
-        # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
         if (
             repair_node_list is None
             or len(repair_node_list) == 0
@@ -146,23 +136,22 @@ class NNRepair:
             repair_node_list = list(range(self.architecture[layer_2_repair]))
         self.repair_node_list = repair_node_list
         self.__set_up_optimizer(
-            np.round(y_repair, data_precision),
-            ####################
-            # TODO: (12_&_2022) x_repair is inputed
+            # np.round(y_repair, data_precision),
             x_repair,
-            ####################
             max_weight_bound,
-            cost_weights,
-            ##############################
-            # TODO: param_bounds and output_bounds can be specified by the user
+            # cost_weights,
             bound_tightening_method,
             w_error_norm,
             param_bounds,
             output_bounds,
-            ##############################
         )
 
-    def repair(self, options: Type[Options]) -> Any:
+    def repair(
+        self,
+        options: Type[Options],
+        y_repair: npt.NDArray,
+        cost_weights: npt.NDArray = np.array([1.0, 1.0]),
+    ) -> Any:
 
         """Perform the layer-wise repair and update the weights of model_mlp
 
@@ -172,7 +161,7 @@ class NNRepair:
         Returns:
             Repaired Model.
         """
-
+        self.__specify_cost(y_repair, cost_weights)
         self.__solve_optimization_problem(
             options.gdp_formulation,
             options.solver_factory,
@@ -197,6 +186,7 @@ class NNRepair:
         self.opt_model = None
         self.layer_to_repair = None
         self.output_name = None
+        self.output_variable = None
         self.num_samples = None
         self.output_constraint_list = []
         ######################################
@@ -347,21 +337,14 @@ class NNRepair:
 
     def __set_up_optimizer(
         self,
-        y_repair: npt.NDArray,
-        ###################
-        # TODO: (12_7_2022) x_repair is inputed
+        # y_repair: npt.NDArray,
         x_repair: npt.NDArray,
-        ###################
         max_weight_bound: Union[int, float],
-        cost_weights: npt.NDArray = np.array([1.0, 1.0]),
-        ##############################
-        # TODO: param_bounds and output_bounds can be specified by the user
-        # please check if I entered the data types correctly
+        # cost_weights: npt.NDArray = np.array([1.0, 1.0]),
         bound_tightening_method: str = "lp",
         w_error_norm: int = 0,
         param_bounds: tuple = None,
         output_bounds: tuple = None,
-        ##############################
     ) -> None:
         """Setting Up optimizer
 
@@ -369,24 +352,13 @@ class NNRepair:
             y_repair: Output Data
             layer_values: Values of ReLU layers after forward pass.
             max_weight_bound: Max Weight Bound
-            cost_weights: Weights of Cost. Defaults to np.array([1.0, 1.0]).
             w_error_norm (int, optional): weight error norm type 0 = L-inf, 1 = L-1. Defaults to 0.
 
-        Raises:
-            TypeError: Mismatch between Input and Output Set.
         """
 
-        if y_repair.shape[-1] != self.architecture[-1]:
-            raise TypeError(
-                f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
-            )
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
-        ##############################
-        # TODO: (12_7_2022) layer values calculated here
         layer_values = self.extract_network_layers_values(x_repair)
-        ##############################
-        # specify the precision of weights, bias, layer values
         for l, w in enumerate(weights):
             weights[l] = np.round(w, self.param_precision)
         for l, b in enumerate(bias):
@@ -396,8 +368,6 @@ class NNRepair:
 
         self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
 
-        ###########
-        # TODO: recive node bounds
         ub_mat, lb_mat = self.__get_node_bounds(
             layer_values,
             weights,
@@ -405,9 +375,6 @@ class NNRepair:
             max_weight_bound,
             bound_tightening_method,
         )
-        ##########
-        ##############################
-        # TODO: param_bounds and output_bounds can be specified by the user
         param_bounds, output_bounds = self.__set_param_n_output_bounds(
             param_bounds,
             output_bounds,
@@ -419,47 +386,67 @@ class NNRepair:
         )
         self.__target_original_weights = weights[self.layer_to_repair - 1]
         self.__target_original_bias = bias[self.layer_to_repair - 1]
-        ##############################
         mip_model_layer = MIPNNModel(
             self.layer_to_repair,
             self.architecture,
             weights,
             bias,
-            ##############################
-            # TODO: (23_5_2022) repair_node_list is added. It specifies the indices of target repair nodes
             self.repair_node_list,
             w_error_norm,
-            ##############################
-            # TODO: param_bounds and output_bounds can be specified by the user
             max_weight_bound,
             self.param_precision,
-            ##############################
         )
         y_ = mip_model_layer(
-            # layer_values[self.layer_to_repair - 2],
             layer_values[self.layer_to_repair - 1],
             (self.num_samples, self.architecture[self.layer_to_repair - 1]),
             self.output_constraint_list,
-            ##############################
-            # TODO: (12_7_2022) input the upper and lower bounds of nodes for
-            #  each sample
             nodes_upper=ub_mat,
             nodes_lower=lb_mat,
-            ##############################
             max_weight_bound=max_weight_bound,
-            ##############################
-            # TODO: param_bounds and output_bounds can be specified by the user
-            # output_bounds=output_bounds,
-            ##############################
         )
+        # specify output variable and initialize the opt_model
         self.output_name = y_.name
+        self.output_variable = y_
         self.opt_model = mip_model_layer.model
 
-        cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
+        # cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
+        # # minimize error bound
+        # dw_l = "dw"
+        # db_l = "db"
+        # if len(getattr(self.opt_model, dw_l)) == 1:
+        #     cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l)
+        # else:
+        #     for item in getattr(self.opt_model, dw_l)._data.items():
+        #         cost_expr += cost_weights[1] * item[1]
+        #     for item in getattr(self.opt_model, db_l)._data.items():
+        #         cost_expr += cost_weights[1] * item[1]
+
+        # self.opt_model.obj = pyo.Objective(expr=cost_expr)
+
+    def __specify_cost(
+        self,
+        y_repair: npt.NDArray,
+        cost_weights: npt.NDArray = np.array([1.0, 1.0]),
+    ) -> None:
+        """Specify the Cost Function if MIP model
+
+        Args:
+            y_repair: Output Data
+            cost_weights (optional): Cost Weights. Defaults to np.array([1.0, 1.0]).
+
+        Raises:
+            TypeError: Mismatch between Input and Output Set.
+        """
+        if y_repair.shape[-1] != self.architecture[-1]:
+            raise TypeError(
+                f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
+            )
+        cost_expr = cost_weights[0] * self.cost_function_output(
+            self.output_variable, np.round(y_repair, self.data_precision)
+        )
         # minimize error bound
         dw_l = "dw"
         db_l = "db"
-        # cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l) ** 2
         if len(getattr(self.opt_model, dw_l)) == 1:
             cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l)
         else:
@@ -467,7 +454,6 @@ class NNRepair:
                 cost_expr += cost_weights[1] * item[1]
             for item in getattr(self.opt_model, db_l)._data.items():
                 cost_expr += cost_weights[1] * item[1]
-        # else:
 
         self.opt_model.obj = pyo.Objective(expr=cost_expr)
 
