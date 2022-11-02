@@ -93,6 +93,51 @@ def generateDataWindow(window_size):
     )
 
 
+def build_network_block(regularizer_rate, layer_size, input, name):
+    layer_list = [input]
+    for i in range(len(layer_size)):
+        activation = tf.nn.relu if i < len(layer_size) - 1 else None
+        layer_list.append(
+            layers.Dense(
+                layer_size[i],
+                activation=activation,
+                kernel_regularizer=keras.regularizers.l2(regularizer_rate),
+                bias_regularizer=keras.regularizers.l2(regularizer_rate),
+                name=f"{name}_layer_{i+1}",
+            )(layer_list[i])
+        )
+    return layer_list[-1]
+
+
+def divide_network(arch_control, arch_pred, network):
+    regularizer_rate = 0.001
+    input1 = tf.keras.Input(shape=arch_control[0])
+    out_layer1 = build_network_block(
+        regularizer_rate, arch_control[1:], input1, "ctrl"
+    )
+    ctrl_model = Model(
+        inputs=[input1],
+        outputs=[out_layer1],
+        name="seq_control_predictor_NN",
+    )
+    input2 = tf.keras.Input(shape=arch_pred[0])
+    out_layer2 = build_network_block(
+        regularizer_rate, arch_pred[1:], input2, "pred"
+    )
+    pred_model = Model(
+        inputs=[input2],
+        outputs=[out_layer2],
+        name="seq_prediction_predictor_NN",
+    )
+    ctrl_model.set_weights(
+        network.get_weights()[0 : 2 * (len(arch_control) - 1)]
+    )
+    pred_model.set_weights(
+        network.get_weights()[2 * (len(arch_control) - 1) :]
+    )
+    return ctrl_model, pred_model
+
+
 if __name__ == "__main__":
     # record current date n time
     now = datetime.now()
@@ -105,28 +150,30 @@ if __name__ == "__main__":
     x_train = test_obs[rnd_pts]
     y_train = test_out[rnd_pts]
 
-    ctrl_model_orig = keras.models.load_model(
+    model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_ctrl_pred"
     )
 
     bound_upper = 10
     bound_lower = 30
-    # specify control+predictor architecture
+    # specify control+predictor architecture and devide the networks
     ctrl_layer_arch = [40, 128, 128, 1]
     pred_layer_arch = [41, 128, 4]
     pred_model_input_order = ["state", "control"]
-
-    A = np.array([[0.0, 1.0, 0.0, 0.0], [0.0, -1.0, 0.0, 0.0]])
-    b = np.array([[1.0], [1.5]])
+    ctrl_model, pred_model = divide_network(
+        ctrl_layer_arch, pred_layer_arch, model_orig
+    )
 
     # input the constraint list
+    A = np.array([[0.0, 1.0, 0.0, 0.0], [0.0, -1.0, 0.0, 0.0]])
+    b = np.array([[1.0], [1.5]])
     constraint_inside = ConstraintsClass(
         "inside", A, b
     )  # ConstraintsClass(A, b, C, d)
     output_constraint_list = [constraint_inside]
-    repair_obj = NNRepair(ctrl_model_orig)
+    repair_obj = NNRepair(ctrl_model)
 
-    layer_to_repair = 4  # first layer-(0) last layer-(4)
+    layer_to_repair = 3  # first layer-(0) last layer-(4)
     max_weight_bound = 10.0  # specifying the upper bound of weights error
     cost_weights = np.array([1.0, 1.0])  # cost weights
     output_bounds = (-30.0, 40.0)
@@ -134,10 +181,10 @@ if __name__ == "__main__":
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
         x_train,
-        y_train,
+        # y_train,
         layer_to_repair,
-        output_constraint_list=output_constraint_list,
-        cost_weights=cost_weights,
+        output_constraint_list=[],
+        # cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
         # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
@@ -184,7 +231,7 @@ if __name__ == "__main__":
     )
 
     # repair the network
-    out_model = repair_obj.repair(options)
+    out_model = repair_obj.repair(options, y_train, cost_weights)
 
     # store the modeled MIP and parameters
     # repair_obj.summary(direc=path_write + "/summary")
