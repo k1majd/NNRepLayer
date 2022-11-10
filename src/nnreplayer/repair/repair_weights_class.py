@@ -55,6 +55,8 @@ class NNRepair:
         self.extended_model_mlp_blocks = []
         self.ub_last_layer = None
         self.lb_last_layer = None
+        self.output_state_name = None
+        self.output_state_variable = None
 
     def compile(
         self,
@@ -183,6 +185,8 @@ class NNRepair:
         self.extended_model_mlp_blocks = []
         self.ub_last_layer = None
         self.lb_last_layer = None
+        self.output_state_name = None
+        self.output_state_variable = Node
 
     def extend(
         self,
@@ -206,8 +210,6 @@ class NNRepair:
         ub_mat, lb_mat = self.__tight_bounds_ia_extend(
             weights, bias, x_repair, input_order
         )
-        ub_mat.insert(0, self.ub_last_layer)
-        lb_mat.insert(0, self.lb_last_layer)
         mip_model_layer = MIPNNModelExtend(
             self.extended_model_mlp_blocks[-1][1],
             weights,
@@ -222,10 +224,13 @@ class NNRepair:
             (self.num_samples, x_repair.shape[1] + self.architecture[-1]),
             output_constraint_list,
             input_order,
-            self.output_variable,
+            self.output_name,
             nodes_upper=ub_mat,
             nodes_lower=lb_mat,
         )
+        self.output_state_name = y_.name
+        self.output_state_variable = y_
+        self.opt_model = mip_model_layer.model
 
     def summary(self, direc: Optional[str] = None):
 
@@ -450,12 +455,18 @@ class NNRepair:
         Raises:
             TypeError: Mismatch between Input and Output Set.
         """
-        if y_repair.shape[-1] != self.architecture[-1]:
+        if y_repair.shape[-1] != (
+            self.architecture[-1] + self.extended_model_mlp_blocks[-1][1][-1]
+        ):
             raise TypeError(
                 f"Input Set Mismatch. Expected (X, {self.architecture[-1]}). Received (X, {y_repair.shape[-1]} instead."
             )
         cost_expr = cost_weights[0] * self.cost_function_output(
-            self.output_variable, np.round(y_repair, self.data_precision)
+            self.output_variable,
+            np.round(y_repair[:, 0:1], self.data_precision),
+        ) + cost_weights[0] * self.cost_function_output(
+            self.output_state_variable,
+            np.round(y_repair[:, 1:], self.data_precision),
         )
         # minimize error bound
         dw_l = "dw"

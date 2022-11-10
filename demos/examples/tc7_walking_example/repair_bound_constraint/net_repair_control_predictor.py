@@ -144,11 +144,11 @@ if __name__ == "__main__":
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
 
     # load data and model
-    num_samples = 2
+    num_samples = 1
     train_obs, train_out, test_obs, test_out = generateDataWindow(10)
     rnd_pts = np.random.choice(test_obs.shape[0], num_samples)
-    x_train = test_obs[rnd_pts]
-    y_train = test_out[rnd_pts]
+    x_train = test_obs[0:num_samples]
+    y_train = test_out[0:num_samples]
 
     model_orig = keras.models.load_model(
         os.path.dirname(os.path.realpath(__file__)) + "/models/model_ctrl_pred"
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
+    layer_to_repair = 2  # first layer-(0) last layer-(4)
     max_weight_bound = 10.0  # specifying the upper bound of weights error
     cost_weights = np.array([1.0, 1.0])  # cost weights
     output_bounds = (-30.0, 40.0)
@@ -181,14 +181,15 @@ if __name__ == "__main__":
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
     repair_obj.compile(
         x_train,
-        # y_train,
         layer_to_repair,
         output_constraint_list=[],
-        # cost_weights=cost_weights,
         max_weight_bound=max_weight_bound,
-        # repair_node_list=repair_set,
         repair_node_list=repair_node_list,
         output_bounds=output_bounds,
+    )
+
+    repair_obj.extend(
+        pred_model, pred_model_input_order, x_train, output_constraint_list
     )
 
     direc = os.path.dirname(os.path.realpath(__file__))
@@ -260,49 +261,49 @@ if __name__ == "__main__":
         pickle.dump([x_train, y_train], data)
 
     # save summary
-    pred_ctrls = out_model(test_obs, training=False)
-    err = np.abs(test_ctrls - pred_ctrls)
-    with open(
-        path_write + f"/stats/repair_layer{now_str}.csv",
-        "a+",
-        newline="",
-    ) as write_obj:
-        # Create a writer object from csv module
-        csv_writer = writer(write_obj)
-        model_evaluation = [
-            "repair layer",
-            layer_to_repair,
-            "mae",
-            np.sum(err) / err.shape[0],
-            "num_samples",
-            num_samples,
-            "num of repaired nodes",
-            num_nodes,
-            "repair node list",
-            repair_node_list,
-            "repair layer",
-            layer_to_repair,
-            "Num of nodes in repair layer",
-            32,
-            "timelimit",
-            options.optimizer_options["timelimit"],
-            "mipfocus",
-            options.optimizer_options["mipfocus"],
-            "max weight bunds",
-            cost_weights,
-            "cost weights",
-            cost_weights,
-            "output bounds",
-            output_bounds,
-        ]
-        # Add contents of list as last row in the csv file
-        csv_writer.writerow(model_evaluation)
-    print("saved: stats")
+    # pred_ctrls = out_model(test_obs, training=False)
+    # err = np.abs(test_ctrls - pred_ctrls)
+    # with open(
+    #     path_write + f"/stats/repair_layer{now_str}.csv",
+    #     "a+",
+    #     newline="",
+    # ) as write_obj:
+    #     # Create a writer object from csv module
+    #     csv_writer = writer(write_obj)
+    #     model_evaluation = [
+    #         "repair layer",
+    #         layer_to_repair,
+    #         "mae",
+    #         np.sum(err) / err.shape[0],
+    #         "num_samples",
+    #         num_samples,
+    #         "num of repaired nodes",
+    #         num_nodes,
+    #         "repair node list",
+    #         repair_node_list,
+    #         "repair layer",
+    #         layer_to_repair,
+    #         "Num of nodes in repair layer",
+    #         32,
+    #         "timelimit",
+    #         options.optimizer_options["timelimit"],
+    #         "mipfocus",
+    #         options.optimizer_options["mipfocus"],
+    #         "max weight bunds",
+    #         cost_weights,
+    #         "cost weights",
+    #         cost_weights,
+    #         "output bounds",
+    #         output_bounds,
+    #     ]
+    #     # Add contents of list as last row in the csv file
+    #     csv_writer.writerow(model_evaluation)
+    # print("saved: stats")
 
-    out_model = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__))
-        + "/repair_net/models/model_layer_3_5_31_2022_16_35_50"
-    )
+    # out_model = keras.models.load_model(
+    #     os.path.dirname(os.path.realpath(__file__))
+    #     + "/repair_net/models/model_layer_3_5_31_2022_16_35_50"
+    # )
     # plotTestData(
     #     ctrl_model_orig,
     #     out_model,
@@ -315,5 +316,3 @@ if __name__ == "__main__":
     #     bound_lower,
     #     3,
     # )
-
-    pass
