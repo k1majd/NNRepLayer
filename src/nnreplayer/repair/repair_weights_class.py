@@ -10,6 +10,7 @@ from nnreplayer.utils import tf2_get_weights, tf2_get_architecture
 from nnreplayer.utils import pt_get_weights, pt_get_architecture
 from nnreplayer.form_nn import MLP
 from nnreplayer.mip import MIPNNModel
+from nnreplayer.mip import MIPNNModelExtend
 from nnreplayer.lp_bound import LPNNModel
 from nnreplayer.utils import give_mse_error
 from nnreplayer.utils import Options
@@ -36,27 +37,9 @@ class NNRepair:
 
         self.model_orig = model_orig
         self.model_type = model_type
-        if model_type == "tensorflow":
-            self.architecture = tf2_get_architecture(self.model_orig)
-            self.model_mlp = MLP(
-                self.architecture[0],
-                self.architecture[-1],
-                self.architecture[1:-1],
-            )
-            self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
-        elif model_type == "pytorch":
-
-            self.architecture = pt_get_architecture(self.model_orig)
-            self.model_mlp = MLP(
-                self.architecture[0],
-                self.architecture[-1],
-                self.architecture[1:-1],
-            )
-            self.model_mlp.set_mlp_params(pt_get_weights(self.model_orig))
-        else:
-            raise TypeError(
-                f"Expected tensorflow or pytorch. Received {model_type} instead."
-            )
+        self.model_mlp, self.architecture = self.__give_mlp_model(
+            model_orig, model_type
+        )
         self.cost_function_output = give_mse_error
         self.data_precision = None
         self.param_precision = None
@@ -69,6 +52,9 @@ class NNRepair:
         self.repair_node_list = []
         self.__target_original_weights = []
         self.__target_original_bias = []
+        self.extended_model_mlp_blocks = []
+        self.ub_last_layer = None
+        self.lb_last_layer = None
 
     def compile(
         self,
@@ -194,7 +180,52 @@ class NNRepair:
         self.repair_node_list = []
         self.__target_original_weights = []
         self.__target_original_bias = []
-        ######################################
+        self.extended_model_mlp_blocks = []
+        self.ub_last_layer = None
+        self.lb_last_layer = None
+
+    def extend(
+        self,
+        new_model_block,
+        input_order: List[str],
+        x_repair: npt.NDArray,
+        output_constraint_list: Optional[List[Type[ConstraintsClass]]] = None,
+    ):
+        """extend the opt model"""
+        self.extended_model_mlp_blocks.append(
+            self.__give_mlp_model(new_model_block, self.model_type)
+        )
+
+        weights = self.extended_model_mlp_blocks[-1][0].get_mlp_weights()
+        bias = self.extended_model_mlp_blocks[-1][0].get_mlp_biases()
+        for i, w in enumerate(weights):
+            weights[i] = np.round(w, self.param_precision)
+        for i, b in enumerate(bias):
+            bias[i] = np.round(b, self.param_precision)
+
+        ub_mat, lb_mat = self.__tight_bounds_ia_extend(
+            weights, bias, x_repair, input_order
+        )
+        ub_mat.insert(0, self.ub_last_layer)
+        lb_mat.insert(0, self.lb_last_layer)
+        mip_model_layer = MIPNNModelExtend(
+            self.extended_model_mlp_blocks[-1][1],
+            weights,
+            bias,
+            self.opt_model,
+            last_ctrl_layer=len(self.architecture),
+            layer_num=len(self.architecture) + 1,
+            param_precision=self.param_precision,
+        )
+        y_ = mip_model_layer(
+            x_repair,
+            (self.num_samples, x_repair.shape[1] + self.architecture[-1]),
+            output_constraint_list,
+            input_order,
+            self.output_variable,
+            nodes_upper=ub_mat,
+            nodes_lower=lb_mat,
+        )
 
     def summary(self, direc: Optional[str] = None):
 
@@ -359,12 +390,12 @@ class NNRepair:
         weights = self.model_mlp.get_mlp_weights()
         bias = self.model_mlp.get_mlp_biases()
         layer_values = self.extract_network_layers_values(x_repair)
-        for l, w in enumerate(weights):
-            weights[l] = np.round(w, self.param_precision)
-        for l, b in enumerate(bias):
-            bias[l] = np.round(b, self.param_precision)
-        for l, value in enumerate(layer_values):
-            layer_values[l] = np.round(value, self.data_precision)
+        for i, w in enumerate(weights):
+            weights[i] = np.round(w, self.param_precision)
+        for i, b in enumerate(bias):
+            bias[i] = np.round(b, self.param_precision)
+        for i, value in enumerate(layer_values):
+            layer_values[i] = np.round(value, self.data_precision)
 
         self.num_samples = layer_values[self.layer_to_repair - 1].shape[0]
 
@@ -375,15 +406,11 @@ class NNRepair:
             max_weight_bound,
             bound_tightening_method,
         )
-        param_bounds, output_bounds = self.__set_param_n_output_bounds(
-            param_bounds,
-            output_bounds,
-            weights,
-            bias,
-            max_weight_bound,
-            ub_mat,
-            lb_mat,
-        )
+
+        # Update the object with the bounds of last layer
+        self.ub_last_layer = ub_mat[-1]
+        self.lb_last_layer = lb_mat[-1]
+
         self.__target_original_weights = weights[self.layer_to_repair - 1]
         self.__target_original_bias = bias[self.layer_to_repair - 1]
         mip_model_layer = MIPNNModel(
@@ -408,20 +435,6 @@ class NNRepair:
         self.output_name = y_.name
         self.output_variable = y_
         self.opt_model = mip_model_layer.model
-
-        # cost_expr = cost_weights[0] * self.cost_function_output(y_, y_repair)
-        # # minimize error bound
-        # dw_l = "dw"
-        # db_l = "db"
-        # if len(getattr(self.opt_model, dw_l)) == 1:
-        #     cost_expr += cost_weights[1] * getattr(self.opt_model, dw_l)
-        # else:
-        #     for item in getattr(self.opt_model, dw_l)._data.items():
-        #         cost_expr += cost_weights[1] * item[1]
-        #     for item in getattr(self.opt_model, db_l)._data.items():
-        #         cost_expr += cost_weights[1] * item[1]
-
-        # self.opt_model.obj = pyo.Objective(expr=cost_expr)
 
     def __specify_cost(
         self,
@@ -472,9 +485,10 @@ class NNRepair:
         print(" ")
         print("-> IA method")
         print(" ")
-        ub_mat, lb_mat = self.model_mlp.give_nodes_bounds(
-            self.layer_to_repair,
-            layer_values[0],
+        ub_mat, lb_mat = self.__tight_bounds_ia(
+            layer_values,
+            weights,
+            bias,
             max_weight_bound,
             self.repair_node_list,
         )
@@ -497,6 +511,257 @@ class NNRepair:
                     max_weight_bound,
                 )
             print(" ")
+        return ub_mat, lb_mat
+
+    def __tight_bounds_ia_extend(  # temporary method
+        self,
+        weights,
+        bias,
+        x_state,
+        input_order,
+    ):
+        architecture = self.extended_model_mlp_blocks[-1][1]
+        num_samples = x_state.shape[0]
+        current_layer = 1
+        # specify control and state ranges
+        if input_order.index("state") == 0:
+            state_range = [0, x_state.shape[1]]
+            control_range = [
+                x_state.shape[1],
+                x_state.shape[1] + self.architecture[-1],
+            ]
+        else:
+            control_range = [0, self.architecture[-1]]
+            state_range = [
+                self.architecture[-1],
+                self.architecture[-1] + x_state.shape[1],
+            ]
+        bound_stat_tracker = BoundStatTracker(architecture)
+        ub_mat = []
+        lb_mat = []
+        ub = np.zeros((x_state.shape[0], architecture[current_layer]))
+        lb = np.zeros((x_state.shape[0], architecture[current_layer]))
+
+        # First layer bounds
+        for node_next in range(architecture[1]):
+            for s in range(num_samples):
+                lb[s, node_next] = bias[current_layer - 1][node_next]
+                ub[s, node_next] = bias[current_layer - 1][node_next]
+                for node_prev in range(control_range[0], control_range[1]):
+                    w_temp = weights[current_layer - 1][node_prev][node_next]
+                    lb[s, node_next] += self.lb_last_layer[s][
+                        node_prev - control_range[0]
+                    ] * max(w_temp, 0) + self.ub_last_layer[s][
+                        node_prev - control_range[0]
+                    ] * min(
+                        w_temp, 0
+                    )
+                    ub[s, node_next] += self.ub_last_layer[s][
+                        node_prev - control_range[0]
+                    ] * max(w_temp, 0) + self.lb_last_layer[s][
+                        node_prev - control_range[0]
+                    ] * min(
+                        w_temp, 0
+                    )
+                for node_prev in range(state_range[0], state_range[1]):
+                    w_temp = weights[current_layer - 1][node_prev][node_next]
+                    lb[s, node_next] += (
+                        w_temp * x_state[s][node_prev - state_range[0]]
+                    )
+                    ub[s, node_next] += (
+                        w_temp * x_state[s][node_prev - state_range[0]]
+                    )
+                # update stats
+                bound_stat_tracker.update_stats(
+                    lb[s, node_next],
+                    ub[s, node_next],
+                    1,
+                    node_next,
+                )
+        # print stats
+        bound_stat_tracker.print_stats(current_layer)
+
+        ub_mat.append(ub)
+        lb_mat.append(lb)
+
+        # get the intervals for the subsequent layers
+        for layer in range(current_layer + 1, len(architecture)):
+            ub = np.zeros((num_samples, architecture[layer]))
+            lb = np.zeros((num_samples, architecture[layer]))
+            for node_next in range(architecture[layer]):
+                for s in range(num_samples):
+                    lb[s, node_next] = bias[layer - 1][node_next]
+                    ub[s, node_next] = bias[layer - 1][node_next]
+                    for node_prev in range(architecture[layer - 1]):
+                        w_temp = weights[layer - 1][node_prev][node_next]
+                        lb[s, node_next] += lb_mat[layer - 2][s][
+                            node_prev
+                        ] * max(w_temp, 0) + ub_mat[layer - 2][s][
+                            node_prev
+                        ] * min(
+                            w_temp, 0
+                        )
+                        ub[s, node_next] += ub_mat[layer - 2][s][
+                            node_prev
+                        ] * max(w_temp, 0) + lb_mat[layer - 2][s][
+                            node_prev
+                        ] * min(
+                            w_temp, 0
+                        )
+                    # update stats
+                    bound_stat_tracker.update_stats(
+                        lb[s, node_next],
+                        ub[s, node_next],
+                        layer,
+                        node_next,
+                    )
+            # print stats
+            bound_stat_tracker.print_stats(layer)
+            ub_mat.append(ub)
+            lb_mat.append(lb)
+
+        return ub_mat, lb_mat
+
+    def __tight_bounds_ia(
+        self,
+        layer_values: List[npt.NDArray],
+        weights: List[npt.NDArray],
+        bias: List[npt.NDArray],
+        max_weight_bound: Union[int, float],
+        repair_node_list: List[int],
+    ) -> tuple[List[npt.NDArray], List[npt.NDArray]]:
+        """Returns the active status of the nodes from the layer_to_repair to the end."""
+        bound_stat_tracker = BoundStatTracker(self.architecture)
+        ub_mat = []
+        lb_mat = []
+        # get the intervals for the layer_to_repair layer outputs
+        ub = np.zeros(
+            (layer_values[0].shape[0], self.architecture[self.layer_to_repair])
+        )
+        lb = np.zeros(
+            (layer_values[0].shape[0], self.architecture[self.layer_to_repair])
+        )
+        for node_next in range(self.architecture[self.layer_to_repair]):
+            for s in range(layer_values[0].shape[0]):
+                if node_next in repair_node_list:
+                    lb[s, node_next] = (
+                        bias[self.layer_to_repair - 1][node_next]
+                        - max_weight_bound
+                    )
+                    ub[s, node_next] = (
+                        bias[self.layer_to_repair - 1][node_next]
+                        + max_weight_bound
+                    )
+                    for node_prev in range(
+                        self.architecture[self.layer_to_repair - 1]
+                    ):
+                        lb[s, node_next] += (
+                            weights[self.layer_to_repair - 1][node_prev][
+                                node_next
+                            ]
+                            - max_weight_bound
+                        ) * max(
+                            0.0,
+                            layer_values[self.layer_to_repair - 1][s][
+                                node_prev
+                            ],
+                        ) + (
+                            weights[self.layer_to_repair - 1][node_prev][
+                                node_next
+                            ]
+                            + max_weight_bound
+                        ) * min(
+                            0.0,
+                            layer_values[self.layer_to_repair - 1][s][
+                                node_prev
+                            ],
+                        )
+
+                        ub[s, node_next] += (
+                            weights[self.layer_to_repair - 1][node_prev][
+                                node_next
+                            ]
+                            + max_weight_bound
+                        ) * max(
+                            0.0,
+                            layer_values[self.layer_to_repair - 1][s][
+                                node_prev
+                            ],
+                        ) + (
+                            weights[self.layer_to_repair - 1][node_prev][
+                                node_next
+                            ]
+                            - max_weight_bound
+                        ) * min(
+                            0.0,
+                            layer_values[self.layer_to_repair - 1][s][
+                                node_prev
+                            ],
+                        )
+                    # update stats
+                    bound_stat_tracker.update_stats(
+                        lb[s, node_next],
+                        ub[s, node_next],
+                        self.layer_to_repair,
+                        node_next,
+                    )
+                else:
+                    lb[s, node_next] = layer_values[self.layer_to_repair][s][
+                        node_next
+                    ]
+                    ub[s, node_next] = layer_values[self.layer_to_repair][s][
+                        node_next
+                    ]
+        # print stats
+        bound_stat_tracker.print_stats(self.layer_to_repair)
+
+        ub_mat.append(ub)
+        lb_mat.append(lb)
+
+        # get the intervals for the subsequent layers
+        for layer in range(self.layer_to_repair + 1, len(self.architecture)):
+            ub = np.zeros((layer_values[0].shape[0], self.architecture[layer]))
+            lb = np.zeros((layer_values[0].shape[0], self.architecture[layer]))
+            for node_next in range(self.architecture[layer]):
+                for s in range(layer_values[0].shape[0]):
+                    lb[s, node_next] = bias[layer - 1][node_next]
+                    ub[s, node_next] = bias[layer - 1][node_next]
+                    for node_prev in range(self.architecture[layer - 1]):
+                        w_temp = weights[layer - 1][node_prev][node_next]
+                        lb[s, node_next] += lb_mat[
+                            layer - self.layer_to_repair - 1
+                        ][s][node_prev] * max(w_temp, 0) + ub_mat[
+                            layer - self.layer_to_repair - 1
+                        ][
+                            s
+                        ][
+                            node_prev
+                        ] * min(
+                            w_temp, 0
+                        )
+                        ub[s, node_next] += ub_mat[
+                            layer - self.layer_to_repair - 1
+                        ][s][node_prev] * max(w_temp, 0) + lb_mat[
+                            layer - self.layer_to_repair - 1
+                        ][
+                            s
+                        ][
+                            node_prev
+                        ] * min(
+                            w_temp, 0
+                        )
+                    # update stats
+                    bound_stat_tracker.update_stats(
+                        lb[s, node_next],
+                        ub[s, node_next],
+                        layer,
+                        node_next,
+                    )
+            # print stats
+            bound_stat_tracker.print_stats(layer)
+            ub_mat.append(ub)
+            lb_mat.append(lb)
+
         return ub_mat, lb_mat
 
     def __tight_bounds_lp(
@@ -590,9 +855,6 @@ class NNRepair:
 
         return ub_mat, lb_mat
 
-    ##############################
-    # TODO: param_bounds and output_bounds can be specified by the user
-    # please add the data types and complete the docstring
     def __set_param_n_output_bounds(
         self,
         param_bounds,
@@ -658,7 +920,6 @@ class NNRepair:
             output_bounds = (lb, ub)
 
         return param_bounds, output_bounds
-        ##############################
 
     def __solve_optimization_problem(
         self,
@@ -693,3 +954,28 @@ class NNRepair:
         if hasattr(self.opt_model, "db"):
             print("----------------------")
             print(self.opt_model.db.display())
+
+    def __give_mlp_model(self, model: Any, model_type: str) -> Any:
+
+        if model_type == "tensorflow":
+            architecture = tf2_get_architecture(model)
+            model_mlp = MLP(
+                architecture[0],
+                architecture[-1],
+                architecture[1:-1],
+            )
+            model_mlp.set_mlp_params(tf2_get_weights(model))
+        elif model_type == "pytorch":
+            architecture = pt_get_architecture(model)
+            model_mlp = MLP(
+                architecture[0],
+                architecture[-1],
+                architecture[1:-1],
+            )
+            model_mlp.set_mlp_params(pt_get_weights(model))
+        else:
+            raise TypeError(
+                f"Expected tensorflow or pytorch. Received {model_type} instead."
+            )
+
+        return model_mlp, architecture
