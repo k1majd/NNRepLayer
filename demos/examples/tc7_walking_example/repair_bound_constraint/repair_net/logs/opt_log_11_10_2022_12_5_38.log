@@ -1,0 +1,26 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Thu Nov 10 12:06:13 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer/demos/examples/tc7_walking_example/repair_bound_constraint/repair_net/logs/opt_log_11_10_2022_12_5_38.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 21812 rows, 14357 columns and 157644 nonzeros
+Model fingerprint: 0x6d1f0f01
+Model has 500 quadratic objective terms
+Variable types: 7957 continuous, 6400 integer (6400 binary)
+Coefficient statistics:
+  Matrix range     [1e-04, 6e+02]
+  Objective range  [2e-05, 1e+00]
+  QObjective range [2e-02, 2e-02]
+  Bounds range     [4e-01, 4e+03]
+  RHS range        [1e-05, 6e+02]
+Presolve removed 2175 rows and 1450 columns
+Presolve time: 0.95s
+
+Explored 0 nodes (0 simplex iterations) in 0.99 seconds (0.74 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -

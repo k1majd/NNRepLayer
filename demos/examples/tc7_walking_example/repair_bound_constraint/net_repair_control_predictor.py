@@ -138,6 +138,113 @@ def divide_network(arch_control, arch_pred, network):
     return ctrl_model, pred_model
 
 
+def merge_models(model_orig, model_repaired):
+    new_model = keras.models.clone_model(model_orig)
+    for l in range(len(model_repaired.layers)):
+        new_model.layers[l].set_weights(model_repaired.layers[l].get_weights())
+
+    return new_model
+
+
+def plotTestData(model, train_obs, train_ctrls, test_obs, test_ctrls):
+    pred_ctrls = model.predict(test_obs)
+
+    fig = plt.figure(figsize=(13, 7))
+    gs = fig.add_gridspec(4, 2, width_ratios=[1, 1])
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[1, 0])
+    ax3 = fig.add_subplot(gs[2, 0])
+    ax4 = fig.add_subplot(gs[3, 0])
+    ax5 = fig.add_subplot(gs[:, 1])
+    x_lim = 271
+    ax5.plot(
+        test_ctrls[:, 0].flatten()[:x_lim],
+        label="test",
+        color="#173f5f",
+    )
+    ax5.plot(
+        pred_ctrls[1].flatten()[:x_lim],
+        label="prediction",
+        color=[0.4705, 0.7921, 0.6470],
+    )
+    ax5.set_xlabel("time step")
+    ax5.set_ylabel("ankle angle [deg]")
+    ax5.set_xlim(0, x_lim)
+    # ax5.set_title("Control")
+    ax1.plot(
+        test_ctrls[:, 1].flatten()[:x_lim],
+        label="test femur ang.",
+        color="#173f5f",
+    )
+    ax1.plot(
+        pred_ctrls[0][:, 0].flatten()[:x_lim],
+        label="pred. femur ang.",
+        color=[0.4705, 0.7921, 0.6470],
+    )
+    ax1.set_ylabel("Femur ang. \n[deg]")
+    ax1.set_xlim(0, x_lim)
+    # ax1.set_title("Femur Angle")
+    ax2.plot(
+        test_ctrls[:, 2].flatten()[:x_lim],
+        label="test femur ang. vel.",
+        color="#173f5f",
+    )
+    ax2.plot(
+        pred_ctrls[0][:, 1].flatten()[:x_lim],
+        label="pred. femur ang. vel.",
+        color=[0.4705, 0.7921, 0.6470],
+    )
+    ax2.set_ylabel("Femur ang. vel. \n [deg/s]")
+    ax2.set_xlim(0, x_lim)
+    # ax2.set_title("Femur Angular Velocity")
+    ax3.plot(
+        test_ctrls[:, 3].flatten()[:x_lim],
+        label="test tibia ang.",
+        color="#173f5f",
+    )
+    ax3.plot(
+        pred_ctrls[0][:, 2].flatten()[:x_lim],
+        label="pred. tibia ang.",
+        color=[0.4705, 0.7921, 0.6470],
+    )
+    ax3.set_ylabel("Tibia ang. \n [deg]")
+    ax3.set_xlim(0, x_lim)
+    # ax3.set_title("Tibia Angle")
+    ax4.plot(
+        test_ctrls[:, 4].flatten()[:x_lim],
+        label="test tibia ang. vel.",
+        color="#173f5f",
+    )
+    ax4.plot(
+        pred_ctrls[0][:, 3].flatten()[:x_lim],
+        label="pred. tibia ang. vel.",
+        color=[0.4705, 0.7921, 0.6470],
+    )
+    ax4.set_xlabel("time step")
+    ax4.set_ylabel("Tibia ang. vel. \n [deg/s]")
+    ax4.set_xlim(0, x_lim)
+    # ax4.set_title("Tibia Angular Velocity")
+    ax1.legend()
+    ax2.legend()
+    ax3.legend()
+    ax4.legend()
+    ax5.legend()
+    # lines, labels = ax5.get_legend_handles_labels()
+    # leg = fig.legend(
+    #     lines,
+    #     labels,
+    #     loc="center",
+    #     bbox_to_anchor=(0.5, -0.5),
+    #     # bbox_to_anchor=(0.75, 0.65),
+    #     bbox_transform=fig.transFigure,
+    #     ncol=1,
+    #     fontsize=14,
+    # )
+    # leg.get_frame().set_facecolor("white")
+    # plt.tight_layout()
+    plt.show()
+
+
 if __name__ == "__main__":
     # record current date n time
     now = datetime.now()
@@ -151,14 +258,15 @@ if __name__ == "__main__":
     y_train = test_out[0:num_samples]
 
     model_orig = keras.models.load_model(
-        os.path.dirname(os.path.realpath(__file__)) + "/models/model_ctrl_pred"
+        os.path.dirname(os.path.realpath(__file__))
+        + "/models/model_ctrl_pred_10"
     )
 
     bound_upper = 10
     bound_lower = 30
     # specify control+predictor architecture and devide the networks
-    ctrl_layer_arch = [40, 128, 128, 1]
-    pred_layer_arch = [41, 128, 4]
+    ctrl_layer_arch = [40, 10, 10, 1]
+    pred_layer_arch = [41, 10, 4]
     pred_model_input_order = ["state", "control"]
     ctrl_model, pred_model = divide_network(
         ctrl_layer_arch, pred_layer_arch, model_orig
@@ -235,8 +343,12 @@ if __name__ == "__main__":
     out_model = repair_obj.repair(options, y_train, cost_weights)
 
     # store the modeled MIP and parameters
-    # repair_obj.summary(direc=path_write + "/summary")
+    repair_obj.summary(direc=path_write + "/summary")
 
+    new_model = merge_models(model_orig, out_model)
+
+    # plot result
+    plotTestData(new_model, train_obs, train_out, test_obs, test_out)
     # store the repaired model
     keras.models.save_model(
         out_model,

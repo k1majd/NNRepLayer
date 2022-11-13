@@ -106,8 +106,8 @@ def build_network_block(regularizer_rate, layer_size, input, name):
 
 
 def buildModelWindow(data_size, train_out):
-    ctrl_layer_size = [128, 128, 1]
-    pred_layer_size = [128, 4]
+    ctrl_layer_size = [10, 10, 1]
+    pred_layer_size = [10, 4]
     regularizer_rate = 0.001
 
     input_layer = tf.keras.Input(shape=(data_size[1]))
@@ -303,7 +303,7 @@ if __name__ == "__main__":
     keras.models.save_model(
         ctrl_model_orig,
         os.path.dirname(os.path.realpath(__file__))
-        + "/models/model_ctrl_pred",
+        + "/models/model_ctrl_pred_10",
         overwrite=True,
         include_optimizer=False,
         save_format=None,

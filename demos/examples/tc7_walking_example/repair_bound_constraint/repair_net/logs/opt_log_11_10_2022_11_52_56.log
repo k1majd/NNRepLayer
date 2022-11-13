@@ -1,0 +1,53 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Thu Nov 10 11:53:47 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer/demos/examples/tc7_walking_example/repair_bound_constraint/repair_net/logs/opt_log_11_10_2022_11_52_56.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 2309 rows, 1190 columns and 5723 nonzeros
+Model fingerprint: 0xc71d2323
+Model has 5 quadratic objective terms
+Variable types: 1126 continuous, 64 integer (64 binary)
+Coefficient statistics:
+  Matrix range     [1e-04, 4e+02]
+  Objective range  [6e-01, 4e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [9e-01, 3e+03]
+  RHS range        [1e-04, 4e+02]
+Found heuristic solution: objective 306.6213987
+Presolve removed 1161 rows and 582 columns
+Presolve time: 0.02s
+Presolved: 1148 rows, 608 columns, 3427 nonzeros
+Presolved model has 5 quadratic objective terms
+Variable types: 547 continuous, 61 integer (61 binary)
+Root relaxation presolve removed 90 rows and 74 columns
+Root relaxation presolved: 1058 rows, 534 columns, 3161 nonzeros
+Root relaxation presolved model has 5 quadratic objective terms
+
+
+Root relaxation: objective 0.000000e+00, 1437 iterations, 0.02 seconds (0.01 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   23  306.62140    0.00000   100%     -    0s
+H    0     0                       0.0213937    0.00000   100%     -    0s
+     0     0    0.02053    0    7    0.02139    0.02053  4.03%     -    0s
+H    0     0                       0.0208158    0.02069  0.62%     -    0s
+     0     0    0.02076    0    5    0.02082    0.02076  0.26%     -    0s
+
+Cutting planes:
+  Implied bound: 25
+  Projected implied bound: 1
+  Clique: 2
+  MIR: 6
+  Flow cover: 7
+  RLT: 2
+
+Explored 1 nodes (2165 simplex iterations) in 0.15 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 0.0208158 0.0213937 306.621 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 2.081575294881e-02, best bound 2.076156457161e-02, gap 0.2603%

@@ -289,13 +289,20 @@ class NNRepair:
         if self.model_type == "tensorflow":
             new_model = keras.models.clone_model(self.model_orig)
             weights_bias_iterate = 0
-            for iterate in range(len(self.architecture) - 1):
+            
+            if len(new_model.layers[0].get_weights()) == 0:
+                iterate = 1
+            else:
+                iterate = 0
+
+            for _ in range(len(self.architecture) - 1):
                 new_model.layers[iterate].set_weights(
                     model_new_params[
                         weights_bias_iterate : weights_bias_iterate + 2
                     ]
                 )
                 weights_bias_iterate = weights_bias_iterate + 2
+                iterate += 1
 
         elif self.model_type == "pytorch":
 
