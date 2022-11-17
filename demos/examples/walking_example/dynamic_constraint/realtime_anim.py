@@ -387,9 +387,9 @@ if __name__ == "__main__":
     color_xline = "#696969"
     color_fill = "#D4D4D4"
     line_width = 1.5
-    xlim_max = 16.0
-    frame = 16.0  # [s]
-    T = 0.07
+    xlim_max = 2.0
+    frame = 2.0  # [s]
+    T = 0.01
     time = np.linspace(
         0, T * y_test.flatten().shape[0], y_test.flatten().shape[0]
     )
@@ -482,8 +482,8 @@ if __name__ == "__main__":
         np.linspace(
             0,
             np.floor(time[-1]),
-            int(np.floor(time[-1]) / 2) + 1,
-            endpoint=True,
+            int(np.floor(time[-1])),
+            endpoint=False,
         )
     )
     ax00.xaxis.set_ticklabels([])
@@ -518,8 +518,9 @@ if __name__ == "__main__":
         np.linspace(
             0,
             np.floor(time[-1]),
-            int(np.floor(time[-1]) / 2) + 1,
-            endpoint=True,
+            # int(np.floor(time[-1]) / 2) + 1,
+            int(np.floor(time[-1])),
+            endpoint=False,
         )
     )
     ax10.set_xlabel("Time [s]", fontsize=14)
