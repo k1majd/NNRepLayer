@@ -622,14 +622,14 @@ if __name__ == "__main__":
         init_func=init,
     )
     print("saving animation")
-    # writer = animation.FFMpegWriter(
-    #     fps=30,
-    #     metadata=dict(artist="Me"),
-    #     bitrate=2000,
-    #     extra_args=["-vcodec", "libx264"],
-    #     # frame_size=(1280, 720),
-    # )
-    # ani.save("movie.mp4", writer=writer)
-    ani.save("animation.gif", writer="imagemagick", fps=30, bitrate=800)
+    writer = animation.FFMpegWriter(
+        fps=100,
+        metadata=dict(artist="Me"),
+        bitrate=2000,
+        extra_args=["-vcodec", "libx264"],
+        # frame_size=(1280, 720),
+    )
+    ani.save("movie.mp4", writer=writer)
+    # ani.save("animation.gif", writer="imagemagick", fps=30, bitrate=800)
     print("done")
     # plt.show()
