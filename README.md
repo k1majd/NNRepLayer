@@ -19,7 +19,7 @@ If you find our work useful, please consider citing our paper:
 ![gif](walking_gif.gif)
 
 ## Setup
-We use the Poetry tool which is a dependency management and packaging tool in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Please follow the installation of poetry `here <https://python-poetry.org/docs/#installation>`_. After you've installed poetry, you can install NNrepLayer by running the following command in the root of the project:
+We use the Poetry tool which is a dependency management and packaging tool in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Please follow the installation of poetry [here](https://python-poetry.org/docs/#installation). After you've installed poetry, you can install NNrepLayer by running the following command in the root of the project:
 
     poetry install
 
