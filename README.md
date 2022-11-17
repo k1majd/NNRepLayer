@@ -31,4 +31,6 @@ For Example, if Python-Identifier was python3.8 and the path to gurobi folder th
 
     sudo ./setup.sh python3.8 /home/local/user/gurobi950/linux64/build/
 
+As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, for info on other supported solver we refer to [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers). Note that the solver in NNRepLayer should be specified through passing optimization `options'.
+
 ## Experiments
