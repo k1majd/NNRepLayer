@@ -1,0 +1,345 @@
+41 Set Declarations
+    b3_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    b_lower_bound_linf_constrain_lay4_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    b_upper_bound_linf_constrain_lay4_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    constraint_inequality_1_lay6_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                                    : Size : Members
+        None :     2 : constraint_inequality_1_lay6_index_0*constraint_inequality_1_lay6_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    constraint_inequality_1_lay6_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    constraint_inequality_1_lay6_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    constraint_inequality_2_lay6_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                                    : Size : Members
+        None :     2 : constraint_inequality_2_lay6_index_0*constraint_inequality_2_lay6_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    constraint_inequality_2_lay6_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    constraint_inequality_2_lay6_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    constraint_inequality_3_lay6_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                                    : Size : Members
+        None :     2 : constraint_inequality_3_lay6_index_0*constraint_inequality_3_lay6_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    constraint_inequality_3_lay6_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    constraint_inequality_3_lay6_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    eq_constraint4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                        : Size : Members
+        None :     2 : eq_constraint4_index_0*eq_constraint4_index_1 :    5 : {(0, 0), (1, 0), (2, 0), (3, 0), (4, 0)}
+    eq_constraint4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    eq_constraint4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    eq_constraint7_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                        : Size : Members
+        None :     2 : eq_constraint7_index_0*eq_constraint7_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    eq_constraint7_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    eq_constraint7_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    inside007_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    inside017_index : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    theta6_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                        : Size : Members
+        None :     2 : theta6_index_0*theta6_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    theta6_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    theta6_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    w3_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : w3_index_0*w3_index_1 :    4 : {(0, 0), (1, 0), (2, 0), (3, 0)}
+    w3_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    w3_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    w_lower_bound_linf_constrain_lay4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                                              : Size : Members
+        None :     2 : w_lower_bound_linf_constrain_lay4_index_0*w_lower_bound_linf_constrain_lay4_index_1 :    4 : {(0, 0), (1, 0), (2, 0), (3, 0)}
+    w_lower_bound_linf_constrain_lay4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    w_lower_bound_linf_constrain_lay4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    w_upper_bound_linf_constrain_lay4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                                                                              : Size : Members
+        None :     2 : w_upper_bound_linf_constrain_lay4_index_0*w_upper_bound_linf_constrain_lay4_index_1 :    4 : {(0, 0), (1, 0), (2, 0), (3, 0)}
+    w_upper_bound_linf_constrain_lay4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    w_upper_bound_linf_constrain_lay4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    x4_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x4_index_0*x4_index_1 :    5 : {(0, 0), (1, 0), (2, 0), (3, 0), (4, 0)}
+    x4_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    x4_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    1 :    {0,}
+    x6_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x6_index_0*x6_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    x6_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    x6_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+    x7_index : Size=1, Index=None, Ordered=True
+        Key  : Dimen : Domain                : Size : Members
+        None :     2 : x7_index_0*x7_index_1 :   20 : {(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3), (4, 0), (4, 1), (4, 2), (4, 3)}
+    x7_index_0 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    5 : {0, 1, 2, 3, 4}
+    x7_index_1 : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    4 : {0, 1, 2, 3}
+
+7 Var Declarations
+    b3 : Size=1, Index=b3_index
+        Key : Lower    : Value              : Upper  : Fixed : Stale : Domain
+          0 : -16.6384 : -6.726328751967273 : 3.3616 : False : False :  Reals
+    dw : Size=1, Index=None
+        Key  : Lower : Value               : Upper : Fixed : Stale : Domain
+        None :     0 : 0.08792867414744587 :  10.0 : False : False : NonNegativeReals
+    theta6 : Size=20, Index=theta6_index
+        Key    : Lower : Value : Upper : Fixed : Stale : Domain
+        (0, 0) :     0 :   1.0 :     1 : False : False : Binary
+        (0, 1) :     0 :   0.0 :     1 : False : False : Binary
+        (0, 2) :     0 :   0.0 :     1 : False : False : Binary
+        (0, 3) :     0 :   1.0 :     1 : False : False : Binary
+        (1, 0) :     0 :   1.0 :     1 : False : False : Binary
+        (1, 1) :     0 :   0.0 :     1 : False : False : Binary
+        (1, 2) :     0 :   1.0 :     1 : False : False : Binary
+        (1, 3) :     0 :   1.0 :     1 : False : False : Binary
+        (2, 0) :     0 :   1.0 :     1 : False : False : Binary
+        (2, 1) :     0 :   0.0 :     1 : False : False : Binary
+        (2, 2) :     0 :   1.0 :     1 : False : False : Binary
+        (2, 3) :     0 :   1.0 :     1 : False : False : Binary
+        (3, 0) :     0 :   1.0 :     1 : False : False : Binary
+        (3, 1) :     0 :   0.0 :     1 : False : False : Binary
+        (3, 2) :     0 :   1.0 :     1 : False : False : Binary
+        (3, 3) :     0 :   1.0 :     1 : False : False : Binary
+        (4, 0) :     0 :   1.0 :     1 : False : False : Binary
+        (4, 1) :     0 :   0.0 :     1 : False : False : Binary
+        (4, 2) :     0 :  None :     1 : False :  True : Binary
+        (4, 3) :     0 :   1.0 :     1 : False : False : Binary
+    w3 : Size=4, Index=w3_index
+        Key    : Lower    : Value               : Upper   : Fixed : Stale : Domain
+        (0, 0) :  -9.2928 :  0.6192713166019133 : 10.7072 : False : False :  Reals
+        (1, 0) :    -10.0 : 0.08792867414744587 :    10.0 : False : False :  Reals
+        (2, 0) :  -8.1216 :   1.790471293999832 : 11.8784 : False : False :  Reals
+        (3, 0) : -11.0326 : -0.9446713710567167 :  8.9674 : False : False :  Reals
+    x4 : Size=5, Index=x4_index
+        Key    : Lower     : Value              : Upper    : Fixed : Stale : Domain
+        (0, 0) : -174.1962 : 17.359513114612174 : 212.3138 : False : False :  Reals
+        (1, 0) : -172.0354 : 17.313953877755527 : 210.0226 : False : False :  Reals
+        (2, 0) :   -168.39 : 16.969712854656283 :  205.618 : False : False :  Reals
+        (3, 0) : -162.1896 :  16.15726288538405 : 197.6684 : False : False :  Reals
+        (4, 0) : -153.1261 : 14.918154210398919 : 185.9439 : False : False :  Reals
+    x6 : Size=20, Index=x6_index
+        Key    : Lower : Value                : Upper               : Fixed : Stale : Domain
+        (0, 0) :   0.0 :     1.32679589101741 :   3.841706277247242 : False : False : NonNegativeReals
+        (0, 1) :   0.0 :                  0.0 :  0.5353879157114101 : False : False : NonNegativeReals
+        (0, 2) :   0.0 :                  0.0 : 0.19893763248425478 : False : False : NonNegativeReals
+        (0, 3) :   0.0 :   0.5814751023903451 :   2.102118498844727 : False : False : NonNegativeReals
+        (1, 0) :   0.0 :   1.4624464331903984 :  3.9483880525918806 : False : False : NonNegativeReals
+        (1, 1) :   0.0 :                  0.0 :  0.5457693883245867 : False : False : NonNegativeReals
+        (1, 2) :   0.0 : 0.017740827062125784 : 0.24899121339262265 : False : False : NonNegativeReals
+        (1, 3) :   0.0 :   0.5283024988643961 :    2.03142989784143 : False : False : NonNegativeReals
+        (2, 0) :   0.0 :   1.6451439644385122 :   4.078706951259155 : False : False : NonNegativeReals
+        (2, 1) :   0.0 :                  0.0 :  0.5597523818071081 : False : False : NonNegativeReals
+        (2, 2) :   0.0 :  0.09129593086767343 : 0.31767388619446124 : False : False : NonNegativeReals
+        (2, 3) :   0.0 :     0.39956887650786 :  1.8710254763242258 : False : False : NonNegativeReals
+        (3, 0) :   0.0 :    1.847887827750991 :   4.189381576048502 : False : False : NonNegativeReals
+        (3, 1) :   0.0 :                  0.0 :  0.5696730504031853 : False : False : NonNegativeReals
+        (3, 2) :   0.0 :  0.19503229035855235 :  0.4128456652416712 : False : False : NonNegativeReals
+        (3, 3) :   0.0 :   0.2416298371812179 :  1.6574166682681035 : False : False : NonNegativeReals
+        (4, 0) :   0.0 :   2.0705042552974255 :   4.276736450908656 : False : False : NonNegativeReals
+        (4, 1) :   0.0 :                  0.0 :  0.5784268257423943 : False : False : NonNegativeReals
+        (4, 2) :   0.0 :  0.32879409150236744 :  0.5340249961978332 : False : False : NonNegativeReals
+        (4, 3) :   0.0 :  0.05801449048420089 :  1.3920152714546417 : False : False : NonNegativeReals
+    x7 : Size=20, Index=x7_index
+        Key    : Lower                : Value                : Upper              : Fixed : Stale : Domain
+        (0, 0) :   0.3391531589510772 :   1.5696630883078166 : 3.2019515438276347 : False : False :  Reals
+        (0, 1) :  -3.5240344001693718 : -0.31374336741013514 : 2.9109938440380163 : False : False :  Reals
+        (0, 2) :  -2.2732786993516814 :   0.6810681817909804 :  3.864697377063162 : False : False :  Reals
+        (0, 3) :  -0.7689327315955701 :   1.0204129007397564 :   2.85974681623701 : False : False :  Reals
+        (1, 0) :   0.3262499503206362 :   1.5721893134987668 : 3.1560733063247963 : False : False :  Reals
+        (1, 1) :  -3.6312653695559614 :  -0.4568081006307388 :  2.729641258798769 : False : False :  Reals
+        (1, 2) :  -2.1683704995289963 :   0.7609540609695622 : 3.8989055445653427 : False : False :  Reals
+        (1, 3) :  -0.7092435785784086 :   1.0865982134232002 : 2.8776391687911813 : False : False :  Reals
+        (2, 0) :   0.3013015319380995 :    1.546996088200729 : 3.0715002288176407 : False : False :  Reals
+        (2, 1) :  -3.8194908802322924 :  -0.7109896355012786 : 2.4073908137976616 : False : False :  Reals
+        (2, 2) :   -2.041143191781127 :   0.8392519399635779 :  3.898294743557579 : False : False :  Reals
+        (2, 3) :  -0.6099146440835724 :   1.1465977311707627 :  2.901392127606081 : False : False :  Reals
+        (3, 0) :   0.2778784829621963 :   1.5081826284149817 :   2.94327110200157 : False : False :  Reals
+        (3, 1) :   -4.001468838526244 :  -1.0094377391275677 : 1.9898286541750658 : False : False :  Reals
+        (3, 2) :  -1.8688052057516429 :   0.9182251183063519 : 3.8459235073644304 : False : False :  Reals
+        (3, 3) :  -0.4900519622474503 :   1.1981860705851932 : 2.8884100820047993 : False : False :  Reals
+        (4, 0) :  0.25466840698781434 :   1.4564217270354278 :  2.766088676476558 : False : False :  Reals
+        (4, 1) :   -4.168998105316188 :   -1.348287685497687 : 1.4761987246840693 : False : False :  Reals
+        (4, 2) :  -1.6474574865029668 :   0.9994881820197451 :  3.737147176325889 : False : False :  Reals
+        (4, 3) : -0.34756510341021285 :   1.2407108365578985 :  2.835732545508555 : False : False :  Reals
+
+1 Objective Declarations
+    obj : Size=1, Index=None, Active=True
+        Key  : Active : Sense    : Expression
+        None :   True : minimize : ((x4[0,0] - 17.7701)**2 + (x4[1,0] - 17.3984)**2 + (x4[2,0] - 16.9597)**2 + (x4[3,0] - 16.2542)**2 + (x4[4,0] - 14.1162)**2)/5 + ((x7[0,0] - 1.6991)**2 + (x7[0,1] + 0.3058)**2 + (x7[0,2] - 0.6811)**2 + (x7[0,3] - 0.9958)**2 + (x7[1,0] - 1.6725)**2 + (x7[1,1] + 0.5333)**2 + (x7[1,2] - 0.7491)**2 + (x7[1,3] - 1.0694)**2 + (x7[2,0] - 1.6322)**2 + (x7[2,1] + 0.8375)**2 + (x7[2,2] - 0.8271)**2 + (x7[2,3] - 1.1319)**2 + (x7[3,0] - 1.5716)**2 + (x7[3,1] + 1.2069)**2 + (x7[3,2] - 0.9044)**2 + (x7[3,3] - 1.1791)**2 + (x7[4,0] - 1.4916)**2 + (x7[4,1] + 1.4533)**2 + (x7[4,2] - 0.9465)**2 + (x7[4,3] - 1.2132)**2)/5 + dw
+
+11 Constraint Declarations
+    b_lower_bound_linf_constrain_lay4 : Size=1, Index=b_lower_bound_linf_constrain_lay4_index, Active=True
+        Key : Lower : Body                    : Upper : Active
+          0 :  -Inf : - dw - (b3[0] + 6.6384) :   0.0 :   True
+    b_upper_bound_linf_constrain_lay4 : Size=1, Index=b_upper_bound_linf_constrain_lay4_index, Active=True
+        Key : Lower : Body                : Upper : Active
+          0 :  -Inf : b3[0] + 6.6384 - dw :   0.0 :   True
+    constraint_inequality_1_lay6 : Size=20, Index=constraint_inequality_1_lay6_index, Active=True
+        Key    : Lower : Body                                              : Upper : Active
+        (0, 0) :  -Inf :      1.102858164233812 + 0.0129*x4[0,0] - x6[0,0] :   0.0 :   True
+        (0, 1) :  -Inf :    -0.2501731445258691 + 0.0037*x4[0,0] - x6[0,1] :   0.0 :   True
+        (0, 2) :  -Inf :  -0.055838939616982386 + 0.0012*x4[0,0] - x6[0,2] :   0.0 :   True
+        (0, 3) :  -Inf :    0.44607090376958225 + 0.0078*x4[0,0] - x6[0,3] :   0.0 :   True
+        (1, 0) :  -Inf :     1.2390964205822106 + 0.0129*x4[1,0] - x6[1,0] :   0.0 :   True
+        (1, 1) :  -Inf :   -0.23131423191013178 + 0.0037*x4[1,0] - x6[1,1] :   0.0 :   True
+        (1, 2) :  -Inf : -0.0030359185780232667 + 0.0012*x4[1,0] - x6[1,2] :   0.0 :   True
+        (1, 3) :  -Inf :    0.39325366228147485 + 0.0078*x4[1,0] - x6[1,3] :   0.0 :   True
+        (2, 0) :  -Inf :     1.4262346611791146 + 0.0129*x4[2,0] - x6[2,0] :   0.0 :   True
+        (2, 1) :  -Inf :   -0.20103421842268793 + 0.0037*x4[2,0] - x6[2,1] :   0.0 :   True
+        (2, 2) :  -Inf :    0.07093227447486417 + 0.0012*x4[2,0] - x6[2,2] :   0.0 :   True
+        (2, 3) :  -Inf :     0.2672051198322727 + 0.0078*x4[2,0] - x6[2,3] :   0.0 :   True
+        (3, 0) :  -Inf :     1.6394591294511345 + 0.0129*x4[3,0] - x6[3,0] :   0.0 :   True
+        (3, 1) :  -Inf :   -0.16170002981772674 + 0.0037*x4[3,0] - x6[3,1] :   0.0 :   True
+        (3, 2) :  -Inf :    0.17564357397517694 + 0.0012*x4[3,0] - x6[3,2] :   0.0 :   True
+        (3, 3) :  -Inf :    0.11560319009404252 + 0.0078*x4[3,0] - x6[3,3] :   0.0 :   True
+        (4, 0) :  -Inf :     1.8780600594477237 + 0.0129*x4[4,0] - x6[4,0] :   0.0 :   True
+        (4, 1) :  -Inf :   -0.10956560446541413 + 0.0037*x4[4,0] - x6[4,1] :   0.0 :   True
+        (4, 2) :   0.0 :    0.31089230559959957 + 0.0012*x4[4,0] - x6[4,2] :   0.0 :   True
+        (4, 3) :  -Inf :   -0.05834710920028163 + 0.0078*x4[4,0] - x6[4,3] :   0.0 :   True
+    constraint_inequality_2_lay6 : Size=19, Index=constraint_inequality_2_lay6_index, Active=True
+        Key    : Lower : Body                                                                                        : Upper : Active
+        (0, 0) :  -Inf :       x6[0,0] - (1.102858164233812 + 0.0129*x4[0,0] + 1.1442728920805225*(1 - theta6[0,0])) :   0.0 :   True
+        (0, 1) :  -Inf :     x6[0,1] - (-0.2501731445258691 + 0.0037*x4[0,0] + 0.8946990847205485*(1 - theta6[0,1])) :   0.0 :   True
+        (0, 2) :  -Inf :   x6[0,2] - (-0.055838939616982386 + 0.0012*x4[0,0] + 0.2648743895456329*(1 - theta6[0,2])) :   0.0 :   True
+        (0, 3) :  -Inf :     x6[0,3] - (0.44607090376958225 + 0.0078*x4[0,0] + 0.9126594193711134*(1 - theta6[0,3])) :   0.0 :   True
+        (1, 0) :  -Inf :      x6[1,0] - (1.2390964205822106 + 0.0129*x4[1,0] + 0.9801603147854903*(1 - theta6[1,0])) :   0.0 :   True
+        (1, 1) :  -Inf :    x6[1,1] - (-0.23131423191013178 + 0.0037*x4[1,0] + 0.8678452121023965*(1 - theta6[1,1])) :   0.0 :   True
+        (1, 2) :  -Inf : x6[1,2] - (-0.0030359185780232667 + 0.0012*x4[1,0] + 0.20947840838351484*(1 - theta6[1,2])) :   0.0 :   True
+        (1, 3) :  -Inf :     x6[1,3] - (0.39325366228147485 + 0.0078*x4[1,0] + 0.9486224213164387*(1 - theta6[1,3])) :   0.0 :   True
+        (2, 0) :  -Inf :       x6[2,0] - (1.4262346611791146 + 0.0129*x4[2,0] + 0.745996412591557*(1 - theta6[2,0])) :   0.0 :   True
+        (2, 1) :  -Inf :    x6[2,1] - (-0.20103421842268793 + 0.0037*x4[2,0] + 0.8240772186108782*(1 - theta6[2,1])) :   0.0 :   True
+        (2, 2) :  -Inf :    x6[2,2] - (0.07093227447486417 + 0.0012*x4[2,0] + 0.13113573512285065*(1 - theta6[2,2])) :   0.0 :   True
+        (2, 3) :  -Inf :      x6[2,3] - (0.2672051198322727 + 0.0078*x4[2,0] + 1.0462368445369945*(1 - theta6[2,3])) :   0.0 :   True
+        (3, 0) :  -Inf :       x6[3,0] - (1.6394591294511345 + 0.0129*x4[3,0] + 0.452786781603179*(1 - theta6[3,0])) :   0.0 :   True
+        (3, 1) :  -Inf :    x6[3,1] - (-0.16170002981772674 + 0.0037*x4[3,0] + 0.7618015499989876*(1 - theta6[3,1])) :   0.0 :   True
+        (3, 2) :  -Inf :    x6[3,2] - (0.17564357397517694 + 0.0012*x4[3,0] + 0.01898395526913421*(1 - theta6[3,2])) :   0.0 :   True
+        (3, 3) :  -Inf :     x6[3,3] - (0.11560319009404252 + 0.0078*x4[3,0] + 1.1494756555872079*(1 - theta6[3,3])) :   0.0 :   True
+        (4, 0) :  -Inf :     x6[4,0] - (1.8780600594477237 + 0.0129*x4[4,0] + 0.09726669763592333*(1 - theta6[4,0])) :   0.0 :   True
+        (4, 1) :  -Inf :    x6[4,1] - (-0.10956560446541413 + 0.0037*x4[4,0] + 0.6761321746365458*(1 - theta6[4,1])) :   0.0 :   True
+        (4, 3) :  -Inf :    x6[4,3] - (-0.05834710920028163 + 0.0078*x4[4,0] + 1.2527306567993366*(1 - theta6[4,3])) :   0.0 :   True
+    constraint_inequality_3_lay6 : Size=19, Index=constraint_inequality_3_lay6_index, Active=True
+        Key    : Lower : Body                                      : Upper : Active
+        (0, 0) :  -Inf :   x6[0,0] - 3.841706277247242*theta6[0,0] :   0.0 :   True
+        (0, 1) :  -Inf :  x6[0,1] - 0.5353879157114101*theta6[0,1] :   0.0 :   True
+        (0, 2) :  -Inf : x6[0,2] - 0.19893763248425478*theta6[0,2] :   0.0 :   True
+        (0, 3) :  -Inf :   x6[0,3] - 2.102118498844727*theta6[0,3] :   0.0 :   True
+        (1, 0) :  -Inf :  x6[1,0] - 3.9483880525918806*theta6[1,0] :   0.0 :   True
+        (1, 1) :  -Inf :  x6[1,1] - 0.5457693883245867*theta6[1,1] :   0.0 :   True
+        (1, 2) :  -Inf : x6[1,2] - 0.24899121339262265*theta6[1,2] :   0.0 :   True
+        (1, 3) :  -Inf :    x6[1,3] - 2.03142989784143*theta6[1,3] :   0.0 :   True
+        (2, 0) :  -Inf :   x6[2,0] - 4.078706951259155*theta6[2,0] :   0.0 :   True
+        (2, 1) :  -Inf :  x6[2,1] - 0.5597523818071081*theta6[2,1] :   0.0 :   True
+        (2, 2) :  -Inf : x6[2,2] - 0.31767388619446124*theta6[2,2] :   0.0 :   True
+        (2, 3) :  -Inf :  x6[2,3] - 1.8710254763242258*theta6[2,3] :   0.0 :   True
+        (3, 0) :  -Inf :   x6[3,0] - 4.189381576048502*theta6[3,0] :   0.0 :   True
+        (3, 1) :  -Inf :  x6[3,1] - 0.5696730504031853*theta6[3,1] :   0.0 :   True
+        (3, 2) :  -Inf :  x6[3,2] - 0.4128456652416712*theta6[3,2] :   0.0 :   True
+        (3, 3) :  -Inf :  x6[3,3] - 1.6574166682681035*theta6[3,3] :   0.0 :   True
+        (4, 0) :  -Inf :   x6[4,0] - 4.276736450908656*theta6[4,0] :   0.0 :   True
+        (4, 1) :  -Inf :  x6[4,1] - 0.5784268257423943*theta6[4,1] :   0.0 :   True
+        (4, 3) :  -Inf :  x6[4,3] - 1.3920152714546417*theta6[4,3] :   0.0 :   True
+    eq_constraint4 : Size=5, Index=eq_constraint4_index, Active=True
+        Key    : Lower : Body                                               : Upper : Active
+        (0, 0) :   0.0 :   b3[0] + 7.45*w3[0,0] + 10.8755*w3[2,0] - x4[0,0] :   0.0 :   True
+        (1, 0) :   0.0 : b3[0] + 7.1486*w3[0,0] + 10.9543*w3[2,0] - x4[1,0] :   0.0 :   True
+        (2, 0) :   0.0 : b3[0] + 6.8272*w3[0,0] + 10.8732*w3[2,0] - x4[2,0] :   0.0 :   True
+        (3, 0) :   0.0 : b3[0] + 6.4393*w3[0,0] + 10.5536*w3[2,0] - x4[3,0] :   0.0 :   True
+        (4, 0) :   0.0 : b3[0] + 5.9083*w3[0,0] + 10.0452*w3[2,0] - x4[4,0] :   0.0 :   True
+    eq_constraint7 : Size=20, Index=eq_constraint7_index, Active=True
+        Key    : Lower : Body                                                                                               : Upper : Active
+        (0, 0) :   0.0 :    1.281599998474121 + 0.1377*x6[0,0] - 1.0206*x6[0,1] - 0.3674*x6[0,2] + 0.1812*x6[0,3] - x7[0,0] :   0.0 :   True
+        (0, 1) :   0.0 : -0.08820000290870667 - 0.6359*x6[0,0] - 0.0365*x6[0,1] - 0.0156*x6[0,2] + 1.0631*x6[0,3] - x7[0,1] :   0.0 :   True
+        (0, 2) :   0.0 :    -0.649399995803833 + 0.7857*x6[0,0] - 0.502*x6[0,1] - 0.0202*x6[0,2] + 0.4953*x6[0,3] - x7[0,2] :   0.0 :   True
+        (0, 3) :   0.0 :    0.447299987077713 + 0.5175*x6[0,0] + 0.0585*x6[0,1] - 0.8113*x6[0,2] - 0.1952*x6[0,3] - x7[0,3] :   0.0 :   True
+        (1, 0) :   0.0 :    1.281599998474121 + 0.1377*x6[1,0] - 1.0206*x6[1,1] - 0.3674*x6[1,2] + 0.1812*x6[1,3] - x7[1,0] :   0.0 :   True
+        (1, 1) :   0.0 : -0.08820000290870667 - 0.6359*x6[1,0] - 0.0365*x6[1,1] - 0.0156*x6[1,2] + 1.0631*x6[1,3] - x7[1,1] :   0.0 :   True
+        (1, 2) :   0.0 :    -0.649399995803833 + 0.7857*x6[1,0] - 0.502*x6[1,1] - 0.0202*x6[1,2] + 0.4953*x6[1,3] - x7[1,2] :   0.0 :   True
+        (1, 3) :   0.0 :    0.447299987077713 + 0.5175*x6[1,0] + 0.0585*x6[1,1] - 0.8113*x6[1,2] - 0.1952*x6[1,3] - x7[1,3] :   0.0 :   True
+        (2, 0) :   0.0 :    1.281599998474121 + 0.1377*x6[2,0] - 1.0206*x6[2,1] - 0.3674*x6[2,2] + 0.1812*x6[2,3] - x7[2,0] :   0.0 :   True
+        (2, 1) :   0.0 : -0.08820000290870667 - 0.6359*x6[2,0] - 0.0365*x6[2,1] - 0.0156*x6[2,2] + 1.0631*x6[2,3] - x7[2,1] :   0.0 :   True
+        (2, 2) :   0.0 :    -0.649399995803833 + 0.7857*x6[2,0] - 0.502*x6[2,1] - 0.0202*x6[2,2] + 0.4953*x6[2,3] - x7[2,2] :   0.0 :   True
+        (2, 3) :   0.0 :    0.447299987077713 + 0.5175*x6[2,0] + 0.0585*x6[2,1] - 0.8113*x6[2,2] - 0.1952*x6[2,3] - x7[2,3] :   0.0 :   True
+        (3, 0) :   0.0 :    1.281599998474121 + 0.1377*x6[3,0] - 1.0206*x6[3,1] - 0.3674*x6[3,2] + 0.1812*x6[3,3] - x7[3,0] :   0.0 :   True
+        (3, 1) :   0.0 : -0.08820000290870667 - 0.6359*x6[3,0] - 0.0365*x6[3,1] - 0.0156*x6[3,2] + 1.0631*x6[3,3] - x7[3,1] :   0.0 :   True
+        (3, 2) :   0.0 :    -0.649399995803833 + 0.7857*x6[3,0] - 0.502*x6[3,1] - 0.0202*x6[3,2] + 0.4953*x6[3,3] - x7[3,2] :   0.0 :   True
+        (3, 3) :   0.0 :    0.447299987077713 + 0.5175*x6[3,0] + 0.0585*x6[3,1] - 0.8113*x6[3,2] - 0.1952*x6[3,3] - x7[3,3] :   0.0 :   True
+        (4, 0) :   0.0 :    1.281599998474121 + 0.1377*x6[4,0] - 1.0206*x6[4,1] - 0.3674*x6[4,2] + 0.1812*x6[4,3] - x7[4,0] :   0.0 :   True
+        (4, 1) :   0.0 : -0.08820000290870667 - 0.6359*x6[4,0] - 0.0365*x6[4,1] - 0.0156*x6[4,2] + 1.0631*x6[4,3] - x7[4,1] :   0.0 :   True
+        (4, 2) :   0.0 :    -0.649399995803833 + 0.7857*x6[4,0] - 0.502*x6[4,1] - 0.0202*x6[4,2] + 0.4953*x6[4,3] - x7[4,2] :   0.0 :   True
+        (4, 3) :   0.0 :    0.447299987077713 + 0.5175*x6[4,0] + 0.0585*x6[4,1] - 0.8113*x6[4,2] - 0.1952*x6[4,3] - x7[4,3] :   0.0 :   True
+    inside007 : Size=5, Index=inside007_index, Active=True
+        Key : Lower : Body          : Upper : Active
+          0 :  -Inf : x7[0,1] - 1.0 :   0.0 :   True
+          1 :  -Inf : x7[1,1] - 1.0 :   0.0 :   True
+          2 :  -Inf : x7[2,1] - 1.0 :   0.0 :   True
+          3 :  -Inf : x7[3,1] - 1.0 :   0.0 :   True
+          4 :  -Inf : x7[4,1] - 1.0 :   0.0 :   True
+    inside017 : Size=5, Index=inside017_index, Active=True
+        Key : Lower : Body            : Upper : Active
+          0 :  -Inf : - x7[0,1] - 1.5 :   0.0 :   True
+          1 :  -Inf : - x7[1,1] - 1.5 :   0.0 :   True
+          2 :  -Inf : - x7[2,1] - 1.5 :   0.0 :   True
+          3 :  -Inf : - x7[3,1] - 1.5 :   0.0 :   True
+          4 :  -Inf : - x7[4,1] - 1.5 :   0.0 :   True
+    w_lower_bound_linf_constrain_lay4 : Size=4, Index=w_lower_bound_linf_constrain_lay4_index, Active=True
+        Key    : Lower : Body                  : Upper : Active
+        (0, 0) :  -Inf : w3[0,0] - 0.7072 - dw :   0.0 :   True
+        (1, 0) :  -Inf :          w3[1,0] - dw :   0.0 :   True
+        (2, 0) :  -Inf : w3[2,0] - 1.8784 - dw :   0.0 :   True
+        (3, 0) :  -Inf : w3[3,0] + 1.0326 - dw :   0.0 :   True
+    w_upper_bound_linf_constrain_lay4 : Size=4, Index=w_upper_bound_linf_constrain_lay4_index, Active=True
+        Key    : Lower : Body                      : Upper : Active
+        (0, 0) :  -Inf : - dw - (w3[0,0] - 0.7072) :   0.0 :   True
+        (1, 0) :  -Inf :            - dw - w3[1,0] :   0.0 :   True
+        (2, 0) :  -Inf : - dw - (w3[2,0] - 1.8784) :   0.0 :   True
+        (3, 0) :  -Inf : - dw - (w3[3,0] + 1.0326) :   0.0 :   True
+
+60 Declarations: w3_index_0 w3_index_1 w3_index w3 b3_index b3 x4_index_0 x4_index_1 x4_index x4 eq_constraint4_index_0 eq_constraint4_index_1 eq_constraint4_index eq_constraint4 dw w_lower_bound_linf_constrain_lay4_index_0 w_lower_bound_linf_constrain_lay4_index_1 w_lower_bound_linf_constrain_lay4_index w_lower_bound_linf_constrain_lay4 w_upper_bound_linf_constrain_lay4_index_0 w_upper_bound_linf_constrain_lay4_index_1 w_upper_bound_linf_constrain_lay4_index w_upper_bound_linf_constrain_lay4 b_upper_bound_linf_constrain_lay4_index b_upper_bound_linf_constrain_lay4 b_lower_bound_linf_constrain_lay4_index b_lower_bound_linf_constrain_lay4 x6_index_0 x6_index_1 x6_index x6 theta6_index_0 theta6_index_1 theta6_index theta6 constraint_inequality_1_lay6_index_0 constraint_inequality_1_lay6_index_1 constraint_inequality_1_lay6_index constraint_inequality_1_lay6 constraint_inequality_2_lay6_index_0 constraint_inequality_2_lay6_index_1 constraint_inequality_2_lay6_index constraint_inequality_2_lay6 constraint_inequality_3_lay6_index_0 constraint_inequality_3_lay6_index_1 constraint_inequality_3_lay6_index constraint_inequality_3_lay6 x7_index_0 x7_index_1 x7_index x7 eq_constraint7_index_0 eq_constraint7_index_1 eq_constraint7_index eq_constraint7 inside007_index inside007 inside017_index inside017 obj

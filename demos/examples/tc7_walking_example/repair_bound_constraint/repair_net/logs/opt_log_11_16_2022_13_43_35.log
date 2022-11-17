@@ -1,0 +1,50 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Nov 16 13:43:52 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer/demos/examples/tc7_walking_example/repair_bound_constraint/repair_net/logs/opt_log_11_16_2022_13_43_35.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 102 rows, 63 columns and 276 nonzeros
+Model fingerprint: 0x42b53f30
+Model has 10 quadratic objective terms
+Variable types: 47 continuous, 16 integer (16 binary)
+Coefficient statistics:
+  Matrix range     [1e-03, 2e+02]
+  Objective range  [3e-01, 2e+01]
+  QObjective range [1e+00, 1e+00]
+  Bounds range     [6e-01, 5e+02]
+  RHS range        [3e-03, 2e+02]
+Found heuristic solution: objective 596.9275835
+Presolve removed 20 rows and 8 columns
+Presolve time: 0.01s
+Presolved: 82 rows, 55 columns, 251 nonzeros
+Presolved model has 10 quadratic objective terms
+Variable types: 39 continuous, 16 integer (16 binary)
+Root relaxation presolve removed 22 rows and 18 columns
+Root relaxation presolved: 60 rows, 37 columns, 185 nonzeros
+Root relaxation presolved model has 10 quadratic objective terms
+
+
+Root relaxation: objective 1.638281e-02, 69 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.01638    0   12  596.92758    0.01638   100%     -    0s
+H    0     0                       0.0911950    0.01638  82.0%     -    0s
+     0     0     cutoff    0         0.09120    0.09120  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 2
+  Implied bound: 2
+  MIR: 2
+  Flow cover: 1
+  Relax-and-lift: 4
+
+Explored 1 nodes (120 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 0.091195 596.928 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 9.119500266934e-02, best bound 9.119500266934e-02, gap 0.0000%

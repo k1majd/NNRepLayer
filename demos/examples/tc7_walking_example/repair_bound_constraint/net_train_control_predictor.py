@@ -106,8 +106,8 @@ def build_network_block(regularizer_rate, layer_size, input, name):
 
 
 def buildModelWindow(data_size, train_out):
-    ctrl_layer_size = [10, 10, 1]
-    pred_layer_size = [10, 4]
+    ctrl_layer_size = [4, 4, 1]
+    pred_layer_size = [4, 4]
     regularizer_rate = 0.001
 
     input_layer = tf.keras.Input(shape=(data_size[1]))

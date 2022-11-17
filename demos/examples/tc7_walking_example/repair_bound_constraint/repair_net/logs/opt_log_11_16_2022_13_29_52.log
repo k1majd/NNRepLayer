@@ -1,0 +1,42 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Nov 16 13:38:52 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer/demos/examples/tc7_walking_example/repair_bound_constraint/repair_net/logs/opt_log_11_16_2022_13_29_52.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 69 rows, 42 columns and 165 nonzeros
+Model fingerprint: 0x327657b5
+Model has 5 quadratic objective terms
+Variable types: 34 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e-03, 9e+01]
+  Objective range  [1e+00, 2e+01]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [9e-01, 3e+02]
+  RHS range        [2e-02, 9e+01]
+Presolve removed 34 rows and 18 columns
+Presolve time: 0.01s
+Presolved: 35 rows, 24 columns, 89 nonzeros
+Presolved model has 5 quadratic objective terms
+Variable types: 19 continuous, 5 integer (5 binary)
+Found heuristic solution: objective 337.9338757
+Root relaxation presolve removed 11 rows and 8 columns
+Root relaxation presolved: 24 rows, 16 columns, 60 nonzeros
+Root relaxation presolved model has 5 quadratic objective terms
+
+
+Root relaxation: objective 2.494968e+02, 36 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  249.49682    0    4  337.93388  249.49682  26.2%     -    0s
+H    0     0                     250.3805691  249.49682  0.35%     -    0s
+
+Explored 1 nodes (39 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 250.381 337.934 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 2.503805690862e+02, best bound 2.494968213320e+02, gap 0.3530%

@@ -1,0 +1,50 @@
+
+Gurobi 9.5.1 (mac64[x86]) logging started Wed Nov 16 13:50:44 2022
+
+Set parameter LogFile to value "/Users/keyvanmajd/Documents/NNRepLayer/demos/examples/tc7_walking_example/repair_bound_constraint/repair_net/logs/opt_log_11_16_2022_13_50_25.log"
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (mac64[x86])
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 195 rows, 126 columns and 570 nonzeros
+Model fingerprint: 0x4111b2f1
+Model has 25 quadratic objective terms
+Variable types: 86 continuous, 40 integer (40 binary)
+Coefficient statistics:
+  Matrix range     [1e-03, 2e+02]
+  Objective range  [1e-01, 7e+00]
+  QObjective range [4e-01, 4e-01]
+  Bounds range     [6e-01, 5e+02]
+  RHS range        [3e-03, 2e+02]
+Found heuristic solution: objective 20575.745048
+Presolve removed 38 rows and 16 columns
+Presolve time: 0.01s
+Presolved: 157 rows, 110 columns, 511 nonzeros
+Presolved model has 25 quadratic objective terms
+Variable types: 74 continuous, 36 integer (36 binary)
+Root relaxation presolve removed 45 rows and 38 columns
+Root relaxation presolved: 112 rows, 72 columns, 370 nonzeros
+Root relaxation presolved model has 25 quadratic objective terms
+
+
+Root relaxation: objective 2.294567e-02, 133 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                    11664.672035    0.02295   100%     -    0s
+     0     0    0.02295    0   28 11664.6720    0.02295   100%     -    0s
+H    0     0                     538.0817903    0.02295   100%     -    0s
+H    0     0                       0.2383502    0.02295  90.4%     -    0s
+     0     0     cutoff    0         0.23835    0.23835  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 5
+  Projected implied bound: 5
+  RLT: 2
+
+Explored 1 nodes (237 simplex iterations) in 0.06 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 0.23835 538.082 11664.7 20575.7 
+
+Optimal solution found (tolerance 1.00e-02)
+Best objective 2.383502465913e-01, best bound 2.383502465913e-01, gap 0.0000%
