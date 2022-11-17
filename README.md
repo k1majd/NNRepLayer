@@ -1,5 +1,5 @@
 
-# Safe Robot Learning in Assistive Devices through Neural Network Repair
+# Safe Robot Learning in Assistive Devices through Neural Network Repair 
 ![teaser](teaser.png)
 
 ## Introduction
