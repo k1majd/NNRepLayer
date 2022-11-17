@@ -19,6 +19,22 @@ If you find our work useful, please consider citing our paper:
 ![gif](walking_gif.gif)
 
 ## Setup
+We use the Poetry tool which is a dependency management and packaging tool in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Please follow the installation of poetry `here <https://python-poetry.org/docs/#installation>`_. After you've installed poetry, you can install NNrepLayer by running the following command in the root of the project:
 
+.. code-block:: python
+    
+    poetry install
+
+Since we also make of the gurobi optimizer, we need to set it up for python. This can be easily done by installing gurobi, the instructions of which can be found here. In order to set it up for python, run the setup.sh file and pass the python identifier and the complete path to folder that contains the setup.py file in the gurobi folder using the following commands:
+
+.. code-block:: python
+
+    sudo ./setup.sh <Python-Identifier> <Path-To-Folder>
+
+For Example, if Python-Identifier was python3.8 and the path to gurobi folder that contains the *setup.py* file is */home/local/user/gurobi950/linux64/build/*, issue the following command:
+
+.. code-block:: python
+
+    sudo ./setup.sh python3.8 /home/local/user/gurobi950/linux64/build/
 
 ## Experiments
