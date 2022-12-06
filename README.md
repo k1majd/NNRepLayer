@@ -31,7 +31,7 @@ For Example, if Python-Identifier was python3.8 and the path to gurobi folder th
 
     sudo ./setup.sh python3.8 /home/local/user/gurobi950/linux64/build/
 
-As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Note that the selected solver should be specified for the NNRepLayer (read examples).
+As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
 
 ## Experiments
-You can find the examples of NNRepLayer for the Prosthesis application under `/examples`, [here](/examples)
+You can find the examples of NNRepLayer for the Prosthesis application under `/examples` ([here](/examples)). 
