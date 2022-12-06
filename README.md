@@ -35,3 +35,5 @@ As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, other
 
 ## Experiments
 You can find the examples of NNRepLayer for the Prosthesis application under `/examples` ([here](/examples)). 
+Our tool currently supports the models trained with [tensorflow 2 (tf2)](https://www.tensorflow.org) and [PyTorch 1](https://pytorch.org). 
+The code examples for loading models saved by common frameworks will be released soon. 
