@@ -46,3 +46,10 @@ For repairing models, please follow the repair notebook tutorials `01_net_repair
 
 As we used [Pyomo](http://www.pyomo.org) for formulating the MIQP optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. We also suggest you to use `Gurobi` as its performance is significantly faster (it also has free academic license!).
 Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
+
+## Results
+| Method | Running Time [s]                                         | MAE Error | Repair Efficacy[%] | Introduced Bug [%] |
+| ------- | ------------------------------------------------------------ | ----- | ----------------------------- | ------------------------ | 
+| MNIST   | [Wong et al. (2017)](https://arxiv.org/abs/1711.00851)       | 0.1   | 4.11%                         | **4.38%**                | 
+| ------- | ------------------------------------------------------------ | ----- | ----------------------------- | ------------------------ | 
+
