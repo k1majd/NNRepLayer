@@ -475,6 +475,10 @@ class NNRepair:
             self.output_state_variable,
             np.round(y_repair[:, 1:], self.data_precision),
         )
+        # cost_expr = cost_weights[0] * self.cost_function_output(
+        #     self.output_state_variable,
+        #     np.round(y_repair[:, 1:], self.data_precision),
+        # )
         # minimize error bound
         dw_l = "dw"
         db_l = "db"

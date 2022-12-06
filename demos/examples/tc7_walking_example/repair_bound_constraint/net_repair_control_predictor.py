@@ -251,7 +251,7 @@ if __name__ == "__main__":
     now_str = f"_{now.month}_{now.day}_{now.year}_{now.hour}_{now.minute}_{now.second}"
 
     # load data and model
-    num_samples = 5
+    num_samples = 100
     train_obs, train_out, test_obs, test_out = generateDataWindow(10)
     rnd_pts = np.random.choice(test_obs.shape[0], num_samples)
     x_train = test_obs[0:num_samples]
@@ -281,9 +281,9 @@ if __name__ == "__main__":
     output_constraint_list = [constraint_inside]
     repair_obj = NNRepair(ctrl_model)
 
-    layer_to_repair = 3  # first layer-(0) last layer-(4)
-    max_weight_bound = 10.0  # specifying the upper bound of weights error
-    cost_weights = np.array([1.0, 1.0])  # cost weights
+    layer_to_repair = 2  # first layer-(0) last layer-(4)
+    max_weight_bound = 10000.0  # specifying the upper bound of weights error
+    cost_weights = np.array([100.0, 1.0])  # cost weights
     output_bounds = (-30.0, 40.0)
     repair_node_list = []
     num_nodes = len(repair_node_list) if len(repair_node_list) != 0 else 32
@@ -346,9 +346,10 @@ if __name__ == "__main__":
     repair_obj.summary(direc=path_write + "/summary")
 
     new_model = merge_models(model_orig, out_model)
+    new_output = new_model.predict(x_train)
 
     # plot result
-    plotTestData(new_model, train_obs, train_out, test_obs, test_out)
+    plotTestData(new_model, train_obs, train_out, x_train, y_train)
     # store the repaired model
     keras.models.save_model(
         out_model,
