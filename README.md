@@ -46,6 +46,8 @@ As we used [Pyomo](http://www.pyomo.org) for formulating the MIQP optimization, 
 Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
 
 ## Results
+![gif](assets/walking_gif.gif)
+
 Below is a modified version of Table 1 from our paper for the stats collected in input-output constraint case. We report the runtime, Mean Absolute Error between the repaired and the original outputs (MAE), the percentage of adversarial samples that are repaired (Repair Efficacy), and the percentage of test samples that were originally safe but became faulty after the repair (Introduced Bugs). The metrics are the average of 50 runs.
 In general, 
 - Our method works better in generalizing the constraints to the unseen cases, especially for the conditional constraint.
@@ -58,4 +60,4 @@ In general,
 | Fine-tuning|$8\pm2$| $0.6\pm0.03$   | $88\pm2$ | $2.48\pm0.49$ | 
 | Retraining|$101\pm1$| $0.5\pm0.04$   | $98\pm2$ | $0.28\pm0.32$ | 
 
-![gif](assets/walking_gif.gif)
+For further results please read [our paper](https://openreview.net/pdf?id=X4228W0QpvN).
