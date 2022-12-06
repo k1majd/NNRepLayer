@@ -50,6 +50,7 @@ Note that the selected solver should be specified for the NNRepLayer (read [exam
 ## Results
 | Method         | Running Time [s] | MAE Error | Repair Efficacy[%] | Introduced Bug [%] |
 | -------        | ---------------  |--------------- |--------------- |--------------- | 
-| NNRepLayer     | 112$\pm$122| 0.5$\pm$0.03   | 98$\pm$1 | 0.19$\pm$0.18 | 
-| REASSURE ([here](https://arxiv.org/pdf/2110.07682.pdf))|112$\pm$122| 0.5$\pm$0.03   | 98$\pm$1 | 0.19$\pm$0.18 | 
-
+| NNRepLayer     | $112\pm122$| $0.5\pm0.03$   | $98\pm1$ | $0.19\pm0.18$ | 
+| REASSURE ([here](https://arxiv.org/pdf/2110.07682.pdf))|$30\pm8$| $0.6\pm0.03$   | $19\pm4$ | $85\pm5$ | 
+| Fine-tuning|$8\pm2$| $0.6\pm0.03$   | $88\pm2$ | $2.48\pm0.49$ | 
+| Retraining|$101\pm1$| $0.5\pm0.04$   | $98\pm2$ | $0.28\pm0.32$ | 
