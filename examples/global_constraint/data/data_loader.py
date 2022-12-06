@@ -3,6 +3,7 @@ import os
 import csv
 import matplotlib.pyplot as plt
 
+
 def loadData(name_csv):
     with open(name_csv) as csv_file:
         data = np.asarray(
@@ -56,7 +57,7 @@ def generateDataWindow(window_size=10):
 def generate_repair_dataset(num_samples, bound, model):
     _, _, obs, ctrl = generateDataWindow(10)
     ctrl_pred = model.predict(obs)
-    max_window_size = 11000
+    max_window_size = 600
     obs = obs[0:max_window_size]
     ctrl_pred = ctrl_pred[0:max_window_size].flatten()
 
