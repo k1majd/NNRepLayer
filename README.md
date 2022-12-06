@@ -42,6 +42,6 @@ We used *Keras (tf2)* to train the models. The trained model will be located in 
 The training walking data is also provided under `/data` in example's directory.
 
 ### Repairing
-For repairing models, please follow the repair notebook tutorials `01_net_repair.ipynb` under each example's directory.  
+For repairing models, please follow the repair notebook tutorials `01_net_repair.ipynb` under each example's directory. The repaired models will be saved under `<example directory>/repair_net/models`. You can also find the optimization log files and formulations under `<example directory>/repair_net/logs` and `<example directory>/repair_net/summary`, respectively.
 
-As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
+As we used [Pyomo](http://www.pyomo.org) for formulating the MIQP optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
