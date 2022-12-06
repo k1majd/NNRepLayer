@@ -31,9 +31,17 @@ For Example, if Python-Identifier was python3.8 and the path to gurobi folder th
 
     sudo ./setup.sh python3.8 /home/local/user/gurobi950/linux64/build/
 
-As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
-
-## Experiments
+## Quick Start
 You can find the examples of NNRepLayer for the Prosthesis application under `/examples` ([here](/examples)). 
 Our tool currently supports the models trained with [tensorflow 2 (tf2)](https://www.tensorflow.org) and [PyTorch 1](https://pytorch.org). 
 The code examples for loading models saved by common frameworks will be released soon. 
+
+### Training 
+For training models with default parameters run the `00_net_train.py` script in each example. 
+We used *Keras (tf2)* to train the models. The trained model will be located in `model_orig` in the example's directory.
+The training walking data is also provided under `/data` in example's directory.
+
+### Repairing
+For repairing models, please follow the repair notebook tutorials `01_net_repair.ipynb` under each example's directory.  
+
+As we used [Pyomo](http://www.pyomo.org) for formulating the optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
