@@ -16,8 +16,6 @@ If you find our work useful, please consider citing our paper:
 }
 ```
 
-![gif](assets/walking_gif.gif)
-
 ## Setup
 We use the Poetry tool which is a dependency management and packaging tool in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Please follow the installation of poetry [here](https://python-poetry.org/docs/#installation). After you've installed poetry, you can install NNrepLayer by running the following command in the root of the project:
 
@@ -46,3 +44,20 @@ For repairing models, please follow the repair notebook tutorials `01_net_repair
 
 As we used [Pyomo](http://www.pyomo.org) for formulating the MIQP optimization, other solvers listed [here](https://pyomo.readthedocs.io/en/stable/solving_pyomo_models.html#supported-solvers) are also supported by our tool. Our choice of optimizer is [Gurobi](http://www.gurobi.com), but any supported optimizer by Pyomo will work. We also suggest you to use `Gurobi` as its performance is significantly faster (it also has free academic license!).
 Note that the selected solver should be specified for the NNRepLayer (read [examples](/examples)).
+
+## Results
+![gif](assets/walking_gif.gif)
+
+Below is a modified version of Table 1 from our paper for the stats collected in input-output constraint case. We report the runtime, Mean Absolute Error between the repaired and the original outputs (MAE), the percentage of adversarial samples that are repaired (Repair Efficacy), and the percentage of test samples that were originally safe but became faulty after the repair (Introduced Bugs). The metrics are the average of 50 runs.
+In general, 
+- Our method works better in generalizing the constraints to the unseen cases, especially for the conditional constraint.
+- The percentage of test samples that were originally safe but then became faulty after repair are 2 to 10 times fewer in our technique.
+ 
+| Method         | Running Time [s] | MAE Error | Repair Efficacy[%] | Introduced Bug [%] |
+| -------        | ---------------  |--------------- |--------------- |--------------- | 
+| NNRepLayer     | $112\pm122$| **$0.5\pm0.03$**   | **$98\pm1$** | **$0.19\pm0.18$** | 
+| REASSURE ([here](https://arxiv.org/pdf/2110.07682.pdf))|$30\pm8$| $0.6\pm0.03$   | $19\pm4$ | $85\pm5$ | 
+| Fine-tuning|$8\pm2$| $0.6\pm0.03$   | $88\pm2$ | $2.48\pm0.49$ | 
+| Retraining|$101\pm1$| $0.5\pm0.04$   | $98\pm2$ | $0.28\pm0.32$ | 
+
+For further results please read [our paper](https://openreview.net/pdf?id=X4228W0QpvN).
