@@ -5,9 +5,6 @@ import numpy as np
 import numpy.typing as npt
 
 import itertools
-import autograd.numpy as npa
-from autograd import jacobian
-from autograd import elementwise_grad as egrad
 import scipy
 
 
@@ -142,14 +139,12 @@ def generate_outside_constraints(name: str, A, B):
     add_attr_list = []
     list_alleq = []
     for a, b in zip(A, B):
-
         list_eq = []
         iterate_1 = 0
 
         for a_, b_ in zip(a, b):
             str_eq = ""
             for iterate_2, val in enumerate(a_):
-
                 if val != 0:
                     str_eq += (
                         "("
@@ -215,7 +210,6 @@ def generate_output_constraints(constraint):
     out_string = ""
     in_string = ""
     for i in constraint:
-
         # print(inside_count, outside_count)
         if i.constraint_type == "outside":
             temp_string = generate_outside_constraints(
@@ -372,7 +366,6 @@ class BoundStatTracker:
 ###############################################################################
 # TODO:
 def neural_return_weights_pert(params, architechture, layer):
-
     idx = 0
     num_layers = architechture.shape[0] - 1
     weights = []
@@ -466,7 +459,6 @@ def sparse_eigenvector_reduction(H_dist, arch, layer, num_non_sparse):
 
 
 def neural_net_predict(params, inputs, architechture):
-
     idx = 0
     num_layers = architechture.shape[0] - 1
     for l in range(num_layers):
@@ -490,7 +482,6 @@ def __soft_plus(x, t=10.0):  # (1/t) * Ln(1+exp(t*x))
 def get_sensitive_nodes(
     model, layer_to_repair, x_train, num_sparse_nodes, A, b
 ):
-
     A = npa.array(A)
     b = npa.array(b)
 

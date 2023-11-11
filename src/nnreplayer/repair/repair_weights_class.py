@@ -45,7 +45,6 @@ class NNRepair:
             )
             self.model_mlp.set_mlp_params(tf2_get_weights(self.model_orig))
         elif model_type == "pytorch":
-
             self.architecture = pt_get_architecture(self.model_orig)
             self.model_mlp = MLP(
                 self.architecture[0],
@@ -94,7 +93,6 @@ class NNRepair:
         output_bounds: tuple = None,
         ##############################
     ) -> None:
-
         """Compile the optimization model and setup the repair optimizer
 
         Args:
@@ -163,7 +161,6 @@ class NNRepair:
         )
 
     def repair(self, options: Type[Options]) -> Any:
-
         """Perform the layer-wise repair and update the weights of model_mlp
 
         Args:
@@ -178,12 +175,11 @@ class NNRepair:
             options.solver_factory,
             options.optimizer_options,
         )
-        self.__set_new_params()
-        repaired_model = self.__return_repaired_model()
+        self.set_new_params()
+        repaired_model = self.return_repaired_model()
         return repaired_model
 
     def reset(self):
-
         """Reset the model_mlp model to the original model"""
 
         self.architecture = tf2_get_architecture(self.model_orig)
@@ -207,7 +203,6 @@ class NNRepair:
         ######################################
 
     def summary(self, direc: Optional[str] = None):
-
         """Print and/or store the pyomo optimization model
 
         Args:
@@ -236,7 +231,6 @@ class NNRepair:
     def extract_network_layers_values(
         self, x_dataset: npt.NDArray
     ) -> List[npt.NDArray]:
-
         """Extract the values of each layer for all input samples
 
         Args:
@@ -254,7 +248,7 @@ class NNRepair:
 
         return layer_values
 
-    def __return_repaired_model(self):
+    def return_repaired_model(self):
         # pylint: disable=pointless-string-statement
         """Returns the repaired model in the given format"""
 
@@ -272,11 +266,9 @@ class NNRepair:
                 weights_bias_iterate = weights_bias_iterate + 2
 
         elif self.model_type == "pytorch":
-
             new_model = copy.deepcopy(self.model_orig)
             weights_bias_iterate = 0
             for name, param in new_model.named_parameters():
-
                 old_param = param.data.numpy()
 
                 new_param = model_new_params[weights_bias_iterate]
@@ -300,8 +292,7 @@ class NNRepair:
             )
         return new_model
 
-    def __set_new_params(self):
-
+    def set_new_params(self):
         """Update the weight and bias terms of model_mlp for the target layer"""
 
         new_weight = np.zeros(
@@ -617,7 +608,6 @@ class NNRepair:
         ub_mat,
         lb_mat,
     ) -> Any:
-
         """_summary_
 
         Args:
@@ -680,7 +670,6 @@ class NNRepair:
         solver_factory: str,
         optimizer_options: dict,
     ) -> None:
-
         """Solve the Optimization Problem
 
         Args:
