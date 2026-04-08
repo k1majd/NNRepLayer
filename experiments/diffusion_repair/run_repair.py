@@ -293,6 +293,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--penalty-update-every", type=int)
     parser.add_argument("--mu-0", type=float)
     parser.add_argument("--repair-lr", type=float)
+    parser.add_argument("--seed", type=int, default=0)
     parser.add_argument(
         "--history-file",
         type=str,
@@ -321,7 +322,7 @@ def main() -> None:
     )
 
     # 2. Fixed evaluation seeds ------------------------------------------
-    torch.manual_seed(0)
+    torch.manual_seed(args.seed)
     seeds = torch.randn(cfg.n_repair_seeds, 2, device=device)
 
     # 3. Evaluate BEFORE repair ------------------------------------------
@@ -408,6 +409,7 @@ def main() -> None:
         "penalty_update_every": cfg.penalty_update_every,
         "mu_0": cfg.mu_0,
         "repair_lr": cfg.repair_lr,
+        "seed": args.seed,
     }
     metrics = {
         "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",

@@ -62,3 +62,16 @@ This file records every tested algorithm variant and its metrics.
 - efficacy: 1.0000
 - side_effect_mse: 0.4911
 - max_weight_delta_linf: 0.0064
+
+### v4_noclamp_seed1
+- timestamp: 2026-04-08T16:51:31Z
+- change_summary: robustness check of best config on seed=1
+- config_overrides: {"beta_alm": 1.1, "ddim_steps_repair": 50, "mu_0": 2.0, "penalty_update_every": 25, "repair_batch_seeds": 500, "repair_epochs": 150, "repair_lr": 0.001, "seed": 1}
+- before_viol_rate: 0.4260
+- after_viol_rate: 0.0040
+- viol_rate_delta: -0.4220
+- before_mean_viol: 0.5022
+- after_mean_viol: 0.0006
+- efficacy: 0.9906
+- side_effect_mse: 0.4771
+- max_weight_delta_linf: 0.0074

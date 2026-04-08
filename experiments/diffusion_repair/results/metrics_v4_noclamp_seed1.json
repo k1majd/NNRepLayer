@@ -1,0 +1,25 @@
+{
+  "metrics": {
+    "timestamp": "2026-04-08T16:51:31Z",
+    "tag": "v4_noclamp_seed1",
+    "change_summary": "robustness check of best config on seed=1",
+    "before_viol_rate": 0.4259999990463257,
+    "after_viol_rate": 0.004000000189989805,
+    "viol_rate_delta": -0.4219999988563359,
+    "before_mean_viol": 0.5022329092025757,
+    "after_mean_viol": 0.0005502272397279739,
+    "efficacy": 0.9906103014945984,
+    "side_effect_mse": 0.477142333984375,
+    "max_weight_delta_linf": 0.007381029427051544
+  },
+  "config": {
+    "ddim_steps_repair": 50,
+    "repair_batch_seeds": 500,
+    "repair_epochs": 150,
+    "beta_alm": 1.1,
+    "penalty_update_every": 25,
+    "mu_0": 2.0,
+    "repair_lr": 0.001,
+    "seed": 1
+  }
+}
