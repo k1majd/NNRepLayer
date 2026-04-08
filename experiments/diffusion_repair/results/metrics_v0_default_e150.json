@@ -1,0 +1,24 @@
+{
+  "metrics": {
+    "timestamp": "2026-04-08T15:56:41Z",
+    "tag": "v0_default_e150",
+    "change_summary": "original settings with 20 repair steps",
+    "before_viol_rate": 0.4339999854564667,
+    "after_viol_rate": 0.8479999899864197,
+    "viol_rate_delta": 0.414000004529953,
+    "before_mean_viol": 0.5146880149841309,
+    "after_mean_viol": 4.871583461761475,
+    "efficacy": 0.0,
+    "side_effect_mse": 19.574373245239258,
+    "max_weight_delta_linf": 0.005852266680449247
+  },
+  "config": {
+    "ddim_steps_repair": 20,
+    "repair_batch_seeds": 200,
+    "repair_epochs": 150,
+    "beta_alm": 1.5,
+    "penalty_update_every": 10,
+    "mu_0": 5.0,
+    "repair_lr": 0.001
+  }
+}

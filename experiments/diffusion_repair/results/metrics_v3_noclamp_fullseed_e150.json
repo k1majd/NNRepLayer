@@ -1,0 +1,24 @@
+{
+  "metrics": {
+    "timestamp": "2026-04-08T15:59:51Z",
+    "tag": "v3_noclamp_fullseed_e150",
+    "change_summary": "no-clamp eval consistency + 50 repair steps + full seed batch + slow mu",
+    "before_viol_rate": 0.4339999854564667,
+    "after_viol_rate": 0.0,
+    "viol_rate_delta": -0.4339999854564667,
+    "before_mean_viol": 0.492037832736969,
+    "after_mean_viol": 0.0,
+    "efficacy": 1.0,
+    "side_effect_mse": 0.4911381006240845,
+    "max_weight_delta_linf": 0.006402813363820314
+  },
+  "config": {
+    "ddim_steps_repair": 50,
+    "repair_batch_seeds": 500,
+    "repair_epochs": 150,
+    "beta_alm": 1.1,
+    "penalty_update_every": 25,
+    "mu_0": 2.0,
+    "repair_lr": 0.001
+  }
+}

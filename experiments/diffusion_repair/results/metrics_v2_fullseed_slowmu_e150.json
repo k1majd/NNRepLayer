@@ -1,0 +1,24 @@
+{
+  "metrics": {
+    "timestamp": "2026-04-08T15:58:11Z",
+    "tag": "v2_fullseed_slowmu_e150",
+    "change_summary": "full seed batch + slower ALM penalty growth",
+    "before_viol_rate": 0.4339999854564667,
+    "after_viol_rate": 0.7960000038146973,
+    "viol_rate_delta": 0.3620000183582306,
+    "before_mean_viol": 0.5146880149841309,
+    "after_mean_viol": 4.529923915863037,
+    "efficacy": 0.0,
+    "side_effect_mse": 14.22996711730957,
+    "max_weight_delta_linf": 0.00596440676599741
+  },
+  "config": {
+    "ddim_steps_repair": 20,
+    "repair_batch_seeds": 500,
+    "repair_epochs": 150,
+    "beta_alm": 1.1,
+    "penalty_update_every": 25,
+    "mu_0": 2.0,
+    "repair_lr": 0.001
+  }
+}

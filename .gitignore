@@ -2,3 +2,7 @@
 *.log
 *.pb
 .lock
+.venv/
+__pycache__/
+experiments/diffusion_repair/results/*.pt
+experiments/diffusion_repair/results/*.png
